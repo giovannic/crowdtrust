@@ -14,7 +14,6 @@ public class CrowdRegisterServlet extends HttpServlet {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     String email = request.getParameter("email");
-    Class.forName("org.postgresql.Driver");
     try {
       String url = "jdbc:postgresql://db:5432/g1236218_u";
       Properties properties = new Properties();
@@ -34,9 +33,13 @@ public class CrowdRegisterServlet extends HttpServlet {
         //email already exists
         return;
       }
-      String sql = "INSERT INTO users VALUES(" + username + ", " + password + ", " + email")";
+      String sql = "INSERT INTO users VALUES(?, digest(?, sha256), ?)";
       preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setString(1, username);
+      preparedStatement.setString(2, password);
+      preparedStatement.setString(3, email);
       resultSet = preparedStatement.executeQuery();
+      response.sendRedirect("login.html");
     }
   }
 

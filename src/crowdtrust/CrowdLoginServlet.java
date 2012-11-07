@@ -14,7 +14,6 @@ public class CrowdLoginServlet extends HttpServlet {
                  throws ServletException, IOException {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-    Class.forName("org.postgresql.Driver");
     try {
       String url = "jdbc:postgresql://db:5432/g1236218_u";
       Properties properties = new Properties();
@@ -26,13 +25,13 @@ public class CrowdLoginServlet extends HttpServlet {
       throw new ServletException(e);
     }
     if (connection != null) {
-      String sql = "SELECT username FROM users WHERE username = ? AND password = ?";
+      String sql = "SELECT username FROM users WHERE username = ? AND password = digest(?, sha256)";
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setString(1, username);
       preparedStatement.setString(2, password);
       ResultSet resultSet = preparedStatement.executeQuery();
       if(!resultSet.next()) {
-        //user does not exist
+        //user does not exist - display error message
         return;
       }
     }
