@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <link href="stylesheet.css" rel="stylesheet" type="text/css">
+    <title>
+      CrowdTrust - Register
+    </title>
+    <script>
+      function validatePassword() {
+        if(register.elements["password"].value != register.elements["cpassword"].value) {
+          alert("The passwords do not match. Please re-enter password.")
+          register.elements["password"].value = "";
+          register.elements["cpassword"].value = "";
+          register.elements["password"].focus();
+          return false;
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>CrowdTrust - Register</h1>
+    <form action="/servlet/register" method="post">
+      <table id="registertable">
+      <tr>
+        <td>Username:</td>
+        <td><input type="text" id="username" value=""></td>
+      </tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" id="password" value=""></td>
+      </tr>
+      <tr>
+        <td>Confirm Password:</td>
+        <td><input type="password" id="cpassword" value=""></td>
+      </tr>
+      <tr>
+        <td>Email:</td> 
+        <td><input type="text" id="email" value=""></td>
+      </tr>      
+      </table> 
+      <input type="submit" id="register" value="Register" onsubmit="validatePassword();">
+    </form>
+    <p><a href="login.html">Click Here to return to the Login page</a></p>
+  </body>
+</html>
