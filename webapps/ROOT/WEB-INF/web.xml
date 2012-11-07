@@ -10,7 +10,25 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>task</servlet-name>
-        <url-pattern>/servlet/task</url-patter>
+        <url-pattern>/servlet/task</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>login</servlet-name>
+        <servlet-class>crowdtrust.CrowdLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>login</servlet-name>
+        <url-pattern>/servlet/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>register</servlet-name>
+        <servlet-class>crowdtrust.CrowdRegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>register</servlet-name>
+        <url-pattern>/servlet/register</url-pattern>
     </servlet-mapping>
 
 </web-app>
