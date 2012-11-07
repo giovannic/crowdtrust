@@ -1,9 +1,17 @@
 package crowdtrust;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.DriverManager;
+import java.util.Properties;
+import javax.servlet.ServletException;
+import java.io.IOException;
+
 
 public class CrowdRegisterServlet extends HttpServlet {
 
@@ -34,22 +42,32 @@ public class CrowdRegisterServlet extends HttpServlet {
         return;
       }
       String sql = "INSERT INTO users VALUES(?, digest(?, sha256), ?)";
-      preparedStatement = connection.prepareStatement(sql);
-      preparedStatement.setString(1, username);
-      preparedStatement.setString(2, password);
-      preparedStatement.setString(3, email);
-      resultSet = preparedStatement.executeQuery();
+      try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, username);
+        preparedStatement.setString(2, password);
+        preparedStatement.setString(3, email);
+        ResultSet resultSet = preparedStatement.executeQuery();
+      }
+      catch (SQLException e) {
+        throw new ServletException(e);
+      }
       response.sendRedirect("login.html");
     }
   }
 
   private boolean checkAccountExists(String field, String data) {
-    String sql = "SELECT account_id FROM accounts WHERE " + field " = ?";
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-    preparedStatement.setString(1, data);
-    ResultSet resultSet = preparedStatement.executeQuery();
-    if(resultSet.next()) {
-      return true;
+    String sql = "SELECT account_id FROM accounts WHERE " + field + " = ?";
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setString(1, data);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      if(resultSet.next()) {
+        return true;
+      }
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
     }
     return false;  
   }
