@@ -15,8 +15,12 @@ import java.util.Properties;
 
 import java.io.IOException;
 
+import java.lang.StringBuilder;
 
-public class CrowdRegisterServlet extends HttpServlet {
+import java.security.MessageDigest;
+
+
+public class RegisterServlet extends HttpServlet {
 
   private Connection connection = null;
 
@@ -25,8 +29,8 @@ public class CrowdRegisterServlet extends HttpServlet {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     String email = request.getParameter("email");
-    boolean client = request.getParameter("client");
-    boolean crowd = request.getParameter("crowd");
+    String client = request.getParameter("client");
+    String crowd = request.getParameter("crowd");
     try {
       String url = "jdbc:postgresql://db:5432/g1236218_u";
       Properties properties = new Properties();
@@ -38,22 +42,23 @@ public class CrowdRegisterServlet extends HttpServlet {
       throw new ServletException(e);
     }
     if (connection != null) {
-      if(checkAccountExists("username", username)) {
+      /*if(checkAccountExists("username", username)) {
         //username already exists
         return;
       }
       if(checkAccountExists("email", email)) {
         //email already exists
         return;
-      }
+      }*/
       int type = getAccountType(client, crowd);
-      String sql = "INSERT INTO accounts (email, username, password, type) ";
-      sql += "VALUES(?, digest(?, sha256), ?)";
+      StringBuilder sql = new StringBuilder();
+      sql.append("INSERT INTO accounts (email, username, password, type, last_active) ");
+      sql.append("VALUES(?, ?, ?, ?, NOW())");
       try {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, username);
-        preparedStatement.setString(3, password);
+        preparedStatement.setBytes(3, sha256(password));
         preparedStatement.setInt(4, type);
         ResultSet resultSet = preparedStatement.executeQuery();
       }
@@ -64,25 +69,31 @@ public class CrowdRegisterServlet extends HttpServlet {
     }
   }
 
-  private int getAccountType(boolean client, boolean crowd) {
-    int type;
-    if(client && crowd) {
-      type = 111;
+  private byte[] sha256(String password) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(password.getBytes("UTF-8"));
+      return hash;
     }
-    else if(client) {
-      type = 100;
+    catch (Exception e) {
+      e.printStackTrace();
     }
-    else if(crowd) {
-      type = 010;
+    return null;
+  }
+
+  private int getAccountType(String client, String crowd) {
+    int type = 000;
+    if(client.equalsIgnoreCase("on")) {
+      type = type ^ 100;
     }
-    else {
-      type = 000;
+    if(crowd.equalsIgnoreCase("on")) {
+      type = type ^ 010;
     }
     return type;
   }
 
   private boolean checkAccountExists(String field, String data) {
-    String sql = "SELECT account_id FROM accounts WHERE " + field + " = ?";
+    String sql = "SELECT user_id FROM accounts WHERE " + field + " = ?";
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setString(1, data);
