@@ -50,7 +50,7 @@ public class RegisterServlet extends HttpServlet {
         //email already exists
         return;
       }*/
-      int type = getAccountType(client, crowd);
+      byte[] type = (byte []) getAccountType(client, crowd);
       StringBuilder sql = new StringBuilder();
       sql.append("INSERT INTO accounts (email, username, password, type, last_active) ");
       sql.append("VALUES(?, ?, ?, ?, NOW())");
@@ -59,7 +59,7 @@ public class RegisterServlet extends HttpServlet {
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, username);
         preparedStatement.setBytes(3, sha256(password));
-        preparedStatement.setInt(4, type);
+        preparedStatement.setBytes(4, type);
         ResultSet resultSet = preparedStatement.executeQuery();
       }
       catch (SQLException e) {
