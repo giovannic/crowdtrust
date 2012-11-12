@@ -8,12 +8,13 @@ public abstract class Task
     BinaryImageClassification;
   };
 
-  private int id;
-  private String name;
+  protected int id;
+  protected String name;
+  protected String question;
 
-  public Task(String name)
+  public Task()
   {
-    this.name = name;
+	  //for the benefit of the object mapper
   }
 
   public int getId()
@@ -32,8 +33,9 @@ public abstract class Task
     // get a connection, call serializeAdditionalData, insert into database
   }
 
+  /*TODO
   protected abstract BLOB serializeAdditionalData();
-
+*/
   public abstract void assignCrowd();
 
   // Define implementations of general crowd assignment methods, to be used by

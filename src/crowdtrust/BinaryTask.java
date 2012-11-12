@@ -1,29 +1,40 @@
 package crowdtrust;
 
+import java.util.Collection;
 import java.util.List;
 
-public class BinaryImageClassificationTask extends Task
+public class BinaryTask extends Task
 {
 
-  private String question;
-  private List<Image> images;
-
+  private List<SubTask> subtasks;
+  
   // what class should images be stored as?!
-  public BinaryImageClassificationTask(String name, String question, List<Image> images)
+  public BinaryTask(String name, String question)
   {
-    super(name);
+    super();
+    this.name = name;
     this.question = question;
-    this.images = images;
-
     this.addToDatabase();
+  }
+
+  public boolean assignSubtask(SubTask s)
+  {
+	  return subtasks.add(s);
+  }
+  
+  public boolean assignSubtasks(Collection<SubTask> s)
+  {
+	  return subtasks.addAll(s);
   }
 
   // need a method to reverse this?
   // possibly a Task constructor which takes (id, name and BLOB) and instantiates the appropriate subclass
+  /*
   protected BLOB serializeAdditionalData()
   {
     // serialize question and images
   }
+  */
 
   public void assignCrowd()
   {
