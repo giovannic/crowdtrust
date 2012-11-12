@@ -1,5 +1,18 @@
+#logs
 logs/
-*~
-conf/PID
 work/
 conf/Catalina/
+
+#swap files
+*~
+*.swp
+
+#eclipse
+.classpath
+.project
+.settings/*
+WebContent/*
+build/*
+
+#misc
+conf/PID
