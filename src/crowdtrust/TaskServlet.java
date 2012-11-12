@@ -26,7 +26,9 @@ public class TaskServlet extends HttpServlet
 		long session = Long.parseLong(request.getParameter("session"));
 		ObjectMapper mapper = new ObjectMapper();
 		String taskJSON = request.getParameter("task");
-		taskJSON = "{ \"name\" : \"test\", \"question\" : \"what's your fave number?\"}";
+		//test cases
+		//taskJSON = "{ \"name\" : \"test\", \"question\" : \"what's your fave number?\"}";
+		
 		BinaryTask t = mapper.readValue(taskJSON, BinaryTask.class);
 		
 		response.setContentType("text/plain");

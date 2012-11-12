@@ -6,18 +6,13 @@ import java.util.List;
 public class BinaryTask extends Task
 {
 
-  public String question;
   private List<SubTask> subtasks;
-
-  public BinaryTask()
-  {
-	  super("placeholder");
-  }
   
   // what class should images be stored as?!
   public BinaryTask(String name, String question)
   {
-    super(name);
+    super();
+    this.name = name;
     this.question = question;
     this.addToDatabase();
   }
