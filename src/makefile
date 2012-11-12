@@ -1,6 +1,6 @@
 CONTEXT   = ../webapps/ROOT
 CLSDIR    = $(CONTEXT)/WEB-INF/classes
-CLASSES   = crowdtrust/TaskServlet.class crowdtrust/CrowdRegisterServlet.class crowdtrust/CrowdLoginServlet.class
+CLASSES   = crowdtrust/TaskServlet.class crowdtrust/RegisterServlet.class crowdtrust/CrowdLoginServlet.class
 CLASSPATH = ../webapps/ROOT/WEB-INF/lib/servlet-api-3.0.jar
 
 all: $(CLASSES)
@@ -14,8 +14,8 @@ install: $(CLASSES)
 crowdtrust/TaskServlet.class: crowdtrust/TaskServlet.java
 	javac -classpath $(CLASSPATH) crowdtrust/TaskServlet.java
 
-crowdtrust/CrowdRegisterServlet.class: crowdtrust/CrowdRegisterServlet.java
-	javac -classpath $(CLASSPATH) crowdtrust/CrowdRegisterServlet.java
+crowdtrust/CrowdRegisterServlet.class: crowdtrust/RegisterServlet.java
+	javac -classpath $(CLASSPATH) crowdtrust/RegisterServlet.java
 
 crowdtrust/CrowdLoginServlet.class: crowdtrust/CrowdLoginServlet.java
 	javac -classpath $(CLASSPATH) crowdtrust/CrowdLoginServlet.java

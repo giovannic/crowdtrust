@@ -24,7 +24,7 @@
 
     <servlet>
         <servlet-name>register</servlet-name>
-        <servlet-class>crowdtrust.CrowdRegisterServlet</servlet-class>
+        <servlet-class>crowdtrust.RegisterServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>register</servlet-name>
