@@ -1,2 +1,5 @@
 logs/
 *~
+conf/PID
+work/
+conf/Catalina/
