@@ -10,7 +10,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>task</servlet-name>
-        <url-pattern>/servlet/task</url-patter>
+        <url-pattern>/servlet/task</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -3,7 +3,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class Simple extends HttpServlet {
-   int accesses = 0;
+
+	private static final long serialVersionUID = 5412833768798945941L;
+int accesses = 0;
 
    public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException

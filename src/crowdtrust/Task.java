@@ -32,8 +32,9 @@ public abstract class Task
     // get a connection, call serializeAdditionalData, insert into database
   }
 
+  /*TODO
   protected abstract BLOB serializeAdditionalData();
-
+*/
   public abstract void assignCrowd();
 
   // Define implementations of general crowd assignment methods, to be used by

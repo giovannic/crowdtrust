@@ -1,2 +1,13 @@
+#logs
 logs/
+
+#swap files
 *~
+*.swp
+
+#eclipse
+.classpath
+.project
+.settings/*
+WebContent/*
+build/*
