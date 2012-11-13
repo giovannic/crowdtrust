@@ -50,22 +50,22 @@ public class RegisterServlet extends HttpServlet {
         //email already exists
         return;
       }*/
-      byte[] type = (byte []) getAccountType(client, crowd);
+      byte type = (byte) getAccountType(client, crowd);
       StringBuilder sql = new StringBuilder();
       sql.append("INSERT INTO accounts (email, username, password, type, last_active) ");
-      sql.append("VALUES(?, ?, ?, ?, NOW())");
+      sql.append("VALUES(?, ?, CAST(? AS bytea), ?, NOW())");
       try {
         PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, username);
         preparedStatement.setBytes(3, sha256(password));
-        preparedStatement.setBytes(4, type);
-        ResultSet resultSet = preparedStatement.executeQuery();
+        preparedStatement.setByte(4, type);
+        preparedStatement.execute();
       }
       catch (SQLException e) {
         throw new ServletException(e);
       }
-      response.sendRedirect("login.html");
+      response.sendRedirect("/login.html");
     }
   }
 
@@ -82,12 +82,12 @@ public class RegisterServlet extends HttpServlet {
   }
 
   private int getAccountType(String client, String crowd) {
-    int type = 000;
-    if(client.equalsIgnoreCase("on")) {
-      type = type ^ 100;
+    int type = 0;
+    if(client != null && client.equalsIgnoreCase("on")) {
+      type = type ^ 4;
     }
-    if(crowd.equalsIgnoreCase("on")) {
-      type = type ^ 010;
+    if(crowd != null && crowd.equalsIgnoreCase("on")) {
+      type = type ^ 2;
     }
     return type;
   }
