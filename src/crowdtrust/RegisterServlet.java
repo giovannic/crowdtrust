@@ -28,6 +28,10 @@ public class RegisterServlet extends HttpServlet {
                  throws ServletException, IOException {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    String cpassword = request.getParameter("cpassword");
+    if(!password.equals("cpassword")) {
+      return; //passwords do not match. fix this
+    }
     String email = request.getParameter("email");
     String client = request.getParameter("client");
     String crowd = request.getParameter("crowd");
@@ -52,8 +56,8 @@ public class RegisterServlet extends HttpServlet {
       }*/
       byte type = (byte) getAccountType(client, crowd);
       StringBuilder sql = new StringBuilder();
-      sql.append("INSERT INTO accounts (email, username, password, type, last_active) ");
-      sql.append("VALUES(?, ?, CAST(? AS bytea), ?, NOW())");
+      sql.append("INSERT INTO accounts (email, username, password, type) ");
+      sql.append("VALUES(?, ?, CAST(? AS bytea), ?)");
       try {
         PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
         preparedStatement.setString(1, email);

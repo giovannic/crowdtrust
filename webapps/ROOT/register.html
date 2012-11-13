@@ -5,17 +5,6 @@
     <title>
       CrowdTrust - Register
     </title>
-    <script>
-      function validatePassword() {
-        if(register.elements["password"].value != register.elements["cpassword"].value) {
-          alert("The passwords do not match. Please re-enter password.")
-          register.elements["password"].value = "";
-          register.elements["cpassword"].value = "";
-          register.elements["password"].focus();
-          return false;
-        }
-      }
-    </script>
   </head>
   <body>
     <h1>CrowdTrust - Register</h1>
@@ -46,7 +35,7 @@
         <td><input type="checkbox" name="client" name="client">Client</td>
       </tr>        
       </table> 
-      <input type="submit" value="Register" onsubmit="validatePassword();">
+      <input type="submit" value="Register">
     </form>
     <p><a href="login.html">Click Here to return to the Login page</a></p>
   </body>
