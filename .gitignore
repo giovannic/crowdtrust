@@ -1,5 +1,7 @@
 #logs
 logs/
+work/
+conf/Catalina/
 
 #swap files
 *~
@@ -11,3 +13,6 @@ logs/
 .settings/*
 WebContent/*
 build/*
+
+#misc
+conf/PID
