@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import javax.servlet.ServletException;
+import java.security.MessageDigest;
 
 public class LoginServlet extends HttpServlet {
 
@@ -27,20 +28,33 @@ public class LoginServlet extends HttpServlet {
       properties.setProperty("password", "RLTn4ViKks");
       connection = DriverManager.getConnection(url, properties);
       if (connection != null) {
-        String sql = "SELECT username FROM users WHERE username = ? AND password = digest(?, sha256)";
+        String sql = "SELECT username FROM accounts WHERE username = ? AND password = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, username);
-        preparedStatement.setString(2, password);
+        preparedStatement.setBytes(2, sha256(password));
         ResultSet resultSet = preparedStatement.executeQuery();
         if(!resultSet.next()) {
           //user does not exist - display error message
           return;
         }
+        response.sendRedirect("/lobby.html");
       }
     }
     catch (SQLException e) {
       throw new ServletException(e);
     }
+    
   }
- 
+
+  private byte[] sha256(String password) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(password.getBytes("UTF-8"));
+      return hash;
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }
