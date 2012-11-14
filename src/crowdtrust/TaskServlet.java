@@ -27,7 +27,7 @@ public class TaskServlet extends HttpServlet
 		ObjectMapper mapper = new ObjectMapper();
 		String taskJSON = request.getParameter("task");
 		//test cases
-		//taskJSON = "{ \"name\" : \"test\", \"question\" : \"what's your fave number?\"}";
+		taskJSON = "{ \"name\" : \"test\", \"question\" : \"what's your fave number?\"}";
 		
 		BinaryTask t = mapper.readValue(taskJSON, BinaryTask.class);
 		
