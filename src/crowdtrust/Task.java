@@ -28,4 +28,7 @@ public abstract class Task
 
   public abstract void assignCrowd();
 
-};
+  // Define implementations of general crowd assignment methods, to be used by
+  // assignCrowd.
+
+}

@@ -21,4 +21,6 @@ public class BinaryTask extends Task
   {
   }
 
-};
+  // inner class extending taskdata
+
+}
