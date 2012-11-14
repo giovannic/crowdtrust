@@ -3,7 +3,6 @@ SRCDIR    = src
 
 CLASSDIR  = $(CONTEXT)/WEB-INF/classes
 LIBDIR    = $(CONTEXT)/WEB-INF/lib
-CLASSPATH = $(LIBDIR)/*.jar
 
 JAVAC     = javac
 
@@ -19,5 +18,5 @@ install: $(CLASSES)
 	install -m600 $(CLASSES) $(CLASSDIR)/crowdtrust
 
 %.class: %.java
-	$(JAVAC) -cp $(CLASSPATH) $<
+	$(JAVAC) -cp $(LIBDIR) $<
 
