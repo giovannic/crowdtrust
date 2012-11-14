@@ -41,4 +41,4 @@ public abstract class Task
   // Define implementations of general crowd assignment methods, to be used by
   // assignCrowd.
 
-};
+}
