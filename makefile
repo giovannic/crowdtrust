@@ -10,6 +10,12 @@ JAVAC     = javac
 SOURCES   = $(wildcard $(SRCDIR)/crowdtrust/*.java)
 CLASSES   = $(SOURCES:.java=.class)
 
+#dependencies
+#BinaryTask.class: Task.class SubTask.class
+#	$(JAVAC) -cp $(LIBDIR) $<
+#Client.class: Task.class
+#	$(JAVAC) -cp $(LIBDIR) $<
+
 all: install clean
 
 clean:
@@ -20,4 +26,5 @@ install: $(CLASSES)
 
 %.class: %.java
 	$(JAVAC) -cp $(CLASSPATH) $<
+
 

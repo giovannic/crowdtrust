@@ -2,33 +2,14 @@ package crowdtrust;
 
 public class SubTask {
 	
-	public enum Media{
-		IMAGE_LINK(){
+	//public Media media;
+	private String html;
 
-			@Override
-			public void HTMLShow() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		},
-		
-		IMAGE_RAW(){
+	public String getHtml() {
+		return html;
+	}
 
-			@Override
-			public void HTMLShow() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		};
-		
-		//data store
-		private byte [] data;
-		
-		//template methods
-	     public abstract void HTMLShow();
-	};
-	
-	private Media media;
+	public void setHtml(String html) {
+		this.html = html;
+	}
 }
