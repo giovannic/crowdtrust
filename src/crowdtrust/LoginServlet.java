@@ -50,13 +50,13 @@ public class LoginServlet extends HttpServlet {
           session.setMaxInactiveInterval(1200);
           session.setAttribute("account_id", resultSet.getInt("id"));
         }
-        response.sendRedirect("/lobby.html");
       }
     }
     catch (SQLException e) {
       throw new ServletException(e);
     }
-    
+    response.setHeader("Location", "/lobby.html");
+    //response.sendRedirect("/lobby.html");
   }
 
   private byte[] sha256(String password) {
