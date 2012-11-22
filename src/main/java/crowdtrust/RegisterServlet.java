@@ -22,7 +22,9 @@ import java.security.MessageDigest;
 
 public class RegisterServlet extends HttpServlet {
 
-  private Connection connection = null;
+	private static final long serialVersionUID = -6820932460475477607L;
+	
+	private Connection connection = null;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {

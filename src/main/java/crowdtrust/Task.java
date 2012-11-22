@@ -1,22 +1,16 @@
 package crowdtrust;
 
+import db.TaskDb;
+
 public abstract class Task
 {
-
-  public enum Type
-  {
-    BinaryImageClassification;
-  };
 
   protected int id;
   protected String name;
   protected String question;
-
-  public Task()
-  {
-	  //for the benefit of the object mapper
-  }
-
+  protected int accuracy;
+  protected int type;
+  
   public int getId()
   {
     return this.id;
@@ -29,13 +23,9 @@ public abstract class Task
 
   protected void addToDatabase()
   {
-    // need to be able to find out which user is logged in
-    // get a connection, call serializeAdditionalData, insert into database
+    TaskDb.addTask(name, question, accuracy, type);
   }
 
-  /*TODO
-  protected abstract BLOB serializeAdditionalData();
-*/
   public abstract void assignCrowd();
 
   // Define implementations of general crowd assignment methods, to be used by
