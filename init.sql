@@ -11,9 +11,7 @@ CREATE TABLE accounts
   email VARCHAR(100) NOT NULL,
   username VARCHAR(12) NOT NULL,
   password BIT(256) NOT NULL,
-  type BIT(3) NOT NULL,
-  session CHARACTER(32) NULL,
-  last_active TIMESTAMP NOT NULL
+  type BIT(3) NOT NULL
 );
 
 CREATE TABLE types
