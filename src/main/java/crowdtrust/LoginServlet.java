@@ -11,13 +11,11 @@ import db.LoginDb;
 import java.util.Properties;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import java.security.MessageDigest;
 import web.*;
 
 public class LoginServlet extends HttpServlet {
-
-  private Connection connection = null;
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
@@ -30,15 +28,15 @@ public class LoginServlet extends HttpServlet {
     if(!request.isRequestedSessionIdValid() && id > 0) {
       HttpSession session = request.getSession();
       session.setMaxInactiveInterval(1200);
-      session.setAttribute("account_id", resultSet.getInt("id"));
+      //session.setAttribute("account_id", resultSet.getInt("id"));
     }
-    Lobby userLobby = new Lobby();
+    Lobby userLobby = new Lobby("test"); //TODO
     userLobby.addClientTable();
     PrintWriter out = response.getWriter();
     out.print(userLobby.generate());
   }
 
-  private byte[] sha256(String password) {
+  /*private byte[] sha256(String password) {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       byte[] hash = digest.digest(password.getBytes("UTF-8"));
@@ -48,5 +46,5 @@ public class LoginServlet extends HttpServlet {
       e.printStackTrace();
     }
     return null;
-  }
+  }*/
 }
