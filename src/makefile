@@ -1,21 +1,28 @@
 CONTEXT   = ../webapps/ROOT
-CLSDIR    = $(CONTEXT)/WEB-INF/classes/crowdtrust
-CLASSES   = crowdtrust/RegisterServlet.class crowdtrust/LoginServlet.class #crowdtrust/TaskServlet.class
-CLASSPATH = ../webapps/ROOT/WEB-INF/lib/servlet-api-3.0.jar
+SRCDIR    = src
 
-all: $(CLASSES)
+CLASSDIR  = $(CONTEXT)/WEB-INF/classes
+LIBDIR    = $(CONTEXT)/WEB-INF/lib
+CLASSPATH = $(LIBDIR)/servlet-api-3.0.jar
+
+JAVAC     = javac
+
+SOURCES   = $(wildcard */*.java)
+CLASSES   = $(SOURCES:.java=.class)
+
+#dependencies
+#BinaryTask.class: Task.class SubTask.class
+#	$(JAVAC) -cp $(LIBDIR) $<
+#Client.class: Task.class
+#	$(JAVAC) -cp $(LIBDIR) $<
+
+all: install clean
 
 clean:
-	rm -f $(CLASSES) */*.class
+	rm -f $(CLASSES)
 
 install: $(CLASSES)
-	install -m600 $(CLASSES) $(CLSDIR)
+	install -m600 $(CLASSES) $(CLASSDIR)/crowdtrust
 
-#crowdtrust/TaskServlet.class: crowdtrust/TaskServlet.java
-#	javac -classpath $(CLASSPATH) crowdtrust/TaskServlet.java
-
-crowdtrust/RegisterServlet.class: crowdtrust/RegisterServlet.java
-	javac -classpath $(CLASSPATH) crowdtrust/RegisterServlet.java
-
-crowdtrust/LoginServlet.class: crowdtrust/LoginServlet.java
-	javac -classpath $(CLASSPATH) crowdtrust/LoginServlet.java
+%.class: %.java
+	$(JAVAC) -cp $(CLASSPATH) $<

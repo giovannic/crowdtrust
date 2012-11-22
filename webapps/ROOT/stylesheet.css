@@ -28,3 +28,26 @@ a {
 a:hover {
   color: #999;
 }
+
+.left {
+  text-align: left;
+  width: 50%;
+  float: left;
+}
+
+.right {
+  text-align: right;
+  width: 50%;
+  float: left;
+}
+
+.header {
+  width: 100%;
+}
+
+.clientcrowd {
+  width: 49%;
+  height: 75%;
+  float: left;
+  border: 1px solid;
+}
