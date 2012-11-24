@@ -1,4 +1,4 @@
-package crowdtrust;
+package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import crowdtrust.Client;
 
 /**
  * Servlet implementation class ClientServlet

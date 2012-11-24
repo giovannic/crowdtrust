@@ -1,4 +1,4 @@
-package crowdtrust;
+package servlet;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 
 import db.LoginDb;
+
+//import db.LoginDb;
 
 import java.util.Properties;
 
@@ -34,6 +36,7 @@ public class LoginServlet extends HttpServlet {
     userLobby.addClientTable();
     PrintWriter out = response.getWriter();
     out.print(userLobby.generate());
+    out.print("some kinda schpiel");
   }
 
   /*private byte[] sha256(String password) {
