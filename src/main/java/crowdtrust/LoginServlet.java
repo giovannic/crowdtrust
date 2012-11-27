@@ -26,25 +26,21 @@ public class LoginServlet extends HttpServlet {
     String password = request.getParameter("password");
     int id = LoginDb.checkUserDetails(username, password);
     if(!request.isRequestedSessionIdValid() && id > 0) {
+    	System.out.println("Hello World");
       HttpSession session = request.getSession();
       session.setMaxInactiveInterval(1200);
-      //session.setAttribute("account_id", resultSet.getInt("id"));
+      session.setAttribute("account_id", id);
+      session.setAttribute("account_name", username);
+      Lobby userLobby = new Lobby(username);
+      userLobby.addClientTable();
+      PrintWriter out = response.getWriter();
+      out.print(userLobby.generate());
     }
-    Lobby userLobby = new Lobby("test"); //TODO
-    userLobby.addClientTable();
-    PrintWriter out = response.getWriter();
-    out.print(userLobby.generate());
   }
-
-  /*private byte[] sha256(String password) {
-    try {
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] hash = digest.digest(password.getBytes("UTF-8"));
-      return hash;
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }*/
+  
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+          throws ServletException, IOException {
+	  doPost(request, response);
+  }
+  
 }

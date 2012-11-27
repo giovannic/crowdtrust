@@ -1,6 +1,7 @@
 package web;
 
 import java.lang.StringBuilder;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class WebPage {
@@ -22,6 +23,7 @@ public abstract class WebPage {
               "\n" + "<h1>CrowdTrust</h1>" + "\n" + "</div>" + 
               "\n" + "<div class=\"right\">" + "\n" + "<p>Logged in as: " + user + "</p>" +
               "\n" + "<p>Sign Out</p>" + "\n" + "</div>" + "\n" + "</div>";
+    body = new ArrayList<WebElement>();
   }
 
   public String generate(){

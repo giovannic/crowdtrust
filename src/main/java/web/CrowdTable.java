@@ -1,6 +1,6 @@
 package web;
 
-public class CrowdTable extends WebElement {
+public class CrowdTable implements WebElement {
 
   public String generateHead(){
     return "";

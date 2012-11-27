@@ -1,9 +1,12 @@
 package db;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.security.MessageDigest;
+import java.util.Properties;
 
 
 public class LoginDb {
@@ -11,7 +14,12 @@ public class LoginDb {
   public static int checkUserDetails(String username, String password) {
     String sql = "SELECT id FROM accounts WHERE username = ? AND password = ?";
     try {
-      PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+      String url = "jdbc:postgresql://db:5432/g1236218_u";
+      Properties properties = new Properties();
+      properties.setProperty("user", "g1236218_u");
+      properties.setProperty("password", "RLTn4ViKks");
+      Connection connection = DriverManager.getConnection(url, properties);
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setString(1, username);
       preparedStatement.setBytes(2, sha256(password));
       ResultSet resultSet = preparedStatement.executeQuery();

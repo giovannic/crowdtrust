@@ -1,12 +1,16 @@
 package db;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
 import java.security.MessageDigest;
+import java.util.Properties;
 
 public class RegisterDb {
+	
 
   public static boolean addUser(String email, String username, String password, String client, String crowd) {
     byte type = getAccountType(client, crowd);
@@ -14,12 +18,17 @@ public class RegisterDb {
     sql.append("INSERT INTO accounts (email, username, password, type) ");
     sql.append("VALUES(?, ?, CAST(? AS bytea), ?)");
     try {
-      PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-      preparedStatement.setString(1, email);
-      preparedStatement.setString(2, username);
-      preparedStatement.setBytes(3, sha256(password));
-      preparedStatement.setByte(4, type);
-      preparedStatement.execute();
+    	String url = "jdbc:postgresql://db:5432/g1236218_u";
+    	Properties properties = new Properties();
+    	properties.setProperty("user", "g1236218_u");
+    	properties.setProperty("password", "RLTn4ViKks");
+    	Connection connection = DriverManager.getConnection(url, properties);
+	    PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+	    preparedStatement.setString(1, email);
+	    preparedStatement.setString(2, username);
+	    preparedStatement.setBytes(3, sha256(password));
+	    preparedStatement.setByte(4, type);
+	    preparedStatement.execute();
     }
     catch (SQLException e) {
       return false;

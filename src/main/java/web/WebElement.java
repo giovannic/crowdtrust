@@ -1,8 +1,8 @@
 package web;
 
-public abstract class WebElement {
+public interface WebElement {
 
-  public abstract String generateHead();
-  public abstract String generateBody();
+  public String generateHead();
+  public String generateBody();
 
 }

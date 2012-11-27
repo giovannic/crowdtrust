@@ -12,12 +12,13 @@ public class DbAdaptor {
 	private final static String PASSWORD = "RLTn4ViKks";
 	
 	public static Connection connect(){
-		Properties properties = new Properties();
-	      properties.setProperty("user", USER);
-	      properties.setProperty("password", PASSWORD);
 		try {
-			return DriverManager.getConnection(URL, properties);
-		} catch (SQLException e) {
+	    	Properties properties = new Properties();
+	    	properties.setProperty("user", USER);
+	    	properties.setProperty("password", PASSWORD);
+	    	Connection connection = DriverManager.getConnection(URL, properties);
+			return connection;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
