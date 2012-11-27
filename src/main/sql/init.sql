@@ -18,6 +18,13 @@ CREATE TABLE accounts
   accuracy INTEGER
 );
 
+CREATE TABLE media_handlers
+(
+  id SERIAL PRIMARY KEY,
+  description TEXT NOT NULL,
+  class VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE types
 (
   id SERIAL PRIMARY KEY,
@@ -32,6 +39,7 @@ CREATE TABLE tasks
   question VARCHAR(100) NOT NULL,
   accuracy INTEGER NOT NULL,
   type INTEGER REFERENCES types (id),
+  handler INTEGER REFERENCES media_handlers (id),
   ex_time INTEGER
 );
 
