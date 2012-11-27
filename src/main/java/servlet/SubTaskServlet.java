@@ -1,4 +1,4 @@
-package crowdtrust;
+package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +14,8 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import crowdtrust.SubTask;
 
 /**
  * Servlet implementation class SubTaskServlet
@@ -76,15 +78,15 @@ public class SubTaskServlet extends HttpServlet {
 				taskJSON = "[{\"html\":\"what colour is this bird\"},{\"html\":\"what colour is this bird 2\"}]";
 				ArrayList<SubTask> ss = mapper.readValue(taskJSON, 
 						new TypeReference<ArrayList<SubTask>>() { });
-				for (SubTask x : ss){}
-//					out.print("new subtasks made " + x.getHtml() + "\n");
+				for (SubTask x : ss)
+					out.print("new subtasks made " + x.getHtml() + "\n");
 			} else {
 				String taskJSON = request.getParameter("subtask");
 				//test cases
 				taskJSON = "{\"html\":\"what colour is this bird\"}";
 				s = mapper.readValue(taskJSON, SubTask.class);
 				//test incorrect params
-//				out.print("new subtask made " + s.getHtml() + "\n");
+				out.print("new subtask made " + s.getHtml() + "\n");
 			}
 			
 		} catch (Exception e){

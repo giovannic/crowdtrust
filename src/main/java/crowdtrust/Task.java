@@ -11,6 +11,14 @@ public abstract class Task
   protected int accuracy;
   protected int type;
   
+  Task(int id, String name, String question, int accuracy, int type){
+	  this.id = id;
+	  this.name = name;
+	  this.question = question;
+	  this.accuracy = accuracy;
+	  this.type = type;
+  }
+  
   public int getId()
   {
     return this.id;
@@ -26,9 +34,8 @@ public abstract class Task
     TaskDb.addTask(name, question, accuracy, type);
   }
 
-  public abstract void assignCrowd();
-
-  // Define implementations of general crowd assignment methods, to be used by
-  // assignCrowd.
+  public void updateAccuracies() {
+	
+  }
 
 }
