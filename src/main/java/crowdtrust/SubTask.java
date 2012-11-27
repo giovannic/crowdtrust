@@ -14,8 +14,9 @@ public abstract class SubTask {
 		return html;
 	}
 
-	public void setHtml(String html) {
-		this.html = html;
+  public String getName()
+  {
+		return this.name;
 	}
 	
 	/*
