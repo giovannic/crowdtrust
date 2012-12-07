@@ -1,4 +1,4 @@
-package crowdtrust;
+package servlet;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 
 import db.LoginDb;
+
+//import db.LoginDb;
 
 import java.util.Properties;
 
@@ -36,6 +38,12 @@ public class LoginServlet extends HttpServlet {
       PrintWriter out = response.getWriter();
       out.print(userLobby.generate());
     }
+
+    //Lobby userLobby = new Lobby("test"); //TODO
+    //userLobby.addClientTable();
+    //PrintWriter out = response.getWriter();
+    //out.print(userLobby.generate());
+    //out.print("some kinda schpiel");
   }
   
   protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -1,8 +1,11 @@
 package db;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+
+import crowdtrust.Task;
 
 public class TaskDb {
 	
@@ -24,18 +27,44 @@ public class TaskDb {
 	      return true;
 	}
 	
-	public static Collection<crowdtrust.Task> getTask(String name){
+	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
 	      sql.append("SELECT * FROM accounts");
 	      sql.append("WHERE name = ?");
 	      try {
 	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 	        preparedStatement.setString(1, name);
-	        preparedStatement.execute();
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        if(!resultSet.next() || !resultSet.isLast()) {
+			      //task does not exist
+			      return null;
+			    }
+	        return TaskDb.map(resultSet);
 	      }       
 	      catch (SQLException e) {
 	          return null;
 	      }
-	      return null;//change to list
 	}
+
+	public static Task map(ResultSet resultSet) {
+		//TODO ryan is on it
+		return null;
+	}
+
+	public static boolean checkFinished(int id) throws SQLException {
+		StringBuilder sql = new StringBuilder();
+	    sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task");
+	    sql.append("WHERE tasks.id = ?");
+	    PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	    preparedStatement.setString(1, Integer.toString(id));
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if(!resultSet.next() || !resultSet.isLast()) {
+		      //task does not exist, grave error TODO log it
+		  return true;
+		}
+	    return false;    
+
+	}
+	
+	
 }

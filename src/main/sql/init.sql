@@ -13,7 +13,9 @@ CREATE TABLE accounts
   password BIT(256) NOT NULL,
   type BIT(3) NOT NULL,
   session CHARACTER(32) NULL,
-  last_active TIMESTAMP NOT NULL
+  last_active TIMESTAMP NOT NULL,
+  expert BOOLEAN,
+  accuracy INTEGER
 );
 
 CREATE TABLE types
@@ -29,7 +31,8 @@ CREATE TABLE tasks
   name VARCHAR(100) NOT NULL,
   question VARCHAR(100) NOT NULL,
   accuracy INTEGER NOT NULL,
-  type INTEGER REFERENCES types (id)
+  type INTEGER REFERENCES types (id),
+  ex_time INTEGER
 );
 
 CREATE TABLE subtasks
@@ -37,10 +40,12 @@ CREATE TABLE subtasks
   id SERIAL PRIMARY KEY,
   task INTEGER REFERENCES tasks (id),
   media BIT VARYING NULL,
-  responses BIT VARYING NULL
+  estimate BIT VARYING NULL,
+  confidence FLOAT,
+  active BOOLEAN
 );
 
-CREATE TABLE assignments
+CREATE TABLE responses
 (
   id SERIAL PRIMARY KEY,
   account INTEGER REFERENCES accounts (id),

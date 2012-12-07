@@ -3,24 +3,12 @@ package crowdtrust;
 public class BinaryTask extends Task
 {
   
-  public BinaryTask()
+  public BinaryTask(int id, String name, String question, int accuracy)
   {
-	  //for the benefit of the object mapper
-  }
-  
-  // what class should images be stored as?!
-  public BinaryTask(String name, String question)
-  {
-    super();
-    this.name = name;
-    this.question = question;
-    this.addToDatabase();
+	  super(id, name, question, accuracy,1);
   }
   
   public void assignCrowd()
   {
   }
-
-  // inner class extending taskdata
-
 }

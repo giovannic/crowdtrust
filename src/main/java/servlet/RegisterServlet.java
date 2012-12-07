@@ -1,6 +1,6 @@
-package crowdtrust;
+package servlet;
 
-import db.RegisterDb;
+//import db.RegisterDb;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ public class RegisterServlet extends HttpServlet {
     String email = request.getParameter("email");
     String client = request.getParameter("client");
     String crowd = request.getParameter("crowd");
-    RegisterDb.addUser(email, username, password, client, crowd);
+    //RegisterDb.addUser(email, username, password, client, crowd);
     response.sendRedirect("/login.html");
     /*try {
       String url = "jdbc:postgresql://db:5432/g1236218_u";
