@@ -6,16 +6,19 @@ import java.util.List;
 
 public abstract class WebPage {
 
-  public String name;
+  protected String name;
 
-  public String head;
+  protected String head;
 
-  public String top;
+  protected String top;
 
-  public List <WebElement> body;
+  protected List <WebElement> body;
 
-  public WebPage(String user) {
-    head = "<link href=\"stylesheet.css\" rel=\"stylesheet\" type=\"text/css\">" +
+  protected String context;
+  
+  public WebPage(String user, String context) {
+	this.context = context;
+    head = "<link href=\"" + context + "/stylesheet.css\" rel=\"stylesheet\" type=\"text/css\">" +
               "\n" + "<title>" + "\n" + "CrowdTrust - " + name + "\n" +
               "\n" + "</title>" + "\n";
 

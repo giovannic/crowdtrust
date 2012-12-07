@@ -4,8 +4,8 @@ import java.lang.StringBuilder;
 
 public class Lobby extends WebPage{
 
-  public Lobby(String name){
-    super(name);
+  public Lobby(String name, String context){
+    super(name, context);
   }
 
   public void addCrowdTable(){

@@ -3,7 +3,8 @@ package db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 import crowdtrust.Task;
 
@@ -53,7 +54,7 @@ public class TaskDb {
 
 	public static boolean checkFinished(int id) throws SQLException {
 		StringBuilder sql = new StringBuilder();
-	    sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task");
+	    sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
 	    sql.append("WHERE tasks.id = ?");
 	    PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 	    preparedStatement.setString(1, Integer.toString(id));
@@ -66,5 +67,28 @@ public class TaskDb {
 
 	}
 	
+	public List<String> getTasksForCrowdId(int id) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT task.name FROM task ");
+		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
+		sql.append("OR task.ex_time + task.date_created < NOW()");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			List<String> tasks = new ArrayList<String>();
+			while(resultSet.next()) {
+				String taskName = resultSet.getString("task.name");
+				tasks.add(taskName);
+			}
+			return tasks;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	
 }
