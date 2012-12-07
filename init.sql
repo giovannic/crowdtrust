@@ -32,7 +32,8 @@ CREATE TABLE tasks
   question VARCHAR(100) NOT NULL,
   accuracy INTEGER NOT NULL,
   type INTEGER REFERENCES types (id),
-  ex_time INTEGER
+  ex_time TIMESTAMP,
+  date_created TIMESTAMP
 );
 
 CREATE TABLE subtasks

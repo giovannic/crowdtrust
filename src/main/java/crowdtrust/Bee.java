@@ -3,5 +3,8 @@ package crowdtrust;
 public class Bee {
 	int id;
 	boolean expert;
-	float accuracy;
+	public double[] getBinaryaccuracy() {
+		// TODO go db and get accuracy
+		return null;
+	}
 }

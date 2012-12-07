@@ -21,22 +21,34 @@ public class LoginServlet extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
-    if(request.isRequestedSessionIdValid()) {
-      response.sendRedirect("/lobby.html");
-    }  
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-    int id = LoginDb.checkUserDetails(username, password);
-    if(!request.isRequestedSessionIdValid() && id > 0) {
-      HttpSession session = request.getSession();
-      session.setMaxInactiveInterval(1200);
-      //session.setAttribute("account_id", resultSet.getInt("id"));
+    if(!request.isRequestedSessionIdValid()) {
+	    String username = request.getParameter("username");
+	    String password = request.getParameter("password");
+	    //int id = LoginDb.checkUserDetails(username, password);
+	    int id = 1;
+	    if(!request.isRequestedSessionIdValid() && id > 0) {
+	      HttpSession session = request.getSession();
+	      session.setMaxInactiveInterval(1200);
+	      //session.setAttribute("account_id", resultSet.getInt("id"));
+	    }
     }
-    Lobby userLobby = new Lobby("test"); //TODO
-    userLobby.addClientTable();
-    PrintWriter out = response.getWriter();
-    out.print(userLobby.generate());
-    out.print("some kinda schpiel");
+    makeLobby(response, request.getContextPath());
+    
+  }
+  
+  private void makeLobby(HttpServletResponse response, String context){
+	  PrintWriter out;
+	try {
+		out = response.getWriter();
+		Lobby userLobby = new Lobby("test", context); //TODO
+	    userLobby.addClientTable();
+	    userLobby.addCrowdTable();
+	    
+	    out.print(userLobby.generate());
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
   }
 
   /*private byte[] sha256(String password) {

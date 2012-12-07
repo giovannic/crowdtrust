@@ -10,6 +10,7 @@ public abstract class Task
   protected String question;
   protected int accuracy;
   protected int type;
+  protected int owner_id;
   
   Task(int id, String name, String question, int accuracy, int type){
 	  this.id = id;
@@ -29,7 +30,7 @@ public abstract class Task
     return this.name;
   }
 
-  protected void addToDatabase()
+  public void addToDatabase()
   {
     TaskDb.addTask(name, question, accuracy, type);
   }

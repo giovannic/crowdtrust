@@ -6,9 +6,11 @@ import java.util.List;
 public abstract class SubTask {
 	
 	//public Media media;
-	private String html;
-	private List <Bee> responses;
-	private int id;
+	protected String html;
+	protected List <Bee> responses;
+	protected int id;
+	protected double confidence;
+	protected Response best_estimate;
 	
 	public String getHtml() {
 		return html;
@@ -22,7 +24,7 @@ public abstract class SubTask {
 	 * calculates the new estimate and confidence, 
 	 * if the confidence is good enough the subtask is closed
 	 * */
-	public abstract void estimate();
+	public abstract void estimate(Bee annotator, Response r);
 	
 	public void close(){
 		db.SubTaskDb.close(id);
