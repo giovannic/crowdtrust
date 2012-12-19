@@ -18,6 +18,7 @@ public class TestUploadToDatabase extends TestCase{
 		Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStart);
 		InputStream is = tomcatServer.getInputStream();
 		String result = IOUtils.toString(is, "ASCII");
+		System.out.println(result);
 		Process tomcatStop = Runtime.getRuntime().exec(commandTomcatStop);
 		assertTrue(true);
 	}
