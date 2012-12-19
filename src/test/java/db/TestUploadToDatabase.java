@@ -13,8 +13,8 @@ public class TestUploadToDatabase extends TestCase{
 	}
 	
 	public void testUpload() throws Exception {
-		String commandTomcatStart = "tomcat7 start";
-		String commandTomcatStop = "tomcat7 stop";
+		String commandTomcatStart = "tomcat6 start";
+		String commandTomcatStop = "tomcat6 stop";
 		Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStart);
 		InputStream is = tomcatServer.getInputStream();
 		String result = IOUtils.toString(is, "ASCII");
