@@ -15,10 +15,10 @@ public class TestUploadToDatabase extends TestCase{
 	public void testUpload() throws Exception {
 		String commandTomcatStart = "tomcat7 start";
 		String commandTomcatStop = "tomcat7 stop";
-		//Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStart);
-		//InputStream is = tomcatServer.getInputStream();
-		//String result = IOUtils.toString(is, "ASCII");
-		//Process tomcatStop = Runtime.getRuntime().exec(commandTomcatStop);
+		Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStart);
+		InputStream is = tomcatServer.getInputStream();
+		String result = IOUtils.toString(is, "ASCII");
+		Process tomcatStop = Runtime.getRuntime().exec(commandTomcatStop);
 		assertTrue(true);
 	}
 
