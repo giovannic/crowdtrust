@@ -31,12 +31,14 @@ public class TestUploadToDatabase extends TestCase{
 //		InputStream is = tomcatServer.getInputStream();
 //		String result = IOUtils.toString(is, "ASCII");
 //		System.out.println(result);
-		new BinaryTask(1, name1, question1, accuracy1);
-		new BinaryTask(2, name2, question2, accuracy2);
-		Task t1 = TaskDb.getTask(name1);
-		Task t2 = TaskDb.getTask(name2);
-		assertTrue(t1.getId()==1);
-		assertTrue(t2.getId()==2);
+		Task t1 = new BinaryTask(1, name1, question1, accuracy1);
+		Task t2 = new BinaryTask(2, name2, question2, accuracy2);
+		t1.addToDatabase();
+		t2.addToDatabase();
+		Task x = TaskDb.getTask(name1);
+		Task y = TaskDb.getTask(name2);
+		assertTrue(x.getId()==1);
+		assertTrue(y.getId()==2);
 	}
 
 }

@@ -75,7 +75,7 @@
     -->
 
     <!-- Define a non-SSL HTTP/1.1 Connector on port 45556 -->
-    <Connector port="59999" maxHttpHeaderSize="8192"
+    <Connector port="55888" maxHttpHeaderSize="8192"
                maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
                enableLookups="false" redirectPort="8443" acceptCount="100"
                connectionTimeout="20000" disableUploadTimeout="true" />

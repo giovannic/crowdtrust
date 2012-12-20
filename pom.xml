@@ -37,20 +37,37 @@
 			   </configuration>-->
 			</plugin>
         </plugins>
-    </build>
+    </build><!--
+    <repositories>
+        <repository>
+            <id>repo</id>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <url>file://${project.basedir}/repo</url>
+        </repository>
+    </repositories>-->
     <dependencies>
 		<dependency>
-		  <groupId>junit</groupId>
-		  <artifactId>junit</artifactId>
-		  <version>4.8.1</version>
-		  <scope>test</scope>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.8.1</version>
+		    <scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>servlet-api-3.0</artifactId>
-            <version>7.0.0pre2</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+		    <groupId>org.glassfish.main.jdbc.jdbc-ra.jdbc40</groupId>
+		    <artifactId>jdbc40</artifactId>
+		    <version>4.0-b33</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.ancoron.postgresql</groupId>
+		    <artifactId>org.postgresql</artifactId>
+		    <version>9.1.901.jdbc4.1-rc8</version>
+		</dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

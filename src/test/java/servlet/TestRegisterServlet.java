@@ -15,7 +15,7 @@ public class TestRegisterServlet extends TestCase {
 	String commandTomcatStart = "tomcat6 start";
 	String commandTomcatStop = "tomcat6 stop";
 	
-	private static final String SERVLET_URL = "http://shell4.doc.ic.ac.uk:45678/servlet/RegisterServlet";
+	private static final String SERVLET_URL = "http://glyph05.doc.ic.ac.uk:55888/servlet/register";
 	
 	private static final String UN = "test";
 	private static final String PW = "test";
