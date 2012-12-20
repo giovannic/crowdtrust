@@ -24,7 +24,7 @@ public class TaskDb {
 	        preparedStatement.execute();
 	      }       
 	      catch (SQLException e) {
-	    	  System.err.println(e.printStackTrace());
+	    	  e.printStackTrace();
 	          return false;
 	      }
 	      return true;
