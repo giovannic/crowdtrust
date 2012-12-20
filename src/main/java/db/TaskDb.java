@@ -13,7 +13,7 @@ public class TaskDb {
 	
 	public static boolean addTask(String name, String question, int accuracy, int type){
 		StringBuilder sql = new StringBuilder();
-	      sql.append("INSERT INTO accounts (name, question, type, accuracy) ");
+	      sql.append("INSERT INTO tasks (name, question, type, accuracy) ");
 	      sql.append("VALUES(?, ?, ?, ?)");
 	      try {
 	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
@@ -32,7 +32,7 @@ public class TaskDb {
 	
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
-	      sql.append("SELECT * FROM accounts");
+	      sql.append("SELECT * FROM tasks");
 	      sql.append("WHERE name = ?");
 	      try {
 	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
