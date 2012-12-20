@@ -33,8 +33,8 @@ public class TestUploadToDatabase extends TestCase{
 //		System.out.println(result);
 		Task t1 = new BinaryTask(1, name1, question1, accuracy1);
 		Task t2 = new BinaryTask(2, name2, question2, accuracy2);
-		t1.addToDatabase();
-		t2.addToDatabase();
+		assertTrue(t1.addToDatabase());
+		assertTrue(t2.addToDatabase());
 		System.out.println("NAME ONE HEREEEEEEEEEEEEEEEEEEEEEEEEEEE - " + name1);
 		Task x = TaskDb.getTask(name1);
 		Task y = TaskDb.getTask(name2);

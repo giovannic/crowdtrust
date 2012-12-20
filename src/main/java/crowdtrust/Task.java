@@ -48,9 +48,9 @@ public abstract class Task
     return this.accuracy;
   }
 
-  public void addToDatabase()
+  public boolean addToDatabase()
   {
-    TaskDb.addTask(name, question, accuracy, type);
+    return TaskDb.addTask(name, question, accuracy, type);
   }
 
   public void updateAccuracies() {
