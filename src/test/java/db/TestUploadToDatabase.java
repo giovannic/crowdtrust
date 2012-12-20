@@ -37,8 +37,16 @@ public class TestUploadToDatabase extends TestCase{
 		t2.addToDatabase();
 		Task x = TaskDb.getTask(name1);
 		Task y = TaskDb.getTask(name2);
-		assertTrue(x.getId()==1);
-		assertTrue(y.getId()==2);
+		assertFalse(x == null);
+		assertFalse(y == null);
+		assertTrue(x.getName().equals(name1));
+		assertTrue(x.getQuestion().equals(question1));
+		assertTrue(x.getType()==1);
+		assertTrue(x.getAccuracy()==accuracy1);
+		assertTrue(y.getName().equals(name1));
+		assertTrue(y.getQuestion().equals(question1));
+		assertTrue(y.getType()==1);
+		assertTrue(y.getAccuracy()==accuracy1);
 	}
 
 }

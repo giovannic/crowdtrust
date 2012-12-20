@@ -30,6 +30,24 @@ public abstract class Task
     return this.name;
   }
 
+  public String getQuestion()
+  {
+    return this.question;
+  }
+
+
+
+  public int getType()
+  {
+    return this.type;
+  }
+
+
+  public int getAccuracy()
+  {
+    return this.accuracy;
+  }
+
   public void addToDatabase()
   {
     TaskDb.addTask(name, question, accuracy, type);

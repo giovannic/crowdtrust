@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import crowdtrust.BinaryTask;
 import crowdtrust.Task;
 
 public class TaskDb {
@@ -36,10 +37,6 @@ public class TaskDb {
 	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 	        preparedStatement.setString(1, name);
 	        ResultSet resultSet = preparedStatement.executeQuery();
-	        if(!resultSet.next() || !resultSet.isLast()) {
-			      //task does not exist
-			      return null;
-			    }
 	        return TaskDb.map(resultSet);
 	      }       
 	      catch (SQLException e) {
@@ -48,8 +45,24 @@ public class TaskDb {
 	}
 
 	public static Task map(ResultSet resultSet) {
-		//TODO ryan is on it
-		return null;
+		Task thisTask = null;
+		try {
+			while(resultSet.next()) {
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				String question = resultSet.getString("question");
+				int type = resultSet.getInt("type");
+				int accuracy = resultSet.getInt("accuracy");
+				switch(type) {
+				case 1:
+					thisTask = new BinaryTask(id, name, question, accuracy);
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return thisTask;
 	}
 
 	public static boolean checkFinished(int id) throws SQLException {
