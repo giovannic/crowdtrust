@@ -18,7 +18,7 @@ public class TestTaskServlet extends TestCase{
 	
 	@Before
 	public void before() throws IOException {
-		Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStart);		
+		//Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStart);		
 	}
 	
 	public void testServlet() {
@@ -27,6 +27,6 @@ public class TestTaskServlet extends TestCase{
 	
 	@After
 	public void after() throws IOException {
-		Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStop);		
+		//Process tomcatServer = Runtime.getRuntime().exec(commandTomcatStop);		
 	}
 }

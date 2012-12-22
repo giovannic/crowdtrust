@@ -1,7 +1,6 @@
 package db;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.Connection;
 
 import org.apache.commons.io.IOUtils;
@@ -31,6 +30,7 @@ public class TestUploadToDatabase extends TestCase{
 //		InputStream is = tomcatServer.getInputStream();
 //		String result = IOUtils.toString(is, "ASCII");
 //		System.out.println(result);
+/*
 		Task t1 = new BinaryTask(1, name1, question1, accuracy1);
 		Task t2 = new BinaryTask(2, name2, question2, accuracy2);
 		assertTrue(t1.addToDatabase());
@@ -47,7 +47,7 @@ public class TestUploadToDatabase extends TestCase{
 		assertTrue(y.getName().equals(name1));
 		assertTrue(y.getQuestion().equals(question1));
 		assertTrue(y.getType()==1);
-		assertTrue(y.getAccuracy()==accuracy1);
+		assertTrue(y.getAccuracy()==accuracy1);*/
 	}
 
 }

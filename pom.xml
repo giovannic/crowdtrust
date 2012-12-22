@@ -16,7 +16,7 @@
                 <version>2.0</version>
                 <configuration>
                     <path>/crowdtrust</path>
-		    <port>55550</port>
+		                <port>55550</port>
                 </configuration>
             </plugin>
             <plugin>
@@ -28,29 +28,13 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-			<plugin>
-			   <groupId>org.apache.maven.plugins</groupId>
-			   <artifactId>maven-surefire-plugin</artifactId>
-			   <version>2.5</version><!--
-			   <configuration>
-				 <parallel>methods</parallel>
-			   </configuration>-->
-			</plugin>
-        </plugins>
-    </build><!--
-    <repositories>
-        <repository>
-            <id>repo</id>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <url>file://${project.basedir}/repo</url>
-        </repository>
-    </repositories>-->
+			      <plugin>
+			        <groupId>org.apache.maven.plugins</groupId>
+			         <artifactId>maven-surefire-plugin</artifactId>
+			         <version>2.5</version>
+			      </plugin>
+          </plugins>
+    </build>
     <dependencies>
 		<dependency>
 		    <groupId>junit</groupId>
@@ -78,10 +62,11 @@
             <artifactId>jackson-core</artifactId>
             <version>2.1.1</version>
         </dependency>
-	<dependency>
-            <groupId>org.apache.directory.studio</groupId>
-            <artifactId>org.apache.commons.io</artifactId>
-            <version>2.1</version>
+	      <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>2.11</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -90,9 +75,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-		<groupId>org.apache.commons</groupId>
-		<artifactId>commons-math3</artifactId>
-		<version>3.0</version>
-	</dependency>
+		      <groupId>org.apache.commons</groupId>
+		      <artifactId>commons-math3</artifactId>
+		      <version>3.0</version>
+	      </dependency>
     </dependencies>
 </project>
