@@ -41,6 +41,9 @@ public class TestRegisterServlet extends TestCase {
 	
 	@Before
 	public void before() {
+	}
+	
+	public void testServlet() throws Exception{
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(INITSQL_LOC));
 			StringBuffer sb = new StringBuffer();
@@ -58,9 +61,6 @@ public class TestRegisterServlet extends TestCase {
 			e.printStackTrace();
 		}
 		System.out.println("I HAVE RUN");
-	}
-	
-	public void testServlet() throws Exception{
 		//TODO: INITIALISE DB
 		/*
 		URL url = new URL(SERVLET_URL);
