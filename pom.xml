@@ -16,6 +16,7 @@
                 <version>2.0</version>
                 <configuration>
                     <path>/crowdtrust</path>
+		    <port>55550</port>
                 </configuration>
             </plugin>
             <plugin>
