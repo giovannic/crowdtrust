@@ -30,24 +30,23 @@ public class TestUploadToDatabase extends TestCase{
 //		InputStream is = tomcatServer.getInputStream();
 //		String result = IOUtils.toString(is, "ASCII");
 //		System.out.println(result);
-/*
-		Task t1 = new BinaryTask(1, name1, question1, accuracy1);
-		Task t2 = new BinaryTask(2, name2, question2, accuracy2);
-		assertTrue(t1.addToDatabase());
-		assertTrue(t2.addToDatabase());
-		System.out.println("NAME ONE HEREEEEEEEEEEEEEEEEEEEEEEEEEEE - " + name1);
-		Task x = TaskDb.getTask(name1);
-		Task y = TaskDb.getTask(name2);
-		assertFalse(x == null);
-		assertFalse(y == null);
-		assertTrue(x.getName().equals(name1));
-		assertTrue(x.getQuestion().equals(question1));
-		assertTrue(x.getType()==1);
-		assertTrue(x.getAccuracy()==accuracy1);
-		assertTrue(y.getName().equals(name1));
-		assertTrue(y.getQuestion().equals(question1));
-		assertTrue(y.getType()==1);
-		assertTrue(y.getAccuracy()==accuracy1);*/
+//		Task t1 = new BinaryTask(1, name1, question1, accuracy1);
+//		Task t2 = new BinaryTask(2, name2, question2, accuracy2);
+//		assertTrue(t1.addToDatabase());
+//		assertTrue(t2.addToDatabase());
+//		System.out.println("NAME ONE HEREEEEEEEEEEEEEEEEEEEEEEEEEEE - " + name1);
+//		Task x = TaskDb.getTask(name1);
+//		Task y = TaskDb.getTask(name2);
+//		assertFalse(x == null);
+//		assertFalse(y == null);
+//		assertTrue(x.getName().equals(name1));
+//		assertTrue(x.getQuestion().equals(question1));
+//		assertTrue(x.getType()==1);
+//		assertTrue(x.getAccuracy()==accuracy1);
+//		assertTrue(y.getName().equals(name1));
+//		assertTrue(y.getQuestion().equals(question1));
+//		assertTrue(y.getType()==1);
+//		assertTrue(y.getAccuracy()==accuracy1);
 	}
 
 }

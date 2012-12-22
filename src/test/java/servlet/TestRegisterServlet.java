@@ -19,6 +19,7 @@ import org.junit.Before;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 import db.DbAdaptor;
+import db.DbInitialiser;
 
 public class TestRegisterServlet extends TestCase {
 
@@ -30,38 +31,14 @@ public class TestRegisterServlet extends TestCase {
 	private static final String EMAIL = "test@example.com";
 	private static final String CLIENT = "testcl";
 	private static final String CROWD = "testcr";
-	
-	private final static String URL = "jdbc:postgresql://db:5432/g1236218_u";
-	private final static String USER = "g1236218_u";
-	private final static String PASSWORD = "RLTn4ViKks";
-	private final static String INITSQL_LOC = "src/main/sql/init.sql";
-	private WebClient client;
-	
-	private Connection connection = null;
+
 	
 	@Before
 	public void before() {
 	}
 	
 	public void testServlet() throws Exception{
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(INITSQL_LOC));
-			StringBuffer sb = new StringBuffer();
-			String sqlLine;
-			while((sqlLine = reader.readLine()) != null) {
-				sb.append(sqlLine + "\n");
-			}
-			reader.close();
-			connection = DbAdaptor.connect();
-			Statement s = null;
-			connection.createStatement().execute(sb.toString());
-		} catch (Exception e) {
-			System.err.println("SOMEBODY MOVED OR FUDGED init.sql");
-			System.err.println("currently looking for it in: " + INITSQL_LOC);
-			e.printStackTrace();
-		}
-		System.out.println("I HAVE RUN");
-		//TODO: INITIALISE DB
+		DbInitialiser.init();
 		/*
 		URL url = new URL(SERVLET_URL);
 		URLConnection connection = url.openConnection();
