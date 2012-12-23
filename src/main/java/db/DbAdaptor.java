@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import org.postgresql.Driver;
 
 public class DbAdaptor {
 	
@@ -12,6 +13,12 @@ public class DbAdaptor {
 	private final static String PASSWORD = "RLTn4ViKks";
 	
 	public static Connection connect(){
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		Properties properties = new Properties();
 	      properties.setProperty("user", USER);
 	      properties.setProperty("password", PASSWORD);

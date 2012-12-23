@@ -41,18 +41,18 @@ public class TaskServlet extends HttpServlet
 		//test cases
 		taskJSON = "{ \"name\" : \"test\", \"question\" : \"what's your fave number?\"}";
 		
-		Task t = mapper.readValue(taskJSON, TASK_TYPES[type]);
+//		Task t = mapper.readValue(taskJSON, TASK_TYPES[type]);
 		
 		//get id
 		
 		//t.assignOwner();
-		t.addToDatabase();
+//		t.addToDatabase();
 		
 		response.setContentType("text/plain");
 	    PrintWriter out = response.getWriter();
 	    
 	    out.print("bonjour monde\n");
-	    out.print("new task made " + t.getName() + "\n");
+//	    out.print("new task made " + t.getName() + "\n");
 	} catch (Exception e){
 		System.out.print("argument error - TODO - separate out exceptions");
 		e.printStackTrace();
