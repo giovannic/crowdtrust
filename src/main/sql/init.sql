@@ -1,9 +1,9 @@
 
-DROP TABLE IF EXISTS assignments;
-DROP TABLE IF EXISTS subtasks;
-DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS responses;
+DROP TABLE IF EXISTS subtasks CASCADES;
+DROP TABLE IF EXISTS tasks CASCADES;
 DROP TABLE IF EXISTS types;
-DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS accounts CASCADES;
 
 CREATE TABLE accounts
 (
@@ -54,5 +54,5 @@ CREATE TABLE responses
   response BIT VARYING NULL
 );
 
-INSERT INTO types (id, name)
+INSERT INTO types
 VALUES(1, 'binary');
