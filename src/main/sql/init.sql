@@ -53,3 +53,6 @@ CREATE TABLE responses
   subtask INTEGER REFERENCES subtasks (id),
   response BIT VARYING NULL
 );
+
+INSERT INTO types (id, name)
+VALUES(1, 'binary');
