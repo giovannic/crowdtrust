@@ -47,28 +47,29 @@ public class TaskDb {
 	
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
-	      sql.append("SELECT * FROM tasks");
-	      sql.append("WHERE name = ?");
-	      PreparedStatement preparedStatement;
-	      try {
-	    	  preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		        preparedStatement.setString(1, name);
-		        ResultSet resultSet = preparedStatement.executeQuery();
-		        return TaskDb.map(resultSet);
-	      }
-	      catch (ClassNotFoundException e) {
-	      	  System.err.println("Error connecting to DB on get Task: PSQL driver not present");
-	      	  return null;
-	      } catch (SQLException e) {
-	      	  System.err.println("SQL Error on get Task");
-	      	  return null;
-	      }
+		sql.append("SELECT * FROM tasks");
+		sql.append("WHERE name = ?");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    return TaskDb.map(resultSet);
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return null;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return null;
+		}
 	}
 
 	public static Task map(ResultSet resultSet) {
 		Task thisTask = null;
 		try {
 			int i = 1;
+			System.out.println("about to iterate through results set!!!!");
 			while(resultSet.next()) {
 				System.out.println("interation of result set: " + i);
 				int id = resultSet.getInt("id");
