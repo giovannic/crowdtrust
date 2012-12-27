@@ -13,8 +13,18 @@ public class RegisterDb {
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO accounts (email, username, password, type) ");
     sql.append("VALUES(?, ?, CAST(? AS bytea), ?)");
+    PreparedStatement preparedStatement;
     try {
-      PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Register: PSQL driver not present");
+  	  return false;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Register");
+  	  return false;
+    }
+    try {
       preparedStatement.setString(1, email);
       preparedStatement.setString(2, username);
       preparedStatement.setBytes(3, sha256(password));

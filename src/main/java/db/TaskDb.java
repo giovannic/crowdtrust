@@ -1,8 +1,10 @@
 package db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,36 +15,59 @@ public class TaskDb {
 	
 	public static boolean addTask(String name, String question, int accuracy, int type){
 		StringBuilder sql = new StringBuilder();
-	      sql.append("INSERT INTO tasks (name, question, type, accuracy) ");
-	      sql.append("VALUES(?, ?, ?, ?)");
-	      try {
-	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-	        preparedStatement.setString(1, name);
-	        preparedStatement.setString(2, question);
-	        preparedStatement.setInt(3, type);
-	        preparedStatement.setInt(4, accuracy);
-	        preparedStatement.execute();
-	      }       
-	      catch (SQLException e) {
-	    	  e.printStackTrace();
-	          return false;
-	      }
-	      return true;
+		sql.append("INSERT INTO tasks (name, question, type, accuracy)\n");
+		sql.append("VALUES(?, ?, ?, ?)");
+		Connection c;
+		try {
+			c = DbAdaptor.connect();
+		}
+		catch (ClassNotFoundException e) {
+			System.err.println("Error connecting to DB on add Task: PSQL driver not present");
+		  	return false;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on add Task");
+		  	return false;
+		}
+		try {
+		    PreparedStatement preparedStatement = c.prepareStatement(sql.toString());
+		    preparedStatement.setString(1, name);
+		    preparedStatement.setString(2, question);
+		    preparedStatement.setInt(3, type);
+		    preparedStatement.setInt(4, accuracy);
+		    preparedStatement.execute();
+		    preparedStatement.close();
+		    c.close();
+		}       
+		catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}	      
+		return true;
 	}
 	
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
-	      sql.append("SELECT * FROM tasks");
-	      sql.append("WHERE name = ?");
-	      try {
-	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-	        preparedStatement.setString(1, name);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        return TaskDb.map(resultSet);
-	      }       
-	      catch (SQLException e) {
-	          return null;
-	      }
+		sql.append("SELECT * FROM tasks\n");
+		sql.append("WHERE name = ?");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return null;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return null;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    return TaskDb.map(resultSet);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
+		  	return null;
+		}
 	}
 
 	public static Task map(ResultSet resultSet) {
@@ -70,7 +95,17 @@ public class TaskDb {
 		StringBuilder sql = new StringBuilder();
 	    sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
 	    sql.append("WHERE tasks.id = ?");
-	    PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	    PreparedStatement preparedStatement;
+	    try {
+	    preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	    }
+	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	      	return true;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	return true;
+	    }
 	    preparedStatement.setString(1, Integer.toString(id));
 	    ResultSet resultSet = preparedStatement.executeQuery();
 	    if(!resultSet.next() || !resultSet.isLast()) {
@@ -97,11 +132,14 @@ public class TaskDb {
 				tasks.add(taskName);
 			}
 			return tasks;
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return null;
+	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
+	      	return null;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on get tasks for id");
+	      	return null;
+	    }
 		
 	}
 	

@@ -19,10 +19,14 @@ public class SubTaskDb {
 		      try {
 		        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 		        preparedStatement.execute();
-		      }       
-		      catch (SQLException e) {
-		          return false;
 		      }
+		      catch (ClassNotFoundException e) {
+		      	  System.err.println("Error connecting to DB on subtask close: PSQL driver not present");
+		      	  return false;
+		        } catch (SQLException e) {
+		      	  System.err.println("SQL Error on subtask close");
+		      	  return false;
+		        }
 		      return true;
 	}
 
@@ -36,12 +40,17 @@ public class SubTaskDb {
 	        ResultSet resultSet = preparedStatement.executeQuery();
 	        if(!resultSet.next() || !resultSet.isLast()) {
 		      //task does not exist, grave error TODO log it
-		      return null;
+	        	System.err.println("Subtask: " + id + " doesn't exist");
+	        	return null;
 		    }
             return TaskDb.map(resultSet);
-	      }       
-	      catch (SQLException e) {
-	          return null;
+	      }
+	      catch (ClassNotFoundException e) {
+	      	  System.err.println("Error connecting to DB on get Subtask: PSQL driver not present");
+	      	  return null;
+	      } catch (SQLException e) {
+	      	  System.err.println("SQL Error on get Subtask");
+	      	  return null;
 	      }
 	}
 	
