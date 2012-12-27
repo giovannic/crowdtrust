@@ -15,7 +15,7 @@ public class TaskDb {
 	
 	public static boolean addTask(String name, String question, int accuracy, int type){
 		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO tasks (name, question, type, accuracy) ");
+		sql.append("INSERT INTO tasks (name, question, type, accuracy)\n");
 		sql.append("VALUES(?, ?, ?, ?)");
 		Connection c;
 		try {
@@ -47,7 +47,7 @@ public class TaskDb {
 	
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM tasks");
+		sql.append("SELECT * FROM tasks\n");
 		sql.append("WHERE name = ?");
 		PreparedStatement preparedStatement;
 		try {
