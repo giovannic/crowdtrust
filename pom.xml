@@ -78,6 +78,11 @@
 		      <groupId>org.apache.commons</groupId>
 		      <artifactId>commons-math3</artifactId>
 		      <version>3.0</version>
-	      </dependency>
+	    </dependency>
+	    <dependency>
+        	<groupId>be.ac.ulg.montefiore.run.jahmm</groupId>
+        	<artifactId>jahmm</artifactId>
+        	<version>0.6.2</version>
+      	</dependency>
     </dependencies>
 </project>

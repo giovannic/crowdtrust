@@ -57,4 +57,10 @@ public abstract class Task
 	
   }
 
+  /*if all finished, close task*/
+  public void notifyFinished() {
+	// TODO Auto-generated method stub
+	
+  }
+
 }
