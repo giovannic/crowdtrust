@@ -52,15 +52,20 @@ public class TaskDb {
 		PreparedStatement preparedStatement;
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		    preparedStatement.setString(1, name);
-		    ResultSet resultSet = preparedStatement.executeQuery();
-		    return TaskDb.map(resultSet);
 		}
 		catch (ClassNotFoundException e) {
 		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
 		  	return null;
 		} catch (SQLException e) {
 		  	System.err.println("SQL Error on get Task");
+		  	return null;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    return TaskDb.map(resultSet);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
 		  	return null;
 		}
 	}
