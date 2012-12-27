@@ -43,10 +43,10 @@ public class TestUploadToDatabase extends TestCase{
 		assertTrue(x.getQuestion().equals(question1));
 		assertTrue(x.getType()==1);
 		assertTrue(x.getAccuracy()==accuracy1);
-		assertTrue(y.getName().equals(name1));
-		assertTrue(y.getQuestion().equals(question1));
+		assertTrue(y.getName().equals(name2));
+		assertTrue(y.getQuestion().equals(question2));
 		assertTrue(y.getType()==1);
-		assertTrue(y.getAccuracy()==accuracy1);
+		assertTrue(y.getAccuracy()==accuracy2);
 	}
 
 }
