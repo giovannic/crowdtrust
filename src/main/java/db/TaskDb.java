@@ -68,16 +68,20 @@ public class TaskDb {
 	public static Task map(ResultSet resultSet) {
 		Task thisTask = null;
 		try {
+			int i = 1;
 			while(resultSet.next()) {
+				System.out.println("interation of result set: " + i);
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String question = resultSet.getString("question");
 				int type = resultSet.getInt("type");
 				int accuracy = resultSet.getInt("accuracy");
+				System.out.println("returned relation - id: " + id + " name: " + name + " question: " + question + " type: " + type);
 				switch(type) {
 				case 1:
 					thisTask = new BinaryTask(id, name, question, accuracy);
 				}
+				i++;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
