@@ -38,7 +38,6 @@ public class TestRegisterServlet extends TestCase {
 	}
 	
 	public void testServlet() throws Exception{
-		DbInitialiser.init();
 		/*
 		URL url = new URL(SERVLET_URL);
 		URLConnection connection = url.openConnection();

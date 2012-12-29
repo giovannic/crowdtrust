@@ -30,6 +30,15 @@
         <servlet-name>register</servlet-name>
         <url-pattern>/servlet/register</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>upload</servlet-name>
+        <servlet-class>servlet.UploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>upload</servlet-name>
+        <url-pattern>/servlet/upload</url-pattern>
+    </servlet-mapping>
     
     
 
