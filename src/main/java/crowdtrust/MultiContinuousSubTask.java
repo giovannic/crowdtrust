@@ -29,38 +29,54 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	protected Estimate[] updateLikelihoods(Response r, Accuracy a,
 			Estimate[] state) {
 		ContinuousMultiR cr = (ContinuousMultiR) r;
-		SingleAccuracy sa = (SingleAccuracy) a;
+		AbsoluteAccuracy sa = (AbsoluteAccuracy) a;
 		
-		MultiGaussianDistribution mgd =
-				new MultiGaussianDistribution(
-						trueValues(cr.values), variance);
-		
+		boolean matched = false;
+		Estimate [] newState;
 		double responseSpace = 1;
 		for (int i = 0; i < ranges.length; i++){
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
 		}
 		
-		boolean matched = false;
-		for (Estimate record : state){
-			if(record.r.equals(r)){
-				matched = true;
+		if (sa.accuracy == 1){
+			MultiGaussianDistribution mgd =
+					new MultiGaussianDistribution(
+							trueValues(cr.values), variance);
+			
+			for (Estimate record : state){
+				if(record.r.equals(r)){
+					matched = true;
+				}
+				ContinuousMultiR cr2 = (ContinuousMultiR) record.r;
+				record.confidence *= mgd.probability(trueValues(cr2.values));
 			}
-			ContinuousMultiR cr2 = (ContinuousMultiR) record.r;
-			record.confidence = 
-					sa.accuracy * mgd.probability(trueValues(cr2.values)) +
-					(1 - sa.accuracy) * responseSpace;
-		}
-		
-		Estimate [] newState;
-		
-		if (!matched){
-			newState = Arrays.copyOf(state, state.length+1);
-			Estimate e = new Estimate(r, 1/responseSpace);
-			e.confidence *= sa.accuracy * mgd.probability(trueValues(cr.values)) +
-					(1 - sa.accuracy) * responseSpace;
-			newState[newState.length] = e;
+			
+			if (!matched){
+				newState = Arrays.copyOf(state, state.length+1);
+				Estimate e = new Estimate(r, 1/responseSpace);
+				e.confidence *= mgd.probability(trueValues(cr.values));
+				newState[newState.length] = e;
+			} else {
+				newState = state.clone();
+			}
+			
 		} else {
-			newState = state.clone();
+			
+			for (Estimate record : state){
+				if(record.r.equals(r)){
+					matched = true;
+				}
+				record.confidence *= 1/responseSpace;
+			}
+			
+			if (!matched){
+				newState = Arrays.copyOf(state, state.length+1);
+				Estimate e = new Estimate(r, 1/responseSpace);
+				e.confidence *= 1/responseSpace;
+				newState[newState.length] = e;
+			} else {
+				newState = state.clone();
+			}
 		}
 		
 		return newState;
