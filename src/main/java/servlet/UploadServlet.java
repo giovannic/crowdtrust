@@ -26,7 +26,7 @@ import org.apache.commons.io.IOUtils;
 public class UploadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8279791785237277465L;
-	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/";
+	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles";
 	
 	
 	@SuppressWarnings("unchecked")
@@ -71,7 +71,7 @@ public class UploadServlet extends HttpServlet {
         	}
         }
         InputStream fileIn = song.getInputStream();
-        OutputStream fileOut = new FileOutputStream(taskDir + song.getName());
+        OutputStream fileOut = new FileOutputStream(taskDir + "/" + song.getName());
         IOUtils.copy(fileIn, fileOut);
         fileOut.close();
         out.println("<html>");
