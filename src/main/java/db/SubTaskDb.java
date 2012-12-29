@@ -3,7 +3,11 @@ package db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
+import crowdtrust.Bee;
+import crowdtrust.Response;
+import crowdtrust.Estimate;
 import crowdtrust.Task;
 
 public class SubTaskDb {
@@ -48,6 +52,23 @@ public class SubTaskDb {
 	      	  System.err.println("SQL Error on get Subtask");
 	      	  return null;
 	      }
+	}
+	
+	public static Map<Bee, Response> getBinaryResponses(int id, Bee[] annotators) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Map<Bee, Response> getMultiValueResponses(int id,
+			Bee[] annotators) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Map<Bee, Response> getContinuousResponses(int id,
+			Bee[] annotators) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

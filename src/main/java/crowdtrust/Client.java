@@ -7,6 +7,7 @@ public class Client {
 	private String name;
 	private String password;
 	private List<Task> tasks;
+	
 	public String getName() {
 		return name;
 	}

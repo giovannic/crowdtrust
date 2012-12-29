@@ -8,7 +8,4 @@ public class BinaryTask extends Task
 	  super(id, name, question, accuracy,1);
   }
   
-  public void assignCrowd()
-  {
-  }
 }
