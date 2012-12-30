@@ -44,10 +44,10 @@ public class BinarySubTask extends SubTask {
 		boolean matched = false;
 		for (Estimate record : state){
 			if(record.r.equals(br)){
-				record.confidence *= accuracy;
+				record.confidence *= accuracy/(1-accuracy);
 				matched = true;
 			} else {
-				record.confidence *= (1-accuracy);
+				record.confidence *= (1-accuracy)/accuracy;
 			}
 		}
 		
@@ -55,8 +55,8 @@ public class BinarySubTask extends SubTask {
 		
 		if (!matched){
 			newState = Arrays.copyOf(state, state.length+1);
-			Estimate e = new Estimate(r, 0.5);
-			e.confidence *= accuracy;
+			Estimate e = new Estimate(r, getPrior());
+			e.confidence *= accuracy/(1-accuracy);
 			newState[newState.length] = e;
 		} else {
 			newState = state.clone();
@@ -83,5 +83,10 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected void updateAccuracies(AccuracyRecord[] accuracies) {
 		db.CrowdDb.updateBinaryAccuracies(accuracies);
+	}
+
+	@Override
+	protected double getPrior() {
+		return 1;
 	}
 }

@@ -6,6 +6,8 @@ public abstract class SubTask {
 	
 	protected int id;
 	protected double confidence_threshold;
+	protected int number_of_labels = 0;
+	protected int max_labels;
 	
 	/*
 	 * E step
@@ -21,7 +23,9 @@ public abstract class SubTask {
 		Estimate [] newState = updateLikelihoods(response,a,state);
 		
 		Estimate z = estimate(newState);
-		if(z.confidence > confidence_threshold){
+		number_of_labels++;
+		if(z.confidence > confidence_threshold || 
+				number_of_labels >= max_labels){
 			close();
 			updateAccuracies(z.r);
 		}
@@ -30,8 +34,6 @@ public abstract class SubTask {
 	private Estimate[] getEstimates(int id) {
 		return null;
 	}
-
-	protected abstract Accuracy getAccuracy(int annotatorId);
 	
 	protected abstract Estimate [] updateLikelihoods(Response r, 
 			Accuracy a, Estimate [] state);
@@ -60,13 +62,19 @@ public abstract class SubTask {
 		updateAccuracies(accuracies);
 	}
 	
+	protected abstract Accuracy maximiseAccuracy(Accuracy a, Response response, Response z);
+	
+	
+	/*
+	 * Helper functions
+	 * */
 	protected abstract Map<Bee, Response> getResponses(Bee[] annotators);
 
 	protected abstract AccuracyRecord[] getAccuracies(Bee[] annotators);
 	
 	protected abstract void updateAccuracies(AccuracyRecord [] accuracies);
-
-	protected abstract Accuracy maximiseAccuracy(Accuracy a, Response response, Response z);
+	
+	protected abstract Accuracy getAccuracy(int annotatorId);
 	
 	public void close(){
 		db.SubTaskDb.close(id);
@@ -74,9 +82,11 @@ public abstract class SubTask {
 		parent.notifyFinished();
 	}
 
+	//uniform distribution for the time being
+	protected abstract double getPrior();
+
 	public String getHtml() {
-		// TODO Auto-generated method stub
-		return null;
+		return Integer.toString(id);
 	}
 	
 }

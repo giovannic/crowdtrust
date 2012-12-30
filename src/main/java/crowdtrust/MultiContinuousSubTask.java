@@ -29,7 +29,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	protected Estimate[] updateLikelihoods(Response r, Accuracy a,
 			Estimate[] state) {
 		ContinuousMultiR cr = (ContinuousMultiR) r;
-		AbsoluteAccuracy sa = (AbsoluteAccuracy) a;
+		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
 		Estimate [] newState;
@@ -38,47 +38,31 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
 		}
 		
-		if (sa.accuracy == 1){
-			MultiGaussianDistribution mgd =
-					new MultiGaussianDistribution(
-							trueValues(cr.values), variance);
+		MultiGaussianDistribution mgd =
+				new MultiGaussianDistribution(
+						trueValues(cr.values), variance);
 			
-			for (Estimate record : state){
-				if(record.r.equals(r)){
-					matched = true;
-				}
-				ContinuousMultiR cr2 = (ContinuousMultiR) record.r;
-				record.confidence *= mgd.probability(trueValues(cr2.values));
+		for (Estimate record : state){
+			if(record.r.equals(r)){
+				matched = true;
 			}
-			
-			if (!matched){
-				newState = Arrays.copyOf(state, state.length+1);
-				Estimate e = new Estimate(r, 1/responseSpace);
-				e.confidence *= mgd.probability(trueValues(cr.values));
-				newState[newState.length] = e;
-			} else {
-				newState = state.clone();
-			}
-			
-		} else {
-			
-			for (Estimate record : state){
-				if(record.r.equals(r)){
-					matched = true;
-				}
-				record.confidence *= 1/responseSpace;
-			}
-			
-			if (!matched){
-				newState = Arrays.copyOf(state, state.length+1);
-				Estimate e = new Estimate(r, 1/responseSpace);
-				e.confidence *= 1/responseSpace;
-				newState[newState.length] = e;
-			} else {
-				newState = state.clone();
-			}
+			ContinuousMultiR cr2 = (ContinuousMultiR) record.r;
+			double p = sa.accuracy*mgd.probability(trueValues(cr2.values)) +
+					(1 - sa.accuracy)/responseSpace;
+			record.confidence *= p/1-p;
 		}
-		
+			
+		if (!matched){
+			newState = Arrays.copyOf(state, state.length+1);
+			Estimate e = new Estimate(r, getPrior());
+			double p = sa.accuracy*mgd.probability(trueValues(cr.values)) +
+					(1 - sa.accuracy)/responseSpace;
+			e.confidence *= p/1-p;
+			newState[newState.length] = e;
+		} else {
+				newState = state.clone();
+		}
+	
 		return newState;
 	}
 	
@@ -88,6 +72,17 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 			t[i] = values[i] * precision;
 		}
 		return t;
+	}
+
+	@Override
+	protected double getPrior() {
+		// TODO Auto-generated method stub
+		double responseSpace = 1;
+		for (int i = 0; i < ranges.length; i++){
+			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
+		}
+		double p = 1/responseSpace;
+		return p/(1-p);
 	}
 
 }
