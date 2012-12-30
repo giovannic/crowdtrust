@@ -6,8 +6,8 @@
 
 
 <form action="servlet/upload" method="post" enctype="multipart/form-data">
-	<input type="text" name="task" placeholder="Task" />
-    <input type="file" name="song" />
+	<input type="text" name="task" placeholder="Task" /><br>
+    <input type="file" name="song" /><br>
     <input type="submit" />
 </form>
 
