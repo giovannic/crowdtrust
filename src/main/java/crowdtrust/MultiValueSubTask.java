@@ -32,7 +32,7 @@ public class MultiValueSubTask extends SubTask{
 		
 		if (!matched){
 			newState = Arrays.copyOf(state, state.length+1);
-			Estimate e = new Estimate(r, getPrior());
+			Estimate e = new Estimate(r, getZPrior());
 			e.confidence *= sa.accuracy/(1-sa.accuracy);
 			newState[newState.length] = e;
 		} else {
@@ -47,9 +47,20 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected Accuracy maximiseAccuracy(Accuracy a, Response response, Response z) {
-		// TODO Auto-generated method stub
-		return null;
+	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
+		SingleAccuracy sa = (SingleAccuracy) a;
+		MultiValueR mvr = (MultiValueR) r;
+		MultiValueR mvz = (MultiValueR) z;
+		
+		int total = a.getN();
+		double w = total/total + 1;
+		double alpha = sa.accuracy*total;
+		if (mvr.equals(mvz)){
+			sa.accuracy = w*(alpha/total) + (1-w);
+		} else {
+			sa.accuracy = w*(alpha/total);
+		}
+		a.increaseN();
 	}
 
 	@Override
@@ -73,7 +84,7 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected double getPrior() {
+	protected double getZPrior() {
 		// TODO Auto-generated method stub
 		double p = 1/options;
 		return p/(1-p);

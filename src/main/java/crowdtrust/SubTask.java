@@ -57,13 +57,12 @@ public abstract class SubTask {
 		Map <Bee, Response> responses = getResponses(annotators);
 		
 		for (AccuracyRecord r : accuracies){
-			r.a = maximiseAccuracy(r.a, responses.get(r.b), z);
+			maximiseAccuracy(r.a, responses.get(r.b), z);
 		}
 		updateAccuracies(accuracies);
 	}
 	
-	protected abstract Accuracy maximiseAccuracy(Accuracy a, Response response, Response z);
-	
+	protected abstract void maximiseAccuracy(Accuracy a, Response response, Response z);
 	
 	/*
 	 * Helper functions
@@ -82,8 +81,8 @@ public abstract class SubTask {
 		parent.notifyFinished();
 	}
 
-	//uniform distribution for the time being
-	protected abstract double getPrior();
+	//uniform distribution across all posibilities for the time being
+	protected abstract double getZPrior();
 
 	public String getHtml() {
 		return Integer.toString(id);
