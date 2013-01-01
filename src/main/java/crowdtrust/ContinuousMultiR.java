@@ -2,7 +2,7 @@ package crowdtrust;
 
 public class ContinuousMultiR extends Response {
 
-	int [] values;
+	private int [] values;
 	
 	@Override
 	Byte[] serialise() {
@@ -12,8 +12,20 @@ public class ContinuousMultiR extends Response {
 
 	@Override
 	public boolean equals(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		ContinuousMultiR cmr = (ContinuousMultiR) o;
+		for (int i = 0; i < values.length; i++){
+			 if (cmr.values[i] != values[i])
+				 return false;
+		}
+		return true;
+	}
+	
+	public double [] getValues(double precision){
+		double [] t = new double [values.length];
+		for (int i = 0; i < values.length; i++){
+			t[i] = values[i] * precision;
+		}
+		return t;
 	}
 
 }

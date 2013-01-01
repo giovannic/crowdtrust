@@ -10,22 +10,32 @@ public class BinarySubTask extends SubTask {
 	}
 
 	@Override
-	protected Accuracy maximiseAccuracy(Accuracy a, Response r, Response z){
+	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		BinaryAccuracy ba = (BinaryAccuracy) a;
-		BinaryR bz = (BinaryR) z;
 		BinaryR br = (BinaryR) r;
+		BinaryR bz = (BinaryR) z;
 		
-		double accuracy;
-		
-		if (bz.isTrue()){
-			//maximise positive rate
-			accuracy = ba.truePositive;
+		int total = a.getN();
+		double w = total/total + 1;
+		if (br.isTrue()){
+			//maximise truePositive
+			double alpha = ba.truePositive*total;
+			if(bz.isTrue())
+				ba.truePositive = w*(alpha/total) + (1-w);
+			else {
+				ba.truePositive = w*(alpha/total);
+			}
 		} else {
-			//maximise negative rate
-			accuracy = ba.trueNegative;
+			//maximize trueNegative
+			double alpha = ba.trueNegative*total;
+			if(bz.isTrue())
+				ba.trueNegative = w*(alpha/total) + (1-w);
+			else {
+				ba.trueNegative = w*(alpha/total);
+			}
 		}
 		
-		return null;
+		a.increaseN();
 	}
 	
 	@Override
@@ -44,10 +54,10 @@ public class BinarySubTask extends SubTask {
 		boolean matched = false;
 		for (Estimate record : state){
 			if(record.r.equals(br)){
-				record.confidence *= accuracy;
+				record.confidence *= accuracy/(1-accuracy);
 				matched = true;
 			} else {
-				record.confidence *= (1-accuracy);
+				record.confidence *= (1-accuracy)/accuracy;
 			}
 		}
 		
@@ -55,8 +65,8 @@ public class BinarySubTask extends SubTask {
 		
 		if (!matched){
 			newState = Arrays.copyOf(state, state.length+1);
-			Estimate e = new Estimate(r, 0.5);
-			e.confidence *= accuracy;
+			Estimate e = new Estimate(r, getZPrior());
+			e.confidence *= accuracy/(1-accuracy);
 			newState[newState.length] = e;
 		} else {
 			newState = state.clone();
@@ -83,5 +93,10 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected void updateAccuracies(AccuracyRecord[] accuracies) {
 		db.CrowdDb.updateBinaryAccuracies(accuracies);
+	}
+
+	@Override
+	protected double getZPrior() {
+		return 1;
 	}
 }
