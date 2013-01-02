@@ -148,7 +148,7 @@ public class UploadServlet extends HttpServlet {
     	
         //add to subtasks
     	for (int i = 0 ; i < filenames.size() ; i++) {
-	        String insertQuery = "INSERT INTO subtasks VALUES ?,?,?";
+	        String insertQuery = "INSERT INTO subtasks VALUES (DEFAULT,?,?,?)";
 	        String filename = filenames.get(i);
 	        PreparedStatement stmt;
 	        try {
