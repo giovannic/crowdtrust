@@ -53,7 +53,7 @@ public class UploadServlet extends HttpServlet {
         	if(item.isFormField()) {
         		String field = item.getFieldName();
         		if (field.equals("task")) {
-            		String task = file.getString();
+            		String task = item.getString();
         			if (task == null) {
         				//output need task name
         			} else {
