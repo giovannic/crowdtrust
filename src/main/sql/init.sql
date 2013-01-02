@@ -43,22 +43,3 @@ CREATE TABLE subtasks
   file_name VARCHAR(32) NOT NULL,
   active BOOLEAN
 );
-
-CREATE TABLE estimates
-(
-estimate_key SERIAL PRIMARY KEY,
-subtask_id INTEGER REFERENCES subtasks (id),
-estimate BIT VARYING,
-confidence FLOAT,
-);
-
-CREATE TABLE responses
-(
-  id SERIAL PRIMARY KEY,
-  account INTEGER REFERENCES accounts (id),
-  subtask INTEGER REFERENCES subtasks (id),
-  response BIT VARYING NULL
-);
-
-INSERT INTO types
-VALUES(1, 'binary');
