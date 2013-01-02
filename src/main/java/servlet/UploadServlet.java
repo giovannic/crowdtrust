@@ -78,8 +78,12 @@ public class UploadServlet extends HttpServlet {
     	String task = request.getParameter("task");
 //    	Part file = request.getPart("file");
     	Map <String, String[]> map = request.getParameterMap();
+    	int i = 1;
+    	out.println(task);
     	for (String name : map.keySet()) {
     		out.println(name + " ");
+    		out.println(i);
+    		i++;
     	}
 //    	String filename = getFilename(file, out);
 //    	String taskDir = TASKS_DIRECTORY + task;
