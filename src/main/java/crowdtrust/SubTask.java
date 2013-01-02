@@ -2,8 +2,13 @@ package crowdtrust;
 
 import java.util.Map;
 
+import algorithm.AlgoTestData;
+
 public abstract class SubTask {
 	
+	
+	
+	protected AlgoTestData testData; //jw
 	protected int id;
 	protected double confidence_threshold;
 	protected int number_of_labels = 0;
@@ -86,6 +91,10 @@ public abstract class SubTask {
 
 	public String getHtml() {
 		return Integer.toString(id);
+	}
+	
+	public AlgoTestData getTestData(){
+		return this.testData;
 	}
 	
 }
