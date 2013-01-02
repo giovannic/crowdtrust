@@ -74,6 +74,9 @@ public class UploadServlet extends HttpServlet {
 //        }
     	String task = request.getParameter("task");
     	Part file = request.getPart("file");
+    	for (String name : file.getHeaderNames()) {
+    		out.println(name + " ");
+    	}
     	String filename = getFilename(file, out);
     	String taskDir = TASKS_DIRECTORY + task;
         InputStream fileIn = file.getInputStream();
