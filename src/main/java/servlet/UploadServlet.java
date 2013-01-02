@@ -59,6 +59,7 @@ public class UploadServlet extends HttpServlet {
 		} //catch (ClassNotFoundException | SQLException e1) {
         catch (Exception e1){
 			// TODO Auto-generated catch block
+        	out.println("db connection failed");
 			e1.printStackTrace();
 			return;
 		}
@@ -157,7 +158,8 @@ public class UploadServlet extends HttpServlet {
 		        stmt.setBoolean(3,  true);
 		        stmt.execute();
 	        } catch (SQLException e1) {
-				System.err.println("some error with task fields: takID not valid?");
+				System.err.println("some error with task fields: taskID not valid?");
+				System.err.println("taskID: " + taskID + ", filename: " + filename);
 				return;
 			}
     	}		
