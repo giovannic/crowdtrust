@@ -51,11 +51,12 @@ public class UploadServlet extends HttpServlet {
         	response.sendRedirect("/index.html");
         }
         
-        int accountID = (int) session.getAttribute("account_id");
+        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
         Connection connection;
         try {
 			connection = DbAdaptor.connect();
-		} catch (ClassNotFoundException | SQLException e1) {
+		} //catch (ClassNotFoundException | SQLException e1) {
+        catch (Exception e1){
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return;
