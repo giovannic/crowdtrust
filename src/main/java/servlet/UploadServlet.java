@@ -6,13 +6,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.apache.commons.fileupload.FileItem;
@@ -21,6 +28,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
+
+import db.DbAdaptor;
 
 public class UploadServlet extends HttpServlet {
 
@@ -35,13 +44,28 @@ public class UploadServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        //add to db - check task in db, add to subtasks,
+        //validate user credentials
+        HttpSession session = request.getSession();
+        if (session == null) {
+        	//TODO: test this
+        	response.sendRedirect("/index.html");
+        }
         
-        //adds to filesystem
+        int accountID = (int) session.getAttribute("account_id");
+        Connection connection;
+        try {
+			connection = DbAdaptor.connect();
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		}
+        
+        //Process post parameters
 		List<FileItem> items = null;
-    	FileItem file = null;
+    	FileItem files = null;
     	String taskDir = "";
-    	String filename = "";
+    	int taskID = -1;
 		try {
 			items = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 		} catch (FileUploadException e) {
@@ -61,20 +85,85 @@ public class UploadServlet extends HttpServlet {
             			taskDir = TASKS_DIRECTORY + task + "/";        				
         			}
         		}
+        		if( field.equals("taskID") ) {
+        			taskID = Integer.parseInt(item.getString());
+        		}
         	}
+        	//file to be uploaded
         	else {
-        		file = item;
-        		filename = file.getName();
+        		files = item;
         	}
     	}
-        InputStream fileIn = file.getInputStream();
-        OutputStream fileOut = new FileOutputStream(taskDir + filename);
-        IOUtils.copy(fileIn, fileOut);
-        fileOut.close();
+        //add to db - check task in db, add to subtasks,
+    	PreparedStatement checkTask;
+		try {
+			checkTask = connection.prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
+			checkTask.setInt(1, taskID);
+			checkTask.setInt(2, accountID);
+	    	if (!checkTask.execute()) {
+	    		out.println("invalid Task");
+	    		response.sendRedirect("/upload.html");
+	    	}
+		} catch (SQLException e) {
+			out.println("SQL problem slecting task from id"); 
+			e.printStackTrace();
+		}
+    	
+        //on upload page retrieve task id, submit task id as a parameter
+        //check id and submitter appear in tasks
+		
+		List<String> filenames = new LinkedList<String>();
+		
+    	//add to filesystem
+		if (files.getName().substring(files.getName().length()-4).toLowerCase().equals(".zip")) {
+			ZipInputStream zipIn = new ZipInputStream(files.getInputStream());
+			ZipEntry entry = zipIn.getNextEntry();
+			while( entry != null ) {
+				String filename = entry.getName();
+				OutputStream fileOut = new FileOutputStream(taskDir + filename);
+				IOUtils.copy(zipIn, fileOut);
+				zipIn.closeEntry();
+				fileOut.close();
+				filenames.add(filename);
+				entry = zipIn.getNextEntry();
+			}
+			zipIn.close();
+		} else {
+			//not a zip archive
+			String filename = files.getName();
+			filenames.add(filename);        
+	        
+	        //adds to filesystem
+	        InputStream fileIn = files.getInputStream();
+	        OutputStream fileOut = new FileOutputStream(taskDir + filename);
+	        IOUtils.copy(fileIn, fileOut);
+	        fileIn.close();
+	        fileOut.close();
+		}
+    	
+        //add to subtasks
+    	for (int i = 0 ; i < filenames.size() ; i++) {
+	        String insertQuery = "INSERT INTO subtasks VALUES ?,?,?,?,?";
+	        String filename = filenames.get(i);
+	        PreparedStatement stmt;
+	        try {
+				stmt = connection.prepareStatement(insertQuery);
+				stmt.setInt(1, taskID);
+		        stmt.setString(2, filename);
+		        stmt.setInt(3, 1);
+		        stmt.setFloat(4, (float) 0.50);
+		        stmt.setBoolean(5,  true);
+		        stmt.execute();
+	        } catch (SQLException e1) {
+				System.err.println("some error with task fields: takID not valid?");
+				return;
+			}
+    	}		
+		
         out.println("<html>");
         out.println("<body>");
-        out.println("uploaded \""+filename + "\" to task " + taskDir + "<br>");                	
-        out.println("click <a href=index.jsp>here</a> to return to the homepage");
+        out.println("uploaded to task " + taskDir + "<br>");                	
+        out.println("click <a href=../index.jsp>here</a> to return to the homepage");
         out.println("</body>");
         out.println("</html>");
     }

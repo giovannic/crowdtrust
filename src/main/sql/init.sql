@@ -40,7 +40,7 @@ CREATE TABLE subtasks
 (
   id SERIAL PRIMARY KEY,
   task INTEGER REFERENCES tasks (id),
-  media BIT VARYING NULL,
+  file_name STRING NOT NULL,
   estimate BIT VARYING NULL,
   confidence FLOAT,
   active BOOLEAN
