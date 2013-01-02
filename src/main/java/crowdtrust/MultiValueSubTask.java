@@ -20,10 +20,11 @@ public class MultiValueSubTask extends SubTask{
 		boolean matched = false;
 		for (Estimate record : state){
 			if(record.r.equals(mvr)){
-				record.confidence *= sa.accuracy;
+				record.confidence *= sa.accuracy/(1-sa.accuracy);
 				matched = true;
 			} else {
-				record.confidence *= inverseAccuracy(sa.accuracy);
+				double ia = inverseAccuracy(sa.accuracy);
+				record.confidence *= ia/(1-ia);
 			}
 		}
 		
@@ -31,8 +32,8 @@ public class MultiValueSubTask extends SubTask{
 		
 		if (!matched){
 			newState = Arrays.copyOf(state, state.length+1);
-			Estimate e = new Estimate(r, (1/options));
-			e.confidence *= sa.accuracy;
+			Estimate e = new Estimate(r, getZPrior());
+			e.confidence *= sa.accuracy/(1-sa.accuracy);
 			newState[newState.length] = e;
 		} else {
 			newState = state.clone();
@@ -46,9 +47,20 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected Accuracy maximiseAccuracy(Accuracy a, Response response, Response z) {
-		// TODO Auto-generated method stub
-		return null;
+	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
+		SingleAccuracy sa = (SingleAccuracy) a;
+		MultiValueR mvr = (MultiValueR) r;
+		MultiValueR mvz = (MultiValueR) z;
+		
+		int total = a.getN();
+		double w = total/total + 1;
+		double alpha = sa.accuracy*total;
+		if (mvr.equals(mvz)){
+			sa.accuracy = w*(alpha/total) + (1-w);
+		} else {
+			sa.accuracy = w*(alpha/total);
+		}
+		a.increaseN();
 	}
 
 	@Override
@@ -69,6 +81,13 @@ public class MultiValueSubTask extends SubTask{
 	@Override
 	protected void updateAccuracies(AccuracyRecord[] accuracies) {
 		db.CrowdDb.updateMultiValueAccuracies(accuracies);
+	}
+
+	@Override
+	protected double getZPrior() {
+		// TODO Auto-generated method stub
+		double p = 1/options;
+		return p/(1-p);
 	}
 
 }

@@ -27,7 +27,7 @@ public abstract class ContinuousSubTask extends SubTask {
 	}
 
 	@Override
-	protected abstract Accuracy maximiseAccuracy(Accuracy a, 
+	protected abstract void maximiseAccuracy(Accuracy a, 
 			Response response, Response z);
 	
 }

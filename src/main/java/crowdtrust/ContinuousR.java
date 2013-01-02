@@ -2,7 +2,7 @@ package crowdtrust;
 
 public class ContinuousR extends Response {
 
-	int value;
+	private int value;
 	
 	@Override
 	Byte[] serialise() {
@@ -14,6 +14,10 @@ public class ContinuousR extends Response {
 	public boolean equals(Object o) {
 		ContinuousR cr = (ContinuousR) o;
 		return value == cr.value;
+	}
+	
+	public double getValue(double precision) {
+		return value*precision;
 	}
 
 }
