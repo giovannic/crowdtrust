@@ -11,9 +11,6 @@
 %\usepackage{parskip}
 %\usepackage{setspace}
 
-
-
-
 %\setlength{\parskip}{0.3cm}
 %\setlength{\parindent}{0cm}
 %\setlength{\textheight}{10in}
@@ -23,6 +20,9 @@
 %\addtolength{\evensidemargin}{-.3in}
 %\addtolength{\topmargin}{-.6in}
 %\addtolength{\textwidth}{.6in}
+
+%Crowdsourcing of tasks has become very popular. It is often based on the principle that by having many different contributors to performing a task, an accurate and appropriate result will be achieved. The classical example is wikipedia where popular pages tend to be more accurate than less popular one. But contributions to a task do not always come for free and frameworks such as Amazon's mechanical turk allow for monetary rewards to be paid in exchange for contributing or performing a task. It is therefore the case that fewer contributions from more trustworthy contributors is more effective than many contributions from less trustworthy sources. The aim of the project is to design and implement a framework that allows the optimum number of contributors to be selected on the basis of their trustworthiness for a desired accuracy of the outcome/result and that evaluates the trustworthiness of contributors on the basis of the accuracy of the results they provide.
+
 
 \begin{document}
 
@@ -36,10 +36,58 @@
 
 \maketitle           % generates the title from the data above
 
-\section{Introduction}
 %Set the scene ( motivation )
 %State the problem you are trying to solve ( Ojective(s) )
 %Summarise what you achieved ( contributions )
+\section{Introduction}
+\subsection{Crowdsourcing and the problems it faces}
+Our project concerns \emph{crowdsourcing} 'the book' would describe crowdsourcing as the principle of obtaining an accurate 
+and appropriate result by having many different contributors performing a task but we'd like to start with a story which
+we believe encapsulates the idea of crowdsourcing in its most positive and useful light.
+\\
+\\
+In January 2009 Timothy Gowers (Fields Medal winner and avid blogger) used his blog to post a striking question \emph{Is massively 
+collaborative mathematics possible?}. He posted a difficult and unsolved mathematical problem he was particularly interested in and invited 
+people to contribute to its solution in the comments section. The project initally got off to a slow start but once the ice was broken the 
+comments flooded in. 37 days , 27 contibuters and 800 comments later Timothy Gowers was able to announce that not only had they solved the 
+original problem but they had also solved a harder generalisation of it, he called his experiment the \emph{Polymath Project} .
+\\
+\\
+This is a nice example of how crowd sourcing can be used to combine the skills of many individuals and produce an answers to a complex problem,
+however Crowd sourcing can be used to solve a wide variety of problems with a wide variety of motivations for instance:
+\begin{itemize}
+\item 
+\emph{Image tagging} is an extemely arduous task for an individual or small group of people to perform and tagging a relatively large 
+set of images could take weeks or even months, outsourcing this to the crowd could have the job done in a number of hours.
+\item
+\emph{Conducting surveys} can require asking a huge number of people many of whom are unwilling to take the survey in the first place
+%FINISH THIS
+\item
+\emph{Searching for missing persons} could require a complex and costly ground operation in a foreign country which is hard
+to co-ordinate. A crowd sourced search for aviator Steve Fosset involved salalite images being sent to the crowd with
+users asking to flag suspcious objects which could look like a crash site.
+\end{itemize}
+
+This is all well and good in theory but it leaves us with a number of problems, an introduction to these problems is provided below but
+they are discussed and addressed in much greater details at various stages throughout the report:
+\begin{enumerate}
+\item
+\emph{How do we get these problems to the crowd?} It is unlikely many people with a problem to be solved would want to go to the trouble
+of creating a crowd themselves and this be comparitive to the complexity of the problem itself therefore there is a need for a third party
+crowd management system. 
+\item
+\emph{What problems can we ask the crowd?} Specialised crowds have been successful and certainly have their uses for instance
+www.stackoverflow.com can be thought of as a crowd specialising in the solution of computing problems, however it is unlikely I would
+be able to find a specialised crowd to indentify bird pictures or to search satellite images for crash sites, therefore I need access 
+to a generalised crowd able to adapt to and solve a wide variety of problems. The crowd management party therefore needs to provide
+the ability to ask a wide variety of questions and the ability to easily encorporate new questions in response to new technology. %EMBELISH?
+\item
+emph{How many people do we ask, who do we ask and how can we trust what they say?} These are all problems the crowd management
+party faces, how many people do you have to ask to be sure of a cor 
+
+
+\end{enumerate}
+\subsection{A formal specification of our objectives}
 
 \section{Design and Implementation}
 % Detail your design why did you do it this way?
