@@ -50,8 +50,8 @@ public class UploadServlet extends HttpServlet {
 			return;
 		}
     	for( FileItem item : items ) {
-        	if(file.isFormField()) {
-        		String field = file.getFieldName();
+        	if(item.isFormField()) {
+        		String field = item.getFieldName();
         		if (field.equals("task")) {
             		String task = file.getString();
         			if (task == null) {
