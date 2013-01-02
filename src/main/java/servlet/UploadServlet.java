@@ -48,10 +48,11 @@ public class UploadServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if (session == null) {
         	//TODO: test this
-        	response.sendRedirect("/index.html");
+//        	response.sendRedirect("/index.html");
+//        	return;
         }
         
-        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
+//        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
         Connection connection;
         try {
 			connection = DbAdaptor.connect();
@@ -100,6 +101,7 @@ public class UploadServlet extends HttpServlet {
 		try {
 			checkTask = connection.prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
 			checkTask.setInt(1, taskID);
+			int accountID = 1;
 			checkTask.setInt(2, accountID);
 	    	if (!checkTask.execute()) {
 	    		out.println("invalid Task");
@@ -108,6 +110,7 @@ public class UploadServlet extends HttpServlet {
 		} catch (SQLException e) {
 			out.println("SQL problem slecting task from id"); 
 			e.printStackTrace();
+			return;
 		}
     	
         //on upload page retrieve task id, submit task id as a parameter
@@ -144,16 +147,14 @@ public class UploadServlet extends HttpServlet {
     	
         //add to subtasks
     	for (int i = 0 ; i < filenames.size() ; i++) {
-	        String insertQuery = "INSERT INTO subtasks VALUES ?,?,?,?,?";
+	        String insertQuery = "INSERT INTO subtasks VALUES ?,?,?";
 	        String filename = filenames.get(i);
 	        PreparedStatement stmt;
 	        try {
 				stmt = connection.prepareStatement(insertQuery);
 				stmt.setInt(1, taskID);
 		        stmt.setString(2, filename);
-		        stmt.setInt(3, 1);
-		        stmt.setFloat(4, (float) 0.50);
-		        stmt.setBoolean(5,  true);
+		        stmt.setBoolean(3,  true);
 		        stmt.execute();
 	        } catch (SQLException e1) {
 				System.err.println("some error with task fields: takID not valid?");
