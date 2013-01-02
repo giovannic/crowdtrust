@@ -22,7 +22,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
-@MultipartConfig
 public class UploadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8279791785237277465L;
@@ -39,51 +38,35 @@ public class UploadServlet extends HttpServlet {
         //add to db - check task in db, add to subtasks,
         
         //adds to filesystem
-		List<FileItem> files = null;
+		List<FileItem> items = null;
+    	FileItem file = null;
+    	String taskDir = "";
+    	String filename = "";
 		try {
-			files = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+			items = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return;
 		}
-    	String task = "test/";
-//    	FileItem song = null;
-//        for( FileItem file : files ) {
-//        	if(!file.isFormField()) {
-//        		song = file;
-//        	}
-//        	else {
-//        		String fieldName = file.getFieldName();
-//        		task = file.getString();
-//        		if( task == null ) {
-//        			//TODO need to input task name
-//        		}
-//        		else {
-//        			//task is task name - add task to db if not yet inputted
-//        			taskDir = taskDir + task;
-//        			File f = new File(taskDir);
-//        			if( !f.exists() ) {
-//        				if( !f.mkdirs() ) {
-//        					//directory creation failed
-//        					System.err.println("COULDN'T CREATE DIRECTORY: " + taskDir);
-//        					return;
-//        				}
-//        			}
-//        		}
-//        	}
-//        }
-    	Part file = request.getPart("file");
-    	String filename = getFilename(file);
-    	String taskDir = TASKS_DIRECTORY + task;
-		File f = new File(taskDir);
-		if( !f.exists() ) {
-			if( !f.mkdirs() ) {
-				//directory creation failed
-				System.err.println("COULDN'T CREATE DIRECTORY: " + taskDir);
-				return;
-			}
-		}
+    	for( FileItem item : items ) {
+        	if(file.isFormField()) {
+        		switch (file.getFieldName()) {
+        		case "task":
+            		String task = file.getString();
+        			if (task == null) {
+        				//output need task name
+        			} else {
+        				//task is task name - add task to db if not yet inputted
+            			taskDir = TASKS_DIRECTORY + task + "/";        				
+        			}
+        		}
+        	}
+        	else {
+        		file = item;
+        		filename = file.getName();
+        	}
+        }
         InputStream fileIn = file.getInputStream();
         OutputStream fileOut = new FileOutputStream(taskDir + filename);
         IOUtils.copy(fileIn, fileOut);
@@ -95,15 +78,5 @@ public class UploadServlet extends HttpServlet {
         out.println("</body>");
         out.println("</html>");
     }
-	
-	private static String getFilename(Part part) {
-	    for (String cd : part.getHeader("content-disposition").split(";")) {
-	        if (cd.trim().startsWith("filename")) {
-	            String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-	            return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
-	        }
-	    }
-	    return null;
-	}
 	
 }
