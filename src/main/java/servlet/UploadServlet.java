@@ -26,7 +26,7 @@ import org.apache.commons.io.IOUtils;
 public class UploadServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8279791785237277465L;
-	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles";
+	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
 	
 	
 	@SuppressWarnings("unchecked")
@@ -35,6 +35,10 @@ public class UploadServlet extends HttpServlet {
 		
 		response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
+        //add to db - check task in db, add to subtasks,
+        
+        //adds to filesystem
 		List<FileItem> files = null;
 		try {
 			files = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
@@ -43,43 +47,63 @@ public class UploadServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
-    	String task = "";
-    	String taskDir = TASKS_DIRECTORY;
-    	FileItem song = null;
-        for( FileItem file : files ) {
-        	if(!file.isFormField()) {
-        		song = file;
-        	}
-        	else {
-        		String fieldName = file.getFieldName();
-        		task = file.getString();
-        		if( task == null ) {
-        			//TODO need to input task name
-        		}
-        		else {
-        			//task is task name - add task to db if not yet inputted
-        			taskDir = taskDir + task;
-        			File f = new File(taskDir);
-        			if( !f.exists() ) {
-        				if( !f.mkdirs() ) {
-        					//directory creation failed
-        					System.err.println("COULDN'T CREATE DIRECTORY: " + taskDir);
-        					return;
-        				}
-        			}
-        		}
-        	}
-        }
-        InputStream fileIn = song.getInputStream();
-        OutputStream fileOut = new FileOutputStream(taskDir + "/" + song.getName());
+    	String task = "test/";
+//    	FileItem song = null;
+//        for( FileItem file : files ) {
+//        	if(!file.isFormField()) {
+//        		song = file;
+//        	}
+//        	else {
+//        		String fieldName = file.getFieldName();
+//        		task = file.getString();
+//        		if( task == null ) {
+//        			//TODO need to input task name
+//        		}
+//        		else {
+//        			//task is task name - add task to db if not yet inputted
+//        			taskDir = taskDir + task;
+//        			File f = new File(taskDir);
+//        			if( !f.exists() ) {
+//        				if( !f.mkdirs() ) {
+//        					//directory creation failed
+//        					System.err.println("COULDN'T CREATE DIRECTORY: " + taskDir);
+//        					return;
+//        				}
+//        			}
+//        		}
+//        	}
+//        }
+    	Part file = request.getPart("file");
+    	String filename = getFilename(file);
+    	String taskDir = TASKS_DIRECTORY + task;
+		File f = new File(taskDir);
+		if( !f.exists() ) {
+			if( !f.mkdirs() ) {
+				//directory creation failed
+				System.err.println("COULDN'T CREATE DIRECTORY: " + taskDir);
+				return;
+			}
+		}
+        InputStream fileIn = file.getInputStream();
+        OutputStream fileOut = new FileOutputStream(taskDir + filename);
         IOUtils.copy(fileIn, fileOut);
         fileOut.close();
         out.println("<html>");
         out.println("<body>");
-        out.println("uploaded \""+song.getName() + "\" to task " + taskDir + "<br>");                	
+        out.println("uploaded \""+filename + "\" to task " + taskDir + "<br>");                	
         out.println("click <a href=index.jsp>here</a> to return to the homepage");
         out.println("</body>");
         out.println("</html>");
     }
+	
+	private static String getFilename(Part part) {
+	    for (String cd : part.getHeader("content-disposition").split(";")) {
+	        if (cd.trim().startsWith("filename")) {
+	            String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+	            return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
+	        }
+	    }
+	    return null;
+	}
 	
 }
