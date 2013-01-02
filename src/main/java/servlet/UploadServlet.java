@@ -51,8 +51,8 @@ public class UploadServlet extends HttpServlet {
 		}
     	for( FileItem item : items ) {
         	if(file.isFormField()) {
-        		switch (file.getFieldName()) {
-        		case "task":
+        		String field = file.getFieldName();
+        		if (field.equals("task")) {
             		String task = file.getString();
         			if (task == null) {
         				//output need task name
@@ -66,7 +66,7 @@ public class UploadServlet extends HttpServlet {
         		file = item;
         		filename = file.getName();
         	}
-        }
+    	}
         InputStream fileIn = file.getInputStream();
         OutputStream fileOut = new FileOutputStream(taskDir + filename);
         IOUtils.copy(fileIn, fileOut);
