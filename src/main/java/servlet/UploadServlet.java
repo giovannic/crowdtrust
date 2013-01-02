@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -72,20 +73,21 @@ public class UploadServlet extends HttpServlet {
 //        		}
 //        	}
 //        }
-    	String task = request.getParameter("task");
-    	Part file = request.getPart("file");
-    	for (String name : file.getHeaderNames()) {
-    		out.println(name + " ");
-    	}
-    	String filename = getFilename(file, out);
-    	String taskDir = TASKS_DIRECTORY + task;
-        InputStream fileIn = file.getInputStream();
-        OutputStream fileOut = new FileOutputStream(taskDir + filename);
-        IOUtils.copy(fileIn, fileOut);
-        fileOut.close();
         out.println("<html>");
         out.println("<body>");
-        out.println("uploaded \""+filename + "\" to task " + taskDir + "<br>");                	
+    	String task = request.getParameter("task");
+//    	Part file = request.getPart("file");
+    	Map <String, String[]> map = request.getParameterMap();
+    	for (String name : map.keySet()) {
+    		out.println(name + " ");
+    	}
+//    	String filename = getFilename(file, out);
+//    	String taskDir = TASKS_DIRECTORY + task;
+//        InputStream fileIn = file.getInputStream();
+//        OutputStream fileOut = new FileOutputStream(taskDir + filename);
+//        IOUtils.copy(fileIn, fileOut);
+//        fileOut.close();
+//        out.println("uploaded \""+filename + "\" to task " + taskDir + "<br>");                	
         out.println("click <a href=index.jsp>here</a> to return to the homepage");
         out.println("</body>");
         out.println("</html>");
