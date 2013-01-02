@@ -47,7 +47,6 @@ public class UploadServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
-    	String task = "test/";
 //    	FileItem song = null;
 //        for( FileItem file : files ) {
 //        	if(!file.isFormField()) {
@@ -73,17 +72,10 @@ public class UploadServlet extends HttpServlet {
 //        		}
 //        	}
 //        }
+    	String task = request.getParameter("task");
     	Part file = request.getPart("file");
-    	String filename = getFilename(file);
+    	String filename = getFilename(file, out);
     	String taskDir = TASKS_DIRECTORY + task;
-		File f = new File(taskDir);
-		if( !f.exists() ) {
-			if( !f.mkdirs() ) {
-				//directory creation failed
-				System.err.println("COULDN'T CREATE DIRECTORY: " + taskDir);
-				return;
-			}
-		}
         InputStream fileIn = file.getInputStream();
         OutputStream fileOut = new FileOutputStream(taskDir + filename);
         IOUtils.copy(fileIn, fileOut);
@@ -96,8 +88,9 @@ public class UploadServlet extends HttpServlet {
         out.println("</html>");
     }
 	
-	private static String getFilename(Part part) {
+	private static String getFilename(Part part, PrintWriter out) {
 	    for (String cd : part.getHeader("content-disposition").split(";")) {
+	    	out.println(cd.trim() + " ");
 	        if (cd.trim().startsWith("filename")) {
 	            String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
 	            return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
