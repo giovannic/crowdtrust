@@ -23,4 +23,10 @@ public class BinaryR extends Response {
 		this.value = value;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		BinaryR br = (BinaryR) o;
+		return value == br.isTrue();
+	}
+
 }

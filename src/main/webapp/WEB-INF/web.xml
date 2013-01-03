@@ -30,6 +30,24 @@
         <servlet-name>register</servlet-name>
         <url-pattern>/servlet/register</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>uploadSubtask</servlet-name>
+        <servlet-class>servlet.UploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uploadSubtask</servlet-name>
+        <url-pattern>/servlet/upload</url-pattern>
+    </servlet-mapping>    
+
+    <servlet>
+        <servlet-name>addTask</servlet-name>
+        <servlet-class>servlet.CreateTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addTask</servlet-name>
+        <url-pattern>/servlet/addTask</url-pattern>
+    </servlet-mapping>
     
     
 

@@ -1,19 +1,20 @@
 
-DROP TABLE IF EXISTS assignments;
-DROP TABLE IF EXISTS subtasks;
-DROP TABLE IF EXISTS tasks;
-DROP TABLE IF EXISTS types;
-DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS responses;
+DROP TABLE IF EXISTS subtasks CASCADE;
+DROP TABLE IF EXISTS tasks CASCADE;
+DROP TABLE IF EXISTS types CASCADE;
+DROP TABLE IF EXISTS accounts CASCADE;
+DROP TABLE IF EXISTS estimates CASCADE;
 
 CREATE TABLE accounts
 (
   id SERIAL PRIMARY KEY,
   email VARCHAR(100) NOT NULL,
   username VARCHAR(12) NOT NULL,
-  password BIT(256) NOT NULL,
-  type BIT(3) NOT NULL,
+  password BIT(256) NULL,
+  type BIT(3) NULL,
   session CHARACTER(32) NULL,
-  last_active TIMESTAMP NOT NULL,
+  last_active TIMESTAMP NULL,
   expert BOOLEAN,
   accuracy INTEGER
 );
@@ -40,10 +41,16 @@ CREATE TABLE subtasks
 (
   id SERIAL PRIMARY KEY,
   task INTEGER REFERENCES tasks (id),
-  media BIT VARYING NULL,
-  estimate BIT VARYING NULL,
-  confidence FLOAT,
+  file_name VARCHAR(32) NOT NULL,
   active BOOLEAN
+);
+
+CREATE TABLE estimates
+(
+  estimate_key SERIAL PRIMARY KEY,
+  subtask_id INTEGER REFERENCES subtasks (id),
+  estimate BIT VARYING,
+  confidence FLOAT
 );
 
 CREATE TABLE responses
@@ -53,3 +60,12 @@ CREATE TABLE responses
   subtask INTEGER REFERENCES subtasks (id),
   response BIT VARYING NULL
 );
+
+INSERT INTO types
+VALUES(1, 'binary');
+
+INSERT INTO accounts
+VALUES(1,'adam','adam', NULL, NULL, NULL, NULL, true, 1);
+
+INSERT INTO tasks
+VALUES( 1,1,'test', 'test',10,1,NULL,NULL);

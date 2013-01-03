@@ -1,43 +1,100 @@
 package crowdtrust;
 
-import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
+
+import algorithm.AlgoTestData;
 
 public abstract class SubTask {
 	
-	//public Media media;
-	protected String html;
-	protected List <Bee> responses;
-	protected int id;
-	protected double confidence;
-	protected Response best_estimate;
 	
-	public String getHtml() {
-		return html;
+	
+	protected AlgoTestData testData; //jw
+	protected int id;
+	protected double confidence_threshold;
+	protected int number_of_labels = 0;
+	protected int max_labels;
+	
+	/*
+	 * E step
+	 * */
+	
+	public void addResponse(Bee annotator, Response r) {
+		MultiValueR response = (MultiValueR) r;
+		
+		db.CrowdDb.addResponse(annotator.id, response.serialise(), this.id);
+		Accuracy a = getAccuracy(annotator.id);
+		
+		Estimate [] state = getEstimates(id);
+		Estimate [] newState = updateLikelihoods(response,a,state);
+		
+		Estimate z = estimate(newState);
+		number_of_labels++;
+		if(z.confidence > confidence_threshold || 
+				number_of_labels >= max_labels){
+			close();
+			updateAccuracies(z.r);
+		}
 	}
-
-	public void setHtml(String html) {
-		this.html = html;
+	
+	private Estimate[] getEstimates(int id) {
+		return null;
+	}
+	
+	protected abstract Estimate [] updateLikelihoods(Response r, 
+			Accuracy a, Estimate [] state);
+	
+	//returns best estimate
+	protected Estimate estimate(Estimate [] state) {
+		Estimate best = null;
+		for (Estimate record : state){
+			if(best != null && record.confidence > best.confidence)
+				best = record;
+		}
+		return best;
 	}
 	
 	/*
-	 * calculates the new estimate and confidence, 
-	 * if the confidence is good enough the subtask is closed
+	 * M step
 	 * */
-	public abstract void estimate(Bee annotator, Response r);
+	protected void updateAccuracies(Response z) {
+		Bee [] annotators = db.CrowdDb.getAnnotators(id);
+		AccuracyRecord [] accuracies = getAccuracies(annotators);
+		Map <Bee, Response> responses = getResponses(annotators);
+		
+		for (AccuracyRecord r : accuracies){
+			maximiseAccuracy(r.a, responses.get(r.b), z);
+		}
+		updateAccuracies(accuracies);
+	}
+	
+	protected abstract void maximiseAccuracy(Accuracy a, Response response, Response z);
+	
+	/*
+	 * Helper functions
+	 * */
+	protected abstract Map<Bee, Response> getResponses(Bee[] annotators);
+
+	protected abstract AccuracyRecord[] getAccuracies(Bee[] annotators);
+	
+	protected abstract void updateAccuracies(AccuracyRecord [] accuracies);
+	
+	protected abstract Accuracy getAccuracy(int annotatorId);
 	
 	public void close(){
 		db.SubTaskDb.close(id);
 		Task parent = db.SubTaskDb.getTask(id);
-		try {
-			if (db.TaskDb.checkFinished(parent.id)){
-				parent.updateAccuracies();
-			}
-		} catch (SQLException e) {
-			// grave error TODO log it
-			e.printStackTrace();
-		}
-		
+		parent.notifyFinished();
+	}
+
+	//uniform distribution across all posibilities for the time being
+	protected abstract double getZPrior();
+
+	public String getHtml() {
+		return Integer.toString(id);
+	}
+	
+	public AlgoTestData getTestData(){
+		return this.testData;
 	}
 	
 }

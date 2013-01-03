@@ -30,12 +30,36 @@ public abstract class Task
     return this.name;
   }
 
-  public void addToDatabase()
+  public String getQuestion()
   {
-    TaskDb.addTask(name, question, accuracy, type);
+    return this.question;
+  }
+
+
+
+  public int getType()
+  {
+    return this.type;
+  }
+
+
+  public int getAccuracy()
+  {
+    return this.accuracy;
+  }
+
+  public boolean addToDatabase()
+  {
+    return TaskDb.addTask(name, question, accuracy, type);
   }
 
   public void updateAccuracies() {
+	
+  }
+
+  /*if all finished, close task*/
+  public void notifyFinished() {
+	// TODO Auto-generated method stub
 	
   }
 

@@ -12,8 +12,18 @@ public class UserDb {
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO accounts (email, username, password, type) ");
     sql.append("VALUES(?, ?, CAST(? AS bytea), ?)");
+    PreparedStatement preparedStatement;
     try {
-      PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    }
+    catch (ClassNotFoundException e) {
+    	System.err.println("Error connecting to DB on add user: PSQL driver not present");
+      	return true;
+    } catch (SQLException e) {
+      	System.err.println("SQL Error on add user");
+      	return true;
+    }
+    try {
       preparedStatement.setString(1, email);
       preparedStatement.setString(2, username);
       preparedStatement.setBytes(3, sha256(password));
