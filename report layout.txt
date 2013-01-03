@@ -1,0 +1,34 @@
+ES
+
+INTRO
+motivation - reliably use rowd to get info, use fewer people who are better suited to task
+objectives - produce webapp that is able to take tasks from providers and send to relevant members of crowd - efficient and accurate
+contributions - ???
+
+DESIGN & IMP
+layout of project - packages, directory structure (maven, and tomcat)
+client/server - webapp, java
+crowdtrust algorithms stuff
+website design (uh oh!)
+go through each part of user process - register/login, add tasks/subtasks, perform subtasks, rate annotators, feedback to crowd user?, client feedback
+security (ssh will be implemented)
+
+EVALUATION
+surefire tests with maven.
+does what we intended - sends to crowd, picks experts, asks fewer people
+aesthetics of website - could be improved
+???
+
+CONCLUSIONS
+useful and useable, but rough around the edges. 
+needs a pricing model.
+could be made into a smartphone app (kiip).
+???
+
+PROJECT MANAGEMENT
+planning - whiteboard, laid out structure, designs of site
+split into subgroups here appropriate.
+tools used by people who knew how to use them - servlets from CC, maven from internship
+regular meetings in labs. google hangouts over holidays.
+pub meets and funny hats, keeps morale up, come up with ideas.
+???
