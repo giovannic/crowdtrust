@@ -1,6 +1,6 @@
 package web;
 
-public class ClientTable extends WebElement {
+public class ClientTable implements WebElement {
 
   public String generateHead(){
     return "";

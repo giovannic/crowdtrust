@@ -1,12 +1,16 @@
 package db;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
 import java.security.MessageDigest;
+import java.util.Properties;
 
 public class RegisterDb {
+	
 
   public static boolean addUser(String email, String username, String password, String client, String crowd) {
     byte type = getAccountType(client, crowd);

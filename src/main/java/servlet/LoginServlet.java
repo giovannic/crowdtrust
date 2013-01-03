@@ -21,45 +21,39 @@ public class LoginServlet extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
-    if(!request.isRequestedSessionIdValid()) {
-	    String username = request.getParameter("username");
-	    String password = request.getParameter("password");
-	    //int id = LoginDb.checkUserDetails(username, password);
-	    int id = 1;
-	    if(!request.isRequestedSessionIdValid() && id > 0) {
-	      HttpSession session = request.getSession();
-	      session.setMaxInactiveInterval(1200);
-	      //session.setAttribute("account_id", resultSet.getInt("id"));
-	    }
+    if(request.isRequestedSessionIdValid()) {
+      makeLobby(response, request);
+    }  
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
+    int id = LoginDb.checkUserDetails(username, password);
+    if(!request.isRequestedSessionIdValid() && id > 0) {
+      HttpSession session = request.getSession(true);
+      session.setMaxInactiveInterval(1200);
+      session.setAttribute("account_id", id);
+      session.setAttribute("account_name", username);
     }
-    makeLobby(response, request.getContextPath());
-    
+    makeLobby(response, request);
   }
   
-  private void makeLobby(HttpServletResponse response, String context){
+  private void makeLobby(HttpServletResponse response, HttpServletRequest request){
 	  PrintWriter out;
 	try {
-		out = response.getWriter();
-		Lobby userLobby = new Lobby("test", context); //TODO
+			out = response.getWriter();
+			HttpSession session = request.getSession();
+			String username = (String) session.getAttribute("account_name");
+			Lobby userLobby = new Lobby(username, request.getContextPath());
 	    userLobby.addClientTable();
 	    userLobby.addCrowdTable();
-	    
 	    out.print(userLobby.generate());
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	  } catch (IOException e) {
+			e.printStackTrace();
+	  }
   }
-
-  /*private byte[] sha256(String password) {
-    try {
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] hash = digest.digest(password.getBytes("UTF-8"));
-      return hash;
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }*/
+  
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+          throws ServletException, IOException {
+	  doPost(request, response);
+  }
+  
 }
