@@ -41,7 +41,7 @@ public class LoginServlet extends HttpServlet {
 	try {
 			out = response.getWriter();
 			HttpSession session = request.getSession();
-			String username = session.getAttribute("account_name");
+			String username = (String) session.getAttribute("account_name");
 			Lobby userLobby = new Lobby(username, request.getContextPath());
 	    userLobby.addClientTable();
 	    userLobby.addCrowdTable();
