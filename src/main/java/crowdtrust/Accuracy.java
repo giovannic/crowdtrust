@@ -12,4 +12,8 @@ public abstract class Accuracy {
 	}
 	
 	abstract Byte[] serialise();
+	
+	abstract double variance();
+	
+	abstract boolean expert(double threshold);
 }

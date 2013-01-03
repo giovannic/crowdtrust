@@ -1,14 +1,13 @@
 package crowdtrust;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
-
-import algorithm.AlgoTestData;
 
 public abstract class SubTask {
 	
-	
-	
-	protected AlgoTestData testData; //jw
+	//threshold accuracy variance
+	static final double THETA = 0.008;
 	protected int id;
 	protected double confidence_threshold;
 	protected int number_of_labels = 0;
@@ -61,12 +60,30 @@ public abstract class SubTask {
 		AccuracyRecord [] accuracies = getAccuracies(annotators);
 		Map <Bee, Response> responses = getResponses(annotators);
 		
+		Collection<Bee> experts = new ArrayList<Bee>();
+		Collection<Bee> bots = new ArrayList<Bee>();
+		
 		for (AccuracyRecord r : accuracies){
 			maximiseAccuracy(r.a, responses.get(r.b), z);
+			if (r.a.variance() < THETA){
+				if (r.a.expert(expertLimit()))
+					experts.add(r.b);
+				else
+					bots.add(r.b);
+			}
 		}
+		
 		updateAccuracies(accuracies);
+		updateExperts(experts);
+		updateBots(bots);
 	}
 	
+	protected abstract void updateExperts(Collection<Bee> experts);
+	
+	protected abstract void updateBots(Collection<Bee> bots);
+
+	protected abstract double expertLimit();
+
 	protected abstract void maximiseAccuracy(Accuracy a, Response response, Response z);
 	
 	/*
@@ -92,9 +109,5 @@ public abstract class SubTask {
 	public String getHtml() {
 		return Integer.toString(id);
 	}
-	
-	public AlgoTestData getTestData(){
-		return this.testData;
-	}
-	
+
 }
