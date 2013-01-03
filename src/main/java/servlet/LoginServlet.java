@@ -22,48 +22,32 @@ public class LoginServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
     if(request.isRequestedSessionIdValid()) {
-      response.sendRedirect("/lobby.html");
+      makeLobby(response, request);
     }  
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     int id = LoginDb.checkUserDetails(username, password);
     if(!request.isRequestedSessionIdValid() && id > 0) {
-    	System.out.println("Hello World");
-      HttpSession session = request.getSession();
+      HttpSession session = request.getSession(true);
       session.setMaxInactiveInterval(1200);
       session.setAttribute("account_id", id);
       session.setAttribute("account_name", username);
-      Lobby userLobby = new Lobby(username);
-      userLobby.addClientTable();
-      PrintWriter out = response.getWriter();
-      out.print(userLobby.generate());
     }
-    if(!request.isRequestedSessionIdValid()) {
-	    String username = request.getParameter("username");
-	    String password = request.getParameter("password");
-	    //int id = LoginDb.checkUserDetails(username, password);
-	    int id = 1;
-	    if(!request.isRequestedSessionIdValid() && id > 0) {
-	      HttpSession session = request.getSession();
-	      session.setMaxInactiveInterval(1200);
-	      //session.setAttribute("account_id", resultSet.getInt("id"));
-	    }
-    }
-    makeLobby(response, request.getContextPath());
+    makeLobby(response, request);
   }
   
-  private void makeLobby(HttpServletResponse response, String context){
+  private void makeLobby(HttpServletResponse response, HttpServletRequest request){
 	  PrintWriter out;
 	try {
-		out = response.getWriter();
-		Lobby userLobby = new Lobby("test", context); //TODO
+			out = response.getWriter();
+			HttpSession session = request.getSession();
+			String username = session.getAttribute("account_name");
+			Lobby userLobby = new Lobby(username, request.getContextPath());
 	    userLobby.addClientTable();
 	    userLobby.addCrowdTable();
-	    
 	    out.print(userLobby.generate());
 	  } catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			e.printStackTrace();
 	  }
   }
   
