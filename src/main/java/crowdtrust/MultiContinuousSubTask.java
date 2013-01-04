@@ -95,5 +95,4 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		double p = 1/responseSpace;
 		return p/(1-p);
 	}
-
 }

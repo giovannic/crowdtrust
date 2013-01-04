@@ -1,6 +1,7 @@
 package crowdtrust;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 public class BinarySubTask extends SubTask {
@@ -15,27 +16,36 @@ public class BinarySubTask extends SubTask {
 		BinaryR br = (BinaryR) r;
 		BinaryR bz = (BinaryR) z;
 		
-		int total = a.getN();
-		double w = total/total + 1;
+		int total;
+		double w;
 		if (br.isTrue()){
 			//maximise truePositive
+			total = ba.getPositiveN();
+			w = total/total + 1;
+			
 			double alpha = ba.truePositive*total;
 			if(bz.isTrue())
 				ba.truePositive = w*(alpha/total) + (1-w);
 			else {
 				ba.truePositive = w*(alpha/total);
 			}
+			
+			ba.incrementPositiveN();
+			
 		} else {
 			//maximize trueNegative
+			total = ba.getNegativeN();
+			w = total/total + 1;
+			
 			double alpha = ba.trueNegative*total;
 			if(bz.isTrue())
 				ba.trueNegative = w*(alpha/total) + (1-w);
 			else {
 				ba.trueNegative = w*(alpha/total);
 			}
+			
+			ba.incrementNegativeN();
 		}
-		
-		a.increaseN();
 	}
 	
 	@Override
@@ -98,5 +108,21 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected double getZPrior() {
 		return 1;
+	}
+
+	@Override
+	protected double expertLimit() {
+		return 2;
+	}
+
+	@Override
+	protected void updateExperts(Collection<Bee> experts) {
+		db.CrowdDb.updateBinaryExperts(experts);
+		
+	}
+
+	@Override
+	protected void updateBots(Collection<Bee> bots) {
+		db.CrowdDb.updateBinaryBots(bots);
 	}
 }
