@@ -16,6 +16,8 @@ public class InitDBServlet extends HttpServlet{
 	              HttpServletResponse response) throws IOException {
 
 			DbInitialiser.init();
+			
+			response.sendRedirect("/index.html");
 	        
 		}
 
