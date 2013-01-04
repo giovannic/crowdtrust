@@ -32,14 +32,38 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>upload</servlet-name>
+        <servlet-name>uploadSubtask</servlet-name>
         <servlet-class>servlet.UploadServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>upload</servlet-name>
+        <servlet-name>uploadSubtask</servlet-name>
         <url-pattern>/servlet/upload</url-pattern>
+    </servlet-mapping>    
+
+    <servlet>
+        <servlet-name>addTask</servlet-name>
+        <servlet-class>servlet.CreateTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addTask</servlet-name>
+        <url-pattern>/servlet/addTask</url-pattern>
     </servlet-mapping>
     
-    
+    <security-constraint>
+       	<display-name>Crowdtrust Security</display-name>
+    	<web-resource-collection>
+    	    <web-resource-name>Secure</web-resource-name>
+    	    <url-pattern>/*</url-pattern>
+    	    <http-method>GET</http-method>
+    	    <http-method>POST</http-method>
+    	</web-resource-collection>
+    	<auth-constraint>
+    		<role-name>manager</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+		
 
 </web-app>

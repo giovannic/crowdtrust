@@ -1,5 +1,6 @@
 package crowdtrust;
 
+import java.util.Collection;
 import java.util.Map;
 
 public abstract class ContinuousSubTask extends SubTask {
@@ -25,9 +26,27 @@ public abstract class ContinuousSubTask extends SubTask {
 	protected void updateAccuracies(AccuracyRecord[] accuracies) {
 		db.CrowdDb.updateContinuousAccuracies(accuracies);
 	}
+	
+	@Override
+	protected void updateExperts(Collection<Bee> experts) {
+		db.CrowdDb.updateContinuousExperts(experts);
+		
+	}
+
+	@Override
+	protected void updateBots(Collection<Bee> bots) {
+		db.CrowdDb.updateContinuousBots(bots);
+	}
+
+
 
 	@Override
 	protected abstract void maximiseAccuracy(Accuracy a, 
 			Response response, Response z);
+	
+	@Override
+	protected double expertLimit() {
+		return 0.85;
+	}
 	
 }

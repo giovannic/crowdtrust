@@ -116,7 +116,7 @@ public class TaskDb {
 
 	}
 	
-	public List<String> getTasksForCrowdId(int id) {
+	public static List<String> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT task.name FROM task ");
 		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");

@@ -1,18 +1,22 @@
 package db;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
 import java.security.MessageDigest;
+import java.util.Properties;
 
 public class RegisterDb {
+	
 
   public static boolean addUser(String email, String username, String password, String client, String crowd) {
     byte type = getAccountType(client, crowd);
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO accounts (email, username, password, type) ");
-    sql.append("VALUES(?, ?, CAST(? AS bytea), ?)");
+    sql.append("VALUES(?, ?, ?, ?)");
     PreparedStatement preparedStatement;
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
@@ -27,17 +31,35 @@ public class RegisterDb {
     try {
       preparedStatement.setString(1, email);
       preparedStatement.setString(2, username);
-      preparedStatement.setBytes(3, sha256(password));
+      preparedStatement.setString(3, sha256(password));
       preparedStatement.setByte(4, type);
       preparedStatement.execute();
     }
     catch (SQLException e) {
+      e.printStackTrace();
       return false;
     }
     return true;   
   }
 
-  private static byte[] sha256(String password) {
+	private static String sha256(String password) {
+    try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			digest.update(password.getBytes());
+			byte bytes[] = digest.digest();
+			StringBuffer buffer = new StringBuffer();
+			for(int i = 0; i < bytes.length; i++){
+				buffer.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+      return buffer.toString();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /*private static byte[] sha256(String password) {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       byte[] hash = digest.digest(password.getBytes("UTF-8"));
@@ -47,7 +69,7 @@ public class RegisterDb {
       e.printStackTrace();
     }
     return null;
-  }
+  }*/
 
   private static byte getAccountType(String client, String crowd) {
     int type = 0;

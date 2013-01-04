@@ -26,7 +26,7 @@ public class AnnotatorModel {
 	
 	//------------------------------------
 	
-	public void answerTask(SubTask task){
+	public void answerTask(SubTask task){/*
 		AlgoTestData testData = task.getTestData();
 		TaskType t = testData.getTaskType();
 		if(t.equals(TaskType.BINARY)){
@@ -42,6 +42,6 @@ public class AnnotatorModel {
 																	  ((ContinuousTestData)testData).getActualAnswer());
 			AnnotatorResponse response = new ContinuousResponse(answer);		
 			//Now link with gios code
-		}
+		}*/
 	}
 }

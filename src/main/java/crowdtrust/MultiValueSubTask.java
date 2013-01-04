@@ -1,6 +1,7 @@
 package crowdtrust;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 public class MultiValueSubTask extends SubTask{
@@ -88,6 +89,21 @@ public class MultiValueSubTask extends SubTask{
 		// TODO Auto-generated method stub
 		double p = 1/options;
 		return p/(1-p);
+	}
+
+	@Override
+	protected double expertLimit() {
+		return 0.85;
+	}
+
+	@Override
+	protected void updateExperts(Collection<Bee> experts) {
+		db.CrowdDb.updateMultiValueExperts(experts);
+	}
+
+	@Override
+	protected void updateBots(Collection<Bee> bots) {
+		db.CrowdDb.updateMultiValueBots(bots);
 	}
 
 }

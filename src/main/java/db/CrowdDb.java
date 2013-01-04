@@ -1,5 +1,7 @@
 package db;
 
+import java.util.Collection;
+
 import crowdtrust.Accuracy;
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
@@ -58,6 +60,36 @@ public class CrowdDb {
 	}
 
 	public static void updateContinuousAccuracies(AccuracyRecord[] accuracies) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void updateBinaryExperts(Collection<Bee> experts) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void updateBinaryBots(Collection<Bee> bots) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void updateContinuousExperts(Collection<Bee> bots) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void updateContinuousBots(Collection<Bee> bots) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void updateMultiValueExperts(Collection<Bee> experts) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void updateMultiValueBots(Collection<Bee> bots) {
 		// TODO Auto-generated method stub
 		
 	}
