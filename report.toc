@@ -1,0 +1,10 @@
+\contentsline {section}{\numberline {1}Executive Summary}{4}
+\contentsline {section}{\numberline {2}Introduction}{4}
+\contentsline {subsection}{\numberline {2.1}An Informal Discussion of Crowdsourcing and the problems it faces}{4}
+\contentsline {subsection}{\numberline {2.2}A Formal Specification of Our Objectives}{6}
+\contentsline {subsection}{\numberline {2.3}A Formal Discussion of Our Achievements}{6}
+\contentsline {section}{\numberline {3}Design and Implementation}{6}
+\contentsline {section}{\numberline {4}Evaluation}{6}
+\contentsline {section}{\numberline {5}Conclusion and Future Extensions}{6}
+\contentsline {section}{\numberline {6}Project Management}{6}
+\contentsline {section}{\numberline {7}Appendix}{6}

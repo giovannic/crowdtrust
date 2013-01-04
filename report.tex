@@ -30,19 +30,48 @@
 
 
 
-\title{Crowdtrust\\ Group Project }
+\title{Crowdtrust - Trustworthy Information From The Crowd\\ Group Project }
 
-\author{Giovanni Charles \and Adam Fiksen \and Ryan Jackson \and Sahil Jain \and John Walker}
+\author{Giovanni Charles \and Adam Fiksen \and Ryan Jackson \and Sahil Jain \and John Walker \and \\ Emil Lupu}
 
 \date{\today}         % inserts today's date
 
 \maketitle           % generates the title from the data above
+\newpage
 
+\begin{abstract}
+\noindent Outsourcing is becomming increasingly popular in a lot of areas and as a result providing these required services has 
+become big business. Companies are using the Internet to accept jobs from requestors which often require some human intelligence 
+such as tagging images, they then distribute these jobs to a crowd of workers and return the results to the requestor. this process is called
+crowdsourcing. %Not happy with this
+\\
+\\
+\noindent At the moment Amazons \emph{Mechanical Turk} is the only real crowdsourcing `giant' in the market, with over 500,000 workers it offers
+anyone with a computer and internet connection the ability to `earn \$\$\$ while working from home!'. Requestors (companies or individuals) 
+can then submit a HIT(Human Intelligence Task) to the mechanical turk system, this HIT is then displayed to all users along with a 
+reward for its completion, the results are then sent back to the requestor and they decide whether the work is worth paying for. 
+This system raises a problem though, How do I know how accurate my results are? You have no control over which worker selects your HIT and
+your task of 'Transcribe this podcast' could be carried out by a lacklustre employee in India who doesn't speak very good English. The solution
+most requestor guides offer is to submit your job to multiple workers but this pushes up your costs linearly and leaves you to make a difficult
+decision to make on the number of workers to consult.
+\\
+\\
+We seek to create is a solution to this problem by providing a framework in which requesters can submit jobs with a required level of accurary. Our
+system then decides how many users it needs to consult to achieve this based on their expertise. 
+  
+\end{abstract}
+
+\newpage
+
+\tableofcontents	%Do contents page and a 1 page break afterward
+
+\newpage
+
+\section{Executive Summary}
+\section{Introduction}
 %Set the scene ( motivation )
 %State the problem you are trying to solve ( Ojective(s) )
 %Summarise what you achieved ( contributions )
-\section{Executive Summary}
-\section{Introduction}
 \subsection{An Informal Discussion of Crowdsourcing and the problems it faces}
 Our project concerns \emph{crowdsourcing} 'the book' would describe crowdsourcing as the principle of obtaining an accurate 
 and appropriate result by having many different contributors performing a task but we'd like to start with a story which
@@ -67,9 +96,9 @@ bird in a picture for example would prove quite difficult on a computer you may 
 would probablly need a good quality photograph, whereas one avid bird enthusiast in the crowd might be able to easilly identify the bird and
 reuturn the correct answer.
 \item
-\emph{Saving Time:} In 2009 aviator Steve Fosset crash landed on an island off Antigua, his friends back in America knew they had a very small
+\emph{Saving Time:} In 2009 aviator Steve Fosset crash landed deep in the Nevada desert, his friends knew they had a very small
 and time critical window to find him alive and they had little faith in the current search and resuce operations. They organised for satellite 
-image to be taken of the island and the images were passed to a crowd who were asked to identify foreign object which could be potential crash 
+images to be taken of the desert and the images were passed to a crowd who were asked to identify foreign object which could be potential crash 
 sites. This is a nice example of how the crowd can be used to literally cover a large ammount of ground in a small ammount of time. Not all 
 examples of saving time are quite this dramatic though, image tagging is an extemely arduous task for an individual or small group of people 
 to perform and tagging a relatively large set of images could take weeks or even months, outsourcing this to the crowd could have the job 
@@ -96,7 +125,7 @@ crowd management system.
 \item
 \emph{What problems can we ask the crowd?} 
 \\
-Specialised crowds have been successful and certainly have their uses for instance
+Specialised crowds have been successful and certainly have their uses for instance\\
 www.stackoverflow.com can be thought of as a crowd specialising in the solution of computing problems, however it is unlikely I would
 be able to find a specialised crowd to indentify bird pictures or to search satellite images for crash sites, therefore I need access 
 to a generalised crowd able to adapt to and solve a wide variety of problems. The crowd management party therefore needs to provide
