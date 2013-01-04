@@ -60,6 +60,15 @@ CREATE TABLE responses
   response BIT VARYING NULL
 );
 
+CREATE TABLE binaryaccuracies
+(
+	account INTEGER REFERENCES accounts (id),
+	truePositive DOUBLE PRECISION NOT NULL,
+	trueNegative DOUBLE PRECISION NOT NULL,
+	numPositive INTEGER NOT NULL,
+	numNegative INTEGER NOT NULL	
+);
+
 INSERT INTO types
 VALUES(1, 'binary');
 

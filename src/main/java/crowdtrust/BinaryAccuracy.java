@@ -12,12 +12,14 @@ import be.ac.ulg.montefiore.run.jahmm.OpdfGaussian;
 public class BinaryAccuracy extends Accuracy {
 	double truePositive;
 	double trueNegative;
-	private int negativeN = 0;
-	private int positiveN = 0;
+	private int negativeN;
+	private int positiveN;
 	
-	BinaryAccuracy(double pos, double neg){
+	public BinaryAccuracy(double pos, double neg, int numpos, int numneg){
 		truePositive = pos;
 		trueNegative = neg;
+		negativeN = numneg;
+		positiveN = numpos;
 	}
 	
 	boolean expert(double threshold){

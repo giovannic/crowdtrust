@@ -22,8 +22,8 @@ public abstract class SubTask {
 	public void addResponse(Bee annotator, Response r) {
 		MultiValueR response = (MultiValueR) r;
 		
-		db.CrowdDb.addResponse(annotator.id, response.serialise(), this.id);
-		Accuracy a = getAccuracy(annotator.id);
+		db.CrowdDb.addResponse(annotator.getId(), response.serialise(), this.id);
+		Accuracy a = getAccuracy(annotator.getId());
 		
 		Estimate [] state = getEstimates(id);
 		Estimate [] newState = updateLikelihoods(response,a,state);
