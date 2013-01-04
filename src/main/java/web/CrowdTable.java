@@ -30,11 +30,14 @@ public class CrowdTable implements WebElement {
   }
   public String generateBody(){
     String body = "<div id=\"crowd\" class=\"clientcrowd\"> <p>Crowd</p>";
-		List<String> tasks = new ArrayList<String> ();
-		tasks = getTaskList();
+		/*List<String> tasks = getTaskList();
+		if(tasks.isEmpty()) {
+			body += "</div>";
+			return body;
+		}
 		for(String task : tasks) {
 			body += "<p>" + task + "</p>";
-		}
+		}*/
  		body += "</div>";
 		return body;
   }
