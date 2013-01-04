@@ -43,11 +43,11 @@ public class UploadServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if (session == null) {
         	//TODO: test this
-//        	response.sendRedirect("/index.html");
-//        	return;
+        	response.sendRedirect("/index.html");
+        	return;
         }
         
-//        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
+        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
         Connection connection;
         try {
 			connection = DbAdaptor.connect();
@@ -97,7 +97,6 @@ public class UploadServlet extends HttpServlet {
 		try {
 			checkTask = connection.prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
 			checkTask.setInt(1, taskID);
-			int accountID = 1;
 			checkTask.setInt(2, accountID);
 	    	if (!checkTask.execute()) {
 	    		out.println("invalid Task");
