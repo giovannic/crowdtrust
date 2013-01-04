@@ -16,7 +16,10 @@
                 <version>2.0</version>
                 <configuration>
                     <path>/</path>
-		                <port>55550</port>
+<!--		    <serverXml>${project.basedir}/server.xml</serverXml>-->
+                    <httpsPort>55550</httpsPort>
+		    <keystoreFile>${project.basedir}/.keystore</keystoreFile>
+		    <keystorePass>changeit</keystorePass>
                 </configuration>
             </plugin>
             <plugin>
