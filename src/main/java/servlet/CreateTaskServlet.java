@@ -31,11 +31,11 @@ import db.DbAdaptor;
 	        HttpSession session = request.getSession();
 	        if (session == null) {
 	        	//TODO: test this
-//	        	response.sendRedirect("/index.html");
-//	        	return;
+	        	response.sendRedirect("/index.html");
+	        	return;
 	        }
 	        
-//	        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
+	        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
 	        Connection connection;
 	        try {
 				connection = DbAdaptor.connect();
@@ -51,15 +51,19 @@ import db.DbAdaptor;
 	        String task = request.getParameter("name");
 	        long expiryTime = Long.parseLong(request.getParameter("expiry"));
 	        long currentTime = (new Date()).getTime();
-			int accountID=1;//TODO:get account id
 			PreparedStatement insertTask;
 	        try {
 	        	insertTask = connection.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?");
 				insertTask.setInt(1, accountID);
 				insertTask.setString(2, task);
 				insertTask.setString(3, request.getParameter("question"));
-				insertTask.setInt(4, Integer.parseInt(request.getParameter("accuracy")));
-				insertTask.setInt(5, Integer.parseInt(request.getParameter("type")));
+				try {
+					insertTask.setDouble(4, Double.parseDouble(request.getParameter("accuracy")));
+					insertTask.setInt(5, Integer.parseInt(request.getParameter("type")));
+				} catch (NumberFormatException e) {
+					out.println("accuracy or type not an integer");
+					return;
+				}
 				insertTask.setTimestamp(6, new Timestamp(expiryTime));
 				insertTask.setTimestamp(7, new Timestamp(currentTime));
 				insertTask.execute();

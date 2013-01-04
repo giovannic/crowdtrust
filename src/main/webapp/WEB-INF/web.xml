@@ -48,4 +48,13 @@
         <servlet-name>addTask</servlet-name>
         <url-pattern>/servlet/addTask</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>initDB</servlet-name>
+        <servlet-class>servlet.InitDBServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>initDB</servlet-name>
+        <url-pattern>/servlet/init</url-pattern>
+    </servlet-mapping>
 </web-app>
