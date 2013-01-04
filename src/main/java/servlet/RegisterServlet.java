@@ -1,6 +1,6 @@
 package servlet;
 
-//import db.RegisterDb;
+import db.RegisterDb;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,59 +31,8 @@ public class RegisterServlet extends HttpServlet {
     String email = request.getParameter("email");
     String client = request.getParameter("client");
     String crowd = request.getParameter("crowd");
-    //RegisterDb.addUser(email, username, password, client, crowd);
-    response.sendRedirect("/login.html");
-    /*try {
-      String url = "jdbc:postgresql://db:5432/g1236218_u";
-      Properties properties = new Properties();
-      properties.setProperty("user", "g1236218_u");
-      properties.setProperty("password", "RLTn4ViKks");
-      connection = DriverManager.getConnection(url, properties);
-    }
-    catch (SQLException e) {
-      throw new ServletException(e);
-    }*/
-    //if (connection != null) {
-      /*if(checkAccountExists("username", username)) {
-        //username already exists
-        return;
-      }
-      if(checkAccountExists("email", email)) {
-        //email already exists
-        return;
-      }*/
-      
-      /*StringBuilder sql = new StringBuilder();
-      sql.append("INSERT INTO accounts (email, username, password, type) ");
-      sql.append("VALUES(?, ?, CAST(? AS bytea), ?)");
-      try {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
-        preparedStatement.setString(1, email);
-        preparedStatement.setString(2, username);
-        preparedStatement.setBytes(3, sha256(password));
-        preparedStatement.setByte(4, type);
-        preparedStatement.execute();
-      }
-      catch (SQLException e) {
-        throw new ServletException(e);
-      }*/
-      
+    RegisterDb.addUser(email, username, password, client, crowd);
+    response.sendRedirect("/login.html");      
   }
   
-
-  /*private boolean checkAccountExists(String field, String data) {
-    String sql = "SELECT user_id FROM accounts WHERE " + field + " = ?";
-    try {
-      PreparedStatement preparedStatement = connection.prepareStatement(sql);
-      preparedStatement.setString(1, data);
-      ResultSet resultSet = preparedStatement.executeQuery();
-      if(resultSet.next()) {
-        return true;
-      }
-    }
-    catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return false;  
-  }*/
 }

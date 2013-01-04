@@ -8,8 +8,6 @@ import javax.servlet.ServletException;
 
 import db.LoginDb;
 
-//import db.LoginDb;
-
 import java.util.Properties;
 
 import java.io.IOException;
@@ -32,8 +30,10 @@ public class LoginServlet extends HttpServlet {
       session.setMaxInactiveInterval(1200);
       session.setAttribute("account_id", id);
       session.setAttribute("account_name", username);
+			makeLobby(response, request);
+			return;
     }
-    makeLobby(response, request);
+    response.sendRedirect("/login.html"); 
   }
   
   private void makeLobby(HttpServletResponse response, HttpServletRequest request){
@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 			String username = (String) session.getAttribute("account_name");
 			Lobby userLobby = new Lobby(username, request.getContextPath());
 	    userLobby.addClientTable();
-	    userLobby.addCrowdTable();
+	    userLobby.addCrowdTable(request);
 	    out.print(userLobby.generate());
 	  } catch (IOException e) {
 			e.printStackTrace();

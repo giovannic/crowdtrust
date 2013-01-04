@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS responses;
 DROP TABLE IF EXISTS subtasks CASCADE;
 DROP TABLE IF EXISTS tasks CASCADE;
@@ -11,8 +10,8 @@ CREATE TABLE accounts
   id SERIAL PRIMARY KEY,
   email VARCHAR(100) NOT NULL,
   username VARCHAR(12) NOT NULL,
-  password BIT(256) NULL,
-  type BIT(3) NULL,
+  password VARCHAR(100) NULL,
+  type SMALLINT NULL,
   session CHARACTER(32) NULL,
   last_active TIMESTAMP NULL,
   expert BOOLEAN,
@@ -64,8 +63,8 @@ CREATE TABLE responses
 INSERT INTO types
 VALUES(1, 'binary');
 
-INSERT INTO accounts
-VALUES(1,'adam','adam', NULL, NULL, NULL, NULL, true, 1);
+--INSERT INTO accounts
+--VALUES(1,'adam','adam', NULL, NULL, NULL, NULL, true, 1);
 
-INSERT INTO tasks
-VALUES( 1,1,'test', 'test',10,1,NULL,NULL);
+--INSERT INTO tasks
+--VALUES( 1,1,'test', 'test',10,1,NULL,NULL);
