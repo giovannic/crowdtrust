@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+<%@ page import="java.util.List" %>
 <html>
 
 	<!-- #BeginTemplate "main.dwt" -->
@@ -46,18 +47,15 @@
 		
 		<!-- #BeginEditable "content" -->
 
-    <%
-	    String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
-		  List<String> recentImageTasks SubTaskDb.getImageSubtasks();
 		<div id="content">
 			<h2>Recent tasks added</h2>
 			<div id="task_images">
-			  <%  int numImages=0;
-			    while(numImages < 5) { %>
-            <img src= />
-			    }
-			  <img src=
-			  <%
+    <%
+	    String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
+		  List<String> recentImageTasks SubTaskDb.getImageSubtasks();
+		  for(int i = 0; i < recentImageTasks.size() ; i++ ) { %>
+            <img src=<%=(TASKS_DIRECTORY + recentImageTasks.get(i));%> />
+			  <%}%>
 			</div>
 		</div>
 		
