@@ -29,6 +29,10 @@ public class AnnotatorModel {
 		this.password = password;
 	}
 	
+	public void setTasks(LinkedList<AnnotatorSubTaskAnswer> tasks){
+		this.tasks = tasks;
+	}
+	
 	public void setId(int id){
 		this.bee = new Bee(id);
 	}
