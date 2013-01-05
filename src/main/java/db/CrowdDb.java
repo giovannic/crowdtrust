@@ -232,111 +232,33 @@ StringBuilder sql = new StringBuilder();
   	  System.err.println("SQL Error on Crowd");
   	  
     }
-
-		
 	}
 
 	public static void updateBinaryExperts(Collection<Bee> experts) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  
-    }
-
-		
+		updateExperts(experts, 1);
 	}
 
-	public static void updateBinaryBots(Collection<Bee> bots) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  
-    }
-
-		
-	}
-
-	public static void updateContinuousExperts(Collection<Bee> bots) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  
-    }
-
-		
-	}
-
-	public static void updateContinuousBots(Collection<Bee> bots) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  
-    }
-
-		
+	public static void updateContinuousExperts(Collection<Bee> experts) {
+		updateExperts(experts, 2);
 	}
 
 	public static void updateMultiValueExperts(Collection<Bee> experts) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  
-    }
+		updateExperts(experts, 3);		
+	}
 
-		
+	public static void updateBinaryBots(Collection<Bee> bots) {
+		updateBots(bots, 1);		
+	}
+
+	public static void updateContinuousBots(Collection<Bee> bots) {
+		updateBots(bots, 2);
 	}
 
 	public static void updateMultiValueBots(Collection<Bee> bots) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  
-    }
+		updateBots(bots, 3);
 	}
 
-	public static BinaryAccuracy mapBinaryAccuracy(ResultSet resultSet) {
+	private static BinaryAccuracy mapBinaryAccuracy(ResultSet resultSet) {
 		try {
 		double truePositive = resultSet.getDouble("truePositive");
 		double trueNegative = resultSet.getDouble("trueNegative");
@@ -349,6 +271,64 @@ StringBuilder sql = new StringBuilder();
 			e.printStackTrace();
 		}
 		return null;
-	}		
+	}
+
+	private static void updateExperts(Collection<Bee> experts, int type) {
+		PreparedStatement preparedStatement;
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO experts (accounts, type) VALUES (?, ?)");
+    try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return;
+    }
+		try {
+			Bee[] bees = (Bee []) experts.toArray(new Bee[experts.size()]);
+			for(int i = 0; i < bees.length; i++) {
+				Bee bee = bees[i];
+				int id = bee.getId();
+				preparedStatement.setInt(1, id);
+				preparedStatement.setInt(2, type);
+				preparedStatement.executeUpdate();
+			}		
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void updateBots(Collection<Bee> bots, int type) {
+		PreparedStatement preparedStatement;
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO bots (accounts, type) VALUES (?, ?)");
+    try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return;
+    }
+		try {
+			Bee[] bees = (Bee []) bots.toArray(new Bee[bots.size()]);
+			for(int i = 0; i < bees.length; i++) {
+				Bee bee = bees[i];
+				int id = bee.getId();
+				preparedStatement.setInt(1, id);
+				preparedStatement.setInt(2, type);
+				preparedStatement.executeUpdate();
+			}		
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

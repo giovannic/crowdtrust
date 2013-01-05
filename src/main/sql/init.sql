@@ -69,6 +69,18 @@ CREATE TABLE binaryaccuracies
 	numNegative INTEGER NOT NULL	
 );
 
+CREATE TABLE experts
+(
+	account INTEGER REFERENCES accounts (id),
+	type SMALLINT NOT NULL
+);
+
+CREATE TABLE bots
+(
+	account INTEGER REFERENCES accounts (id),
+	type SMALLINT NOT NULL
+);
+
 INSERT INTO types
 VALUES(1, 'binary');
 
