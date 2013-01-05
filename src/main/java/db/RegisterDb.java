@@ -12,8 +12,8 @@ import java.util.Properties;
 public class RegisterDb {
 	
 
-  public static boolean addUser(String email, String username, String password, String client, String crowd) {
-    byte type = getAccountType(client, crowd);
+  public static boolean addUser(String email, String username, String password, boolean crowd) {
+    byte type = getAccountType(crowd);
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO accounts (email, username, password, type) ");
     sql.append("VALUES(?, ?, ?, ?)");
@@ -71,14 +71,14 @@ public class RegisterDb {
     return null;
   }*/
 
-  private static byte getAccountType(String client, String crowd) {
+  private static byte getAccountType(boolean crowd) {
     int type = 0;
-    if(client != null && client.equalsIgnoreCase("on")) {
-      type = type ^ 4;
-    }
-    if(crowd != null && crowd.equalsIgnoreCase("on")) {
+    if(crowd) {
       type = type ^ 2;
     }
+		else {
+			type = type ^ 4;
+		}
     return (byte) type;
   } 
 
