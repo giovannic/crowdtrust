@@ -72,16 +72,16 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("Got it");
 		
 		//Lets create a linked list of subTasks
-		for(int i = 0; i < 100; i++){
+		for(int i = 0; i < 10; i++){
 			String uuid = UUID.randomUUID().toString();
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
 			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
-			int id = SubTaskDb.getSubTaskId(uuid);
-			System.out.println("Subtask Id: " + id);
-			BinarySubTask bst = new BinarySubTask(id);
-			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
-			answers.add(asta);
+		//	int id = SubTaskDb.getSubTaskId(uuid);
+		//	System.out.println("Subtask Id: " + id);
+		//	BinarySubTask bst = new BinarySubTask(id);
+		//	AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
+		//	answers.add(asta);
 		}
 		
 		//Give all the annotators the answers
@@ -89,6 +89,7 @@ public class TestAlgorithm extends TestCase {
 			annotators[i].setTasks(answers);
 		}
 		
+	
 		/*SubTask t = SubTaskDb.getRandomSubTask();
 		
 		while( t != null){

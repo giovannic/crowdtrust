@@ -4,6 +4,11 @@ DROP TABLE IF EXISTS tasks CASCADE;
 DROP TABLE IF EXISTS types CASCADE;
 DROP TABLE IF EXISTS accounts CASCADE;
 DROP TABLE IF EXISTS estimates CASCADE;
+DROP TABLE IF EXISTS binaryaccuracies CASCADE;
+DROP TABLE IF EXISTS continuousaccuracies CASCADE;
+DROP TABLE IF EXISTS multivalueaccuracies CASCADE;
+DROP TABLE IF EXISTS experts CASCADE;
+DROP TABLE IF EXISTS bots CASCADE;
 
 CREATE TABLE accounts
 (
@@ -30,7 +35,7 @@ CREATE TABLE tasks
   submitter INTEGER REFERENCES accounts (id),
   name VARCHAR(100) NOT NULL,
   question VARCHAR(100) NOT NULL,
-  accuracy DOUBLE PRECISION NOT NULL,
+  accuracy INTEGER NOT NULL,
   type INTEGER REFERENCES types (id),
   ex_time TIMESTAMP,
   date_created TIMESTAMP
@@ -95,6 +100,12 @@ CREATE TABLE bots
 
 INSERT INTO types
 VALUES(1, 'binary');
+
+INSERT INTO types
+VALUES(2, 'continuous');
+
+INSERT INTO types
+VALUES(3, 'multivalue');
 
 --INSERT INTO accounts
 --VALUES(1,'adam','adam', NULL, NULL, NULL, NULL, true, 1);
