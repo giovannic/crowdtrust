@@ -31,7 +31,9 @@ public class RegisterServlet extends HttpServlet {
     String email = request.getParameter("email");
     String client = request.getParameter("client");
     String crowd = request.getParameter("crowd");
-    RegisterDb.addUser(email, username, password, client, crowd);
+		boolean crowdBool = client.equalsIgnoreCase("on");
+		boolean clientBool = client.equalsIgnoreCase("on");
+    RegisterDb.addUser(email, username, password, crowdBool);
     response.sendRedirect("/login.html");      
   }
   
