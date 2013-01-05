@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import crowdtrust.BinaryTask;
-import crowdtrust.Task;
+import crowdtrust.*;
 
 public class TaskDb {
 	
@@ -142,10 +141,15 @@ public class TaskDb {
 				String question = resultSet.getString("question");
 				int type = resultSet.getInt("type");
 				int accuracy = resultSet.getInt("accuracy");
-				switch(type) {
-				case 1:
+				if(type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy);
 				}
+				if(type == 2) {
+						//thisTask = new SingleContinuousTask(id, name, question, accuracy);
+				}							
+				if(type == 3) {
+						thisTask = new MultiValueTask(id, name, question, accuracy);
+				}					
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -179,7 +183,7 @@ public class TaskDb {
 
 	}
 	
-	public static List<String> getTasksForCrowdId(int id) {
+	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT task.name FROM task ");
 		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
@@ -189,10 +193,11 @@ public class TaskDb {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<String> tasks = new ArrayList<String>();
+			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
 				String taskName = resultSet.getString("task.name");
-				tasks.add(taskName);
+				Task task = getTask(taskName);
+				tasks.add(task);
 			}
 			return tasks;
 		}
@@ -203,7 +208,6 @@ public class TaskDb {
 	      	System.err.println("SQL Error on get tasks for id");
 	      	return null;
 	    }
-		
 	}
 	
 }

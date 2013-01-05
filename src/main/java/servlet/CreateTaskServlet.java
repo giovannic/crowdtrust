@@ -22,7 +22,7 @@ import db.TaskDb;
 	        //validate user credentials
 	        HttpSession session = request.getSession();
 	        if (session == null) {
-	        	response.sendRedirect("/index.html");
+	        	response.sendRedirect("/index.jsp");
 	        	return;
 	        }
 	        
