@@ -69,6 +69,18 @@ CREATE TABLE binaryaccuracies
 	numNegative INTEGER NOT NULL	
 );
 
+CREATE TABLE continuousaccuracies
+(
+	account INTEGER REFERENCES accounts (id),
+	accuracy DOUBLE PRECISION NOT NULL
+);
+
+CREATE TABLE multivalueaccuracies
+(
+	account INTEGER REFERENCES accounts (id),
+	accuracy DOUBLE PRECISION NOT NULL
+);
+
 CREATE TABLE experts
 (
 	account INTEGER REFERENCES accounts (id),
