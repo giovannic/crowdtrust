@@ -131,8 +131,11 @@ public class UploadServlet extends HttpServlet {
 		}
     	
         //add to subtasks
-		if( !SubTaskDb.addSubtask(filenames, taskID) ) 
-			return;
+    	for (int i = 0 ; i < filenames.size() ; i++) {
+	        String filename = filenames.get(i);
+    		if( !SubTaskDb.addSubtask(filename, taskID) ) 
+    			return;
+    	}		
 		
         out.println("<html>");
         out.println("<body>");
