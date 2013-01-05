@@ -1,3 +1,10 @@
+#report latex compilation files
+*.log
+*.aux
+*.toc
+*.pdf
+*.synctex.gz
+
 #logs
 logs/*
 work/
@@ -20,7 +27,3 @@ build/*
 #misc
 conf/PID
 
-#report latex compilation files
-report.log
-report.aux
-report.toc
