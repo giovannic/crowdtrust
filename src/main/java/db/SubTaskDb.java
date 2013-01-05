@@ -83,12 +83,34 @@ public class SubTaskDb {
 	
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
-	      sql.append("SELECT tasks.name, subtasks.file_name, tasks.date_created FROM tasks JOIN subtasks ON tasks.id = subtasks.task");
+	      sql.append("SELECT tasks.name, subtasks.file_name, tasks.date_created FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
 	      sql.append("WHERE subtasks.file_name LIKE '%.jpg' OR subtasks.file_name LIKE '%.png' ORDER BY tasks.date_created");
 	      List<String> list = new LinkedList<String>();
+	      PreparedStatement preparedStatement;
 	      try {
-	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-	        ResultSet resultSet = preparedStatement.executeQuery();
+	        preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	      }
+	      catch (ClassNotFoundException e) {
+	      	  System.err.println("Error connecting to DB on get Subtask: PSQL driver not present");
+	      	  return list;
+	      } catch (SQLException e) {
+	      	  System.err.println("SQL Error on connection during get image subtask");
+	      	  return list;
+	      }		
+	      try {
+			preparedStatement.execute();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	      ResultSet resultSet;
+	      try{
+	        resultSet = preparedStatement.getResultSet();
+	      } catch (SQLException e) {
+	    	  System.err.println("problem executing stement");
+	    	  return list;
+	      }
+	      try{
 	        if(!resultSet.next() || !resultSet.isLast()) {
 		      //task does not exist, grave error TODO log it
 		    }
@@ -96,13 +118,11 @@ public class SubTaskDb {
 	        	String subtask = resultSet.getString(2);
 	        	String task = resultSet.getString(1);
 	        	list.add(task + "/" + subtask);
+	        	resultSet.next();
 	        }
+	      } catch(SQLException e) {
+	    	  System.err.println("problem with result set");
 	      }
-	      catch (ClassNotFoundException e) {
-	      	  System.err.println("Error connecting to DB on get Subtask: PSQL driver not present");
-	      } catch (SQLException e) {
-	      	  System.err.println("SQL Error on get Subtask");
-	      }		
 	      return list;
 	}
 	

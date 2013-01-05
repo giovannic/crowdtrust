@@ -45,27 +45,18 @@ public class UploadServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if (session == null) {
         	//TODO: test this
-        	response.sendRedirect("/index.html");
-        	return;
+     //   	response.sendRedirect("/index.html");
+   //     	return;
         }
         
-        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
-        Connection connection;
-        try {
-			connection = DbAdaptor.connect();
-		} //catch (ClassNotFoundException | SQLException e1) {
-        catch (Exception e1){
-			// TODO Auto-generated catch block
-        	out.println("db connection failed");
-			e1.printStackTrace();
-			return;
-		}
-        
+    //    int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
+        int accountID = 1;
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
     	String taskDir = "";
     	int taskID = -1;
+    	System.out.println("about to get file things");
 		try {
 			items = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 		} catch (FileUploadException e) {
@@ -73,11 +64,13 @@ public class UploadServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
+		System.out.println("about to go through params");
     	for( FileItem item : items ) {
         	if(item.isFormField()) {
         		String field = item.getFieldName();
         		if (field.equals("task")) {
             		String task = item.getString();
+            		System.out.println("task field");
         			if (task == null) {
         				//output need task name
         			} else {
@@ -86,6 +79,7 @@ public class UploadServlet extends HttpServlet {
         			}
         		}
         		if( field.equals("taskID") ) {
+        			System.out.println("task id field");
         			taskID = Integer.parseInt(item.getString());
         		}
         	}
@@ -94,8 +88,9 @@ public class UploadServlet extends HttpServlet {
         		files = item;
         	}
     	}
+    	System.out.println("taskDB.isPresent about to run");
         //add to db - check task in db, add to subtasks,
-    	if (TaskDb.isPresent(taskID, accountID))
+    	if (!TaskDb.isPresent(taskID, accountID))
     		return;
     	
         //on upload page retrieve task id, submit task id as a parameter
