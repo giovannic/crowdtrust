@@ -116,9 +116,9 @@ public class TaskDb {
 
 	}
 	
-	public static List<String> getTasksForCrowdId(int id) {
+	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT task.name FROM task ");
+		sql.append("SELECT task.name, task.question FROM task ");
 		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
 		sql.append("OR task.ex_time + task.date_created < NOW()");
 		PreparedStatement preparedStatement;
@@ -126,10 +126,11 @@ public class TaskDb {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<String> tasks = new ArrayList<String>();
+			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
 				String taskName = resultSet.getString("task.name");
-				tasks.add(taskName);
+				String taskQuestion = resultSet.getString("task.question");
+				tasks.add(new Task(null, taskName, taskQuestion, null, null));
 			}
 			return tasks;
 		}
@@ -140,7 +141,6 @@ public class TaskDb {
 	      	System.err.println("SQL Error on get tasks for id");
 	      	return null;
 	    }
-		
 	}
 	
 }
