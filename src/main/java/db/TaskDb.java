@@ -87,6 +87,31 @@ public class TaskDb {
 		}
 	}
 	
+	public static int getTaskId(String name){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id FROM tasks\n");
+		sql.append("WHERE name = ?");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return -1;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return -1;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    return resultSet.getInt(1);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
+		  	return -1;
+		}
+	}
+	
 	public static boolean isPresent(int taskID, int accountID) {
     	PreparedStatement checkTask;
 		try {
