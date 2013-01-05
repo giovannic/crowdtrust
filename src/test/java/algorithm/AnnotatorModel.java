@@ -19,10 +19,17 @@ public class AnnotatorModel {
 	protected MultiBehaviour                     multi     ;
 	protected ContinuousBehaviour                continuous;
 	protected Bee								 bee       ;
+	protected String							 username  ;
+	protected String							 password  ;
 	
 	//------------Initalisation------------
 	
-	public AnnotatorModel(int id){
+	public AnnotatorModel(String username, String password){
+		this.username = username;
+		this.password = password;
+	}
+	
+	public void setId(int id){
 		this.bee = new Bee(id);
 	}
 	
@@ -74,5 +81,13 @@ public class AnnotatorModel {
 			}
 		}
 		return null;
+	}
+	
+	public String getUsername(){
+		return this.username;
+	}
+	
+	public String getPassword(){
+		return this.password;
 	}
 }
