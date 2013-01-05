@@ -72,7 +72,7 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("Got it");
 		
 		//Lets create a linked list of subTasks
-		for(int i = 0; i < 100; i++){
+		for(int i = 0; i < 10; i++){
 			String uuid = UUID.randomUUID().toString();
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
