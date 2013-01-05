@@ -1,8 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
 
-	<!-- #BeginTemplate "main.dwt" -->
-
 	<head>
 		<!-- #BeginEditable "doctitle" -->
 		<title>CrowdTrust</title>
@@ -59,7 +57,5 @@
 		</div>
 	</div>
 	</body>
-
-<!-- #EndTemplate -->
 
 </html>
