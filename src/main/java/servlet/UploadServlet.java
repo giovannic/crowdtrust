@@ -45,18 +45,16 @@ public class UploadServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if (session == null) {
         	//TODO: test this
-     //   	response.sendRedirect("/index.html");
-   //     	return;
+        	response.sendRedirect("/index.jsp");
+        	return;
         }
         
-    //    int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
-        int accountID = 1;
+        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
     	String taskDir = "";
     	int taskID = -1;
-    	System.out.println("about to get file things");
 		try {
 			items = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 		} catch (FileUploadException e) {
@@ -64,7 +62,6 @@ public class UploadServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
-		System.out.println("about to go through params");
     	for( FileItem item : items ) {
         	if(item.isFormField()) {
         		String field = item.getFieldName();
@@ -88,7 +85,6 @@ public class UploadServlet extends HttpServlet {
         		files = item;
         	}
     	}
-    	System.out.println("taskDB.isPresent about to run");
         //add to db - check task in db, add to subtasks,
     	if (!TaskDb.isPresent(taskID, accountID))
     		return;
