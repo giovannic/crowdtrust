@@ -6,8 +6,9 @@ import java.util.Map;
 
 public class BinarySubTask extends SubTask {
 	
-	public BinarySubTask(){
+	public BinarySubTask(int id){
 		super(); 
+		this.id = id;
 	} 
 
 	@Override

@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ import crowdtrust.Task;
 
 import db.LoginDb;
 import db.RegisterDb;
+import db.SubTaskDb;
 import db.TaskDb;
 
 import junit.framework.TestCase;
@@ -62,10 +64,19 @@ public class TestAlgorithm extends TestCase {
 		double accuracy = 0.7;
 		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey));
 		
+		//List of answers
+		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
+		
 		//Lets create a linked list of subTasks
 		for(int i = 0; i < 100; i++){
-		
-			
+			String uuid = UUID.randomUUID().toString();
+			uuid = uuid.replace("-", "");
+			uuid = uuid.substring(0, 12);
+			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
+			int id = SubTaskDb.getSubTaskId(uuid);
+			BinarySubTask bst = new BinarySubTask(id);
+			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
+			answers.add(asta);
 		}
 		}
 	}
