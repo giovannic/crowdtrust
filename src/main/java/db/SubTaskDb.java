@@ -97,9 +97,15 @@ public class SubTaskDb {
 	      	  System.err.println("SQL Error on connection during get image subtask");
 	      	  return list;
 	      }		
+	      try {
+			preparedStatement.execute();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	      ResultSet resultSet;
 	      try{
-	        resultSet = preparedStatement.executeQuery();
+	        resultSet = preparedStatement.getResultSet();
 	      } catch (SQLException e) {
 	    	  System.err.println("problem executing stement");
 	    	  return list;
