@@ -45,7 +45,7 @@ public class TestAlgorithm extends TestCase {
 			int trueNeg = rand.nextInt(999) + 1;
 			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
 		}
-		boolean labs = false;
+		boolean labs = true;
 		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < 1000; i++){
