@@ -1,5 +1,6 @@
 package algorithm;
 
+import crowdtrust.Task;
 import crowdtrust.TaskType;
 
 public class AlgoTestData {
