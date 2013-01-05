@@ -36,7 +36,7 @@ public class TaskDb {
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
-        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?");
+        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?)");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
