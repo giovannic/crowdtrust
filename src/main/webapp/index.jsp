@@ -48,6 +48,12 @@
 		
 		<!-- #BeginEditable "content" -->
 
+		<div id="dbinit">
+		  <form action="servlet/init" method="post">
+		    <input type="submit" />
+      </form>
+    </div>
+
 		<div id="content">
 			<h2>Recent tasks added</h2>
 			<div id="task_images">
@@ -65,12 +71,6 @@
 		<div id="footer">
 			<p>Created by Giovanni Charles, Adam Fiksen, Ryan Jackson, Sahil Jain, John Walker</p>
 		</div>
-
-		<div id="dbinit">
-		  <form action="servlet/init" method="post">
-		    <input type="submit" />
-      </form>
-    </div>
 	</div>
 	</body>
 
