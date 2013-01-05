@@ -42,7 +42,7 @@
 \begin{abstract}
 \noindent Outsourcing is becomming increasingly popular in a lot of areas and as a result providing these required services has 
 become big business. Companies are using the Internet to accept jobs from requestors which often require some human intelligence 
-such as tagging images, they then distribute these jobs to a crowd of workers and return the results to the requestor. this process is called
+such as tagging images, they then distribute these jobs to a crowd of workers and return the results to the requestor. This process is called
 crowdsourcing. %Not happy with this
 \\
 \\
@@ -67,12 +67,17 @@ system then decides how many users it needs to consult to achieve this based on 
 
 \newpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Executive Summary}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %Set the scene ( motivation )
 %State the problem you are trying to solve ( Ojective(s) )
 %Summarise what you achieved ( contributions )
-\subsection{An Informal Discussion of Crowdsourcing and the problems it faces}
+%%%%%%%%%%%
+\subsection{What Is Crowdsourcing} %Change the I adam and 'I' will kill you
 Our project concerns \emph{crowdsourcing} 'the book' would describe crowdsourcing as the principle of obtaining an accurate 
 and appropriate result by having many different contributors performing a task but we'd like to start with a story which
 we believe encapsulates the idea of crowdsourcing in its most positive and useful light.
@@ -112,9 +117,11 @@ to a crowd of lower paid people could potentially save you a lot of money.
 getting the general public to do things such as complete surverys can be difficult as a large number of people will simply not want to do it. The
 crowd memebers will be inventivised to perform work and as such will be more likely to complete your survey.
 \end{itemize}
-This is all well and good in theory but it leaves us with a number of problems, an introduction to these problems is provided below but
-they are discussed and addressed in much greater details at various stages throughout the report:
+%%%%%%%%%%%
+\subsection{Analysis of the Marketplace}
 
+%%%%%%%%%%%
+\subsection{Problem Description}
 \begin{enumerate}
 \item
 \emph{How do we get these problems to the crowd?} 
@@ -147,10 +154,13 @@ A solution to these problems provides us with the basis for our project we are t
 \emph{Design and implement a framework that allows the optimum number of contributors to be selected on the basis of their trustworthiness 
 for a desired accuracy of the outcome/result and that evaluates the trustworthiness of contributors on the basis of the accuracy of the 
 results they provide.}
+%%%%%%%%%%%
+\subsection{Formal Objectives}
+%%%%%%%%%%%
+\subsection{Achievements}
 
-\subsection{A Formal Specification of Our Objectives}
 
-\subsection{A Formal Discussion of Our Achievements}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Design and Implementation}
 % Detail your design why did you do it this way?
@@ -168,20 +178,28 @@ These goals can be achieved with the `Expectation-Maximisation algorithm'. We ha
 where $p(z|\zeta)$ is our prior belief of $p(z)$.\\Maximisation Step:You replace the current hypothesis h with the most likely hypothesis assuming that the Z = E[Z]. This will mean that we have to calculate our most likely accuracies for the system based on the expected correct annotations calculated from the previous step.Q(a,a)(2)Annotation typesOur framework deals with a variety of subtasks that have different annotation types and models for accurate behaviour.We model each of the subtasks with a different conjugate prior and model for accurate behaviour.Subtask type, Description, conjugate prior, likelihoodBinary: An annotator can respond either true or falseMultivalued: An annotator must categorise the subject into one of a range of categories DContinuous: An annotator must respond using a tuple from an N-dimensional number line[2] f(1)Online implementationThe online implementation of this algorithm is different in that it does not compute the expected labels as a batch job but instead has to observe several instances, one at a time, over a long period of time.It also exploits discrimination. Expert annotators are asked first to respond to subtasks in order to reduce the total number of labels required. Since experts are likely to be the minority this technique is important since it makes sure that their annotations are taken into account [3].We carry this out by checking the variance of our estimate for the most likely accuracy of an annotator. A large variance would suggest that we do not yet have enough information to judge an annotator. When the variance is small enough, we will test the accuracy against the criteria below.Subtask type, criteriaBinary: Multivalued: Continuous: E-stepDb response > Update ratios > check threshold \& max labels >M-stepUpdate accuracies > check threshold variance > update bot/expert listsE stepTo calculate (1), values for the Sequential Probability Ratio Test [4] for each hidden value Z are stored in the database. Since the value is the sum of a sequence, the stored value can simply be increased by the new value. At this point each value is tested with the threshold to see if the maximum likelihood is great enough. At this point the M step will begin.M stepTo compute the new accuracy (2), the prior accuracy needs to be modelled as a distribution stated in figure 1 and the expected accuracy is calculated assuming the correct label is the most likely one from the last step.The new accuracy would be the peak of the equation (2). To avoid using numerical methods to estimate the peak we write the Bayes estimate as a convex combination of the prior and the data [5]. This way we get a formula for the expected accuracy that can be computed in constant time:Subtask type, convex combinationBinary: Multivalued: Continuous: Once the accuracies have been updated we must check the variance of the posterior accuracy. In the cases where the accuracy is modelled as a single beta distribution, multi valued and continuous, is trivial:In the binary case the accuracy is modelled as a product of two dependant distributions therefore the variance must be estimated. We fit the peak to a multivariate Gaussian curve to estimate the posterior’s variance.If we are confident in our knowledge of the annotator we test its accuracy against the criteria and store any new data about experts and bots in the database.[1] – Machine Learning Tom M Mitchell[2] - A Compendium of Conjugate Priors - John D. Cook[3] – Online crowdsourcing: rating annotators and obtaining cost-effective labels - Welinder Perona[4] - Sequential tests of statistical hypotheses – Wald[5] – Bayesian inference for simple problems - Simon Jackman
 
  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{Evaluation}
 %summarise testing procedures (+ relevant testing results)
 %Evaluate your deliverables in terms of performance usability
 %usefulness, (how successful was the project?)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Conclusion and Future Extensions}
 %Say what you've concluded from doing the work and how you'd build on it
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Project Management}
 %Planning, group organisation, breakdown + task allocation etc
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Appendix}
 %e.g user guide
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{thebibliography}{9}
 
