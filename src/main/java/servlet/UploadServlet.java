@@ -45,17 +45,18 @@ public class UploadServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if (session == null) {
         	//TODO: test this
-        	response.sendRedirect("/index.html");
-        	return;
+     //   	response.sendRedirect("/index.html");
+   //     	return;
         }
         
-//        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
-int accountID=1;
+    //    int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
+        int accountID = 1;
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
     	String taskDir = "";
     	int taskID = -1;
+    	System.out.println("about to get file things");
 		try {
 			items = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 		} catch (FileUploadException e) {
@@ -63,11 +64,13 @@ int accountID=1;
 			e.printStackTrace();
 			return;
 		}
+		System.out.println("about to go through params");
     	for( FileItem item : items ) {
         	if(item.isFormField()) {
         		String field = item.getFieldName();
         		if (field.equals("task")) {
             		String task = item.getString();
+            		System.out.println("task field");
         			if (task == null) {
         				//output need task name
         			} else {
@@ -76,6 +79,7 @@ int accountID=1;
         			}
         		}
         		if( field.equals("taskID") ) {
+        			System.out.println("task id field");
         			taskID = Integer.parseInt(item.getString());
         		}
         	}
@@ -84,9 +88,9 @@ int accountID=1;
         		files = item;
         	}
     	}
-    	System.out.println("tasDB.isPresent about to run");
+    	System.out.println("taskDB.isPresent about to run");
         //add to db - check task in db, add to subtasks,
-    	if (TaskDb.isPresent(taskID, accountID))
+    	if (!TaskDb.isPresent(taskID, accountID))
     		return;
     	
         //on upload page retrieve task id, submit task id as a parameter
