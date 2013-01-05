@@ -81,10 +81,8 @@ public class SubTaskDb {
 	      return list;
 	}
 	
-	public static boolean addSubtask(List<String> filenames, int taskID) {
-    	for (int i = 0 ; i < filenames.size() ; i++) {
+	public static boolean addSubtask(String filename, int taskID) {
 	        String insertQuery = "INSERT INTO subtasks VALUES (DEFAULT,?,?,?)";
-	        String filename = filenames.get(i);
 	        PreparedStatement stmt;
 	        try {
 				stmt = DbAdaptor.connect().prepareStatement(insertQuery);
@@ -101,7 +99,6 @@ public class SubTaskDb {
 				e.printStackTrace();
 				return false;
 			}
-    	}		
         return true;
 	}
 	
