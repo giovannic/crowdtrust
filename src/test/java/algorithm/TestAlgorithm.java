@@ -89,6 +89,7 @@ public class TestAlgorithm extends TestCase {
 			annotators[i].setTasks(answers);
 		}
 		
+	
 		/*SubTask t = SubTaskDb.getRandomSubTask();
 		
 		while( t != null){
