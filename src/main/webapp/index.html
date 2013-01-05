@@ -45,11 +45,23 @@
 		</div>
 		
 		<!-- #BeginEditable "content" -->
-		
+
+    <%
+    String dbURL = "jdbc:postgresql://db:5432/g1236218_u";
+    String dbUsername = "g1236218_u";
+    String dbPassword = "RLTn4ViKks";
+    Class.forName("org.postgresql.Driver");
+		Connection con = DriverManager.getConnection(dbURL, dbUsername, dbPassword)
 		<div id="content">
 			<h2>Recent tasks added</h2>
-			<img src="images/sample01.jpg" />
-			<img src="images/sample02.jpg" />
+			<div id="task_images">
+			  <%  int numImages=0;
+			    while(numImages < 5) { %>
+            <img src= />
+			    }
+			  <img src=
+			  <%
+			</div>
 		</div>
 		
 		<!-- #EndEditable -->

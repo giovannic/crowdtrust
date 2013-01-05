@@ -1,9 +1,18 @@
 package algorithm;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
+import crowdtrust.BinaryTask;
+import crowdtrust.Task;
+
+import db.LoginDb;
 import db.RegisterDb;
+import db.TaskDb;
 
 import junit.framework.TestCase;
 
@@ -36,11 +45,35 @@ public class TestAlgorithm extends TestCase {
 			int trueNeg = rand.nextInt(999) + 1;
 			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
 		}
-		
+		boolean labs = false;
+		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < 1000; i++){
 			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
+			annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
 		}
 		
+		//Lets make a client
+		RegisterDb.addUser("testClient@test.com", "gio", "gio", false);
+		int accountId = LoginDb.checkUserDetails("gio", "gio");
+		//Lets add a binary task to the database
+		long expirey = getDate();
+		TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", 0.7, 1, expirey);
+		}
+	}
+	
+	protected long getDate(){
+		long ret        = 0           ;
+		String str_date = "11-June-15";
+	    DateFormat formatter ; 
+	    Date date ; 
+	    formatter = new SimpleDateFormat("dd-MMM-yy");
+		try {
+			date = (Date)formatter.parse(str_date);
+			ret = date.getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} 
+		return ret;
 	}
 }

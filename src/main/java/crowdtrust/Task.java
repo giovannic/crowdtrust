@@ -12,7 +12,7 @@ public abstract class Task
   protected int type;
   protected int owner_id;
   
-  Task(int id, String name, String question, int accuracy, int type){
+  public Task(int id, String name, String question, int accuracy, int type){
 	  this.id = id;
 	  this.name = name;
 	  this.question = question;
@@ -50,7 +50,8 @@ public abstract class Task
 
   public boolean addToDatabase()
   {
-    return TaskDb.addTask(name, question, accuracy, type);
+    //return TaskDb.addTask(name, question, accuracy, type);
+	  return false;
   }
 
   public void updateAccuracies() {

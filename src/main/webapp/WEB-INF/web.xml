@@ -57,4 +57,24 @@
         <servlet-name>initDB</servlet-name>
         <url-pattern>/servlet/init</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <init-param>
+            <param-name>jdbcDriver</param-name>
+            <param-value>org.postgresql.Driver</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dbURL</param-name>
+            <param-value>jdbc:postgresql://db:5432/g1236218_u</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dbUsername</param-name>
+            <param-value>g1236218_u</param-value>
+        </init-param>
+        <init-param>
+            <param-name>dbPassword</param-name>
+            <param-value>RLTn4ViKks</param-value>
+        </init-param>
+    </servlet>
+        
 </web-app>
