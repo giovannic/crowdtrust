@@ -50,7 +50,9 @@ public class TestAlgorithm extends TestCase {
 		//Add them to the Database
 		for(int i = 0; i < 1000; i++){
 			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
-			annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
+			int id = LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword());
+			annotators[i].setId(id);
+			System.out.println(i + " : " + id);
 		}
 		
 		//Lets make a client
