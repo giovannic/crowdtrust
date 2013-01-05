@@ -39,6 +39,7 @@ public class TaskDb {
         	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
+			insertTask.setString(3, question);
 			insertTask.setDouble(4, accuracy);
 			insertTask.setInt(5, type);
 			insertTask.setTimestamp(6, new Timestamp(expiryTime));
