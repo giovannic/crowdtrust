@@ -9,10 +9,11 @@ import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
 	protected static int annotatorNumber = 1000;
-	protected static AnnotatorModel[] annotators;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
+	
+	protected AnnotatorModel[] annotators;
 	
 	public TestAlgorithm(String name){
 		super(name);
@@ -38,7 +39,7 @@ public class TestAlgorithm extends TestCase {
 		
 		//Add them to the Database
 		for(int i = 0; i < 1000; i++){
-			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
+		//	RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 		}
 		
 	}
