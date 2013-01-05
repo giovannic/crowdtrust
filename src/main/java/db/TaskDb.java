@@ -117,7 +117,10 @@ public class TaskDb {
 			checkTask = DbAdaptor.connect().prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
 			checkTask.setInt(1, taskID);
 			checkTask.setInt(2, accountID);
-	    	return checkTask.execute();
+	    	checkTask.execute();
+	    	ResultSet rs = checkTask.getResultSet();
+	    	rs.next();
+	    	return taskID == rs.getInt(1);
 		} catch (SQLException e) { 
 			e.printStackTrace();
 			return false;
