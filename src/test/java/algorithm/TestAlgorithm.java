@@ -39,7 +39,7 @@ public class TestAlgorithm extends TestCase {
 		
 		//Add them to the Database
 		for(int i = 0; i < 1000; i++){
-		//	RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
+			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 		}
 		
 	}
