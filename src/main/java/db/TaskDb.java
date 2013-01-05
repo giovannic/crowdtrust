@@ -39,7 +39,8 @@ public class TaskDb {
         	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
-			insertTask.setString(3, question);
+			insertTask.setDouble(4, accuracy);
+			insertTask.setInt(5, type);
 			insertTask.setTimestamp(6, new Timestamp(expiryTime));
 			insertTask.setTimestamp(7, new Timestamp(currentTime));
 			insertTask.execute();
@@ -135,33 +136,6 @@ public class TaskDb {
 	public static List<String> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT task.name FROM task ");
-		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
-		sql.append("OR task.ex_time + task.date_created < NOW()");
-		PreparedStatement preparedStatement;
-		try {
-			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-			preparedStatement.setInt(1, id);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			List<String> tasks = new ArrayList<String>();
-			while(resultSet.next()) {
-				String taskName = resultSet.getString("task.name");
-				tasks.add(taskName);
-			}
-			return tasks;
-		}
-	    catch (ClassNotFoundException e) {
-	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
-	      	return null;
-	    } catch (SQLException e) {
-	      	System.err.println("SQL Error on get tasks for id");
-	      	return null;
-	    }
-		
-	}
-	
-	public static List<String> getDisplayableTasks(int id) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM task ");
 		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
 		sql.append("OR task.ex_time + task.date_created < NOW()");
 		PreparedStatement preparedStatement;

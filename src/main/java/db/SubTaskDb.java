@@ -3,6 +3,8 @@ package db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import crowdtrust.Bee;
@@ -52,6 +54,31 @@ public class SubTaskDb {
 	      	  System.err.println("SQL Error on get Subtask");
 	      	  return null;
 	      }
+	}
+	
+	public static List<String> getImageSubtasks() {
+		StringBuilder sql = new StringBuilder();
+	      sql.append("SELECT tasks.name, subtasks.file_name, tasks.date_created FROM tasks JOIN subtasks ON tasks.id = subtasks.task");
+	      sql.append("WHERE subtasks.file_name LIKE '%.jpg' OR subtasks.file_name LIKE '%.png' ORDER BY tasks.date_created");
+	      List<String> list = new LinkedList<String>();
+	      try {
+	        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        if(!resultSet.next() || !resultSet.isLast()) {
+		      //task does not exist, grave error TODO log it
+		    }
+	        for (int i = 0 ; !resultSet.isLast() && i < 5 ; i++) {
+	        	String subtask = resultSet.getString(2);
+	        	String task = resultSet.getString(1);
+	        	list.add(task + "/" + subtask);
+	        }
+	      }
+	      catch (ClassNotFoundException e) {
+	      	  System.err.println("Error connecting to DB on get Subtask: PSQL driver not present");
+	      } catch (SQLException e) {
+	      	  System.err.println("SQL Error on get Subtask");
+	      }		
+	      return list;
 	}
 	
 	public static Map<Bee, Response> getBinaryResponses(int id, Bee[] annotators) {
