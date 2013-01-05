@@ -4,7 +4,7 @@ public class BinaryR extends Response {
 
 	private boolean value;
 	
-	BinaryR(boolean value){
+	public BinaryR(boolean value){
 		super();
 		this.setValue(value);
 	}

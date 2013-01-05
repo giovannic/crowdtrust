@@ -108,5 +108,9 @@ public abstract class SubTask {
 	public String getHtml() {
 		return Integer.toString(id);
 	}
+	
+	public int getId(){
+		return this.id;
+	}
 
 }
