@@ -4,7 +4,9 @@
 \contentsline {subsection}{\numberline {2.2}A Formal Specification of Our Objectives}{6}
 \contentsline {subsection}{\numberline {2.3}A Formal Discussion of Our Achievements}{6}
 \contentsline {section}{\numberline {3}Design and Implementation}{6}
-\contentsline {section}{\numberline {4}Evaluation}{6}
-\contentsline {section}{\numberline {5}Conclusion and Future Extensions}{6}
-\contentsline {section}{\numberline {6}Project Management}{6}
-\contentsline {section}{\numberline {7}Appendix}{6}
+\contentsline {subsection}{\numberline {3.1}Data Processing}{6}
+\contentsline {subsubsection}{\numberline {3.1.1}EM-Algorithm overview}{6}
+\contentsline {section}{\numberline {4}Evaluation}{8}
+\contentsline {section}{\numberline {5}Conclusion and Future Extensions}{8}
+\contentsline {section}{\numberline {6}Project Management}{8}
+\contentsline {section}{\numberline {7}Appendix}{8}

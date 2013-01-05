@@ -21,6 +21,6 @@ build/*
 conf/PID
 
 #report latex compilation files
-*.log
-*.aux
-*.toc
+report.log
+report.aux
+report.toc

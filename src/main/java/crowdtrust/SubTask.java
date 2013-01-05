@@ -3,9 +3,6 @@ package crowdtrust;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-
-import algorithm.AlgoTestData;
-
 public abstract class SubTask {
 	
 	//threshold accuracy variance
@@ -110,11 +107,6 @@ public abstract class SubTask {
 
 	public String getHtml() {
 		return Integer.toString(id);
-	}
-
-	public AlgoTestData getTestData() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
