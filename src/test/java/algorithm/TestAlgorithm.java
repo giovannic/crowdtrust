@@ -3,6 +3,8 @@ package algorithm;
 import java.util.Random;
 import java.util.UUID;
 
+import db.RegisterDb;
+
 import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
@@ -36,7 +38,7 @@ public class TestAlgorithm extends TestCase {
 		
 		//Add them to the Database
 		for(int i = 0; i < 1000; i++){
-			
+			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 		}
 		
 	}
