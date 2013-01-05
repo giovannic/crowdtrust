@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import crowdtrust.BinaryTask;
-import crowdtrust.Task;
+import crowdtrust.*;
 
 public class TaskDb {
 	
@@ -138,10 +137,15 @@ public class TaskDb {
 				String question = resultSet.getString("question");
 				int type = resultSet.getInt("type");
 				int accuracy = resultSet.getInt("accuracy");
-				switch(type) {
-				case 1:
+				if(type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy);
 				}
+				if(type == 2) {
+						//thisTask = new SingleContinuousTask(id, name, question, accuracy);
+				}							
+				if(type == 3) {
+						thisTask = new MultiValueTask(id, name, question, accuracy);
+				}					
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -177,7 +181,7 @@ public class TaskDb {
 	
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT task.name, task.question FROM task ");
+		sql.append("SELECT task.name FROM task ");
 		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
 		sql.append("OR task.ex_time + task.date_created < NOW()");
 		PreparedStatement preparedStatement;
@@ -188,8 +192,8 @@ public class TaskDb {
 			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
 				String taskName = resultSet.getString("task.name");
-				String taskQuestion = resultSet.getString("task.question");
-				tasks.add(new Task(null, taskName, taskQuestion, null, null));
+				Task task = getTask(taskName);
+				tasks.add(task);
 			}
 			return tasks;
 		}
