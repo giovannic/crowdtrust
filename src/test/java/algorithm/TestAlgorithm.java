@@ -1,5 +1,9 @@
 package algorithm;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -49,10 +53,27 @@ public class TestAlgorithm extends TestCase {
 			annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
 		}
 		
+		//Lets make a client
+		RegisterDb.addUser("testClient@test.com", "gio", "gio", false);
+		int accountId = LoginDb.checkUserDetails("gio", "gio");
 		//Lets add a binary task to the database
-	//	TaskDb.addTask("testBinaryTask", question, accuracy, type)
-		
-	//	BinaryTask testTask = new BinaryTask();
+		long expirey = getDate();
+		TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", 0.7, 1, expirey);
 		}
+	}
+	
+	protected long getDate(){
+		long ret        = 0           ;
+		String str_date = "11-June-15";
+	    DateFormat formatter ; 
+	    Date date ; 
+	    formatter = new SimpleDateFormat("dd-MMM-yy");
+		try {
+			date = (Date)formatter.parse(str_date);
+			ret = date.getTime();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} 
+		return ret;
 	}
 }
