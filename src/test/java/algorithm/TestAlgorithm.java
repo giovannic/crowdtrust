@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
+import crowdtrust.BinarySubTask;
 import crowdtrust.BinaryTask;
 import crowdtrust.Task;
 
@@ -63,6 +64,7 @@ public class TestAlgorithm extends TestCase {
 		
 		//Lets create a linked list of subTasks
 		for(int i = 0; i < 100; i++){
+		
 			
 		}
 		}
