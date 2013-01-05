@@ -50,17 +50,6 @@ public class UploadServlet extends HttpServlet {
         }
         
         int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
-        Connection connection;
-        try {
-			connection = DbAdaptor.connect();
-		} //catch (ClassNotFoundException | SQLException e1) {
-        catch (Exception e1){
-			// TODO Auto-generated catch block
-        	out.println("db connection failed");
-			e1.printStackTrace();
-			return;
-		}
-        
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
@@ -94,6 +83,7 @@ public class UploadServlet extends HttpServlet {
         		files = item;
         	}
     	}
+    	System.out.println("tasDB.isPresent about to run");
         //add to db - check task in db, add to subtasks,
     	if (TaskDb.isPresent(taskID, accountID))
     		return;
