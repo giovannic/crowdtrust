@@ -3,7 +3,12 @@ package algorithm;
 import java.util.Random;
 import java.util.UUID;
 
+import crowdtrust.BinaryTask;
+import crowdtrust.Task;
+
+import db.LoginDb;
 import db.RegisterDb;
+import db.TaskDb;
 
 import junit.framework.TestCase;
 
@@ -36,11 +41,18 @@ public class TestAlgorithm extends TestCase {
 			int trueNeg = rand.nextInt(999) + 1;
 			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
 		}
-		
+		boolean labs = false;
+		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < 1000; i++){
-		//	RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
+			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
+			annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
 		}
 		
+		//Lets add a binary task to the database
+	//	TaskDb.addTask("testBinaryTask", question, accuracy, type)
+		
+	//	BinaryTask testTask = new BinaryTask();
+		}
 	}
 }
