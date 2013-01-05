@@ -34,7 +34,7 @@ public class RegisterServlet extends HttpServlet {
 		boolean crowdBool = client.equalsIgnoreCase("on");
 		boolean clientBool = client.equalsIgnoreCase("on");
     RegisterDb.addUser(email, username, password, crowdBool);
-    response.sendRedirect("/login.html");      
+    response.sendRedirect("/index.jsp");      
   }
   
 }
