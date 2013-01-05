@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,6 +84,48 @@ public class TaskDb {
 		} catch (SQLException e) {
 		  	System.err.println("SELECT task query invalid");
 		  	return null;
+		}
+	}
+	
+	public static int getTaskId(String name){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id FROM tasks\n");
+		sql.append("WHERE name = ?");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return -1;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return -1;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    return resultSet.getInt(1);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
+		  	return -1;
+		}
+	}
+	
+	public static boolean isPresent(int taskID, int accountID) {
+    	PreparedStatement checkTask;
+		try {
+			checkTask = DbAdaptor.connect().prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
+			checkTask.setInt(1, taskID);
+			checkTask.setInt(2, accountID);
+	    	return checkTask.execute();
+		} catch (SQLException e) { 
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
 		}
 	}
 

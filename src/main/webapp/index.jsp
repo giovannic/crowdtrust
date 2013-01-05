@@ -1,4 +1,6 @@
 ﻿<!DOCTYPE html>
+<%@ page import="java.util.List" %>
+<%@ page import="db.SubTaskDb" %>
 <html>
 
 	<!-- #BeginTemplate "main.dwt" -->
@@ -46,21 +48,15 @@
 		
 		<!-- #BeginEditable "content" -->
 
-    <%
-    String dbURL = "jdbc:postgresql://db:5432/g1236218_u";
-    String dbUsername = "g1236218_u";
-    String dbPassword = "RLTn4ViKks";
-    Class.forName("org.postgresql.Driver");
-		Connection con = DriverManager.getConnection(dbURL, dbUsername, dbPassword)
 		<div id="content">
 			<h2>Recent tasks added</h2>
 			<div id="task_images">
-			  <%  int numImages=0;
-			    while(numImages < 5) { %>
-            <img src= />
-			    }
-			  <img src=
-			  <%
+    <%
+	    String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
+		  List<String> recentImageTasks = SubTaskDb.getImageSubtasks();
+		  for(int i = 0; i < recentImageTasks.size() ; i++ ) { %>
+            <img src=<%=(TASKS_DIRECTORY + recentImageTasks.get(i))%> />
+			  <%}%>
 			</div>
 		</div>
 		

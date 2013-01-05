@@ -56,6 +56,31 @@ public class SubTaskDb {
 	      }
 	}
 	
+	public static int getSubTaskId(String name){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id FROM subtasks\n");
+		sql.append("WHERE name = ?");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return -1;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return -1;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    return resultSet.getInt(1);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
+		  	return -1;
+		}
+	}
+	
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
 	      sql.append("SELECT tasks.name, subtasks.file_name, tasks.date_created FROM tasks JOIN subtasks ON tasks.id = subtasks.task");
@@ -79,6 +104,27 @@ public class SubTaskDb {
 	      	  System.err.println("SQL Error on get Subtask");
 	      }		
 	      return list;
+	}
+	
+	public static boolean addSubtask(String filename, int taskID) {
+	        String insertQuery = "INSERT INTO subtasks VALUES (DEFAULT,?,?,?)";
+	        PreparedStatement stmt;
+	        try {
+				stmt = DbAdaptor.connect().prepareStatement(insertQuery);
+				stmt.setInt(1, taskID);
+		        stmt.setString(2, filename);
+		        stmt.setBoolean(3,  true);
+		        stmt.execute();
+		    } catch (SQLException e1) {
+				System.err.println("some error with task fields: taskID not valid?");
+				System.err.println("taskID: " + taskID + ", filename: " + filename);
+				return false;
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+        return true;
 	}
 	
 	public static Map<Bee, Response> getBinaryResponses(int id, Bee[] annotators) {
