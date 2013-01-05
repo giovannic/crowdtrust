@@ -10,8 +10,8 @@ import be.ac.ulg.montefiore.run.jahmm.ObservationReal;
 import be.ac.ulg.montefiore.run.jahmm.OpdfGaussian;
 
 public class BinaryAccuracy extends Accuracy {
-	double truePositive;
-	double trueNegative;
+	private double truePositive;
+	private double trueNegative;
 	private int negativeN;
 	private int positiveN;
 	
@@ -29,12 +29,28 @@ public class BinaryAccuracy extends Accuracy {
 		return d > threshold;
 	}
 
-	int getPositiveN(){
-		return positiveN;
+	public int getPositiveN(){
+		return this.positiveN;
 	}
 	
-	int getNegativeN(){
-		return negativeN;
+	public int getNegativeN(){
+		return this.negativeN;
+	}
+
+	public double getTruePositive() {
+		return this.truePositive;
+	}
+
+	public double getTrueNegative() {
+		return this.trueNegative;
+	}
+
+	public void setTruePositive(double n) {
+		this.truePositive = n;
+	}
+
+	public void setTrueNegative(double n) {
+		this.trueNegative = n;
 	}
 	
 	void incrementPositiveN(){

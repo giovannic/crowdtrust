@@ -17,7 +17,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		
 		int total = a.getN();
 		double w = total/total + 1;
-		double alpha = sa.accuracy*total;
+		double alpha = sa.getAccuracy()*total;
 		
 		NormalDistribution nd = 
 				new NormalDistribution(
@@ -28,7 +28,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		//mle
 		double pLabel = nd.density(cr.getValue(precision));
 		double mle = pLabel/(pLabel + 1/responseSpace);
-		sa.accuracy = w*(alpha/total) + (1-w)*mle;
+		sa.setAccuracy(w*(alpha/total) + (1-w)*mle);
 		a.increaseN();
 	}
 	
@@ -52,16 +52,16 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 				matched = true;
 			}
 			ContinuousR cr2 = (ContinuousR) record.r;
-			double p = sa.accuracy*nd.density(cr2.getValue(precision)) + 
-				(1-sa.accuracy)*pResponseSpace;
+			double p = sa.getAccuracy()*nd.density(cr2.getValue(precision)) + 
+				(1-sa.getAccuracy())*pResponseSpace;
 			record.confidence *= p/(1-p);
 		}
 			
 		if (!matched){
 			newState = Arrays.copyOf(state, state.length+1);
 			Estimate e = new Estimate(r, getZPrior());
-			double p = sa.accuracy*nd.density(cr.getValue(precision)) +
-					(1-sa.accuracy)*pResponseSpace;
+			double p = sa.getAccuracy()*nd.density(cr.getValue(precision)) +
+					(1-sa.getAccuracy())*pResponseSpace;
 			e.confidence *= p/1-p;
 			newState[newState.length] = e;
 		} else {

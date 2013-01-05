@@ -21,10 +21,10 @@ public class MultiValueSubTask extends SubTask{
 		boolean matched = false;
 		for (Estimate record : state){
 			if(record.r.equals(mvr)){
-				record.confidence *= sa.accuracy/(1-sa.accuracy);
+				record.confidence *= sa.getAccuracy()/(1-sa.getAccuracy());
 				matched = true;
 			} else {
-				double ia = inverseAccuracy(sa.accuracy);
+				double ia = inverseAccuracy(sa.getAccuracy());
 				record.confidence *= ia/(1-ia);
 			}
 		}
@@ -34,7 +34,7 @@ public class MultiValueSubTask extends SubTask{
 		if (!matched){
 			newState = Arrays.copyOf(state, state.length+1);
 			Estimate e = new Estimate(r, getZPrior());
-			e.confidence *= sa.accuracy/(1-sa.accuracy);
+			e.confidence *= sa.getAccuracy()/(1-sa.getAccuracy());
 			newState[newState.length] = e;
 		} else {
 			newState = state.clone();
@@ -55,11 +55,11 @@ public class MultiValueSubTask extends SubTask{
 		
 		int total = a.getN();
 		double w = total/total + 1;
-		double alpha = sa.accuracy*total;
+		double alpha = sa.getAccuracy()*total;
 		if (mvr.equals(mvz)){
-			sa.accuracy = w*(alpha/total) + (1-w);
+			sa.setAccuracy(w*(alpha/total) + (1-w));
 		} else {
-			sa.accuracy = w*(alpha/total);
+			sa.setAccuracy(w*(alpha/total));
 		}
 		a.increaseN();
 	}

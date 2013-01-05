@@ -120,7 +120,8 @@ public class CrowdDb {
 
 	public static SingleAccuracy getMultiValueAccuracy(int id) {
 		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT accuracy FROM multivalueaccuracies WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
     }
@@ -131,63 +132,108 @@ StringBuilder sql = new StringBuilder();
   	  System.err.println("SQL Error on Crowd");
   	  return null;
     }
-
-return null;
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			double accuracy = resultSet.getDouble("accuracy");
+			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy);
+			return singleAccuracy;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void updateBinaryAccuracies(AccuracyRecord[] accuracies) {
 		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE binaryaccuracies\n");
+		sql.append("SET truePositive = ?, trueNegative = ?, numPositive = ?, numNegative = ?\n");
+		sql.append("WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
     }
     catch (ClassNotFoundException e) {
   	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
+  	  return;
     } catch (SQLException e) {
   	  System.err.println("SQL Error on Crowd");
-  	  
+  	  return;
     }
-
+		try {
+			for(int i = 0; i < accuracies.length; i++) {
+				AccuracyRecord record = accuracies[i];
+				Bee bee = record.getBee();
+				int id = bee.getId();
+				BinaryAccuracy accuracy = (BinaryAccuracy) record.getAccuracy();
+				double truePositive = accuracy.getTruePositive();
+				double trueNegative = accuracy.getTrueNegative();
+				int positiveN = accuracy.getPositiveN();
+				int negativeN = accuracy.getNegativeN();
+				preparedStatement.setDouble(1, truePositive);
+				preparedStatement.setDouble(2, trueNegative);
+				preparedStatement.setInt(3, positiveN);
+				preparedStatement.setInt(4, negativeN);
+				preparedStatement.setInt(5, id);
+				preparedStatement.executeUpdate();
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static AccuracyRecord[] getMultiValueAccuracies(Bee[] annotators) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  return null;
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  return null;
-    }
-
-return null;
+		int annotatorsLength = annotators.length;
+		AccuracyRecord[] records = new AccuracyRecord[annotatorsLength];
+		for(int i = 0; i < annotatorsLength; i++) {
+			Bee bee = annotators[i];
+			int id = bee.getId();
+			SingleAccuracy accuracy = getMultiValueAccuracy(id);
+			AccuracyRecord record = new AccuracyRecord(bee, accuracy);
+			records[i] = record;
+		}
+		return records;	
 	}
 
 	public static void updateMultiValueAccuracies(AccuracyRecord[] accuracies) {
 		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE multivalueaccuracies\n");
+		sql.append("SET accuracy = ?\n");
+		sql.append("WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
     }
     catch (ClassNotFoundException e) {
   	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
+  	  return;
     } catch (SQLException e) {
   	  System.err.println("SQL Error on Crowd");
-  	  
+  	  return;
     }
-
-		
+		try {
+			for(int i = 0; i < accuracies.length; i++) {
+				AccuracyRecord record = accuracies[i];
+				Bee bee = record.getBee();
+				int id = bee.getId();
+				SingleAccuracy accuracy = (SingleAccuracy) record.getAccuracy();
+				double a = accuracy.getAccuracy();
+				preparedStatement.setDouble(1, a);
+				preparedStatement.setInt(2, id);
+				preparedStatement.executeUpdate();
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static Accuracy getContinuousAccuracy(int annotatorId) {
+	public static SingleAccuracy getContinuousAccuracy(int annotatorId) {
 		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT accuracy FROM continuousaccuracies WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
     }
@@ -198,40 +244,63 @@ StringBuilder sql = new StringBuilder();
   	  System.err.println("SQL Error on Crowd");
   	  return null;
     }
-
-return null;
+		try {
+			preparedStatement.setInt(1, annotatorId);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			double accuracy = resultSet.getDouble("accuracy");
+			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy);
+			return singleAccuracy;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static AccuracyRecord[] getContinuousAccuracies(Bee[] annotators) {
-		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  return null;
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  return null;
-    }
-
-return null;
+		int annotatorsLength = annotators.length;
+		AccuracyRecord[] records = new AccuracyRecord[annotatorsLength];
+		for(int i = 0; i < annotatorsLength; i++) {
+			Bee bee = annotators[i];
+			int id = bee.getId();
+			SingleAccuracy accuracy = getContinuousAccuracy(id);
+			AccuracyRecord record = new AccuracyRecord(bee, accuracy);
+			records[i] = record;
+		}
+		return records;	
 	}
 
 	public static void updateContinuousAccuracies(AccuracyRecord[] accuracies) {
 		PreparedStatement preparedStatement;
-StringBuilder sql = new StringBuilder();
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE continuousaccuracies\n");
+		sql.append("SET accuracy = ?\n");
+		sql.append("WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
     }
     catch (ClassNotFoundException e) {
   	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  
+  	  return;
     } catch (SQLException e) {
   	  System.err.println("SQL Error on Crowd");
-  	  
+  	  return;
     }
+		try {
+			for(int i = 0; i < accuracies.length; i++) {
+				AccuracyRecord record = accuracies[i];
+				Bee bee = record.getBee();
+				int id = bee.getId();
+				SingleAccuracy accuracy = (SingleAccuracy) record.getAccuracy();
+				double a = accuracy.getAccuracy();
+				preparedStatement.setDouble(1, a);
+				preparedStatement.setInt(2, id);
+				preparedStatement.executeUpdate();
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void updateBinaryExperts(Collection<Bee> experts) {

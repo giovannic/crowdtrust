@@ -26,7 +26,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		
 		int total = a.getN();
 		double w = total/total + 1;
-		double alpha = sa.accuracy*total;
+		double alpha = sa.getAccuracy()*total;
 		
 		MultiGaussianDistribution mgd =
 				new MultiGaussianDistribution(
@@ -39,7 +39,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		//mle
 		double pLabel = mgd.probability(cr.getValues(precision));
 		double mle = pLabel/(pLabel + 1/responseSpace);
-		sa.accuracy = w*(alpha/total) + (1-w)*mle;
+		sa.setAccuracy(w*(alpha/total) + (1-w)*mle);
 		a.increaseN();
 	}
 
@@ -66,16 +66,16 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 				matched = true;
 			}
 			ContinuousMultiR cr2 = (ContinuousMultiR) record.r;
-			double p = sa.accuracy*mgd.probability(cr2.getValues(precision)) +
-					(1 - sa.accuracy)/responseSpace;
+			double p = sa.getAccuracy()*mgd.probability(cr2.getValues(precision)) +
+					(1 - sa.getAccuracy())/responseSpace;
 			record.confidence *= p/1-p;
 		}
 			
 		if (!matched){
 			newState = Arrays.copyOf(state, state.length+1);
 			Estimate e = new Estimate(r, getZPrior());
-			double p = sa.accuracy*mgd.probability(cr.getValues(precision)) +
-					(1 - sa.accuracy)/responseSpace;
+			double p = sa.getAccuracy()*mgd.probability(cr.getValues(precision)) +
+					(1 - sa.getAccuracy())/responseSpace;
 			e.confidence *= p/1-p;
 			newState[newState.length] = e;
 		} else {

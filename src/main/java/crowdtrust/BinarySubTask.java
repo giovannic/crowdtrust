@@ -23,11 +23,11 @@ public class BinarySubTask extends SubTask {
 			total = ba.getPositiveN();
 			w = total/total + 1;
 			
-			double alpha = ba.truePositive*total;
+			double alpha = ba.getTruePositive()*total;
 			if(bz.isTrue())
-				ba.truePositive = w*(alpha/total) + (1-w);
+				ba.setTruePositive(w*(alpha/total) + (1-w));
 			else {
-				ba.truePositive = w*(alpha/total);
+				ba.setTruePositive(w*(alpha/total));
 			}
 			
 			ba.incrementPositiveN();
@@ -37,11 +37,11 @@ public class BinarySubTask extends SubTask {
 			total = ba.getNegativeN();
 			w = total/total + 1;
 			
-			double alpha = ba.trueNegative*total;
+			double alpha = ba.getTrueNegative()*total;
 			if(bz.isTrue())
-				ba.trueNegative = w*(alpha/total) + (1-w);
+				ba.setTrueNegative(w*(alpha/total) + (1-w));
 			else {
-				ba.trueNegative = w*(alpha/total);
+				ba.setTrueNegative(w*(alpha/total));
 			}
 			
 			ba.incrementNegativeN();
@@ -57,9 +57,9 @@ public class BinarySubTask extends SubTask {
 		
 		double accuracy;
 		if (br.isTrue())
-			accuracy = ba.truePositive;
+			accuracy = ba.getTruePositive();
 		else
-			accuracy = ba.trueNegative;
+			accuracy = ba.getTrueNegative();
 		
 		boolean matched = false;
 		for (Estimate record : state){

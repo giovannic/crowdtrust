@@ -66,12 +66,12 @@ public abstract class SubTask {
 		Collection<Bee> bots = new ArrayList<Bee>();
 		
 		for (AccuracyRecord r : accuracies){
-			maximiseAccuracy(r.a, responses.get(r.b), z);
-			if (r.a.variance() < THETA){
-				if (r.a.expert(expertLimit()))
-					experts.add(r.b);
+			maximiseAccuracy(r.getAccuracy(), responses.get(r.getBee()), z);
+			if (r.getAccuracy().variance() < THETA){
+				if (r.getAccuracy().expert(expertLimit()))
+					experts.add(r.getBee());
 				else
-					bots.add(r.b);
+					bots.add(r.getBee());
 			}
 		}
 		
