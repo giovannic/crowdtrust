@@ -118,7 +118,7 @@ public class SubTaskDb {
 	        	String subtask = resultSet.getString(2);
 	        	String task = resultSet.getString(1);
 	        	list.add(task + "/" + subtask);
-	        	System.out.println(task+"/"+subtask);
+	        	resultSet.next();
 	        }
 	      } catch(SQLException e) {
 	    	  System.err.println("problem with result set");
