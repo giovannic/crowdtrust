@@ -90,7 +90,7 @@ public class UploadServlet extends HttpServlet {
     	}
     	System.out.println("taskDB.isPresent about to run");
         //add to db - check task in db, add to subtasks,
-    	if (TaskDb.isPresent(taskID, accountID))
+    	if (!TaskDb.isPresent(taskID, accountID))
     		return;
     	
         //on upload page retrieve task id, submit task id as a parameter
