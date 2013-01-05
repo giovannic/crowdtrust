@@ -58,7 +58,8 @@ public class TestAlgorithm extends TestCase {
 		int accountId = LoginDb.checkUserDetails("gio", "gio");
 		//Lets add a binary task to the database
 		long expirey = getDate();
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", 0.7, 1, expirey));
+		double accuracy = 0.7;
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey));
 		}
 	}
 	
