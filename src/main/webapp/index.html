@@ -47,8 +47,11 @@
 		<!-- #BeginEditable "content" -->
 
     <%
-    Class.forName("org.postgresql.Driver")
-		
+    String dbURL = "jdbc:postgresql://db:5432/g1236218_u";
+    String dbUsername = "g1236218_u";
+    String dbPassword = "RLTn4ViKks";
+    Class.forName("org.postgresql.Driver");
+		Connection con = DriverManager.getConnection(dbURL, dbUsername, dbPassword)
 		<div id="content">
 			<h2>Recent tasks added</h2>
 			<div id="task_images">

@@ -50,7 +50,8 @@ public abstract class Task
 
   public boolean addToDatabase()
   {
-    return TaskDb.addTask(name, question, accuracy, type);
+    //return TaskDb.addTask(name, question, accuracy, type);
+	  return false;
   }
 
   public void updateAccuracies() {
