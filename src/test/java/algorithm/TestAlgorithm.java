@@ -60,6 +60,11 @@ public class TestAlgorithm extends TestCase {
 		long expirey = getDate();
 		double accuracy = 0.7;
 		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey));
+		
+		//Lets create a linked list of subTasks
+		for(int i = 0; i < 100; i++){
+			
+		}
 		}
 	}
 	
