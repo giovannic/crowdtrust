@@ -63,6 +63,7 @@ public class SubTaskDb {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT task FROM subtasks");
 		PreparedStatement preparedStatement;
+
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 	    }
