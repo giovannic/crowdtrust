@@ -25,6 +25,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
 import db.DbAdaptor;
+import db.SubTaskDb;
+import db.TaskDb;
 
 public class UploadServlet extends HttpServlet {
 
@@ -93,20 +95,8 @@ public class UploadServlet extends HttpServlet {
         	}
     	}
         //add to db - check task in db, add to subtasks,
-    	PreparedStatement checkTask;
-		try {
-			checkTask = connection.prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
-			checkTask.setInt(1, taskID);
-			checkTask.setInt(2, accountID);
-	    	if (!checkTask.execute()) {
-	    		out.println("invalid Task");
-	    		response.sendRedirect("/upload.html");
-	    	}
-		} catch (SQLException e) {
-			out.println("SQL problem slecting task from id"); 
-			e.printStackTrace();
-			return;
-		}
+    	if (TaskDb.isPresent(taskID, accountID))
+    		return;
     	
         //on upload page retrieve task id, submit task id as a parameter
         //check id and submitter appear in tasks
@@ -141,22 +131,8 @@ public class UploadServlet extends HttpServlet {
 		}
     	
         //add to subtasks
-    	for (int i = 0 ; i < filenames.size() ; i++) {
-	        String insertQuery = "INSERT INTO subtasks VALUES (DEFAULT,?,?,?)";
-	        String filename = filenames.get(i);
-	        PreparedStatement stmt;
-	        try {
-				stmt = connection.prepareStatement(insertQuery);
-				stmt.setInt(1, taskID);
-		        stmt.setString(2, filename);
-		        stmt.setBoolean(3,  true);
-		        stmt.execute();
-	        } catch (SQLException e1) {
-				System.err.println("some error with task fields: taskID not valid?");
-				System.err.println("taskID: " + taskID + ", filename: " + filename);
-				return;
-			}
-    	}		
+		if( !SubTaskDb.addSubtask(filenames, taskID) ) 
+			return;
 		
         out.println("<html>");
         out.println("<body>");

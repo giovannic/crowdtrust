@@ -87,6 +87,23 @@ public class TaskDb {
 		  	return null;
 		}
 	}
+	
+	public static boolean isPresent(int taskID, int accountID) {
+    	PreparedStatement checkTask;
+		try {
+			checkTask = DbAdaptor.connect().prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
+			checkTask.setInt(1, taskID);
+			checkTask.setInt(2, accountID);
+	    	return checkTask.execute();
+		} catch (SQLException e) { 
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public static Task map(ResultSet resultSet) {
 		Task thisTask = null;
