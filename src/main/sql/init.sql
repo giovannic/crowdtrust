@@ -30,7 +30,7 @@ CREATE TABLE tasks
   submitter INTEGER REFERENCES accounts (id),
   name VARCHAR(100) NOT NULL,
   question VARCHAR(100) NOT NULL,
-  accuracy INTEGER NOT NULL,
+  accuracy DOUBLE PRECISION NOT NULL,
   type INTEGER REFERENCES types (id),
   ex_time TIMESTAMP,
   date_created TIMESTAMP
