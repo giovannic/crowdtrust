@@ -6,9 +6,10 @@ import java.util.Map;
 
 public class BinarySubTask extends SubTask {
 	
-	BinarySubTask(){
-		super();
-	}
+	public BinarySubTask(int id){
+		super(); 
+		this.id = id;
+	} 
 
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
