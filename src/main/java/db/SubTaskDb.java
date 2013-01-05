@@ -81,6 +81,30 @@ public class SubTaskDb {
 	      return list;
 	}
 	
+	public static boolean addSubtask(List<String> filenames, int taskID) {
+    	for (int i = 0 ; i < filenames.size() ; i++) {
+	        String insertQuery = "INSERT INTO subtasks VALUES (DEFAULT,?,?,?)";
+	        String filename = filenames.get(i);
+	        PreparedStatement stmt;
+	        try {
+				stmt = DbAdaptor.connect().prepareStatement(insertQuery);
+				stmt.setInt(1, taskID);
+		        stmt.setString(2, filename);
+		        stmt.setBoolean(3,  true);
+		        stmt.execute();
+		    } catch (SQLException e1) {
+				System.err.println("some error with task fields: taskID not valid?");
+				System.err.println("taskID: " + taskID + ", filename: " + filename);
+				return false;
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+    	}		
+        return true;
+	}
+	
 	public static Map<Bee, Response> getBinaryResponses(int id, Bee[] annotators) {
 		// TODO Auto-generated method stub
 		return null;
