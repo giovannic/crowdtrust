@@ -17,9 +17,6 @@ public class TaskDb {
 	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
 	
 	public static boolean addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
-		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO tasks (name, question, type, accuracy, max_labels)\n");
-		sql.append("VALUES(?, ?, ?, ?, ?)");
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -34,14 +31,15 @@ public class TaskDb {
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
-        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?)");
+        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?)");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
 			insertTask.setDouble(4, accuracy);
 			insertTask.setInt(5, type);
 			insertTask.setTimestamp(6, new Timestamp(expiryTime));
-			insertTask.setTimestamp(7, new Timestamp(currentTime));
+			insertTask.setInt(7, max_labels);
+			insertTask.setTimestamp(8, new Timestamp(currentTime));
 			insertTask.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
