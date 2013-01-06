@@ -1,10 +1,8 @@
 package db;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,11 +23,10 @@ import crowdtrust.Task;
 public class SubTaskDb {
 
 	public static boolean close(int id) {
-			StringBuilder sql = new StringBuilder();
-		      sql.append("UPDATE subtasks (active) ");
-		      sql.append("VALUES(FALSE)");
+			String sql = "UPDATE subtasks SET active = FALSE WHERE subtasks.id = ?";
 		      try {
-		        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+		        preparedStatement.setInt(1, id);
 		        preparedStatement.execute();
 		      }
 		      catch (ClassNotFoundException e) {
@@ -46,13 +43,13 @@ public class SubTaskDb {
 
 	public static Task getTask(int id) {
 		StringBuilder sql = new StringBuilder();
-      sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task");
+      sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
       sql.append("WHERE subtasks.id = ?");
       try {
         PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-        preparedStatement.setString(1, Integer.toString(id));
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if(!resultSet.next() || !resultSet.isLast()) {
+        if(!resultSet.next()) {
 	      //task does not exist, grave error TODO log it
         	System.err.println("Subtask: " + id + " doesn't exist");
         	return null;
@@ -369,8 +366,8 @@ public class SubTaskDb {
 		    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
 		    	for (Estimate e : state){
 		    		preparedStatement.setFloat(1, (float) e.getConfidence());
-					preparedStatement.setBytes(2, e.getR().serialise());
-					preparedStatement.setInt(3, id);
+		    		preparedStatement.setInt(2, id);
+					preparedStatement.setString(3, e.getR().serialise());
 					preparedStatement.addBatch();
 				}  
 		    	preparedStatement.executeBatch();
@@ -394,7 +391,7 @@ public class SubTaskDb {
 		try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
 	    	preparedStatement.setFloat(1, (float) est.getConfidence());
-			preparedStatement.setBytes(2, est.getR().serialise());
+			preparedStatement.setString(2, est.getR().serialise());
 			preparedStatement.setInt(3, id);
 			preparedStatement.execute();
 	    }	    catch (ClassNotFoundException e) {
