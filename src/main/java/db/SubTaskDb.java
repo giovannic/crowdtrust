@@ -104,10 +104,18 @@ public class SubTaskDb {
 
 	public static SubTask getRandomBinarySubTask(int task) {
 		
-		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, " +
-				"COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
-				"LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = ? " +
-				"GROUP BY s,a,m ORDER BY random() LIMIT 1";
+		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, " +
+				"tasks.max_labels AS m, COUNT(responses.id) AS r " +
+				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
+				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
+				"WHERE tasks.id = 1 AND subtasks.active " +
+				"AND NOT EXISTS " +
+				"(SELECT * FROM responses answered " +
+				"WHERE answered.subtask = subtasks.id " +
+				"AND answered.account = 1) " +
+				"GROUP BY s,a,m " +
+				"ORDER BY random() " +
+				"LIMIT 1";
 		
 		PreparedStatement preparedStatement;
 	    try {

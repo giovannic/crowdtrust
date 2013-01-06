@@ -64,11 +64,6 @@ public abstract class SubTask {
 	 * M step
 	 * */
 	protected void calculateAccuracies(Response z) {
-		/*
-		Collection<Bee> annotators = db.CrowdDb.getAnnotators(id);
-		Collection<AccuracyRecord> accuracies = getAccuracies(annotators);
-		Map <Integer, Response> responses = getResponses();
-		*/
 		Collection<AccuracyRecord> accuracies = getAnnotators();
 		
 		Collection<Bee> experts = new ArrayList<Bee>();
