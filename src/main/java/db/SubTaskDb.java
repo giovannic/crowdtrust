@@ -96,14 +96,16 @@ public class SubTaskDb {
 		PreparedStatement preparedStatement;
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
-	    preparedStatement.setInt(1, task);
+	    preparedStatement.setInt(0, task);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-	      	return null;
+	      	e.printStackTrace();
+	    	return null;
 	    } catch (SQLException e) {
 		e.printStackTrace();
 	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
 	      	return null;
 	    }
 		try {

@@ -20,7 +20,6 @@ CREATE TABLE accounts
   type BOOLEAN NOT NULL,
   session CHARACTER(32) NULL,
   last_active TIMESTAMP NULL,
-  expert BOOLEAN,
   accuracy INTEGER
 );
 

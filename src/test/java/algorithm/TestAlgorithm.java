@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import crowdtrust.BinarySubTask;
 
+import db.DbInitialiser;
 import db.LoginDb;
 import db.RegisterDb;
 import db.SubTaskDb;
@@ -19,6 +20,7 @@ import db.TaskDb;
 import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
+
 	protected static int annotatorNumber = 10;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
@@ -31,6 +33,10 @@ public class TestAlgorithm extends TestCase {
 	}
 	
 	public void testAlgorithm(){
+		boolean labs = false;
+		if(labs){
+			DbInitialiser.init();
+		}
 		//Lets create some annotators with id's 1 - 1000 and place them in array
 		annotators = new AnnotatorModel[annotatorNumber];
 		for(int i = 0; i < annotatorNumber; i++){
@@ -47,7 +53,7 @@ public class TestAlgorithm extends TestCase {
 			int trueNeg = rand.nextInt(999) + 1;
 			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
 		}
-		boolean labs = true;
+
 		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < annotatorNumber; i++){
@@ -95,6 +101,8 @@ public class TestAlgorithm extends TestCase {
 		
 		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		
+		System.out.println("Got first");
+		
 		while( t != null){
 			int annotatorIndex = rand.nextInt(annotatorNumber - 1);
 			System.out.println("Annotator: " + annotators[annotatorIndex].username + " |Task: " + t.getId());
@@ -130,5 +138,15 @@ public class TestAlgorithm extends TestCase {
 			e.printStackTrace();
 		} 
 		return ret;
+	}
+	
+	protected void printExpertList(){
+		System.out.println("-----------Printing Expert List----------------");
+		System.out.println("-----------------------------------------------");
+	}
+	
+	protected void printBotList(){
+		System.out.println("-----------Printing Bots List-------------------");
+		System.out.println("------------------------------------------------");
 	}
 }
