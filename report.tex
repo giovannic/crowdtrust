@@ -202,7 +202,7 @@ results they provide.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
+%\newpage
 \section{Design and Implementation}
 % Detail your design why did you do it this way?
 %Summarise Key implementation details (how did you do it what 
@@ -327,37 +327,110 @@ In the binary case the accuracy is modelled as a product of two dependant distri
 
 If we are confident in our knowledge of the annotator we test its accuracy against the criteria and store any new data about experts and bots in the database.\\
 
-%[1] Ð Machine Learning Tom M Mitchell
+%[1]  Machine Learning Tom M Mitchell
 %[2] - A Compendium of Conjugate Priors - John D. Cook
-%[3] Ð Online crowdsourcing: rating annotators and obtaining cost-effective labels - Welinder Perona
-%[4] - Sequential tests of statistical hypotheses Ð Wald
-%[5] Ð Bayesian inference for simple problems - Simon Jackman
+%[3]  Online crowdsourcing: rating annotators and obtaining cost-effective labels - Welinder Perona
+%[4] - Sequential tests of statistical hypotheses  Wald
+%[5]  Bayesian inference for simple problems - Simon Jackman
 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\newpage
+%\newpage
 \section{Evaluation}
 %summarise testing procedures (+ relevant testing results)
+\subsection{Testing}
+\subsubsection{Validity}
+Validity testing ensures our system can handle erroneous events, below are the validity tests we carried out:
+\begin{itemize}
+\item
+\item
+\end{itemize}
+\subsubsection{Security}
+Security testing ensures our system conforms to the appropriate security standards, below are the security tests we carried out:
+\begin{itemize}
+\item
+\item
+\end{itemize}
+\subsubsection{Scaleability}
+Scalability testing ensures the system can handle increased demand, below and the scalability tests we carried out:
+\begin{itemize}
+\item
+\item
+\end{itemize}
+\subsubsection{Performance}
+Performance testing ensures the system performs in a timely manner, below are the performance tests we carried out: 
+\begin{itemize}
+\item
+\item
+\end{itemize}
+\subsubsection{Correctness}
+Correctness testing ensures the system outputs what it is supposed to, below are the correctness tests we carried out:
+\begin{itemize}
+\item
+\item
+\end{itemize}
+\subsubsection{End To End}
+End to end testing ensures a process makes its journey correctly through the system, below are the end to end tests we carried out:
+\begin{itemize}
+\item
+\item
+\end{itemize}
+
 %Evaluate your deliverables in terms of performance usability
 %usefulness, (how successful was the project?)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
+%\newpage
 \section{Conclusion and Future Extensions}
 %Say what you've concluded from doing the work and how you'd build on it
 
+%%%%%%%%%%%
+\subsection{Conclusion}
+
+%%%%%%%%%%%
+\subsection{Future Extensions}
+
+%%%%%%%%%%%%%%
+\subsubsection{Tagging}
+Tagging could be used to improve the efficency of our algorithm, for instance when a user signs up to the website he could provide a list of his
+interests such as football or birdwatching and when a client submitts a task to the website he uses a similar tagging system to record what his
+task is related to. If a user provides an answer to a task which is in line with his interests then it is more likely his answer will be correct
+the algorithm would take this into account when calculating how sure it is of an answer. This will result in less people having to be asked 
+for each question which will improve turnaround time for jobs submitted to the system. 
+
+
+%%%%%%%%%%%%%%
+\subsubsection{Dynamic Pricing Model}
+If you do any reading into Amazons Mechanical Turk it's not long before you will meet some criticisms on the way they pay their workers with some
+even likening it to an electronic sweat shop. The average wage for a worker is around \$2 far below the minimum wage and the average payment for 
+a task is around 30 cents, whats more the requestor is under no obligation to pay the worker unless he is completely satisfied this is often abused
+with companies simply choosing not to pay the workers. Workers really have no control over their wage and the ammount they are paid simply 
+reflects how quickly they can complete tasks, crowdtrust could be used to change this.
+
+With crowdtrust you keep track of an annotators 'expertise' and so you can return an answer to a task with a mesaure of how sure you are of its
+correctness, this means users will not have to submit tasks multiple times to validate them this saves the user money and as a result some of this
+saving could be passed on to the annotators to reward them for being experts.   
+
+%%%%%%%%%%%%%%
+\subsubsection{Mobile Access}
+Althought Mechanical Turk has over 500000 workers registerd 80\% of HITs are performed by around 20\% of the workforce and this isn't a 
+particularly large number. The reason for this we believe is the pay, if you're at home there are many things you'd rather be doing than sitting
+if front of your computer for \$2 an hour. However if you're stuck on a 4 hour train journey from Newcastle back to London for university and
+you could have access to a crowdtrust app on your phone you may be far more willing to sit there and earn \$8. We believe a mobile app would 
+greatly increase the userbase and therefore the turn around time for tasks submitted to the system. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
+%\newpage
 \section{Project Management}
 %Planning, group organisation, breakdown + task allocation etc
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
+%\newpage
 \section{Appendix}
 %e.g user guide
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
+%\newpage
 \begin{thebibliography}{9}
 
 \end{thebibliography}
