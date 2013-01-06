@@ -95,7 +95,7 @@ public class SubTaskDb {
 		PreparedStatement preparedStatement;
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
-	    preparedStatement.setInt(0, task);
+	    preparedStatement.setInt(1, task);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
