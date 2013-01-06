@@ -455,7 +455,7 @@ public class CrowdDb {
 	public static Collection<AccuracyRecord> getBinaryAnnotators(int id) {
 		PreparedStatement preparedStatement;
 		String sql = "SELECT responses.account, response, truePositive, " +
-				"trueNegative, numPositive, numNegative" +
+				"trueNegative, numPositive, numNegative " +
 				"FROM responses JOIN binaryaccuracies " +
 				"ON responses.account = binaryaccuracies.account " +
 				"WHERE subtask = ?";
