@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import crowdtrust.BinarySubTask;
 
+import db.DbInitialiser;
 import db.LoginDb;
 import db.RegisterDb;
 import db.SubTaskDb;
@@ -32,6 +33,10 @@ public class TestAlgorithm extends TestCase {
 	}
 	
 	public void testAlgorithm(){
+		boolean labs = false;
+		if(labs){
+			DbInitialiser.init();
+		}
 		//Lets create some annotators with id's 1 - 1000 and place them in array
 		annotators = new AnnotatorModel[annotatorNumber];
 		for(int i = 0; i < annotatorNumber; i++){
@@ -48,7 +53,7 @@ public class TestAlgorithm extends TestCase {
 			int trueNeg = rand.nextInt(999) + 1;
 			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
 		}
-		boolean labs = false;
+
 		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < annotatorNumber; i++){
