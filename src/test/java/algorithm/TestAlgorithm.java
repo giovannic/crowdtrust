@@ -77,11 +77,11 @@ public class TestAlgorithm extends TestCase {
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
 			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
-		//	int id = SubTaskDb.getSubTaskId(uuid);
-		//	System.out.println("Subtask Id: " + id);
-		//	BinarySubTask bst = new BinarySubTask(id);
-		//	AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
-		//	answers.add(asta);
+			int id = SubTaskDb.getSubTaskId(uuid);
+			System.out.println("Subtask Id: " + id);
+			BinarySubTask bst = new BinarySubTask(id);
+			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
+			answers.add(asta);
 		}
 		
 		//Give all the annotators the answers
