@@ -71,7 +71,7 @@ public class UploadServlet extends HttpServlet {
         				//output need task name
         			} else {
         				//task is task name - add task to db if not yet inputted
-            			taskDir = TASKS_DIRECTORY + task + "/";        				
+            			taskDir = TASKS_DIRECTORY +accountID+"/"+ task + "/";        				
         			}
         		}
         		if( field.equals("taskID") ) {
@@ -127,11 +127,11 @@ public class UploadServlet extends HttpServlet {
 			return; 
     	}		
 		
-    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"upload.jsp\">");
+    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"/client/upload.jsp\">");
         out.println("<html>");
         out.println("<body>");
         out.println("uploaded to task " + taskDir + "<br>");                	
-        out.println("click <a href=addtask.jsp>here</a> to to add tasks");
+        out.println("click <a href=/client/addtask.jsp>here</a> to to add tasks");
         out.println("</body>");
         out.println("</html>");
     }
