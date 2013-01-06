@@ -75,7 +75,7 @@ public class UploadServlet extends HttpServlet {
         		}
         		if( field.equals("taskID") ) {
         			taskID = Integer.parseInt(item.getString());
-        			taskDir = TASKS_DIRECTORY +accountID+"/"+ taskID + "/";
+        			taskDir = TASKS_DIRECTORY + taskID + "/";
         		}
         	}
         	//file to be uploaded
