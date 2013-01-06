@@ -206,7 +206,7 @@ public class TaskDb {
 	
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT tasks.name FROM tasks ");
+		sql.append("SELECT * FROM tasks ");
 		sql.append("WHERE tasks.ex_time > NOW()");
 		PreparedStatement preparedStatement;
 		List<Task> tasks = new ArrayList<Task>();
@@ -215,9 +215,7 @@ public class TaskDb {
 //			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString(1);
-				Task task = getTask(taskName);
-				tasks.add(task);
+				tasks.add(map(resultSet));
 			}
 		}
 	    catch (ClassNotFoundException e) {
