@@ -54,7 +54,7 @@ CREATE TABLE estimates
 (
   estimate_key SERIAL PRIMARY KEY,
   subtask_id INTEGER REFERENCES subtasks (id),
-  estimate BIT VARYING,
+  estimate BYTEA,
   confidence FLOAT
 );
 
@@ -63,7 +63,7 @@ CREATE TABLE responses
   id SERIAL PRIMARY KEY,
   account INTEGER REFERENCES accounts (id),
   subtask INTEGER REFERENCES subtasks (id),
-  response BIT VARYING NULL
+  response BYTEA NULL
 );
 
 CREATE TABLE ranged

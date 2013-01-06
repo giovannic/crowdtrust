@@ -3,11 +3,13 @@ package db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import crowdtrust.Bee;
+import crowdtrust.BinaryR;
 import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
@@ -58,7 +60,9 @@ public class SubTaskDb {
       }
 	}
 	
-	public static Map<Bee, Response> getBinaryResponses(int id, Bee[] annotators) {
+	public static Map<Integer, Response> getBinaryResponses(int id, Bee[] annotators) {
+		HashMap<Integer,Response> responses = new HashMap <Integer,Response>();
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT account, response");
 		sql.append("FROM responses");
@@ -75,23 +79,28 @@ public class SubTaskDb {
 		      	System.err.println("SQL Error on check finished");
 		      	return null;
 		    }
-		
+		ResultSet resultSet;
+		try {
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()){
+				BinaryR br = new BinaryR(resultSet.getBytes("response"));
+				responses.put(resultSet.getInt("account"), br);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//FINISH THIS!
 		return null;
 	}
 
 	public static SubTask getRandomBinarySubTask(int task) {
-/*
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, COUNT(responses.id) AS r");
-		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
-		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id");
-		sql.append("WHERE tasks.id = ?");
-		sql.append("GROUP BY s,a,m");
-		sql.append("ORDER BY random()");
-		sql.append("LIMIT 1");
-*/
-  String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = ? GROUP BY s,a,m ORDER BY random() LIMIT 1";
+		
+		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, " +
+				"COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
+				"LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = 1 " +
+				"GROUP BY s,a,m ORDER BY random() LIMIT 1";
+		
 		PreparedStatement preparedStatement;
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
@@ -187,13 +196,13 @@ public class SubTaskDb {
         return true;
 	}
 
-	public static Map<Bee, Response> getMultiValueResponses(int id,
+	public static Map<Integer, Response> getMultiValueResponses(int id,
 			Bee[] annotators) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static Map<Bee, Response> getContinuousResponses(int id,
+	public static Map<Integer, Response> getContinuousResponses(int id,
 			Bee[] annotators) {
 		// TODO Auto-generated method stub
 		return null;
