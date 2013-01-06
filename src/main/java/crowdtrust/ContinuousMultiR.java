@@ -1,5 +1,7 @@
 package crowdtrust;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ContinuousMultiR extends Response {
 
 	private int [] values;
@@ -18,12 +20,8 @@ public class ContinuousMultiR extends Response {
 	}
 	
 	@Override
-	public byte[] serialise() {
-		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < values.length; i++){
-			s.append(values[i] + "/");
-		}
-		return s.toString().getBytes();
+	public String serialise() {
+		return StringUtils.join(values);
 	}
 
 	@Override
