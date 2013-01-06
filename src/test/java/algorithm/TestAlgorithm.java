@@ -63,7 +63,7 @@ public class TestAlgorithm extends TestCase {
 		//Lets add a binary task to the database
 		long expirey = getDate();
 		double accuracy = 0.7;
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey));
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey, 15));
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();

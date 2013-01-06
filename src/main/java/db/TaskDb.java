@@ -16,10 +16,10 @@ public class TaskDb {
 	
 	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
 	
-	public static boolean addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime){
+	public static boolean addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
 		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO tasks (name, question, type, accuracy)\n");
-		sql.append("VALUES(?, ?, ?, ?)");
+		sql.append("INSERT INTO tasks (name, question, type, accuracy, max_labels)\n");
+		sql.append("VALUES(?, ?, ?, ?, ?)");
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
