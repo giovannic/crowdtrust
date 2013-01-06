@@ -54,7 +54,7 @@ public abstract class SubTask {
 	protected Estimate estimate(Collection<Estimate> newState) {
 		Estimate best = null;
 		for (Estimate record : newState){
-			if(best != null && record.getConfidence() > best.getConfidence())
+			if(best == null || record.getConfidence() > best.getConfidence())
 				best = record;
 		}
 		return best;
