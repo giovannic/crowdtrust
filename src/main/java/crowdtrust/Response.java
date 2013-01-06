@@ -1,7 +1,7 @@
 package crowdtrust;
 
 public abstract class Response {
-	abstract byte[] serialise();
+	public abstract byte[] serialise();
 	
 	@Override
 	public abstract boolean equals(Object o);

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <decorators>
-    <decorator name="main_theme" page="/decorators/theme.jsp">
+    <decorator name="client_theme" page="/decorators/client_theme.jsp">
+        <pattern>/client/*</pattern>
+    </decorator>
+    
+    <decorator name="crowd_theme" page="/decorators/crowd_theme.jsp">
+        <pattern>/crowd/*</pattern>
+    </decorator>
+    
+    <decorator name="register_theme" page="/decorators/register_theme.jsp">
+        <pattern>/register.jsp</pattern>
+    </decorator>
+    
+    <decorator name="main_theme" page="/decorators/home_theme.jsp">
         <pattern>/*</pattern>
     </decorator>
     

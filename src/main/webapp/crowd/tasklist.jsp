@@ -6,7 +6,7 @@
 
 
 	<head>
-		<title>Crowd: Profile</title>
+		<title>Crowd: TaskList</title>
 	</head>
 	
 	<body>

@@ -1,8 +1,10 @@
 package db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -302,7 +304,7 @@ public class SubTaskDb {
 		return null;
 	}
 
-	public static Estimate [] getBinaryEstimates(int id) {
+	public static Collection<Estimate> getBinaryEstimates(int id) {
 		String sql = "SELECT estimate, confidence " +
 				"FROM estimates " +
 				"WHERE subtask_id = ?";
@@ -332,7 +334,50 @@ public class SubTaskDb {
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return (Estimate[]) state.toArray();
+		return state;
+	}
+
+	public static void updateBinaryEstimates(Collection<Estimate> state, int id) {
+
+			String query = "UPDATE estimates SET confidence = ? " +
+					"WHERE subtask_id = ? AND estimate = ?";
+			
+			PreparedStatement preparedStatement;
+	        
+			try {
+		    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
+		    	for (Estimate e : state){
+		    		preparedStatement.setFloat(1, (float) e.getConfidence());
+					preparedStatement.setBytes(2, e.getR().serialise());
+					preparedStatement.setInt(3, id);
+					preparedStatement.addBatch();
+				}  
+		    	preparedStatement.executeBatch();
+		    }	    catch (ClassNotFoundException e) {
+		    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+		    } catch (SQLException e) {
+		      	System.err.println("SQL Error on check finished");
+		    }
+			
+	}
+
+	public static void addBinaryEstimate(Estimate est, int id) {
+		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?)";
+		
+		PreparedStatement preparedStatement;
+        
+		try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
+	    	preparedStatement.setFloat(1, (float) est.getConfidence());
+			preparedStatement.setBytes(2, est.getR().serialise());
+			preparedStatement.setInt(3, id);
+			preparedStatement.execute();
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	    }
+		
 	}
 	
 

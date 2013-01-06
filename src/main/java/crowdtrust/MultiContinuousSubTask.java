@@ -1,6 +1,6 @@
 package crowdtrust;
 
-import java.util.Arrays;
+import java.util.Collection;
 
 import be.ac.ulg.montefiore.run.distributions.MultiGaussianDistribution;
 
@@ -47,13 +47,12 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 
 
 	@Override
-	protected Estimate[] updateLikelihoods(Response r, Accuracy a,
-			Estimate[] state) {
+	protected void updateLikelihoods(Response r, Accuracy a,
+			Collection<Estimate> state) {
 		ContinuousMultiR cr = (ContinuousMultiR) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
-		Estimate [] newState;
 		double responseSpace = 1;
 		for (int i = 0; i < ranges.length; i++){
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
@@ -64,27 +63,23 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 						cr.getValues(precision), variance);
 			
 		for (Estimate record : state){
-			if(record.r.equals(r)){
+			if(record.getR().equals(r)){
 				matched = true;
 			}
-			ContinuousMultiR cr2 = (ContinuousMultiR) record.r;
+			ContinuousMultiR cr2 = (ContinuousMultiR) record.getR();
 			double p = sa.getAccuracy()*mgd.probability(cr2.getValues(precision)) +
 					(1 - sa.getAccuracy())/responseSpace;
-			record.confidence *= p/1-p;
+			record.setConfidence(record.getConfidence() * (p/1-p));
 		}
 			
 		if (!matched){
-			newState = Arrays.copyOf(state, state.length+1);
 			Estimate e = new Estimate(r, getZPrior());
 			double p = sa.getAccuracy()*mgd.probability(cr.getValues(precision)) +
 					(1 - sa.getAccuracy())/responseSpace;
-			e.confidence *= p/1-p;
-			newState[newState.length] = e;
-		} else {
-				newState = state.clone();
+			e.setConfidence(e.getConfidence() * (p/1-p));
+			state.add(e);
+			addEstimate(e);
 		}
-	
-		return newState;
 	}
 
 	@Override
@@ -99,8 +94,20 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	}
 
 	@Override
-	protected Estimate[] getEstimates(int id) {
+	protected Collection<Estimate> getEstimates(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void updateEstimates(Collection<Estimate> state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void addEstimate(Estimate e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
