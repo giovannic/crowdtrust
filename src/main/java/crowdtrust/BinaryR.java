@@ -5,14 +5,16 @@ public class BinaryR extends Response {
 	private boolean value;
 	
 	public BinaryR(boolean value){
-		super();
-		this.setValue(value);
+		this.value = value;
+	}
+	
+	public BinaryR(byte [] b){
+		this.value = Boolean.parseBoolean(new String(b));
 	}
 	
 	@Override
-	Byte [] serialise() {
-		//TODO
-		return null;
+	byte[] serialise() {
+		return Boolean.toString(value).getBytes();
 	}
 
 	public boolean isTrue() {

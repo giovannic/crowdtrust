@@ -58,4 +58,14 @@ public class LoginDb {
     return null;
   }
 
+public static boolean isUserCrowd(int id) throws ClassNotFoundException, SQLException {
+	PreparedStatement ps;
+	ps = DbAdaptor.connect().prepareStatement("SELECT type FROM accounts WHERE id = ?");
+	ps.setInt(1, id);
+	ps.execute();
+	ResultSet rs = ps.getResultSet();
+	rs.next();
+	return rs.getBoolean(1);
+}
+
 }

@@ -44,19 +44,16 @@ public class UploadServlet extends HttpServlet {
         //validate user credentials
         HttpSession session = request.getSession();
         if (session == null) {
-        	//TODO: test this
-     //   	response.sendRedirect("/index.html");
-   //     	return;
+        	response.sendRedirect("/index.jsp");
+        	return;
         }
         
-    //    int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
-        int accountID = 1;
+        int accountID = (Integer) session.getAttribute("account_id");
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
     	String taskDir = "";
     	int taskID = -1;
-    	System.out.println("about to get file things");
 		try {
 			items = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 		} catch (FileUploadException e) {
@@ -64,7 +61,6 @@ public class UploadServlet extends HttpServlet {
 			e.printStackTrace();
 			return;
 		}
-		System.out.println("about to go through params");
     	for( FileItem item : items ) {
         	if(item.isFormField()) {
         		String field = item.getFieldName();
@@ -75,7 +71,7 @@ public class UploadServlet extends HttpServlet {
         				//output need task name
         			} else {
         				//task is task name - add task to db if not yet inputted
-            			taskDir = TASKS_DIRECTORY + task + "/";        				
+            			taskDir = TASKS_DIRECTORY +accountID+"/"+ task + "/";        				
         			}
         		}
         		if( field.equals("taskID") ) {
@@ -88,7 +84,6 @@ public class UploadServlet extends HttpServlet {
         		files = item;
         	}
     	}
-    	System.out.println("taskDB.isPresent about to run");
         //add to db - check task in db, add to subtasks,
     	if (!TaskDb.isPresent(taskID, accountID))
     		return;
@@ -129,13 +124,14 @@ public class UploadServlet extends HttpServlet {
     	for (int i = 0 ; i < filenames.size() ; i++) {
 	        String filename = filenames.get(i);
     		if( !SubTaskDb.addSubtask(filename, taskID) ) 
-    			return;
+			return; 
     	}		
 		
+    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"/client/upload.jsp\">");
         out.println("<html>");
         out.println("<body>");
         out.println("uploaded to task " + taskDir + "<br>");                	
-        out.println("click <a href=../index.jsp>here</a> to return to the homepage");
+        out.println("click <a href=/client/addtask.jsp>here</a> to to add tasks");
         out.println("</body>");
         out.println("</html>");
     }

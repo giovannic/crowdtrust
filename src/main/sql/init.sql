@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS responses;
 DROP TABLE IF EXISTS subtasks CASCADE;
+DROP TABLE IF EXISTS ranged CASCADE;
 DROP TABLE IF EXISTS tasks CASCADE;
 DROP TABLE IF EXISTS types CASCADE;
 DROP TABLE IF EXISTS accounts CASCADE;
@@ -15,8 +16,8 @@ CREATE TABLE accounts
   id SERIAL PRIMARY KEY,
   email VARCHAR(100) NOT NULL,
   username VARCHAR(12) NOT NULL,
-  password VARCHAR(100) NULL,
-  type SMALLINT NULL,
+  password VARCHAR(100) NOT NULL,
+  type BOOLEAN NOT NULL,
   session CHARACTER(32) NULL,
   last_active TIMESTAMP NULL,
   accuracy INTEGER
@@ -37,6 +38,7 @@ CREATE TABLE tasks
   accuracy INTEGER NOT NULL,
   type INTEGER REFERENCES types (id),
   ex_time TIMESTAMP,
+  max_labels INTEGER NOT NULL,
   date_created TIMESTAMP
 );
 
@@ -62,6 +64,14 @@ CREATE TABLE responses
   account INTEGER REFERENCES accounts (id),
   subtask INTEGER REFERENCES subtasks (id),
   response BIT VARYING NULL
+);
+
+CREATE TABLE ranged
+(
+  subtask INTEGER PRIMARY KEY,
+  start INTEGER,
+  finish INTEGER,
+  p DOUBLE PRECISION
 );
 
 CREATE TABLE binaryaccuracies

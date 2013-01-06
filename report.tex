@@ -220,79 +220,118 @@ These goals can be achieved with the `Expectation-Maximisation algorithm'. We ha
 
 \subsubsection{EM-Algorithm overview}
 
-The a EM algorithm models the system as a hypothesis, h, and new evidence, Y, which is a set independent instances with observed data, X, and unobserved data, Z.\\
+The a EM algorithm models the system as a hypothesis, h, and new evidence, Y, which is a set independent instances with observed data, X, and unobserved data, Z.
+
+For our particular case we have a set of subtasks, S, with correct annotations, $Z_{s}$; a set of annotators, J, with accuracies $A_{j}$ and labels $L_{ij}$ from these annotators to subtasks
 
 It then iterates through two steps to revise this hypothesis so that it converges on the most likely hypothesis for the state of the system.\\
 
-Expectation Step:
+Expectation Step:\\
 You calculate P(Z) values using the X assuming the current hypothesis holds. In our case Z are the correct annotations for each subtask, X are the provided labels and the current hypothesis is the annotator`s accuracy. [1]\\
 
-$ p(z) = p(z|\zeta) \prod p (l_{ij} | z_{i} a_{j}) $ (1)\\
+$ p(z_{i}) = p(z_{i}|\zeta) \prod p (l_{ij} | z_{i} a_{j}) $ (1)\\
 
 where $p(z|\zeta)$ is our prior belief of $p(z)$.\\
 
-Maximisation Step:
-You replace the current hypothesis h with the most likely hypothesis assuming that the Z = E[Z]. This will mean that we have to calculate our most likely accuracies for the system based on the expected correct annotations calculated from the previous step.
+Maximisation Step:\\
+You replace the current hypothesis h with the most likely hypothesis assuming that the Z = E[Z]. This will mean that we have to calculate our most likely accuracies for the system based on the expected correct annotations calculated from the previous step.\\
 
-Q(a,a)
-(2)
-Annotation types
+$ Q(a_{j},a\prime_{j}) = \log p(a_{j}|\alpha_{j}) + \sum E_{z_{i}} [\log p (l_{ij} | z_{i} a_{j})]$ (2)\\
+
+\subsubsection{Annotation types}
 
 Our framework deals with a variety of subtasks that have different annotation types and models for accurate behaviour.
 
-We model each of the subtasks with a different conjugate prior and model for accurate behaviour.
+We model each of the subtasks with a different conjugate prior and model for accurate behaviour.\\
 
-Subtask type, Description, conjugate prior, likelihood
-Binary: An annotator can respond either true or false
-Multivalued: An annotator must categorise the subject into one of a range of categories D
-Continuous: An annotator must respond using a tuple from an N-dimensional number line
-[2] f(1)
+%\renewcommand{\arraystretch}{1.5}
+\begin{table}[htdp]
+\caption{Subtask models [2]}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{5cm}|p{4cm}|p{4cm}|}
+Subtask type & Description & conjugate prior & likelihood \\
+\hline
+Binary & An annotator can respond either true or false & $Beta(\alpha_{j}^{0}, \beta_{j}^{0})Beta(\alpha_{j}^{1},\beta_{j}^{1})$, where $\alpha_{j}^{0/1}$ are the negative and positive successes and $\beta_{j}^{0/1}$ are the failures.& $p(l_{ij} = z_{i} = 1 | a_{j}) = a_{j}^{1}$ $p(l_{ij} = z_{i} = 0 | a_{j}) = a_{j}^{0}$\\ [2cm]
 
-Online implementation
+Multivalued & An annotator must categorise the subject into one of a range of categories D & $Beta(\alpha, \beta)$, where $\alpha$ is the number of successes and $\beta$ the failures.  &  $p(l_{ij} = z_{i}| a_{j}) = a_{j}$ $p(l_{ij} \ne z_{i} | a_{j}) = \frac{1 - a_{j}}{D - 1}$\\ [1cm]
+
+Continuous & An annotator must respond using a tuple from an N-dimensional number line & as above &  $p(l_{ij} | z_{i} a_{j}) = a_{j} p(l_{ij}|honest) + (1- a_{j}) p(l_{ij}|random)$, where the probability of an honest label is given by $\mathcal{N}(l_{ij}, \sum)$ for a given variance and the random probability is uniform over the response space.\\
+\end{tabular}
+\end{center}
+\label{models}
+\end{table}
+
+\subsubsection{Online Considerations}
 
 The online implementation of this algorithm is different in that it does not compute the expected labels as a batch job but instead has to observe several instances, one at a time, over a long period of time.
 
 It also exploits discrimination. Expert annotators are asked first to respond to subtasks in order to reduce the total number of labels required. Since experts are likely to be the minority this technique is important since it makes sure that their annotations are taken into account [3].
 
-We carry this out by checking the variance of our estimate for the most likely accuracy of an annotator. A large variance would suggest that we do not yet have enough information to judge an annotator. When the variance is small enough, we will test the accuracy against the criteria below.
+We carry this out by checking the variance of our estimate for the most likely accuracy of an annotator. A large variance would suggest that we do not yet have enough information to judge an annotator. When the variance is small enough, we will test the accuracy against the criteria below.\\
 
-Subtask type, criteria
-Binary: 
-Multivalued: 
-Continuous: 
+\begin{table}[htdp]
+\caption{default}
+\begin{center}
+\begin{tabular}{|c|c|}
+Subtask type & criteria\\ \hline
+Binary & \shortstack{$\frac{\Phi^{-1}(a_{j}^{0}) - \Phi^{-1}(1 - a_{j}^{1})}{2} > 2$ \\ i.e an annotator's sensitivity index [1] is greater than 2}\\
+Multivalued & $a_{j} > 0.85$\\ 
+Continuous & $a_{j} > 0.85$\\
+\end{tabular}
+\end{center}
+\label{default}
+\end{table}%
 
-E-step
-Db response > Update ratios > check threshold \& max labels >
+\subsubsection{Implementation details}
 
-M-step
-Update accuracies > check threshold variance > update bot/expert lists
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\linewidth]{flow.jpg}
+\caption{algorithm}
+\label{default}
+\end{center}
+\end{figure}
 
-E step
 
-To calculate (1), values for the Sequential Probability Ratio Test [4] for each hidden value Z are stored in the database. Since the value is the sum of a sequence, the stored value can simply be increased by the new value. At this point each value is tested with the threshold to see if the maximum likelihood is great enough. At this point the M step will begin.
+E step\\
 
-M step
+To calculate (1), values for the Sequential Probability Ratio Test [4] for each hidden value Z are stored in the database. Since the value is the sum of a sequence, the stored value can simply be increased by the new value. At this point each value is tested with the threshold to see if the maximum likelihood is great enough. At this point the M step will begin.\\
+
+M step\\
 
 To compute the new accuracy (2), the prior accuracy needs to be modelled as a distribution stated in figure 1 and the expected accuracy is calculated assuming the correct label is the most likely one from the last step.
 
-The new accuracy would be the peak of the equation (2). To avoid using numerical methods to estimate the peak we write the Bayes estimate as a convex combination of the prior and the data [5]. This way we get a formula for the expected accuracy that can be computed in constant time:
+The new accuracy would be the peak of the equation (2). To avoid using numerical methods to estimate the peak we write the Bayes estimate as a convex combination of the prior and the data [5]. This way we get a formula for the expected accuracy that can be computed in constant time:\\
 
-Subtask type, convex combination
-Binary: 
-Multivalued: 
-Continuous: 
+\begin{table}[htdp]
+\caption{Bayes estimate}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+Subtask type & Convex combination & $\theta_{mle}$\\ \hline
+
+Binary & $ E(a_{j}^{k}) = \gamma \frac{\alpha_{j}^{k}}{\alpha_{j}^{k} + \beta_{j}^{k}} +  (1 - \gamma)\theta_{mle}$, only for affected k & 1 if $l_{ij} = z_{i}$, 0 otherwise\\
+
+Multivalued & $ E(a_{j}) = \gamma \frac{\alpha_{j}}{\alpha_{j} + \beta_{j}} +  (1 - \gamma)\theta_{mle}$ &1 if $l_{ij} = z_{i}$, 0 otherwise\\
+
+Continuous & $ E(a_{j}) = \gamma \frac{\alpha_{j}}{\alpha_{j} + \beta_{j}} +  (1 - \gamma)\theta_{mle}$ & \shortstack{$\frac{\mathcal{N}(l_{ij}| z_{i}, \sum)}{\mathcal{N}(l_{ij}| z_{i}, \sum) + \lambda^{-1}}$ \\ where $\lambda$ is the response space}\\
+\end{tabular}
+\end{center}
+\label{def}
+\end{table}%
+
+where $\gamma = \frac{\alpha_{j}^{k} + \beta_{j}^{k}}{\alpha_{j}^{k} + \beta_{j}^{k} + 1}$ 
 
 Once the accuracies have been updated we must check the variance of the posterior accuracy. In the cases where the accuracy is modelled as a single beta distribution, multi valued and continuous, is trivial:
 
-In the binary case the accuracy is modelled as a product of two dependant distributions therefore the variance must be estimated. We fit the peak to a multivariate Gaussian curve to estimate the posterior’s variance.
+In the binary case the accuracy is modelled as a product of two dependant distributions therefore the variance must be estimated. We fit the peak to a multivariate Gaussian curve to estimate the posterior`s variance.
 
-If we are confident in our knowledge of the annotator we test its accuracy against the criteria and store any new data about experts and bots in the database.
+If we are confident in our knowledge of the annotator we test its accuracy against the criteria and store any new data about experts and bots in the database.\\
 
-[1] – Machine Learning Tom M Mitchell
-[2] - A Compendium of Conjugate Priors - John D. Cook
-[3] – Online crowdsourcing: rating annotators and obtaining cost-effective labels - Welinder Perona
-[4] - Sequential tests of statistical hypotheses – Wald
-[5] – Bayesian inference for simple problems - Simon Jackman
+%[1] – Machine Learning Tom M Mitchell
+%[2] - A Compendium of Conjugate Priors - John D. Cook
+%[3] – Online crowdsourcing: rating annotators and obtaining cost-effective labels - Welinder Perona
+%[4] - Sequential tests of statistical hypotheses – Wald
+%[5] – Bayesian inference for simple problems - Simon Jackman
 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -311,37 +350,6 @@ If we are confident in our knowledge of the annotator we test its accuracy again
 \newpage
 \section{Project Management}
 %Planning, group organisation, breakdown + task allocation etc
-
-\subsection{Collaboration Tools}
-
-In order to complete the project, we have made use of several tools which have
-allowed us to collaborate our work efficiently. These are discussed below.
-
-\begin{enumerate}
-\item Git - Git was used as our version control system. All of us had previously
-used git, so we were comfortable using it. Besides familiarity, there were
-many other points which encouraged us to use git instead of other version control
-systems. Firstly, since we would be working in several different places, such as
-at home and in labs, we wanted a decentralised repository, which was provided
-by using git. Git also allowed us to branch from the master branch when we were
-working on something new, which was very convenient. Code from branches was
-merged with the master branch only after thorough testing of the code.
-\item Github - We used Github to track the progress of our project over the course
-of the project development. Being able to read our detailed commit messages
-allowed us to know where everyone was at with their part of the project. Again,
-as with git, Github was available to us anywhere, so that was an added advantage
-for using it.
-\item Google+ - Since the progress of our project slowed down towards the end
-of term due to coursework deadlines and Christmas tests, we planned to complete
-our project over the Christmas break. During this time, communication was going
-to be a problem as all of us were in different places. To tackle this problem,
-we decided to have regular meetings on Google Plus. We would have them every 2
-days, where we would discuss what we had accomplished, and what we would be working
-on next. At the end, it worked out really well.
-\item Skype, IM - At points, people would be working in pairs and such, so using
-these means of communication were useful as we could not be present with one
-another at all times.
-\end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage

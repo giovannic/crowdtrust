@@ -16,10 +16,7 @@ public class TaskDb {
 	
 	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
 	
-	public static boolean addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime){
-		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO tasks (name, question, type, accuracy)\n");
-		sql.append("VALUES(?, ?, ?, ?)");
+	public static boolean addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -34,14 +31,15 @@ public class TaskDb {
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
-        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?)");
+        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?)");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
 			insertTask.setDouble(4, accuracy);
 			insertTask.setInt(5, type);
 			insertTask.setTimestamp(6, new Timestamp(expiryTime));
-			insertTask.setTimestamp(7, new Timestamp(currentTime));
+			insertTask.setInt(7, max_labels);
+			insertTask.setTimestamp(8, new Timestamp(currentTime));
 			insertTask.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -60,6 +58,33 @@ public class TaskDb {
         }
         return true;
 	}
+	
+	/*public static int getSubTaskId(String name){
+ 		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id FROM subtasks\n");
+		sql.append("WHERE name = ?");
+ 		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return -1;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return -1;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+	    	resultSet.next();
+		    return resultSet.getInt(1);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
+		  	return -1;
+
+		}
+	}*/
 	
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
@@ -185,29 +210,26 @@ public class TaskDb {
 	
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT task.name FROM task ");
-		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
-		sql.append("OR task.ex_time + task.date_created < NOW()");
+		sql.append("SELECT tasks.name FROM tasks ");
+		sql.append("WHERE tasks.ex_time > NOW()");
 		PreparedStatement preparedStatement;
+		List<Task> tasks = new ArrayList<Task>();
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-			preparedStatement.setInt(1, id);
+//			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString("task.name");
+				String taskName = resultSet.getString(1);
 				Task task = getTask(taskName);
 				tasks.add(task);
 			}
-			return tasks;
 		}
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
-	      	return null;
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on get tasks for id");
-	      	return null;
 	    }
+		return tasks;
 	}
 	
 }

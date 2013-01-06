@@ -17,7 +17,7 @@ public class InitDBServlet extends HttpServlet{
 
 			DbInitialiser.init();
 			
-			response.sendRedirect("/index.html");
+			response.sendRedirect("/index.jsp");
 	        
 		}
 

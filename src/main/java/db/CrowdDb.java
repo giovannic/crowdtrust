@@ -16,7 +16,7 @@ import java.sql.Statement;
 
 public class CrowdDb {
 
-	public static void addResponse(int account, Byte[] serialise, int subtask) {
+	public static void addResponse(int account, byte[] serialise, int subtask) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO responses (account, subtask, response)");
 		sql.append("VALUES(?, ?, ?)");
@@ -35,7 +35,7 @@ public class CrowdDb {
 			PreparedStatement preparedStatement = c.prepareStatement(sql.toString());
 			preparedStatement.setInt(1, account);
 			preparedStatement.setInt(2, subtask);
-			preparedStatement.setObject(3, (Object) serialise, -7);
+			preparedStatement.setBytes(3, serialise);
 			preparedStatement.execute();
 			c.close();
 		}

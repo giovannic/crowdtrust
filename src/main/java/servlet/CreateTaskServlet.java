@@ -2,6 +2,11 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,26 +27,45 @@ import db.TaskDb;
 	        //validate user credentials
 	        HttpSession session = request.getSession();
 	        if (session == null) {
-	        	response.sendRedirect("/index.html");
+	        	response.sendRedirect("/index.jsp");
 	        	return;
 	        }
-	        
-	        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
+	        int accountID = (Integer) session.getAttribute("account_id");
 	        
 	        //validate user, add task to db, maked task directory
 	        String task = request.getParameter("name");
 	        double accuracy;
 	        int type;
+	        int max_labels;
 			try {
 				accuracy = Double.parseDouble(request.getParameter("accuracy"));
 				type = Integer.parseInt(request.getParameter("type"));
+				max_labels = Integer.parseInt(request.getParameter("max_labels"));
 			} catch (NumberFormatException e) {
 				out.println("accuracy or type not an integer");
 				return;
 			}
-	        long expiryTime = Long.parseLong(request.getParameter("expiry"));
-	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiryTime))
+			long expiry;
+			try {
+				expiry = getLongDate(request);
+			} catch (ParseException e) {					
+		    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"addtask.jsp\">");
+		        out.println("<html>");
+		        out.println("<body>");
+		        out.println("bad date given, returning to add task page");
+		        out.println("</body>");
+		        out.println("</html>");
+		        return;
+			}
+	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry, max_labels))
 	        	return;
-        	response.sendRedirect("/upload.jsp");	        
+        	response.sendRedirect("/client/upload.jsp");	        
+	}
+		
+
+	private long getLongDate(HttpServletRequest request) throws ParseException{
+		String expiryDateStr = request.getParameter("day") + request.getParameter("month") + request.getParameter("year");
+		Date expiryDate = new SimpleDateFormat("ddMMyyyy").parse(expiryDateStr);
+		return expiryDate.getTime();
 	}
 }
