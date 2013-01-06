@@ -57,7 +57,7 @@ import db.TaskDb;
 			}
 	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry))
 	        	return;
-        	response.sendRedirect("/upload.jsp");	        
+        	response.sendRedirect("/client/upload.jsp");	        
 	}
 		
 
