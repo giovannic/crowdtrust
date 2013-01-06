@@ -218,7 +218,7 @@ public class TaskDb {
 		List<Task> tasks = new ArrayList<Task>();
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-			preparedStatement.setInt(1, id);
+//			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
 				String taskName = resultSet.getString("task.name");
