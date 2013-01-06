@@ -5,7 +5,7 @@
 
 
 
-<form action="servlet/upload" method="post" enctype="multipart/form-data">
+<form action="/servlet/upload" method="post" enctype="multipart/form-data">
 	<input type="text" name="task" placeholder="Task" /><br>
     <input type="file" name="song" /><br>
     <input type="text" name="taskID" /> <br>

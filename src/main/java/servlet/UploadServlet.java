@@ -44,7 +44,6 @@ public class UploadServlet extends HttpServlet {
         //validate user credentials
         HttpSession session = request.getSession();
         if (session == null) {
-        	//TODO: test this
         	response.sendRedirect("/index.jsp");
         	return;
         }
@@ -125,13 +124,14 @@ public class UploadServlet extends HttpServlet {
     	for (int i = 0 ; i < filenames.size() ; i++) {
 	        String filename = filenames.get(i);
     		if( !SubTaskDb.addSubtask(filename, taskID) ) 
-    			return;
+			return; 
     	}		
 		
+    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"upload.jsp\">");
         out.println("<html>");
         out.println("<body>");
         out.println("uploaded to task " + taskDir + "<br>");                	
-        out.println("click <a href=../index.jsp>here</a> to return to the homepage");
+        out.println("click <a href=addtask.jsp>here</a> to to add tasks");
         out.println("</body>");
         out.println("</html>");
     }

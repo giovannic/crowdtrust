@@ -5,7 +5,7 @@
 
 
 
-<form action="servlet/addTask" method="post">
+<form action="/servlet/addTask" method="post">
 	<input type="text" name="name" placeholder="Task Name" /><br>
     <input type="text" name="question" placeholder="question" /> <br>
     <input type="number" name="accuracy" placeholder"accuracy" /> <br>
