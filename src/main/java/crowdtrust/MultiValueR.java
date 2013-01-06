@@ -1,5 +1,7 @@
 package crowdtrust;
 
+import java.io.UnsupportedEncodingException;
+
 public class MultiValueR extends Response{
 	
 	int selection;
@@ -8,10 +10,13 @@ public class MultiValueR extends Response{
 		this.selection = selection;
 	}
 	
+	public MultiValueR(byte [] b) throws NumberFormatException, UnsupportedEncodingException{
+		this.selection = Integer.parseInt(new String(b, "UTF-8"));
+	}
+	
 	@Override
-	Byte[] serialise() {
-		// TODO Auto-generated method stub
-		return null;
+	byte[] serialise() {
+		return Integer.toString(selection).getBytes();
 	}
 
 	@Override
