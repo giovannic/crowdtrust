@@ -107,4 +107,10 @@ public class MultiValueSubTask extends SubTask{
 		db.CrowdDb.updateMultiValueBots(bots);
 	}
 
+	@Override
+	protected Estimate[] getEstimates(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

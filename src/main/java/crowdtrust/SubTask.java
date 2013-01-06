@@ -42,9 +42,7 @@ public abstract class SubTask {
 		}
 	}
 	
-	private Estimate[] getEstimates(int id) {
-		return null;
-	}
+	protected abstract Estimate[] getEstimates(int id);
 	
 	protected abstract Estimate [] updateLikelihoods(Response r, 
 			Accuracy a, Estimate [] state);

@@ -85,4 +85,10 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		double p = 1/(range[1] - range[0])*precision;
 		return p/(1-p);
 	}
+
+	@Override
+	protected Estimate[] getEstimates(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
