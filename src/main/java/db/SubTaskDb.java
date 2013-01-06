@@ -380,6 +380,8 @@ public class SubTaskDb {
 		    } catch (SQLException e) {
 		      	System.err.println("SQL Error on check finished");
 		      	e.printStackTrace();
+		      	System.out.println("-------------------");
+		      	e.getNextException().printStackTrace();
 		    }
 			
 	}
