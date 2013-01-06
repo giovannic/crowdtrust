@@ -19,7 +19,8 @@ import db.TaskDb;
 import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
-	protected static int annotatorNumber = 500;
+
+	protected static int annotatorNumber = 10;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
@@ -47,7 +48,7 @@ public class TestAlgorithm extends TestCase {
 			int trueNeg = rand.nextInt(999) + 1;
 			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
 		}
-		boolean labs = false;
+		boolean labs = true;
 		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < annotatorNumber; i++){
