@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+
 import crowdtrust.Bee;
 import crowdtrust.BinaryR;
 import crowdtrust.MultiValueSubTask;
@@ -33,9 +34,11 @@ public class SubTaskDb {
 		      }
 		      catch (ClassNotFoundException e) {
 		      	  System.err.println("Error connecting to DB on subtask close: PSQL driver not present");
+		      	  e.printStackTrace();
 		      	  return false;
 		        } catch (SQLException e) {
 		      	  System.err.println("SQL Error on subtask close");
+		      	e.printStackTrace();
 		      	  return false;
 		        }
 		      return true;
@@ -57,9 +60,11 @@ public class SubTaskDb {
         return TaskDb.map(resultSet);
       } catch (ClassNotFoundException e) {
       	  System.err.println("Error connecting to DB on get Subtask: PSQL driver not present");
+      	e.printStackTrace();
       	  return null;
       } catch (SQLException e) {
       	  System.err.println("SQL Error on get Subtask");
+      	e.printStackTrace();
       	  return null;
       }
 	}
@@ -78,9 +83,11 @@ public class SubTaskDb {
 		    }
 		    catch (ClassNotFoundException e) {
 		    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-		      	return null;
+		    	e.printStackTrace();
+		    	return null;
 		    } catch (SQLException e) {
 		      	System.err.println("SQL Error on check finished");
+		      	e.printStackTrace();
 		      	return null;
 		    }
 		ResultSet resultSet;
@@ -145,9 +152,11 @@ public class SubTaskDb {
 	      }
 	      catch (ClassNotFoundException e) {
 	      	  System.err.println("Error connecting to DB on get Subtask: PSQL driver not present");
+	      	e.printStackTrace();
 	      	  return list;
 	      } catch (SQLException e) {
 	      	  System.err.println("SQL Error on connection during get image subtask");
+	      	e.printStackTrace();
 	      	  return list;
 	      }		
 	      try {
@@ -160,6 +169,7 @@ public class SubTaskDb {
 	        resultSet = preparedStatement.getResultSet();
 	      } catch (SQLException e) {
 	    	  System.err.println("problem executing stement");
+	    	  e.printStackTrace();
 	    	  return list;
 	      }
 	      try{
@@ -172,6 +182,7 @@ public class SubTaskDb {
 	        }
 	      } catch(SQLException e) {
 	    	  System.err.println("problem with result set");
+	    	  e.printStackTrace();
 	      }
 	      return list;
 	}
@@ -188,6 +199,7 @@ public class SubTaskDb {
 		    } catch (SQLException e1) {
 				System.err.println("some error with task fields: taskID not valid?");
 				System.err.println("taskID: " + taskID + ", filename: " + filename);
+				e1.printStackTrace();
 				return false;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -218,9 +230,11 @@ public class SubTaskDb {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 		} catch (ClassNotFoundException e) {
 		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	e.printStackTrace();
 		  	return -1;
 		} catch (SQLException e) {
 		  	System.err.println("SQL Error on get Task");
+		  	e.printStackTrace();
 		  	return -1;
 		}
 		try {
@@ -230,6 +244,7 @@ public class SubTaskDb {
 		    return resultSet.getInt(1);
 		} catch (SQLException e) {
 		  	System.err.println("SELECT task query invalid");
+		  	e.printStackTrace();
 		  	return -1;
 		}
 	}
@@ -248,9 +263,11 @@ public class SubTaskDb {
 	    	preparedStatement.setInt(1, subTaskId);
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-	      	return null;
+	    	e.printStackTrace();
+	    	return null;
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
 	      	return null;
 	    }
 		try {
@@ -284,9 +301,11 @@ public class SubTaskDb {
 	    	preparedStatement.setInt(1, subTaskId);
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-	      	return null;
+	    	e.printStackTrace();
+	    	return null;
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
 	      	return null;
 	    }
 		try {
@@ -318,9 +337,11 @@ public class SubTaskDb {
 	    	preparedStatement.setInt(1, id);
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-	      	return null;
+	    	e.printStackTrace();
+	    	return null;
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
 	      	return null;
 	    }
 		try {
@@ -355,8 +376,10 @@ public class SubTaskDb {
 		    	preparedStatement.executeBatch();
 		    }	    catch (ClassNotFoundException e) {
 		    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+		    	e.printStackTrace();
 		    } catch (SQLException e) {
 		      	System.err.println("SQL Error on check finished");
+		      	e.printStackTrace();
 		    }
 			
 	}
@@ -374,8 +397,10 @@ public class SubTaskDb {
 			preparedStatement.execute();
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	    	e.printStackTrace();
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
 	    }
 		
 	}
