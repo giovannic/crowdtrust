@@ -47,7 +47,7 @@ public class SubTaskDb {
       sql.append("WHERE subtasks.id = ?");
       try {
         PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-        preparedStatement.setString(1, Integer.toString(id));
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if(!resultSet.next()) {
 	      //task does not exist, grave error TODO log it
