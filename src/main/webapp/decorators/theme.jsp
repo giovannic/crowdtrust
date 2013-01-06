@@ -9,29 +9,21 @@
 	
 	<body>
 	<div id="wrapper">
-		<div id="banner">
-				<a href="/"><img src="/images/header txt.png" /></a>
-		</div>
-					
-		<div id="about_us">
-			<ul>
-				<li><a href="/crowd_info.jsp">AS A CROWDMEMBER</a></li>
-				<li><a href="/client_info.jsp">AS A CLIENT</a></li>
-				<li><a href="/about.jsp">ABOUT US</a></li>
-			</ul>
-		</div>
-		
+
+	  <%@include file="/includes/header.jsp" %>
+
+	  <%@include file="/includes/about.jsp" %>
+
+		<%@include file="/includes/login.jsp" %>
     <decorator:body />
-		
-		<div id="footer">
-			<p>Created by Giovanni Charles, Adam Fiksen, Ryan Jackson, Sahil Jain, John Walker</p>
-		</div>
 
 		<div id="dbinit">
 		  <form action="/servlet/init" method="post">
 		    <input type="submit" />
       </form>
     </div>
+
+	  <%@include file="/includes/footer.jsp" %>
 	</div>
 	</body>
 
