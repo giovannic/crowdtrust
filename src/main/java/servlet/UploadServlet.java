@@ -48,7 +48,7 @@ public class UploadServlet extends HttpServlet {
         	return;
         }
         
-        int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
+        int accountID = (Integer) session.getAttribute("account_id");
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;

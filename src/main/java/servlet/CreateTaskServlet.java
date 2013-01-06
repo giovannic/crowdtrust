@@ -25,9 +25,7 @@ import db.TaskDb;
 	        	response.sendRedirect("/index.jsp");
 	        	return;
 	        }
-	        String aid = (String) session.getAttribute("account_id");
-	        System.out.println(aid);
-	        int accountID = Integer.parseInt(aid);
+	        int accountID = (Integer) session.getAttribute("account_id");
 	        
 	        //validate user, add task to db, maked task directory
 	        String task = request.getParameter("name");
