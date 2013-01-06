@@ -102,6 +102,7 @@ public class SubTaskDb {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
 	      	return null;
 	    } catch (SQLException e) {
+		e.printStackTrace();
 	      	System.err.println("SQL Error on check finished");
 	      	return null;
 	    }
