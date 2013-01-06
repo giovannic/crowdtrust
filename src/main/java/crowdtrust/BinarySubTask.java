@@ -1,6 +1,5 @@
 package crowdtrust;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -52,8 +51,8 @@ public class BinarySubTask extends SubTask {
 	}
 	
 	@Override
-	protected Estimate [] updateLikelihoods(Response r,  Accuracy a, 
-			Estimate [] state){
+	protected void updateLikelihoods(Response r,  Accuracy a, 
+			Collection<Estimate> state){
 		BinaryR br = (BinaryR) r;
 		BinaryAccuracy ba = (BinaryAccuracy) a;
 		
@@ -65,28 +64,29 @@ public class BinarySubTask extends SubTask {
 		
 		boolean matched = false;
 		for (Estimate record : state){
-			if(record.r.equals(br)){
-				record.confidence *= accuracy/(1-accuracy);
+			if(record.getR().equals(br)){
+				record.setConfidence(record.getConfidence()
+						* (accuracy/(1-accuracy)));
 				matched = true;
 			} else {
-				record.confidence *= (1-accuracy)/accuracy;
+				record.setConfidence(record.getConfidence()
+						* ((1-accuracy)/accuracy));
 			}
 		}
 		
-		Estimate [] newState;
-		
 		if (!matched){
-			newState = Arrays.copyOf(state, state.length+1);
 			Estimate e = new Estimate(r, getZPrior());
-			e.confidence *= accuracy/(1-accuracy);
-			newState[newState.length] = e;
-		} else {
-			newState = state.clone();
+			e.setConfidence(e.getConfidence() * (accuracy/(1-accuracy)));
+			state.add(e);
+			addEstimate(e);
 		}
-		
-		return newState;
 	}
 	
+	@Override
+	protected void addEstimate(Estimate e) {
+		db.SubTaskDb.addBinaryEstimate(e, id);
+	}
+
 	@Override
 	protected Accuracy getAccuracy(int annotatorId) {
 		return db.CrowdDb.getBinaryAccuracy(annotatorId);
@@ -129,7 +129,12 @@ public class BinarySubTask extends SubTask {
 	}
 
 	@Override
-	protected Estimate[] getEstimates(int id) {
+	protected Collection <Estimate> getEstimates(int id) {
 		return SubTaskDb.getBinaryEstimates(id);
+	}
+
+	@Override
+	protected void updateEstimates(Collection<Estimate> state) {
+		db.SubTaskDb.updateBinaryEstimates(state, id);
 	}
 }
