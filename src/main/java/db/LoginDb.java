@@ -8,37 +8,63 @@ import java.sql.ResultSet;
 import java.security.MessageDigest;
 import java.util.Properties;
 import java.lang.StringBuilder;
+import crowdtrust.Account;
+import java.util.ArrayList;
 
 
 public class LoginDb {
 
+	public static Account getAccount(int id) {
+		String sql = "SELECT username FROM accounts WHERE id = ?";
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+		}
+		catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on login: PSQL driver not present");
+  	  return null;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on login");
+  	  return null;
+    }
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			return new Account(id, resultSet.getString("username"));
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
   public static int checkUserDetails(String username, String password) {
     String sql = "SELECT id FROM accounts WHERE username = ? AND password = ?";
-      PreparedStatement preparedStatement;
-      try {
-    	  preparedStatement = DbAdaptor.connect().prepareStatement(sql);
-      } 
-      catch (ClassNotFoundException e) {
-    	  System.err.println("Error connecting to DB on login: PSQL driver not present");
-    	  return 0;
-      } catch (SQLException e) {
-    	  System.err.println("SQL Error on login");
-    	  return 0;
+    PreparedStatement preparedStatement;
+    try {
+  	  preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+    } 
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on login: PSQL driver not present");
+  	  return 0;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on login");
+  	  return 0;
+    }
+    try {
+  	  preparedStatement.setString(1, username);
+      preparedStatement.setString(2, sha256(password));
+      ResultSet resultSet = preparedStatement.executeQuery();
+      if(!resultSet.next() || !resultSet.isLast()) {
+        //user does not exist - display error message
+        return 0;
       }
-      try {
-    	  preparedStatement.setString(1, username);
-	      preparedStatement.setString(2, sha256(password));
-	      ResultSet resultSet = preparedStatement.executeQuery();
-	      if(!resultSet.next() || !resultSet.isLast()) {
-	        //user does not exist - display error message
-	        return 0;
-	      }
-	      int id = resultSet.getInt("id");
-	      return id;
-      }
-      catch (SQLException e) {
-          return 0;
-      }
+      int id = resultSet.getInt("id");
+      return id;
+    }
+    catch (SQLException e) {
+        return 0;
+    }
   }
 
   private static String sha256(String password) {
@@ -58,14 +84,14 @@ public class LoginDb {
     return null;
   }
 
-public static boolean isUserCrowd(int id) throws ClassNotFoundException, SQLException {
-	PreparedStatement ps;
-	ps = DbAdaptor.connect().prepareStatement("SELECT type FROM accounts WHERE id = ?");
-	ps.setInt(1, id);
-	ps.execute();
-	ResultSet rs = ps.getResultSet();
-	rs.next();
-	return rs.getBoolean(1);
-}
+	public static boolean isUserCrowd(int id) throws ClassNotFoundException, SQLException {
+		PreparedStatement ps;
+		ps = DbAdaptor.connect().prepareStatement("SELECT type FROM accounts WHERE id = ?");
+		ps.setInt(1, id);
+		ps.execute();
+		ResultSet rs = ps.getResultSet();
+		rs.next();
+		return rs.getBoolean(1);
+	}
 
 }
