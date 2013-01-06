@@ -65,13 +65,13 @@ public abstract class SubTask {
 	protected void updateAccuracies(Response z) {
 		Bee [] annotators = db.CrowdDb.getAnnotators(id);
 		AccuracyRecord [] accuracies = getAccuracies(annotators);
-		Map <Bee, Response> responses = getResponses(annotators);
+		Map <Integer, Response> responses = getResponses(annotators);
 		
 		Collection<Bee> experts = new ArrayList<Bee>();
 		Collection<Bee> bots = new ArrayList<Bee>();
 		
 		for (AccuracyRecord r : accuracies){
-			maximiseAccuracy(r.getAccuracy(), responses.get(r.getBee()), z);
+			maximiseAccuracy(r.getAccuracy(), responses.get(r.getBee().getId()), z);
 			if (r.getAccuracy().variance() < THETA){
 				if (r.getAccuracy().expert(expertLimit()))
 					experts.add(r.getBee());
@@ -96,7 +96,7 @@ public abstract class SubTask {
 	/*
 	 * Helper functions
 	 * */
-	protected abstract Map<Bee, Response> getResponses(Bee[] annotators);
+	protected abstract Map<Integer, Response> getResponses(Bee[] annotators);
 
 	protected abstract AccuracyRecord[] getAccuracies(Bee[] annotators);
 	

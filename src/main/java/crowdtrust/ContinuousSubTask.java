@@ -18,9 +18,8 @@ public abstract class ContinuousSubTask extends SubTask {
 	}
 
 	@Override
-	protected Map<Bee, Response> getResponses(Bee[] annotators) {
-		return null;
-		//return db.SubTaskDb.getContinuousResponses(id, annotators);
+	protected Map<Integer, Response> getResponses(Bee[] annotators) {
+		return db.SubTaskDb.getContinuousResponses(id, annotators);
 	}
 
 	@Override

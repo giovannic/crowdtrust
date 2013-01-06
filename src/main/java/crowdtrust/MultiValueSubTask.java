@@ -71,9 +71,8 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected Map<Bee, Response> getResponses(Bee[] annotators) {
-		return null;
-		//return db.SubTaskDb.getMultiValueResponses(id, annotators);
+	protected Map<Integer, Response> getResponses(Bee[] annotators) {
+		return db.SubTaskDb.getMultiValueResponses(id, annotators);
 	}
 
 	@Override

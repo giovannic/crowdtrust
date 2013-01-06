@@ -67,9 +67,9 @@ public class TestAlgorithm extends TestCase {
 		RegisterDb.addUser("testClient@test.com", "gio", "gio", false);
 		int accountId = LoginDb.checkUserDetails("gio", "gio");
 		//Lets add a binary task to the database
-		long expirey = getDate();
+		long expiry = getDate();
 		double accuracy = 0.7;
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey, 15));
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expiry, 15)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();

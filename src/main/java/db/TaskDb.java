@@ -14,24 +14,23 @@ import crowdtrust.*;
 
 public class TaskDb {
 	
-	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
 	
-	public static boolean addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
+	public static int addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
 		}
 		catch (ClassNotFoundException e) {
 			System.err.println("Error connecting to DB on add Task: PSQL driver not present");
-		  	return false;
+		  	return -1;
 		} catch (SQLException e) {
 		  	System.err.println("SQL Error on add Task");
-		  	return false;
+		  	return -1;
 		}
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
-        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?)");
+        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?) RETURNING id");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
@@ -41,22 +40,13 @@ public class TaskDb {
 			insertTask.setInt(7, max_labels);
 			insertTask.setTimestamp(8, new Timestamp(currentTime));
 			insertTask.execute();
+			ResultSet rs = insertTask.getResultSet();
+			rs.next();
+			return rs.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
-        File taskFolder = new File(TASKS_DIRECTORY + accountID + "/" + name);
-        if(taskFolder.isDirectory()) {
-        	try {
-				insertTask.cancel();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return false;
-			}	        	
-        } else {
-        	taskFolder.mkdirs();
-        }
-        return true;
 	}
 	
 	/*public static int getSubTaskId(String name){
