@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import crowdtrust.BinaryTask;
-import crowdtrust.Task;
+import crowdtrust.*;
 
 public class TaskDb {
 	
@@ -62,6 +61,33 @@ public class TaskDb {
         return true;
 	}
 	
+	public static int getSubTaskId(String name){
+ 		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id FROM subtasks\n");
+		sql.append("WHERE name = ?");
+ 		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return -1;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return -1;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+	    	resultSet.next();
+		    return resultSet.getInt(1);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
+		  	return -1;
+
+		}
+	}
+	
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks\n");
@@ -87,13 +113,42 @@ public class TaskDb {
 		}
 	}
 	
+	public static int getTaskId(String name){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id FROM tasks\n");
+		sql.append("WHERE name = ?");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		  	return -1;
+		} catch (SQLException e) {
+		  	System.err.println("SQL Error on get Task");
+		  	return -1;
+		}
+		try {
+		    preparedStatement.setString(1, name);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    resultSet.next();
+		    return resultSet.getInt(1);
+		} catch (SQLException e) {
+		  	System.err.println("SELECT task query invalid");
+		  	return -1;
+		}
+	}
+	
 	public static boolean isPresent(int taskID, int accountID) {
     	PreparedStatement checkTask;
 		try {
 			checkTask = DbAdaptor.connect().prepareStatement("SELECT id FROM tasks WHERE id = ? AND submitter = ?");
 			checkTask.setInt(1, taskID);
 			checkTask.setInt(2, accountID);
-	    	return checkTask.execute();
+	    	checkTask.execute();
+	    	ResultSet rs = checkTask.getResultSet();
+	    	rs.next();
+	    	return taskID == rs.getInt(1);
 		} catch (SQLException e) { 
 			e.printStackTrace();
 			return false;
@@ -113,10 +168,15 @@ public class TaskDb {
 				String question = resultSet.getString("question");
 				int type = resultSet.getInt("type");
 				int accuracy = resultSet.getInt("accuracy");
-				switch(type) {
-				case 1:
+				if(type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy);
 				}
+				if(type == 2) {
+						//thisTask = new SingleContinuousTask(id, name, question, accuracy);
+				}							
+				if(type == 3) {
+						thisTask = new MultiValueTask(id, name, question, accuracy);
+				}					
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -150,7 +210,7 @@ public class TaskDb {
 
 	}
 	
-	public static List<String> getTasksForCrowdId(int id) {
+	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT task.name FROM task ");
 		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
@@ -160,10 +220,11 @@ public class TaskDb {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<String> tasks = new ArrayList<String>();
+			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
 				String taskName = resultSet.getString("task.name");
-				tasks.add(taskName);
+				Task task = getTask(taskName);
+				tasks.add(task);
 			}
 			return tasks;
 		}
@@ -174,7 +235,6 @@ public class TaskDb {
 	      	System.err.println("SQL Error on get tasks for id");
 	      	return null;
 	    }
-		
 	}
 	
 }

@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 			makeLobby(response, request);
 			return;
     }
-    response.sendRedirect("/login.html"); 
+    response.sendRedirect("/index.jsp"); 
   }
   
   private void makeLobby(HttpServletResponse response, HttpServletRequest request){

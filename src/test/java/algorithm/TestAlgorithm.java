@@ -11,14 +11,18 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.UUID;
 
+import crowdtrust.BinarySubTask;
 import crowdtrust.BinaryTask;
+import crowdtrust.SubTask;
 import crowdtrust.Task;
 
 import db.LoginDb;
 import db.RegisterDb;
+import db.SubTaskDb;
 import db.TaskDb;
 
 import junit.framework.TestCase;
@@ -67,6 +71,40 @@ public class TestAlgorithm extends TestCase {
 		long expirey = getDate();
 		double accuracy = 0.7;
 		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey));
+		
+		//List of answers
+		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
+		System.out.println("About to get Task id");
+		System.out.println("John Task Id: " + TaskDb.getTaskId("BinaryTestTask"));
+		System.out.println("Got it");
+		
+		//Lets create a linked list of subTasks
+		for(int i = 0; i < 10; i++){
+			String uuid = UUID.randomUUID().toString();
+			uuid = uuid.replace("-", "");
+			uuid = uuid.substring(0, 12);
+			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
+			int id = SubTaskDb.getSubTaskId(uuid);
+			System.out.println("Subtask Id: " + id);
+			BinarySubTask bst = new BinarySubTask(id);
+			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
+			answers.add(asta);
+		}
+		
+		//Give all the annotators the answers
+		for(int i = 0; i < annotatorNumber; i++){
+			annotators[i].setTasks(answers);
+		}
+		
+	
+		/*SubTask t = SubTaskDb.getRandomSubTask();
+		
+		while( t != null){
+			int annotatorIndex = rand.nextInt(annotatorNumber - 1);
+			annotators[annotatorIndex].answerTask(t);
+			t = SubTaskDb.getRandomSubTask();
+		} */
+		
 		}
 	}
 	

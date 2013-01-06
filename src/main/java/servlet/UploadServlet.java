@@ -45,22 +45,11 @@ public class UploadServlet extends HttpServlet {
         HttpSession session = request.getSession();
         if (session == null) {
         	//TODO: test this
-        	response.sendRedirect("/index.html");
+        	response.sendRedirect("/index.jsp");
         	return;
         }
         
         int accountID = Integer.parseInt((String) session.getAttribute("account_id"));
-        Connection connection;
-        try {
-			connection = DbAdaptor.connect();
-		} //catch (ClassNotFoundException | SQLException e1) {
-        catch (Exception e1){
-			// TODO Auto-generated catch block
-        	out.println("db connection failed");
-			e1.printStackTrace();
-			return;
-		}
-        
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
@@ -78,6 +67,7 @@ public class UploadServlet extends HttpServlet {
         		String field = item.getFieldName();
         		if (field.equals("task")) {
             		String task = item.getString();
+            		System.out.println("task field");
         			if (task == null) {
         				//output need task name
         			} else {
@@ -86,6 +76,7 @@ public class UploadServlet extends HttpServlet {
         			}
         		}
         		if( field.equals("taskID") ) {
+        			System.out.println("task id field");
         			taskID = Integer.parseInt(item.getString());
         		}
         	}
@@ -95,7 +86,7 @@ public class UploadServlet extends HttpServlet {
         	}
     	}
         //add to db - check task in db, add to subtasks,
-    	if (TaskDb.isPresent(taskID, accountID))
+    	if (!TaskDb.isPresent(taskID, accountID))
     		return;
     	
         //on upload page retrieve task id, submit task id as a parameter
