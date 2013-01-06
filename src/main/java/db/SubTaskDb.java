@@ -70,8 +70,8 @@ public class SubTaskDb {
 		HashMap<Integer,Response> responses = new HashMap <Integer,Response>();
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT account, response");
-		sql.append("FROM responses");
+		sql.append("SELECT account, response ");
+		sql.append("FROM responses ");
 		sql.append("WHERE subtask = ?");
 		PreparedStatement preparedStatement;
 		try {
