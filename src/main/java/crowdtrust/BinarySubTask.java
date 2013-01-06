@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
+import db.SubTaskDb;
+
 public class BinarySubTask extends SubTask {
 	
 	public BinarySubTask(int id, double confidence_threshold, 
@@ -52,7 +54,6 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected Estimate [] updateLikelihoods(Response r,  Accuracy a, 
 			Estimate [] state){
-		//TODO add new cases
 		BinaryR br = (BinaryR) r;
 		BinaryAccuracy ba = (BinaryAccuracy) a;
 		
@@ -125,5 +126,10 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected void updateBots(Collection<Bee> bots) {
 		db.CrowdDb.updateBinaryBots(bots);
+	}
+
+	@Override
+	protected Estimate[] getEstimates(int id) {
+		return SubTaskDb.getBinaryEstimates(id);
 	}
 }
