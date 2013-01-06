@@ -14,7 +14,7 @@ font:100%/1.25 Arial, Helvetica, sans-serif;
 }
 
 /***** Headings *****/
-/*
+
 h1, h2, h3, h4, h5, h6 {
 margin:0;
 padding:0;
@@ -168,15 +168,16 @@ body {
 #wrapper {
 	width:800px;
 	margin:0px auto;
+	padding:0px 0px 100% 0px
 	background-color:#eeeeee;
 }
 
-#about_us {
+#nav_bar {
 	background-color:#496176;
 	clear:both;
 }
 
-#about_us ul {
+#nav_bar ul {
 	float:left;
 	width:100%;
 	margin:0px;
@@ -184,34 +185,34 @@ body {
 	padding:0px;
 }
 
-#about_us ul li {
+#nav_bar ul li {
 	display:inline;
 }
 
-#about_us ul li a {
+#nav_bar ul li a {
 	float:left; padding:10px 20px;
 	text-decoration:none;
 
 }
 
-#about_us a:link {
+#nav_bar a:link {
 	color:#fff;
 }
 
-#about_us a:visited {
+#nav_bar a:visited {
 	color:#fff;
 }
 
-#about_us a:active {
+#nav_bar a:active {
 	color:#fff;
 }
 
-#about_us a:hover {
+#nav_bar a:hover {
 	color:#fff;
 	background-color:#b6771e;
 }
 
-#about_us a:focus {
+#nav_bar a:focus {
 	color:#fff;
 }
 
