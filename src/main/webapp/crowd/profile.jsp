@@ -6,7 +6,7 @@
 
 
 	<head>
-		<title>AS A CROWDMEMBERAS A CLIENTABOUT</title>
+		<title>Crowd: Profile</title>
 	</head>
 	
 	<body>
