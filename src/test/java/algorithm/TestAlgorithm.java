@@ -87,6 +87,8 @@ public class TestAlgorithm extends TestCase {
 			answers.add(asta);
 		}
 		
+		printAnswers(answers);
+		
 		//Give all the annotators the answers
 		for(int i = 0; i < annotatorNumber; i++){
 			annotators[i].setTasks(answers);
