@@ -109,6 +109,7 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
+			rs.next();
 			int taskAccuracy = rs.getInt("a");
 			int id = rs.getInt("s");
 			int responses = rs.getInt("r");
