@@ -44,6 +44,16 @@
             <td>answer 2?</td>
             <td><input type="text" name="answer2" /></td>
         </tr>
+        <tr>
+            <td>What type of response do you expect?</td>
+            <td><select name="annotation_type">
+            <option value="1">Radio</option>
+            <option value="2">Slider</option>
+            <option value="3">Coordinates</option>
+            <option value="4">Bounding Box</option>
+            </select></td>
+        </tr>
+        </tr>
         <!--<tr>
             <td>What type of response do you expect?</td>
             <td><input type="text" name="question" value="binary" /></td>

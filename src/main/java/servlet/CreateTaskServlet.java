@@ -51,6 +51,7 @@ import db.TaskDb;
 				input_type = Integer.parseInt(request.getParameter("input_type"));
 			} catch (NumberFormatException e) {
 				out.println("accuracy or type not an integer");
+				e.printStackTrace();
 				return;
 			}
 			long expiry;
