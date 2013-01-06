@@ -19,7 +19,7 @@
 
 		<div id="dbinit">
 		  <form action="/servlet/init" method="post">
-		    <input type="submit" />
+		    <input type="submit" value="initDB DO NOT PRESS UNLESS INIT IS DESIRED"/>
       </form>
     </div>
 

@@ -27,7 +27,7 @@ import db.TaskDb;
 	        //validate user credentials
 	        HttpSession session = request.getSession();
 	        if (session == null) {
-	        	response.sendRedirect("/index.jsp");
+	        	response.sendRedirect("/");
 	        	return;
 	        }
 	        int accountID = (Integer) session.getAttribute("account_id");
