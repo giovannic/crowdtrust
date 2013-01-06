@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.UUID;
@@ -81,6 +82,8 @@ public class TestAlgorithm extends TestCase {
 			answers.add(asta);
 		}
 		
+		printAnswers(answers);
+		
 		//Give all the annotators the answers
 		for(int i = 0; i < annotatorNumber; i++){
 			annotators[i].setTasks(answers);
@@ -96,6 +99,17 @@ public class TestAlgorithm extends TestCase {
 		} */
 		
 		}
+	}
+	
+	protected void printAnswers(LinkedList<AnnotatorSubTaskAnswer> answers){
+		System.out.println("-------------Printing Answers------------------");
+		Iterator<AnnotatorSubTaskAnswer> i = answers.iterator();
+		while(i.hasNext()){
+			AnnotatorSubTaskAnswer temp = i.next();
+			System.out.println("Answer id: " + temp.getId());
+			System.out.println("Actual answer: " + ((BinaryTestData)temp.getAlgoTestData()).getActualAnswer());
+		}
+		System.out.println("-----------------------------------------------");
 	}
 	
 	protected long getDate(){

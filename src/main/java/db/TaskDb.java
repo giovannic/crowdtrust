@@ -212,29 +212,26 @@ public class TaskDb {
 	
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT task.name FROM task ");
-		sql.append("WHERE EXISTS (SELECT * FROM account WHERE ? = id AND expert ");
-		sql.append("OR task.ex_time + task.date_created < NOW()");
+		sql.append("SELECT tasks.name FROM tasks ");
+		sql.append("WHERE tasks.ex_time > NOW()");
 		PreparedStatement preparedStatement;
+		List<Task> tasks = new ArrayList<Task>();
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-			preparedStatement.setInt(1, id);
+//			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString("task.name");
+				String taskName = resultSet.getString(1);
 				Task task = getTask(taskName);
 				tasks.add(task);
 			}
-			return tasks;
 		}
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
-	      	return null;
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on get tasks for id");
-	      	return null;
 	    }
+		return tasks;
 	}
 	
 }

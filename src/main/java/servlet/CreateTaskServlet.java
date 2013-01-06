@@ -2,6 +2,11 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,9 +30,7 @@ import db.TaskDb;
 	        	response.sendRedirect("/index.jsp");
 	        	return;
 	        }
-	        String aid = (String) session.getAttribute("account_id");
-	        System.out.println(aid);
-	        int accountID = Integer.parseInt(aid);
+	        int accountID = (Integer) session.getAttribute("account_id");
 	        
 	        //validate user, add task to db, maked task directory
 	        String task = request.getParameter("name");
@@ -40,9 +43,27 @@ import db.TaskDb;
 				out.println("accuracy or type not an integer");
 				return;
 			}
-	        long expiryTime = Long.parseLong(request.getParameter("expiry"));
-	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiryTime))
+			long expiry;
+			try {
+				expiry = getLongDate(request);
+			} catch (ParseException e) {					
+		    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"addtask.jsp\">");
+		        out.println("<html>");
+		        out.println("<body>");
+		        out.println("bad date given, returning to add task page");
+		        out.println("</body>");
+		        out.println("</html>");
+		        return;
+			}
+	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry))
 	        	return;
-        	response.sendRedirect("/upload.jsp");	        
+        	response.sendRedirect("/client/upload.jsp");	        
+	}
+		
+
+	private long getLongDate(HttpServletRequest request) throws ParseException{
+		String expiryDateStr = request.getParameter("day") + request.getParameter("month") + request.getParameter("year");
+		Date expiryDate = new SimpleDateFormat("ddMMyyyy").parse(expiryDateStr);
+		return expiryDate.getTime();
 	}
 }

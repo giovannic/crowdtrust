@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 
 import db.LoginDb;
 
+import java.sql.SQLException;
 import java.util.Properties;
 
 import java.io.IOException;
@@ -19,38 +20,46 @@ public class LoginServlet extends HttpServlet {
 
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
-    if(request.isRequestedSessionIdValid()) {
-      makeLobby(response, request);
-    }  
+	  
+
+		response.setContentType("text/html;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+	  
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-		System.out.println(username);
-		System.out.println(password);
     int id = LoginDb.checkUserDetails(username, password);
-    if(!request.isRequestedSessionIdValid() && id > 0) {
-      HttpSession session = request.getSession(true);
-      session.setMaxInactiveInterval(1200);
-      session.setAttribute("account_id", id);
-      session.setAttribute("account_name", username);
-			makeLobby(response, request);
-			return;
-    }
-    response.sendRedirect("/index.jsp"); 
-  }
-  
-  private void makeLobby(HttpServletResponse response, HttpServletRequest request){
-	  PrintWriter out;
-	try {
-			out = response.getWriter();
-			HttpSession session = request.getSession();
-			String username = (String) session.getAttribute("account_name");
-			Lobby userLobby = new Lobby(username, request.getContextPath());
-	    userLobby.addClientTable();
-	    userLobby.addCrowdTable(request);
-	    out.print(userLobby.generate());
-	  } catch (IOException e) {
+    if( id > 0) {
+		boolean isCrowd;
+        try {
+        	isCrowd = LoginDb.isUserCrowd(id);
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-	  }
+			response.sendRedirect("/index.jsp?login=false");
+			return;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.sendRedirect("/index.jsp?login=false");
+			return;
+		}
+		HttpSession session = request.getSession(true);
+		session.setMaxInactiveInterval(1200);
+		session.setAttribute("account_id", id);
+		session.setAttribute("account_name", username);
+        if( isCrowd ) {
+    		response.sendRedirect("/crowd/profile.jsp");
+        } else {
+        	response.sendRedirect("/client/profile.jsp");
+        }
+        return;
+    }
+	
+	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"/\">");
+    out.println("<html>");
+    out.println("<body>");
+    out.println("bad login! delete cookies and try again. going back to homepage in 5 seconds");                	
+    out.println("</body>");
+    out.println("</html>");
+    
   }
   
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
