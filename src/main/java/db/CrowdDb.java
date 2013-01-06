@@ -64,6 +64,7 @@ public class CrowdDb {
 		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet.next();
 			BinaryAccuracy accuracy = mapBinaryAccuracy(resultSet);
 			return accuracy;
 		}
