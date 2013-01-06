@@ -91,7 +91,7 @@ public class SubTaskDb {
 		sql.append("ORDER BY random()");
 		sql.append("LIMIT 1");
 */
-  String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = 1 GROUP BY s,a,m ORDER BY random() LIMIT 1";
+  String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = ? GROUP BY s,a,m ORDER BY random() LIMIT 1";
 		PreparedStatement preparedStatement;
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
