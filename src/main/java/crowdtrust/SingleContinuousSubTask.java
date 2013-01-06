@@ -1,6 +1,6 @@
 package crowdtrust;
 
-import java.util.Arrays;
+import java.util.Collection;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
@@ -42,13 +42,12 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 	}
 	
 	@Override
-	protected Estimate[] updateLikelihoods(Response r, Accuracy a,
-			Estimate[] state) {
+	protected void updateLikelihoods(Response r, Accuracy a,
+			Collection<Estimate> state) {
 		ContinuousR cr = (ContinuousR) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
-		Estimate [] newState;
 		
 		NormalDistribution nd = 
 				new NormalDistribution(
@@ -57,27 +56,23 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		double pResponseSpace = 1/(range[1] - range[0])*precision;
 			
 		for (Estimate record : state){
-			if(record.r.equals(r)){
+			if(record.getR().equals(r)){
 				matched = true;
 			}
-			ContinuousR cr2 = (ContinuousR) record.r;
+			ContinuousR cr2 = (ContinuousR) record.getR();
 			double p = sa.getAccuracy()*nd.density(cr2.getValue(precision)) + 
 				(1-sa.getAccuracy())*pResponseSpace;
-			record.confidence *= p/(1-p);
+			record.setConfidence(record.getConfidence() * (p/(1-p)));
 		}
 			
 		if (!matched){
-			newState = Arrays.copyOf(state, state.length+1);
 			Estimate e = new Estimate(r, getZPrior());
 			double p = sa.getAccuracy()*nd.density(cr.getValue(precision)) +
 					(1-sa.getAccuracy())*pResponseSpace;
-			e.confidence *= p/1-p;
-			newState[newState.length] = e;
-		} else {
-			newState = state.clone();
+			e.setConfidence(e.getConfidence() * (p/1-p));
+			state.add(e);
+			addEstimate(e);
 		}
-		
-		return newState;
 	}
 
 	@Override
@@ -87,8 +82,21 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 	}
 
 	@Override
-	protected Estimate[] getEstimates(int id) {
+	protected Collection<Estimate> getEstimates(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	protected void updateEstimates(Collection<Estimate> state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void addEstimate(Estimate e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -158,7 +158,6 @@ public class TaskDb {
 	public static Task map(ResultSet resultSet) {
 		Task thisTask = null;
 		try {
-			while(resultSet.next()) {
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String question = resultSet.getString("question");
@@ -172,8 +171,7 @@ public class TaskDb {
 				}							
 				if(type == 3) {
 						thisTask = new MultiValueTask(id, name, question, accuracy);
-				}					
-			}
+				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

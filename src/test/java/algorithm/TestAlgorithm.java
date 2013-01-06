@@ -9,14 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.List;
 
 import crowdtrust.BinarySubTask;
+import crowdtrust.Account;
 
 import db.DbInitialiser;
 import db.LoginDb;
 import db.RegisterDb;
 import db.SubTaskDb;
 import db.TaskDb;
+import db.CrowdDb;
 
 import junit.framework.TestCase;
 
@@ -147,10 +150,18 @@ public class TestAlgorithm extends TestCase {
 	protected void printExpertList(){
 		System.out.println("-----------Printing Expert List----------------");
 		System.out.println("-----------------------------------------------");
+		List<Account> experts = CrowdDb.getAllExperts();
+		for(Account account : experts) {
+			System.out.println("id =" + account.getId() + " name = " + account.getName());
+		}
 	}
 	
 	protected void printBotList(){
 		System.out.println("-----------Printing Bots List-------------------");
 		System.out.println("------------------------------------------------");
+		List<Account> bots = CrowdDb.getAllExperts();
+		for(Account account : bots) {
+			System.out.println("id =" + account.getId() + " name = " + account.getName());
+		}
 	}
 }
