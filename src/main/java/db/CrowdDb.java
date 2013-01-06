@@ -26,10 +26,12 @@ public class CrowdDb {
     }
     catch (ClassNotFoundException e) {
   	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-			return;
+  	  e.printStackTrace();
+	  return;
     } catch (SQLException e) {
   	  System.err.println("SQL Error on Crowd");
-			return;
+  	  e.printStackTrace();
+	  return;
     }
 		try {
 			PreparedStatement preparedStatement = c.prepareStatement(sql.toString());
