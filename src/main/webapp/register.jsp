@@ -35,7 +35,7 @@
       </table> 
       <input type="submit" value="Register">
     </form>
-    <p><a href="index.jsp">Click Here to return to the Login page</a></p>
+    <p><a href="/">Click Here to return to the Homepage</a></p>
     
   </body>
 </html>

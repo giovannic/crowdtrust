@@ -15,9 +15,9 @@
 					
 		<div id="about_us">
 			<ul>
-				<li><a href="crowd_info.html">AS A CROWDMEMBER</a></li>
-				<li><a href="client_info.html">AS A CLIENT</a></li>
-				<li><a href="about.html">ABOUT US</a></li>
+				<li><a href="crowd_info.jsp">AS A CROWDMEMBER</a></li>
+				<li><a href="client_info.jsp">AS A CLIENT</a></li>
+				<li><a href="about.jsp">ABOUT US</a></li>
 			</ul>
 		</div>
 		
@@ -36,7 +36,7 @@
 		      </table>
 		      <input type="submit" id="login" value="Login">
 		    </form>
-    		<p><a href="register.html">Click Here to Register</a></p>
+    		<p><a href="register.jsp">Click Here to Register</a></p>
   
 		</div>
 		
