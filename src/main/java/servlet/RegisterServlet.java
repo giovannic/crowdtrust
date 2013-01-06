@@ -29,8 +29,8 @@ public class RegisterServlet extends HttpServlet {
       return; //passwords do not match. fix this
     }
     String email = request.getParameter("email");
-    String crowd = request.getParameter("crowd");
-    RegisterDb.addUser(email, username, password, crowd!=null);
+    String crowd = request.getParameter("custtype");
+    RegisterDb.addUser(email, username, password, crowd.equals(crowd));
     response.sendRedirect("/index.jsp");      
   }
   
