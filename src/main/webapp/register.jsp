@@ -29,8 +29,8 @@
       </tr>
       <tr>
         <td>Register as:</td> 
-        <td><input type="radio" name="custtype" name="crowd">Crowd
-        <input type="radio" name="custtype" name="client">Client</td>
+        <td><input type="radio" name="custtype" value="crowd">Crowd
+        <input type="radio" name="custtype" value="client">Client</td>
       </tr>        
       </table> 
       <input type="submit" value="Register">

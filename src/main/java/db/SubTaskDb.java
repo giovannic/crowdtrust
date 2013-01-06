@@ -161,14 +161,11 @@ public class SubTaskDb {
 	    	  return list;
 	      }
 	      try{
-	        if(!resultSet.next() || !resultSet.isLast()) {
-		      //task does not exist, grave error TODO log it
-		    }
-	        for (int i = 0 ; !resultSet.isLast() && i < 5 ; i++) {
+	        for (int i = 0 ; resultSet.next() && i < 5 ; i++) {
 	        	String subtask = resultSet.getString(2);
 	        	int task = resultSet.getInt(1);
-	        	int submitter = resultSet.getInt(1);
-	        	list.add(submitter + "/" + task + "/" + subtask);
+	        	int submitter = resultSet.getInt(1); // may be useful to display uname of uploader
+	        	list.add(task + "/" + subtask);
 	        	resultSet.next();
 	        }
 	      } catch(SQLException e) {
