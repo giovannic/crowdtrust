@@ -1,19 +1,13 @@
 package db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.ResultSet;
-
 import java.security.MessageDigest;
-import java.util.Properties;
 
 public class RegisterDb {
 	
 
   public static boolean addUser(String email, String username, String password, boolean crowd) {
-    byte type = getAccountType(crowd);
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO accounts (email, username, password, type) ");
     sql.append("VALUES(?, ?, ?, ?)");
@@ -32,7 +26,7 @@ public class RegisterDb {
       preparedStatement.setString(1, email);
       preparedStatement.setString(2, username);
       preparedStatement.setString(3, sha256(password));
-      preparedStatement.setByte(4, type);
+      preparedStatement.setBoolean(4, crowd);
       preparedStatement.execute();
     }
     catch (SQLException e) {
@@ -70,16 +64,5 @@ public class RegisterDb {
     }
     return null;
   }*/
-
-  private static byte getAccountType(boolean crowd) {
-    int type = 0;
-    if(crowd) {
-      type = type ^ 2;
-    }
-		else {
-			type = type ^ 4;
-		}
-    return (byte) type;
-  } 
 
 }
