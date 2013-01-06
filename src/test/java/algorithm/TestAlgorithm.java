@@ -91,13 +91,15 @@ public class TestAlgorithm extends TestCase {
 		printAnswers(answers);
 		System.out.println("---------Beginnign to answer tasks--------------------");
 		
-		Task t = SubTaskDb.getRandomSubTask();
+		int parent_task_id = TaskDb.getTaskId("BinaryTestTask");
+		
+		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		
 		while( t != null){
 			int annotatorIndex = rand.nextInt(annotatorNumber - 1);
-			System.out.println("Annotator: " + annotators[annotatorIndex].username + " |Task: ");
+			System.out.println("Annotator: " + annotators[annotatorIndex].username + " |Task: " + t.getId());
 			annotators[annotatorIndex].answerTask(t);
-			t = SubTaskDb.getRandomSubTask();
+			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		} 
 		System.out.println("------------------------------------------------------  ");
 		
