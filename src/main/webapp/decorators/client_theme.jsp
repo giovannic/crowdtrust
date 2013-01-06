@@ -12,16 +12,9 @@
 
 	  <%@include file="/includes/header.jsp" %>
 
-	  <%@include file="/includes/about.jsp" %>
-
-		<%@include file="/includes/login.jsp" %>
+	  <%@include file="/includes/client_nav_bar.jsp" %>
+		
     <decorator:body />
-
-		<div id="dbinit">
-		  <form action="/servlet/init" method="post">
-		    <input type="submit" />
-      </form>
-    </div>
 
 	  <%@include file="/includes/footer.jsp" %>
 	</div>

@@ -18,7 +18,7 @@ public class ContinuousMultiR extends Response {
 	}
 	
 	@Override
-	byte[] serialise() {
+	public byte[] serialise() {
 		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < values.length; i++){
 			s.append(values[i] + "/");

@@ -29,10 +29,12 @@ public class CrowdDb {
     }
     catch (ClassNotFoundException e) {
   	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-			return;
+  	  e.printStackTrace();
+	  return;
     } catch (SQLException e) {
   	  System.err.println("SQL Error on Crowd");
-			return;
+  	  e.printStackTrace();
+	  return;
     }
 		try {
 			PreparedStatement preparedStatement = c.prepareStatement(sql.toString());
@@ -65,7 +67,11 @@ public class CrowdDb {
 		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			BinaryAccuracy accuracy = mapBinaryAccuracy(resultSet);
+			BinaryAccuracy accuracy;
+			if(resultSet.next())
+				accuracy = mapBinaryAccuracy(resultSet);
+			else
+				accuracy = new BinaryAccuracy(0.5, 0.5, 0, 0);
 			return accuracy;
 		}
 		catch (SQLException e) {

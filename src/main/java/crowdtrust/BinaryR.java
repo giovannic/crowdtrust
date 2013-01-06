@@ -13,7 +13,7 @@ public class BinaryR extends Response {
 	}
 	
 	@Override
-	byte[] serialise() {
+	public byte[] serialise() {
 		return Boolean.toString(value).getBytes();
 	}
 

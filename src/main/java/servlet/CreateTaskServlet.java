@@ -1,5 +1,6 @@
 package servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -17,6 +18,7 @@ import db.TaskDb;
 	public class CreateTaskServlet extends HttpServlet {
 	
 		private static final long serialVersionUID = -2917901106721177733L;
+		private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
 
 		protected void doPost(HttpServletRequest request,
 	              HttpServletResponse response) throws IOException {
@@ -27,7 +29,7 @@ import db.TaskDb;
 	        //validate user credentials
 	        HttpSession session = request.getSession();
 	        if (session == null) {
-	        	response.sendRedirect("/index.jsp");
+	        	response.sendRedirect("/");
 	        	return;
 	        }
 	        int accountID = (Integer) session.getAttribute("account_id");
@@ -57,9 +59,12 @@ import db.TaskDb;
 		        out.println("</html>");
 		        return;
 			}
-	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry, max_labels))
-	        	return;
-        	response.sendRedirect("/client/upload.jsp");	        
+			int tid = TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry, max_labels);
+	        if( tid > 0) {
+	            File taskFolder = new File(TASKS_DIRECTORY + "/" + tid);
+	        	taskFolder.mkdirs();
+	        	response.sendRedirect("/client/upload.jsp");	        
+	        }
 	}
 		
 

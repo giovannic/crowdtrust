@@ -1,13 +1,19 @@
 package db;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import crowdtrust.Bee;
+import crowdtrust.BinaryR;
 import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
@@ -58,7 +64,9 @@ public class SubTaskDb {
       }
 	}
 	
-	public static Map<Bee, Response> getBinaryResponses(int id, Bee[] annotators) {
+	public static Map<Integer, Response> getBinaryResponses(int id, Bee[] annotators) {
+		HashMap<Integer,Response> responses = new HashMap <Integer,Response>();
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT account, response");
 		sql.append("FROM responses");
@@ -75,24 +83,28 @@ public class SubTaskDb {
 		      	System.err.println("SQL Error on check finished");
 		      	return null;
 		    }
-		
+		ResultSet resultSet;
+		try {
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()){
+				BinaryR br = new BinaryR(resultSet.getBytes("response"));
+				responses.put(resultSet.getInt("account"), br);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//FINISH THIS!
 		return null;
 	}
 
 	public static SubTask getRandomBinarySubTask(int task) {
-/*
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
-		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r");
-		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
-		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id");
-		sql.append("WHERE tasks.id = ?");
-		sql.append("GROUP BY s,a,m");
-		sql.append("ORDER BY random()");
-		sql.append("LIMIT 1");
-*/
-  String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = 1 GROUP BY s,a,m ORDER BY random() LIMIT 1";
+		
+		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, " +
+				"COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
+				"LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = ? " +
+				"GROUP BY s,a,m ORDER BY random() LIMIT 1";
+		
 		PreparedStatement preparedStatement;
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
@@ -100,13 +112,16 @@ public class SubTaskDb {
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-	      	return null;
+	      	e.printStackTrace();
+	    	return null;
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
 	      	return null;
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
+			rs.next();
 			int taskAccuracy = rs.getInt("a");
 			int id = rs.getInt("s");
 			int responses = rs.getInt("r");
@@ -121,7 +136,7 @@ public class SubTaskDb {
 
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
-	      sql.append("SELECT tasks.name, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
+	      sql.append("SELECT tasks.id, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
 	      sql.append("WHERE subtasks.file_name LIKE '%.jpg' OR subtasks.file_name LIKE '%.png' ORDER BY tasks.date_created");
 	      List<String> list = new LinkedList<String>();
 	      PreparedStatement preparedStatement;
@@ -148,14 +163,11 @@ public class SubTaskDb {
 	    	  return list;
 	      }
 	      try{
-	        if(!resultSet.next() || !resultSet.isLast()) {
-		      //task does not exist, grave error TODO log it
-		    }
-	        for (int i = 0 ; !resultSet.isLast() && i < 5 ; i++) {
+	        for (int i = 0 ; resultSet.next() && i < 5 ; i++) {
 	        	String subtask = resultSet.getString(2);
-	        	String task = resultSet.getString(1);
-	        	int submitter = resultSet.getInt(1);
-	        	list.add(submitter + "/" + task + "/" + subtask);
+	        	int task = resultSet.getInt(1);
+	        	int submitter = resultSet.getInt(1); // may be useful to display uname of uploader
+	        	list.add(task + "/" + subtask);
 	        	resultSet.next();
 	        }
 	      } catch(SQLException e) {
@@ -185,13 +197,13 @@ public class SubTaskDb {
         return true;
 	}
 
-	public static Map<Bee, Response> getMultiValueResponses(int id,
+	public static Map<Integer, Response> getMultiValueResponses(int id,
 			Bee[] annotators) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static Map<Bee, Response> getContinuousResponses(int id,
+	public static Map<Integer, Response> getContinuousResponses(int id,
 			Bee[] annotators) {
 		// TODO Auto-generated method stub
 		return null;
@@ -225,11 +237,11 @@ public class SubTaskDb {
 	public static BinarySubTask getBinarySubTask(int subTaskId) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
-		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r");
-		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
-		sql.append("LEFT JOIN responses ON responses.id");
-		sql.append("WHERE subtasks.id = ?");
-		sql.append("GROUP BY s,a,m");
+		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r ");
+		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id ");
+		sql.append("LEFT JOIN responses ON responses.id ");
+		sql.append("WHERE subtasks.id = ? ");
+		sql.append("GROUP BY s,a,m ");
 		PreparedStatement preparedStatement;
 	    try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
@@ -290,6 +302,82 @@ public class SubTaskDb {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static Collection<Estimate> getBinaryEstimates(int id) {
+		String sql = "SELECT estimate, confidence " +
+				"FROM estimates " +
+				"WHERE subtask_id = ?";
+		
+		PreparedStatement preparedStatement;
+		
+		ArrayList<Estimate> state = new ArrayList<Estimate>();
+		
+	    try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    	preparedStatement.setInt(1, id);
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	      	return null;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	return null;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()){
+				BinaryR r = new BinaryR(rs.getBytes("estimate"));
+				double c = rs.getFloat("confidence");
+				state.add(new Estimate(r,c));
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return state;
+	}
+
+	public static void updateBinaryEstimates(Collection<Estimate> state, int id) {
+
+			String query = "UPDATE estimates SET confidence = ? " +
+					"WHERE subtask_id = ? AND estimate = ?";
+			
+			PreparedStatement preparedStatement;
+	        
+			try {
+		    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
+		    	for (Estimate e : state){
+		    		preparedStatement.setFloat(1, (float) e.getConfidence());
+					preparedStatement.setBytes(2, e.getR().serialise());
+					preparedStatement.setInt(3, id);
+					preparedStatement.addBatch();
+				}  
+		    	preparedStatement.executeBatch();
+		    }	    catch (ClassNotFoundException e) {
+		    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+		    } catch (SQLException e) {
+		      	System.err.println("SQL Error on check finished");
+		    }
+			
+	}
+
+	public static void addBinaryEstimate(Estimate est, int id) {
+		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?)";
+		
+		PreparedStatement preparedStatement;
+        
+		try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
+	    	preparedStatement.setFloat(1, (float) est.getConfidence());
+			preparedStatement.setBytes(2, est.getR().serialise());
+			preparedStatement.setInt(3, id);
+			preparedStatement.execute();
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	    }
+		
 	}
 	
 

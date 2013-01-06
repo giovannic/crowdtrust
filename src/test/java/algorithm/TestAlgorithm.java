@@ -13,6 +13,7 @@ import java.util.List;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 
+import db.DbInitialiser;
 import db.LoginDb;
 import db.RegisterDb;
 import db.SubTaskDb;
@@ -35,6 +36,10 @@ public class TestAlgorithm extends TestCase {
 	}
 	
 	public void testAlgorithm(){
+		boolean labs = false;
+		if(labs){
+			DbInitialiser.init();
+		}
 		//Lets create some annotators with id's 1 - 1000 and place them in array
 		annotators = new AnnotatorModel[annotatorNumber];
 		for(int i = 0; i < annotatorNumber; i++){
@@ -51,7 +56,7 @@ public class TestAlgorithm extends TestCase {
 			int trueNeg = rand.nextInt(999) + 1;
 			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
 		}
-		boolean labs = false;
+
 		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < annotatorNumber; i++){
@@ -63,9 +68,9 @@ public class TestAlgorithm extends TestCase {
 		RegisterDb.addUser("testClient@test.com", "gio", "gio", false);
 		int accountId = LoginDb.checkUserDetails("gio", "gio");
 		//Lets add a binary task to the database
-		long expirey = getDate();
+		long expiry = getDate();
 		double accuracy = 0.7;
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey, 15));
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expiry, 15)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
@@ -108,7 +113,7 @@ public class TestAlgorithm extends TestCase {
 			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		} 
 		System.out.println("------------------------------------------------------  ");
-		
+		DbInitialiser.init();
 		}
 	}
 	

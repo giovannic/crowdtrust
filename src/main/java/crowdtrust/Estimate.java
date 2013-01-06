@@ -1,11 +1,27 @@
 package crowdtrust;
 
 public class Estimate {
-	Response r;
-	double confidence;
+	private Response r;
+	private double confidence;
 	
-	Estimate(Response r, double c){
+	public Estimate(Response r, double c){
+		this.setR(r);
+		setConfidence(c);
+	}
+
+	public Response getR() {
+		return r;
+	}
+
+	public void setR(Response r) {
 		this.r = r;
-		confidence = c;
+	}
+
+	public double getConfidence() {
+		return confidence;
+	}
+
+	public void setConfidence(double confidence) {
+		this.confidence = confidence;
 	}
 }
