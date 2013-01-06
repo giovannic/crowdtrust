@@ -82,8 +82,7 @@ public class SubTaskDb {
 
 	public static SubTask getRandomBinarySubTask(int task) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
-		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r");
+		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, COUNT(responses.id) AS r");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
 		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id");
 		sql.append("WHERE tasks.id = ?");
