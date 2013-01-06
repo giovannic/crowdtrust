@@ -112,23 +112,21 @@ CREATE TABLE bots
 
 CREATE TABLE media_types
 (
-  id INTEGER SERIAL,
+  id SERIAL INTEGER,
   name VARCHAR(32)
 );
 
 CREATE TABLE annotation_types
 (
-  id INTEGER SERIAL,
+  id SERIAL INTEGER,
   name VARCHAR(32)
 );
 
 CREATE TABLE input_types
 (
-  id INTEGER SERIAL,
+  id SERIAL INTEGER,
   name VARCHAR(32)
 );
-  annotation_type INTEGER REFERENCES annotation_types (id),
-  input_type INTEGER REFERENCES input_types (id),
 
 INSERT INTO types
 VALUES(1, 'binary');
