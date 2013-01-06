@@ -23,11 +23,10 @@ import crowdtrust.Task;
 public class SubTaskDb {
 
 	public static boolean close(int id) {
-			StringBuilder sql = new StringBuilder();
-		      sql.append("UPDATE subtasks (active) ");
-		      sql.append("VALUES(FALSE)");
+			String sql = "UPDATE subtasks SET active = FALSE WHERE subtasks.id = ?";
 		      try {
-		        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+		        preparedStatement.setInt(1, id);
 		        preparedStatement.execute();
 		      }
 		      catch (ClassNotFoundException e) {
@@ -367,8 +366,8 @@ public class SubTaskDb {
 		    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
 		    	for (Estimate e : state){
 		    		preparedStatement.setFloat(1, (float) e.getConfidence());
-					preparedStatement.setString(2, e.getR().serialise());
-					preparedStatement.setInt(3, id);
+		    		preparedStatement.setInt(2, id);
+					preparedStatement.setString(3, e.getR().serialise());
 					preparedStatement.addBatch();
 				}  
 		    	preparedStatement.executeBatch();
