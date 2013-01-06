@@ -21,6 +21,10 @@ public class LoginServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
 	  
+
+		response.setContentType("text/html;charset=UTF-8");
+      PrintWriter out = response.getWriter();
+	  
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     int id = LoginDb.checkUserDetails(username, password);
@@ -46,22 +50,16 @@ public class LoginServlet extends HttpServlet {
         } else {
         	response.sendRedirect("/client/profile.jsp");
         }
+        return;
     }
-  }
-  
-  private void makeLobby(HttpServletResponse response, HttpServletRequest request){
-	  PrintWriter out;
-	try {
-			out = response.getWriter();
-			HttpSession session = request.getSession();
-			String username = (String) session.getAttribute("account_name");
-			Lobby userLobby = new Lobby(username, request.getContextPath());
-	    userLobby.addClientTable();
-	    userLobby.addCrowdTable(request);
-	    out.print(userLobby.generate());
-	  } catch (IOException e) {
-			e.printStackTrace();
-	  }
+	
+	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"/\">");
+    out.println("<html>");
+    out.println("<body>");
+    out.println("bad login! delete cookies and try again. going back to homepage in 5 seconds");                	
+    out.println("</body>");
+    out.println("</html>");
+    
   }
   
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
