@@ -68,7 +68,7 @@ public class CrowdDb {
 			if(resultSet.next())
 				accuracy = mapBinaryAccuracy(resultSet);
 			else
-				accuracy = new BinaryAccuracy(0, 0, 0, 0);
+				accuracy = new BinaryAccuracy(0.5, 0.5, 0, 0);
 			return accuracy;
 		}
 		catch (SQLException e) {

@@ -97,4 +97,10 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		double p = 1/responseSpace;
 		return p/(1-p);
 	}
+
+	@Override
+	protected Estimate[] getEstimates(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
