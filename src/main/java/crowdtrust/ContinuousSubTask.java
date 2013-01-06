@@ -18,17 +18,17 @@ public abstract class ContinuousSubTask extends SubTask {
 	}
 
 	@Override
-	protected Map<Integer, Response> getResponses(Bee[] annotators) {
-		return db.SubTaskDb.getContinuousResponses(id, annotators);
+	protected Map<Integer, Response> getResponses() {
+		return db.SubTaskDb.getContinuousResponses(id);
 	}
 
 	@Override
-	protected AccuracyRecord[] getAccuracies(Bee[] annotators) {
+	protected Collection<AccuracyRecord> getAccuracies(Collection<Bee> annotators) {
 		return db.CrowdDb.getContinuousAccuracies(annotators);
 	}
 
 	@Override
-	protected void updateAccuracies(AccuracyRecord[] accuracies) {
+	protected void updateAccuracies(Collection<AccuracyRecord> accuracies) {
 		db.CrowdDb.updateContinuousAccuracies(accuracies);
 	}
 	

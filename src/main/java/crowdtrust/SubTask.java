@@ -39,7 +39,7 @@ public abstract class SubTask {
 		if(z.getConfidence() > confidence_threshold || 
 				number_of_labels >= max_labels){
 			close();
-			updateAccuracies(z.getR());
+			calculateAccuracies(z.getR());
 		}
 	}
 	
@@ -63,10 +63,10 @@ public abstract class SubTask {
 	/*
 	 * M step
 	 * */
-	protected void updateAccuracies(Response z) {
-		Bee [] annotators = db.CrowdDb.getAnnotators(id);
-		AccuracyRecord [] accuracies = getAccuracies(annotators);
-		Map <Integer, Response> responses = getResponses(annotators);
+	protected void calculateAccuracies(Response z) {
+		Collection<Bee> annotators = db.CrowdDb.getAnnotators(id);
+		Collection<AccuracyRecord> accuracies = getAccuracies(annotators);
+		Map <Integer, Response> responses = getResponses();
 		
 		Collection<Bee> experts = new ArrayList<Bee>();
 		Collection<Bee> bots = new ArrayList<Bee>();
@@ -97,11 +97,11 @@ public abstract class SubTask {
 	/*
 	 * Helper functions
 	 * */
-	protected abstract Map<Integer, Response> getResponses(Bee[] annotators);
+	protected abstract Map<Integer, Response> getResponses();
 
-	protected abstract AccuracyRecord[] getAccuracies(Bee[] annotators);
+	protected abstract Collection<AccuracyRecord> getAccuracies(Collection<Bee> annotators);
 	
-	protected abstract void updateAccuracies(AccuracyRecord [] accuracies);
+	protected abstract void updateAccuracies(Collection<AccuracyRecord> accuracies);
 	
 	protected abstract Accuracy getAccuracy(int annotatorId);
 	

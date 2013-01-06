@@ -93,17 +93,17 @@ public class BinarySubTask extends SubTask {
 	}
 
 	@Override
-	protected Map<Integer, Response> getResponses(Bee[] annotators) {
-		return db.SubTaskDb.getBinaryResponses(id, annotators);
+	protected Map<Integer, Response> getResponses() {
+		return db.SubTaskDb.getBinaryResponses(id);
 	}
 
 	@Override
-	protected AccuracyRecord[] getAccuracies(Bee[] annotators) {
+	protected Collection<AccuracyRecord> getAccuracies(Collection<Bee> annotators) {
 		return db.CrowdDb.getBinaryAccuracies(annotators);
 	}
 
 	@Override
-	protected void updateAccuracies(AccuracyRecord[] accuracies) {
+	protected void updateAccuracies(Collection<AccuracyRecord> accuracies) {
 		db.CrowdDb.updateBinaryAccuracies(accuracies);
 	}
 
