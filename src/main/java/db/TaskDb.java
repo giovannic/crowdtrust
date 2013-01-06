@@ -221,7 +221,7 @@ public class TaskDb {
 //			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString("task.name");
+				String taskName = resultSet.getString(1);
 				Task task = getTask(taskName);
 				tasks.add(task);
 			}
