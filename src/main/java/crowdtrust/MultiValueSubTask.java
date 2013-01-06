@@ -1,6 +1,5 @@
 package crowdtrust;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -15,33 +14,30 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected Estimate [] updateLikelihoods(Response r, Accuracy a, Estimate [] state) {
+	protected void updateLikelihoods(Response r, Accuracy a, 
+			Collection<Estimate> state) {
 		MultiValueR mvr = (MultiValueR) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
 		for (Estimate record : state){
-			if(record.r.equals(mvr)){
-				record.confidence *= sa.getAccuracy()/(1-sa.getAccuracy());
+			if(record.getR().equals(mvr)){
+				record.setConfidence(record.getConfidence()
+						* (sa.getAccuracy()/(1-sa.getAccuracy())));
 				matched = true;
 			} else {
 				double ia = inverseAccuracy(sa.getAccuracy());
-				record.confidence *= ia/(1-ia);
+				record.setConfidence(record.getConfidence()
+						* (ia/(1-ia)));
 			}
 		}
 		
-		Estimate [] newState;
-		
 		if (!matched){
-			newState = Arrays.copyOf(state, state.length+1);
 			Estimate e = new Estimate(r, getZPrior());
-			e.confidence *= sa.getAccuracy()/(1-sa.getAccuracy());
-			newState[newState.length] = e;
-		} else {
-			newState = state.clone();
+			e.setConfidence(e.getConfidence() * (sa.getAccuracy()/(1-sa.getAccuracy())));
+			state.add(e);
+			addEstimate(e);
 		}
-		
-		return newState;
 	}
 
 	private double inverseAccuracy(double accuracy) {
@@ -105,6 +101,24 @@ public class MultiValueSubTask extends SubTask{
 	@Override
 	protected void updateBots(Collection<Bee> bots) {
 		db.CrowdDb.updateMultiValueBots(bots);
+	}
+
+	@Override
+	protected Collection<Estimate> getEstimates(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void updateEstimates(Collection<Estimate> state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void addEstimate(Estimate e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

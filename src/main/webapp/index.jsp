@@ -11,11 +11,6 @@
 	
 	<body>
 
-		<div id="dbinit">
-		  <form action="servlet/init" method="post">
-		    <input type="submit" />
-      </form>
-    </div>
 
 		<div id="content">
 			<h2>Recent tasks added</h2>

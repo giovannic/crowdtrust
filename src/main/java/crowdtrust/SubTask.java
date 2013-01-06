@@ -30,30 +30,31 @@ public abstract class SubTask {
 		db.CrowdDb.addResponse(annotator.getId(), response.serialise(), this.id);
 		Accuracy a = getAccuracy(annotator.getId());
 		
-		Estimate [] state = getEstimates(id);
-		Estimate [] newState = updateLikelihoods(response,a,state);
+		Collection<Estimate> state = getEstimates(id);
+		updateLikelihoods(response,a,state);
+		updateEstimates(state);
 		
-		Estimate z = estimate(newState);
+		Estimate z = estimate(state);
 		number_of_labels++;
-		if(z.confidence > confidence_threshold || 
+		if(z.getConfidence() > confidence_threshold || 
 				number_of_labels >= max_labels){
 			close();
-			updateAccuracies(z.r);
+			updateAccuracies(z.getR());
 		}
 	}
 	
-	private Estimate[] getEstimates(int id) {
-		return null;
-	}
+	protected abstract void updateEstimates(Collection<Estimate> state);
+
+	protected abstract Collection<Estimate> getEstimates(int id);
 	
-	protected abstract Estimate [] updateLikelihoods(Response r, 
-			Accuracy a, Estimate [] state);
+	protected abstract void updateLikelihoods(Response r, 
+			Accuracy a, Collection<Estimate> state);
 	
 	//returns best estimate
-	protected Estimate estimate(Estimate [] state) {
+	protected Estimate estimate(Collection<Estimate> newState) {
 		Estimate best = null;
-		for (Estimate record : state){
-			if(best != null && record.confidence > best.confidence)
+		for (Estimate record : newState){
+			if(best == null || record.getConfidence() > best.getConfidence())
 				best = record;
 		}
 		return best;
@@ -121,4 +122,5 @@ public abstract class SubTask {
 		return this.id;
 	}
 
+	protected abstract void addEstimate(Estimate e);
 }
