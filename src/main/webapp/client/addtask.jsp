@@ -10,7 +10,7 @@
     <input type="text" name="question" placeholder="question" /> <br>
     <input type="number" name="accuracy" placeholder"accuracy" /> <br>
     <input type="number" name="type" placeholder="currently only 1"/> <br>
-        
+    <input type="datetime" name="expiry" /> <br>
     <input type="submit" />
 </form>
 
