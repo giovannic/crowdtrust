@@ -110,7 +110,7 @@ public class TestAlgorithm extends TestCase {
 			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		} 
 		System.out.println("------------------------------------------------------  ");
-		
+		DbInitialiser.init();
 		}
 	}
 	
