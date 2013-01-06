@@ -42,9 +42,9 @@ public class LoginServlet extends HttpServlet {
 		session.setAttribute("account_id", id);
 		session.setAttribute("account_name", username);
         if( isCrowd ) {
-    		response.sendRedirect("/crowd/profile.html");
+    		response.sendRedirect("/crowd/profile.jsp");
         } else {
-        	response.sendRedirect("/client/profile.html");
+        	response.sendRedirect("/client/profile.jsp");
         }
     }
   }
