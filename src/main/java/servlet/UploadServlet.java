@@ -66,17 +66,16 @@ public class UploadServlet extends HttpServlet {
         		String field = item.getFieldName();
         		if (field.equals("task")) {
             		String task = item.getString();
-            		System.out.println("task field");
         			if (task == null) {
         				//output need task name
         			} else {
         				//task is task name - add task to db if not yet inputted
-            			taskDir = TASKS_DIRECTORY +accountID+"/"+ task + "/";        				
+            			        				
         			}
         		}
         		if( field.equals("taskID") ) {
-        			System.out.println("task id field");
         			taskID = Integer.parseInt(item.getString());
+        			taskDir = TASKS_DIRECTORY +accountID+"/"+ taskID + "/";
         		}
         	}
         	//file to be uploaded
