@@ -141,7 +141,7 @@ public class SubTaskDb {
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
 	      sql.append("SELECT tasks.id, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
-	      sql.append("WHERE subtasks.file_name LIKE '%.jpg' OR subtasks.file_name LIKE '%.png' ORDER BY tasks.date_created");
+	      sql.append("WHERE tasks.media_type=1 ORDER BY tasks.date_created DES");
 	      List<String> list = new LinkedList<String>();
 	      PreparedStatement preparedStatement;
 	      try {
