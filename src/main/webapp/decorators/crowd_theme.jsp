@@ -12,7 +12,7 @@
 
 	  <%@include file="/includes/header.jsp" %>
 
-	  <%@include file="/includes/client_nav_bar.jsp" %>
+	  <%@include file="/includes/crowd_nav_bar.jsp" %>
 
     <decorator:body />
 

@@ -12,9 +12,8 @@
 
 	  <%@include file="/includes/header.jsp" %>
 
-	  <%@include file="/includes/about.jsp" %>
-
-		<%@include file="/includes/login.jsp" %>
+	  <%@include file="/includes/crowd_nav_bar.jsp" %>
+		
     <decorator:body />
 
 	  <%@include file="/includes/footer.jsp" %>
