@@ -11,8 +11,8 @@ public class ContinuousR extends Response {
 	}
 	
 	@Override
-	byte[] serialise() {
-		return Integer.toString(value).getBytes();
+	public String serialise() {
+		return Integer.toString(value);
 	}
 
 	@Override

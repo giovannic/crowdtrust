@@ -1,6 +1,5 @@
 package db;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,49 +13,48 @@ import crowdtrust.*;
 
 public class TaskDb {
 	
-	private static final String TASKS_DIRECTORY = "/vol/project/2012/362/g1236218/TaskFiles/";
 	
-	public static boolean addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
+	public static int addTask(int accountID, String name, String question, float accuracy, 
+			int media_type, int annotation_type, int input_type, int max_labels, long expiryTime, 
+			List<String> answerList){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
 		}
 		catch (ClassNotFoundException e) {
 			System.err.println("Error connecting to DB on add Task: PSQL driver not present");
-		  	return false;
+		  	return -1;
 		} catch (SQLException e) {
 		  	System.err.println("SQL Error on add Task");
-		  	return false;
+		  	return -1;
+		}
+		String answerChoice = "";
+		for (String thisChoice : answerList) {
+			answerChoice += thisChoice + "/";
 		}
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
-        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?)");
+        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?,?,?,?) RETURNING id");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
-			insertTask.setDouble(4, accuracy);
-			insertTask.setInt(5, type);
-			insertTask.setTimestamp(6, new Timestamp(expiryTime));
-			insertTask.setInt(7, max_labels);
-			insertTask.setTimestamp(8, new Timestamp(currentTime));
+			insertTask.setFloat(4, accuracy);
+			insertTask.setInt(5, media_type);
+			insertTask.setInt(6, annotation_type);
+			insertTask.setInt(7, input_type);
+			insertTask.setString(8, answerChoice);
+			insertTask.setInt(9, max_labels);
+			insertTask.setTimestamp(10, new Timestamp(expiryTime));
+			insertTask.setTimestamp(11, new Timestamp(currentTime));
 			insertTask.execute();
+			ResultSet rs = insertTask.getResultSet();
+			rs.next();
+			return rs.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
-        File taskFolder = new File(TASKS_DIRECTORY + accountID + "/" + name);
-        if(taskFolder.isDirectory()) {
-        	try {
-				insertTask.cancel();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return false;
-			}	        	
-        } else {
-        	taskFolder.mkdirs();
-        }
-        return true;
 	}
 	
 	/*public static int getSubTaskId(String name){
@@ -160,7 +158,6 @@ public class TaskDb {
 	public static Task map(ResultSet resultSet) {
 		Task thisTask = null;
 		try {
-			while(resultSet.next()) {
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String question = resultSet.getString("question");
@@ -174,8 +171,7 @@ public class TaskDb {
 				}							
 				if(type == 3) {
 						thisTask = new MultiValueTask(id, name, question, accuracy);
-				}					
-			}
+				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

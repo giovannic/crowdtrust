@@ -25,35 +25,36 @@ public abstract class SubTask {
 	}
 	
 	public void addResponse(Bee annotator, Response r) {
-		MultiValueR response = (MultiValueR) r;
+		Response response = r;
 		
 		db.CrowdDb.addResponse(annotator.getId(), response.serialise(), this.id);
 		Accuracy a = getAccuracy(annotator.getId());
 		
-		Estimate [] state = getEstimates(id);
-		Estimate [] newState = updateLikelihoods(response,a,state);
+		Collection<Estimate> state = getEstimates(id);
+		updateLikelihoods(response,a,state);
+		updateEstimates(state);
 		
-		Estimate z = estimate(newState);
+		Estimate z = estimate(state);
 		number_of_labels++;
-		if(z.confidence > confidence_threshold || 
+		if(z.getConfidence() > confidence_threshold || 
 				number_of_labels >= max_labels){
 			close();
-			updateAccuracies(z.r);
+			calculateAccuracies(z.getR());
 		}
 	}
 	
-	private Estimate[] getEstimates(int id) {
-		return null;
-	}
+	protected abstract void updateEstimates(Collection<Estimate> state);
+
+	protected abstract Collection<Estimate> getEstimates(int id);
 	
-	protected abstract Estimate [] updateLikelihoods(Response r, 
-			Accuracy a, Estimate [] state);
+	protected abstract void updateLikelihoods(Response r, 
+			Accuracy a, Collection<Estimate> state);
 	
 	//returns best estimate
-	protected Estimate estimate(Estimate [] state) {
+	protected Estimate estimate(Collection<Estimate> newState) {
 		Estimate best = null;
-		for (Estimate record : state){
-			if(best != null && record.confidence > best.confidence)
+		for (Estimate record : newState){
+			if(best == null || record.getConfidence() > best.getConfidence())
 				best = record;
 		}
 		return best;
@@ -62,16 +63,16 @@ public abstract class SubTask {
 	/*
 	 * M step
 	 * */
-	protected void updateAccuracies(Response z) {
-		Bee [] annotators = db.CrowdDb.getAnnotators(id);
-		AccuracyRecord [] accuracies = getAccuracies(annotators);
-		Map <Bee, Response> responses = getResponses(annotators);
+	protected void calculateAccuracies(Response z) {
+		Collection<Bee> annotators = db.CrowdDb.getAnnotators(id);
+		Collection<AccuracyRecord> accuracies = getAccuracies(annotators);
+		Map <Integer, Response> responses = getResponses();
 		
 		Collection<Bee> experts = new ArrayList<Bee>();
 		Collection<Bee> bots = new ArrayList<Bee>();
 		
 		for (AccuracyRecord r : accuracies){
-			maximiseAccuracy(r.getAccuracy(), responses.get(r.getBee()), z);
+			maximiseAccuracy(r.getAccuracy(), responses.get(r.getBee().getId()), z);
 			if (r.getAccuracy().variance() < THETA){
 				if (r.getAccuracy().expert(expertLimit()))
 					experts.add(r.getBee());
@@ -96,11 +97,11 @@ public abstract class SubTask {
 	/*
 	 * Helper functions
 	 * */
-	protected abstract Map<Bee, Response> getResponses(Bee[] annotators);
+	protected abstract Map<Integer, Response> getResponses();
 
-	protected abstract AccuracyRecord[] getAccuracies(Bee[] annotators);
+	protected abstract Collection<AccuracyRecord> getAccuracies(Collection<Bee> annotators);
 	
-	protected abstract void updateAccuracies(AccuracyRecord [] accuracies);
+	protected abstract void updateAccuracies(Collection<AccuracyRecord> accuracies);
 	
 	protected abstract Accuracy getAccuracy(int annotatorId);
 	
@@ -121,4 +122,5 @@ public abstract class SubTask {
 		return this.id;
 	}
 
+	protected abstract void addEstimate(Estimate e);
 }

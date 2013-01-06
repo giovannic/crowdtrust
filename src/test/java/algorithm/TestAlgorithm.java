@@ -6,16 +6,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.List;
 
 import crowdtrust.BinarySubTask;
+import crowdtrust.Account;
 
 import db.DbInitialiser;
 import db.LoginDb;
 import db.RegisterDb;
 import db.SubTaskDb;
 import db.TaskDb;
+import db.CrowdDb;
 
 import junit.framework.TestCase;
 
@@ -65,9 +69,12 @@ public class TestAlgorithm extends TestCase {
 		RegisterDb.addUser("testClient@test.com", "gio", "gio", false);
 		int accountId = LoginDb.checkUserDetails("gio", "gio");
 		//Lets add a binary task to the database
-		long expirey = getDate();
-		double accuracy = 0.7;
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expirey, 15));
+		long expiry = getDate();
+		float accuracy = (float)0.7;
+		List<String> testQs = new LinkedList<String>();
+		testQs.add("test q1");
+		testQs.add("test q2");
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, 1, 1, 1, 15, expiry, testQs)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
@@ -110,7 +117,7 @@ public class TestAlgorithm extends TestCase {
 			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		} 
 		System.out.println("------------------------------------------------------  ");
-		
+		DbInitialiser.init();
 		}
 	}
 	
@@ -143,10 +150,18 @@ public class TestAlgorithm extends TestCase {
 	protected void printExpertList(){
 		System.out.println("-----------Printing Expert List----------------");
 		System.out.println("-----------------------------------------------");
+		List<Account> experts = CrowdDb.getAllExperts();
+		for(Account account : experts) {
+			System.out.println("id =" + account.getId() + " name = " + account.getName());
+		}
 	}
 	
 	protected void printBotList(){
 		System.out.println("-----------Printing Bots List-------------------");
 		System.out.println("------------------------------------------------");
+		List<Account> bots = CrowdDb.getAllExperts();
+		for(Account account : bots) {
+			System.out.println("id =" + account.getId() + " name = " + account.getName());
+		}
 	}
 }
