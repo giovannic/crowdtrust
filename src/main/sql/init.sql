@@ -35,10 +35,13 @@ CREATE TABLE tasks
   submitter INTEGER REFERENCES accounts (id),
   name VARCHAR(100) NOT NULL,
   question VARCHAR(100) NOT NULL,
-  accuracy INTEGER NOT NULL,
-  type INTEGER REFERENCES types (id),
-  ex_time TIMESTAMP,
+  accuracy FLOAT NOT NULL,
+  media_type INTEGER REFERENCES media_types (id),
+  annotation_type INTEGER REFERENCES annotation_types (id),
+  input_type INTEGER REFERENCES input_types (id),
+  answers VARCHAR(256),
   max_labels INTEGER NOT NULL,
+  ex_time TIMESTAMP,
   date_created TIMESTAMP
 );
 

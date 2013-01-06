@@ -1,6 +1,5 @@
 package db;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +14,9 @@ import crowdtrust.*;
 public class TaskDb {
 	
 	
-	public static int addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
+	public static int addTask(int accountID, String name, String question, float accuracy, 
+			int media_type, int annotation_type, int input_type, int max_labels, long expiryTime, 
+			List<String> answerList){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -27,18 +28,25 @@ public class TaskDb {
 		  	System.err.println("SQL Error on add Task");
 		  	return -1;
 		}
+		String answerChoice = "";
+		for (String thisChoice : answerList) {
+			answerChoice += thisChoice + "/";
+		}
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
-        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?) RETURNING id");
+        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?,?,?,?) RETURNING id");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
-			insertTask.setDouble(4, accuracy);
-			insertTask.setInt(5, type);
-			insertTask.setTimestamp(6, new Timestamp(expiryTime));
-			insertTask.setInt(7, max_labels);
-			insertTask.setTimestamp(8, new Timestamp(currentTime));
+			insertTask.setFloat(4, accuracy);
+			insertTask.setInt(5, media_type);
+			insertTask.setInt(6, annotation_type);
+			insertTask.setInt(7, input_type);
+			insertTask.setString(8, answerChoice);
+			insertTask.setInt(9, max_labels);
+			insertTask.setTimestamp(10, new Timestamp(expiryTime));
+			insertTask.setTimestamp(11, new Timestamp(currentTime));
 			insertTask.execute();
 			ResultSet rs = insertTask.getResultSet();
 			rs.next();

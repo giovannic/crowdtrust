@@ -38,11 +38,11 @@
         </tr>
         <tr>
             <td>answer 1?</td>
-            <td><input type="text" name="a1" /></td>
+            <td><input type="text" name="answer1" /></td>
         </tr>
         <tr>
             <td>answer 2?</td>
-            <td><input type="text" name="a2" /></td>
+            <td><input type="text" name="answer2" /></td>
         </tr>
         <!--<tr>
             <td>What type of response do you expect?</td>

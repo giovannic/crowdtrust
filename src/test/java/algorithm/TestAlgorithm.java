@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -66,8 +67,11 @@ public class TestAlgorithm extends TestCase {
 		int accountId = LoginDb.checkUserDetails("gio", "gio");
 		//Lets add a binary task to the database
 		long expiry = getDate();
-		double accuracy = 0.7;
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expiry, 15)>0);
+		float accuracy = (float)0.7;
+		List<String> testQs = new LinkedList<String>();
+		testQs.add("test q1");
+		testQs.add("test q2");
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, 1, 1, 1, 15, expiry, testQs)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
