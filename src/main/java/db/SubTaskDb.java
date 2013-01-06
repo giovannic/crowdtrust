@@ -43,13 +43,13 @@ public class SubTaskDb {
 
 	public static Task getTask(int id) {
 		StringBuilder sql = new StringBuilder();
-      sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task");
+      sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
       sql.append("WHERE subtasks.id = ?");
       try {
         PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
         preparedStatement.setString(1, Integer.toString(id));
         ResultSet resultSet = preparedStatement.executeQuery();
-        if(!resultSet.next() || !resultSet.isLast()) {
+        if(!resultSet.next()) {
 	      //task does not exist, grave error TODO log it
         	System.err.println("Subtask: " + id + " doesn't exist");
         	return null;
