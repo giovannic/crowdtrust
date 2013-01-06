@@ -30,7 +30,7 @@ public class RegisterServlet extends HttpServlet {
     }
     String email = request.getParameter("email");
     String crowd = request.getParameter("custtype");
-    RegisterDb.addUser(email, username, password, crowd.equals(crowd));
+    RegisterDb.addUser(email, username, password, crowd.equals("crowd"));
     response.sendRedirect("/index.jsp");      
   }
   
