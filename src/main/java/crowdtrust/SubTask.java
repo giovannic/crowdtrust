@@ -9,12 +9,20 @@ public abstract class SubTask {
 	static final double THETA = 0.008;
 	protected int id;
 	protected double confidence_threshold;
-	protected int number_of_labels = 0;
+	protected int number_of_labels;
 	protected int max_labels;
 	
 	/*
 	 * E step
 	 * */
+	
+	public SubTask(int id, double confidence_threshold, 
+			int number_of_labels, int max_labels){
+		this.id = id;
+		this.confidence_threshold = confidence_threshold;
+		this.number_of_labels = number_of_labels;
+		this.max_labels = max_labels;
+	}
 	
 	public void addResponse(Bee annotator, Response r) {
 		MultiValueR response = (MultiValueR) r;

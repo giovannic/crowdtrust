@@ -1,7 +1,5 @@
 package crowdtrust;
 
-import db.TaskDb;
-
 public abstract class Task
 {
 
@@ -63,5 +61,10 @@ public abstract class Task
 	// TODO Auto-generated method stub
 	
   }
+
+public int getMaxLabels() {
+	// TODO Auto-generated method stub
+	return 0;
+}
 
 }

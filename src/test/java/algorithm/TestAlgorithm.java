@@ -10,9 +10,6 @@ import java.util.Random;
 import java.util.UUID;
 
 import crowdtrust.BinarySubTask;
-import crowdtrust.BinaryTask;
-import crowdtrust.SubTask;
-import crowdtrust.Task;
 
 import db.LoginDb;
 import db.RegisterDb;
@@ -82,8 +79,8 @@ public class TestAlgorithm extends TestCase {
 			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
 			int id = SubTaskDb.getSubTaskId(uuid);
 			System.out.println("Subtask Id: " + id);
-			BinarySubTask bst = new BinarySubTask(id);
-			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(2)));
+			BinarySubTask bst = new BinarySubTask(id,0,0,0);
+			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
 			answers.add(asta);
 		}
 		
