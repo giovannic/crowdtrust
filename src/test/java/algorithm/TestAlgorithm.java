@@ -19,7 +19,8 @@ import db.TaskDb;
 import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
-	protected static int annotatorNumber = 1000;
+
+	protected static int annotatorNumber = 10;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
@@ -50,7 +51,7 @@ public class TestAlgorithm extends TestCase {
 		boolean labs = true;
 		if(labs){
 		//Add them to the Database
-		for(int i = 0; i < 1000; i++){
+		for(int i = 0; i < annotatorNumber; i++){
 			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 			int id = LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword());
 			annotators[i].setId(id);
@@ -97,6 +98,8 @@ public class TestAlgorithm extends TestCase {
 		
 		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		
+		System.out.println("Got first");
+		
 		while( t != null){
 			int annotatorIndex = rand.nextInt(annotatorNumber - 1);
 			System.out.println("Annotator: " + annotators[annotatorIndex].username + " |Task: " + t.getId());
@@ -132,5 +135,15 @@ public class TestAlgorithm extends TestCase {
 			e.printStackTrace();
 		} 
 		return ret;
+	}
+	
+	protected void printExpertList(){
+		System.out.println("-----------Printing Expert List----------------");
+		System.out.println("-----------------------------------------------");
+	}
+	
+	protected void printBotList(){
+		System.out.println("-----------Printing Bots List-------------------");
+		System.out.println("------------------------------------------------");
 	}
 }

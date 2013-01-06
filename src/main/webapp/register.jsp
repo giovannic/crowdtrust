@@ -1,12 +1,13 @@
 <!doctype html>
 <html>
   <head>
-    <link href="stylesheet.css" rel="stylesheet" type="text/css">
     <title>
       CrowdTrust - Register
     </title>
   </head>
+  
   <body>
+  
     <h1>CrowdTrust - Register</h1>
     <form action="/servlet/register" method="post">
       <table id="registertable">
@@ -34,6 +35,7 @@
       </table> 
       <input type="submit" value="Register">
     </form>
-    <p><a href="index.jsp">Click Here to return to the Login page</a></p>
+    <p><a href="/">Click Here to return to the Homepage</a></p>
+    
   </body>
 </html>
