@@ -67,17 +67,17 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected Map<Integer, Response> getResponses(Bee[] annotators) {
-		return db.SubTaskDb.getMultiValueResponses(id, annotators);
+	protected Map<Integer, Response> getResponses() {
+		return db.SubTaskDb.getMultiValueResponses(id);
 	}
 
 	@Override
-	protected AccuracyRecord[] getAccuracies(Bee[] annotators) {
+	protected Collection<AccuracyRecord> getAccuracies(Collection<Bee> annotators) {
 		return db.CrowdDb.getMultiValueAccuracies(annotators);
 	}
 
 	@Override
-	protected void updateAccuracies(AccuracyRecord[] accuracies) {
+	protected void updateAccuracies(Collection<AccuracyRecord> accuracies) {
 		db.CrowdDb.updateMultiValueAccuracies(accuracies);
 	}
 

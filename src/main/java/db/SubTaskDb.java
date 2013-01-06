@@ -66,12 +66,12 @@ public class SubTaskDb {
       }
 	}
 	
-	public static Map<Integer, Response> getBinaryResponses(int id, Bee[] annotators) {
+	public static Map<Integer, Response> getBinaryResponses(int id) {
 		HashMap<Integer,Response> responses = new HashMap <Integer,Response>();
 		
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT account, response");
-		sql.append("FROM responses");
+		sql.append("SELECT account, response ");
+		sql.append("FROM responses ");
 		sql.append("WHERE subtask = ?");
 		PreparedStatement preparedStatement;
 		try {
@@ -141,7 +141,7 @@ public class SubTaskDb {
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
 	      sql.append("SELECT tasks.id, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
-	      sql.append("WHERE subtasks.file_name LIKE '%.jpg' OR subtasks.file_name LIKE '%.png' ORDER BY tasks.date_created");
+	      sql.append("WHERE tasks.media_type=1 ORDER BY tasks.date_created DES");
 	      List<String> list = new LinkedList<String>();
 	      PreparedStatement preparedStatement;
 	      try {
@@ -206,14 +206,12 @@ public class SubTaskDb {
         return true;
 	}
 
-	public static Map<Integer, Response> getMultiValueResponses(int id,
-			Bee[] annotators) {
+	public static Map<Integer, Response> getMultiValueResponses(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static Map<Integer, Response> getContinuousResponses(int id,
-			Bee[] annotators) {
+	public static Map<Integer, Response> getContinuousResponses(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

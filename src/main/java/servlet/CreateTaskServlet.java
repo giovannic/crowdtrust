@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,16 +37,21 @@ import db.TaskDb;
 	        int accountID = (Integer) session.getAttribute("account_id");
 	        
 	        //validate user, add task to db, maked task directory
-	        String task = request.getParameter("name");
-	        double accuracy;
-	        int type;
+	        String name = request.getParameter("name");
+	        float accuracy;
 	        int max_labels;
+	        int media_type;
+	        int annotation_type;
+	        int input_type;
 			try {
-				accuracy = Double.parseDouble(request.getParameter("accuracy"));
-				type = Integer.parseInt(request.getParameter("type"));
+				accuracy = Float.parseFloat(request.getParameter("accuracy"));
 				max_labels = Integer.parseInt(request.getParameter("max_labels"));
+				media_type = Integer.parseInt(request.getParameter("media_type"));
+				annotation_type = Integer.parseInt(request.getParameter("annotation_type"));
+				input_type = Integer.parseInt(request.getParameter("input_type"));
 			} catch (NumberFormatException e) {
 				out.println("accuracy or type not an integer");
+				e.printStackTrace();
 				return;
 			}
 			long expiry;
@@ -59,7 +66,13 @@ import db.TaskDb;
 		        out.println("</html>");
 		        return;
 			}
-			int tid = TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry, max_labels);
+			List<String> answers = new LinkedList<String>();
+			String answer = request.getParameter("answer1");
+			for(int i = 2 ; i < 5 && answer != null ; i++) {
+				answers.add(request.getParameter("answer" + i));
+			}
+			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
+					accuracy, media_type, annotation_type, input_type, max_labels, expiry, answers);
 	        if( tid > 0) {
 	            File taskFolder = new File(TASKS_DIRECTORY + "/" + tid);
 	        	taskFolder.mkdirs();
