@@ -68,7 +68,7 @@ CREATE TABLE responses
 
 CREATE TABLE ranged
 (
-  subtask PRIMARY KEY,
+  subtask INTEGER PRIMARY KEY,
   start INTEGER,
   finish INTEGER,
   p DOUBLE PRECISION,

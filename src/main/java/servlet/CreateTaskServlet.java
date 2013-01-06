@@ -36,9 +36,11 @@ import db.TaskDb;
 	        String task = request.getParameter("name");
 	        double accuracy;
 	        int type;
+	        int max_labels;
 			try {
 				accuracy = Double.parseDouble(request.getParameter("accuracy"));
 				type = Integer.parseInt(request.getParameter("type"));
+				max_labels = Integer.parseInt(request.getParameter("max_labels"));
 			} catch (NumberFormatException e) {
 				out.println("accuracy or type not an integer");
 				return;
@@ -55,7 +57,7 @@ import db.TaskDb;
 		        out.println("</html>");
 		        return;
 			}
-	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry))
+	        if( !TaskDb.addTask(accountID, task, request.getParameter("question"), accuracy, type, expiry, max_labels))
 	        	return;
         	response.sendRedirect("/client/upload.jsp");	        
 	}
