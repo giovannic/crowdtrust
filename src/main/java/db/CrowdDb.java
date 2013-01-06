@@ -1,12 +1,15 @@
 package db;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.ArrayList;
 
 import crowdtrust.Accuracy;
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
 import crowdtrust.SingleAccuracy;
+import crowdtrust.Account;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -406,4 +409,59 @@ public class CrowdDb {
 		}
 	}
 
+	public static List<Account> getAllExperts() {
+		PreparedStatement preparedStatement;
+		String sql = "SELECT account FROM experts";
+		try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return null;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return null;
+    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			List<Account> experts = new ArrayList<Account>();
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				experts.add(LoginDb.getAccount(id));
+			}
+			return experts; 
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static List<Account> getAllBots() {
+		PreparedStatement preparedStatement;
+		String sql = "SELECT account FROM bots";
+		try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return null;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return null;
+    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			List<Account> experts = new ArrayList<Account>();
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				experts.add(LoginDb.getAccount(id));
+			}
+			return experts; 
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
