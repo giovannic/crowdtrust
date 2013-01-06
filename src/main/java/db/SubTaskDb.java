@@ -1,10 +1,8 @@
 package db;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -348,7 +346,7 @@ public class SubTaskDb {
 		    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
 		    	for (Estimate e : state){
 		    		preparedStatement.setFloat(1, (float) e.getConfidence());
-					preparedStatement.setBytes(2, e.getR().serialise());
+					preparedStatement.setString(2, e.getR().serialise());
 					preparedStatement.setInt(3, id);
 					preparedStatement.addBatch();
 				}  
@@ -369,7 +367,7 @@ public class SubTaskDb {
 		try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
 	    	preparedStatement.setFloat(1, (float) est.getConfidence());
-			preparedStatement.setBytes(2, est.getR().serialise());
+			preparedStatement.setString(2, est.getR().serialise());
 			preparedStatement.setInt(3, id);
 			preparedStatement.execute();
 	    }	    catch (ClassNotFoundException e) {

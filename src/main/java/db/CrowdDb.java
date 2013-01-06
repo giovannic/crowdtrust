@@ -2,7 +2,6 @@ package db;
 
 import java.util.Collection;
 
-import crowdtrust.Accuracy;
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
@@ -12,11 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class CrowdDb {
 
-	public static void addResponse(int account, byte[] serialise, int subtask) {
+	public static void addResponse(int account, String string, int subtask) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO responses (account, subtask, response)");
 		sql.append("VALUES(?, ?, ?)");
@@ -37,7 +35,7 @@ public class CrowdDb {
 			PreparedStatement preparedStatement = c.prepareStatement(sql.toString());
 			preparedStatement.setInt(1, account);
 			preparedStatement.setInt(2, subtask);
-			preparedStatement.setBytes(3, serialise);
+			preparedStatement.setString(3, string);
 			preparedStatement.execute();
 			c.close();
 		}
