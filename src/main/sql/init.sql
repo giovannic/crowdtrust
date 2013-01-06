@@ -71,7 +71,7 @@ CREATE TABLE ranged
   subtask INTEGER PRIMARY KEY,
   start INTEGER,
   finish INTEGER,
-  p DOUBLE PRECISION,
+  p DOUBLE PRECISION
 );
 
 CREATE TABLE binaryaccuracies
