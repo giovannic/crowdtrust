@@ -161,7 +161,7 @@ public class TaskDb {
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String question = resultSet.getString("question");
-				int type = resultSet.getInt("type");
+				int type = resultSet.getInt("annotation_type");
 				int accuracy = resultSet.getInt("accuracy");
 				if(type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy);
