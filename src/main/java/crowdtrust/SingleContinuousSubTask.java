@@ -9,6 +9,15 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 	int [] range;
 	double variance;
 	
+	SingleContinuousSubTask(double precision, double variance, 
+			int [] range, int id, double confidence_threshold, 
+			int number_of_labels, int max_labels){
+		super(id, confidence_threshold, number_of_labels, max_labels);
+		this.precision = precision;
+		this.variance = variance;
+		this.range = range;
+	}
+	
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		SingleAccuracy sa = (SingleAccuracy) a;

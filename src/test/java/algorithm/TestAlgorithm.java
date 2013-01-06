@@ -1,12 +1,5 @@
 package algorithm;
 
-<<<<<<< HEAD
-import junit.framework.TestCase;
-
-public class TestAlgorithm extends TestCase {
-	public void initDb(){
-		
-=======
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,9 +9,6 @@ import java.util.Random;
 import java.util.UUID;
 
 import crowdtrust.BinarySubTask;
-import crowdtrust.BinaryTask;
-import crowdtrust.SubTask;
-import crowdtrust.Task;
 
 import db.LoginDb;
 import db.RegisterDb;
@@ -86,7 +76,7 @@ public class TestAlgorithm extends TestCase {
 			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
 			int id = SubTaskDb.getSubTaskId(uuid);
 			System.out.println("Subtask Id: " + id);
-			BinarySubTask bst = new BinarySubTask(id);
+			BinarySubTask bst = new BinarySubTask(id,0,0,0);
 			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(1)));
 			answers.add(asta);
 		}
@@ -121,6 +111,5 @@ public class TestAlgorithm extends TestCase {
 			e.printStackTrace();
 		} 
 		return ret;
->>>>>>> fb9eeb7e066c7bd55e2447b10550ca9faeff4752
 	}
 }

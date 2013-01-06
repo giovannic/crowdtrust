@@ -8,9 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import crowdtrust.Bee;
+import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
+import crowdtrust.BinarySubTask;
+import crowdtrust.SubTask;
 import crowdtrust.Task;
+
 public class SubTaskDb {
 
 	public static boolean close(int id) {
@@ -55,17 +59,26 @@ public class SubTaskDb {
 	}
 	
 	public static Map<Bee, Response> getBinaryResponses(int id, Bee[] annotators) {
-		// TODO Auto-generated method stub
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT account, response");
+		sql.append("FROM responses");
+		sql.append("FROM responses");
 		return null;
 	}
 
-	public static Task getRandomSubTask() {
+	public static SubTask getRandomBinarySubTask(int task) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT task FROM subtasks");
+		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
+		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r");
+		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
+		sql.append("LEFT JOIN responses ON responses.id");
+		sql.append("WHERE tasks.id = ?");
+		sql.append("GROUP BY s,a,m");
+		sql.append("ORDER BY NEWID()");
 		PreparedStatement preparedStatement;
-
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	    preparedStatement.setInt(1, task);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
@@ -74,19 +87,21 @@ public class SubTaskDb {
 	      	System.err.println("SQL Error on check finished");
 	      	return null;
 	    }
-			try {
-				ResultSet rs = preparedStatement.executeQuery();
-				int taskId = rs.getInt("task");
-				Task task = getTask(taskId);
-				return task;
-			}
-			catch(SQLException e) {
-				e.printStackTrace();
-			}
-			return null;
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			int taskAccuracy = rs.getInt("a");
+			int id = rs.getInt("s");
+			int responses = rs.getInt("r");
+			int maxLabels = rs.getInt("m");
+			return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
 		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-	   public static List<String> getImageSubtasks() {
+	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
 	      sql.append("SELECT tasks.name, subtasks.file_name, tasks.date_created FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
 	      sql.append("WHERE subtasks.file_name LIKE '%.jpg' OR subtasks.file_name LIKE '%.png' ORDER BY tasks.date_created");
@@ -105,7 +120,6 @@ public class SubTaskDb {
 	      try {
 			preparedStatement.execute();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	      ResultSet resultSet;
@@ -171,8 +185,7 @@ public class SubTaskDb {
  		PreparedStatement preparedStatement;
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 		  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
 		  	return -1;
 		} catch (SQLException e) {
@@ -187,8 +200,78 @@ public class SubTaskDb {
 		} catch (SQLException e) {
 		  	System.err.println("SELECT task query invalid");
 		  	return -1;
-
 		}
 	}
+
+	public static BinarySubTask getBinarySubTask(int subTaskId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
+		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r");
+		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
+		sql.append("LEFT JOIN responses ON responses.id");
+		sql.append("WHERE subtasks.id = ?");
+		sql.append("GROUP BY s,a,m");
+		PreparedStatement preparedStatement;
+	    try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	    	preparedStatement.setInt(1, subTaskId);
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	      	return null;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	return null;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			int taskAccuracy = rs.getInt("a");
+			int id = rs.getInt("s");
+			int responses = rs.getInt("r");
+			int maxLabels = rs.getInt("m");
+			return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	    
+	    
+	}
+
+	public static MultiValueSubTask getMultiValueSubtask(int subTaskId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
+		sql.append("tasks.max_labels AS m, ranged.finish AS o, COUNT(responses.id) AS r");
+		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
+		sql.append("LEFT JOIN ranged ON subtasks.id = ranged.id");
+		sql.append("LEFT JOIN responses ON responses.id");
+		sql.append("WHERE subtasks.id = ?");
+		sql.append("GROUP BY s,a,m,o");
+		PreparedStatement preparedStatement;
+	    try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+	    	preparedStatement.setInt(1, subTaskId);
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	      	return null;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	return null;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			int taskAccuracy = rs.getInt("a");
+			int id = rs.getInt("s");
+			int responses = rs.getInt("r");
+			int maxLabels = rs.getInt("m");
+			int options = rs.getInt("o");
+			return new MultiValueSubTask(id, taskAccuracy, responses, maxLabels, options);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 
 }
