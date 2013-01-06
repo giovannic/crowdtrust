@@ -15,8 +15,8 @@ public class MultiValueR extends Response{
 	}
 	
 	@Override
-	public byte[] serialise() {
-		return Integer.toString(selection).getBytes();
+	public String serialise() {
+		return Integer.toString(selection);
 	}
 
 	@Override
