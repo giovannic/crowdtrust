@@ -8,8 +8,9 @@ public class MultiValueSubTask extends SubTask{
 	
 	int options;
 
-	MultiValueSubTask(int options){
-		super();
+	public MultiValueSubTask(int id, double confidence_threshold, 
+			int number_of_labels, int max_labels, int options){
+		super(id, confidence_threshold, number_of_labels, max_labels);
 		this.options = options;
 	}
 

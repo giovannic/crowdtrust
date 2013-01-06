@@ -38,6 +38,7 @@ CREATE TABLE tasks
   accuracy INTEGER NOT NULL,
   type INTEGER REFERENCES types (id),
   ex_time TIMESTAMP,
+  max_labels INTEGER NOT NULL,
   date_created TIMESTAMP
 );
 
@@ -63,6 +64,14 @@ CREATE TABLE responses
   account INTEGER REFERENCES accounts (id),
   subtask INTEGER REFERENCES subtasks (id),
   response BIT VARYING NULL
+);
+
+CREATE TABLE ranged
+(
+  subtask PRIMARY KEY,
+  start INTEGER,
+  finish INTEGER,
+  p DOUBLE PRECISION,
 );
 
 CREATE TABLE binaryaccuracies

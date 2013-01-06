@@ -7,6 +7,11 @@ public abstract class ContinuousSubTask extends SubTask {
 
 	double precision;
 	
+	public ContinuousSubTask(int id, double confidence_threshold, 
+			int number_of_labels, int max_labels){
+		super(id, confidence_threshold, number_of_labels, max_labels);
+	}
+	
 	@Override
 	protected Accuracy getAccuracy(int annotatorId) {
 		return db.CrowdDb.getContinuousAccuracy(annotatorId);

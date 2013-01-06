@@ -10,8 +10,10 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	int [][] ranges;
 	double [][] variance;
 
-	MultiContinuousSubTask(double precision, double [][] variance, int d, int [][] ranges){
-		super();
+	MultiContinuousSubTask(double precision, double [][] variance, int d, 
+			int [][] ranges, int id, double confidence_threshold, 
+			int number_of_labels, int max_labels){
+		super(id, confidence_threshold, number_of_labels, max_labels);
 		this.precision = precision;
 		this.variance = variance;
 		this.dimensions = d;
