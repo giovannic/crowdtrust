@@ -25,7 +25,7 @@ public abstract class SubTask {
 	}
 	
 	public void addResponse(Bee annotator, Response r) {
-		MultiValueR response = (MultiValueR) r;
+		Response response = r;
 		
 		db.CrowdDb.addResponse(annotator.getId(), response.serialise(), this.id);
 		Accuracy a = getAccuracy(annotator.getId());
