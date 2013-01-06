@@ -10,8 +10,7 @@ public class ContinuousMultiR extends Response {
 		this.values = values;
 	}
 	
-	public ContinuousMultiR(byte [] b){
-		String s = new String(b);
+	public ContinuousMultiR(String s){
 		String [] split = s.split("/");
 		this.values = new int [split.length];
 		for (int i = 0; i < split.length; i++){

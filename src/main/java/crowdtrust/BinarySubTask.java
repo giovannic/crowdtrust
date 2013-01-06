@@ -1,7 +1,6 @@
 package crowdtrust;
 
 import java.util.Collection;
-import java.util.Map;
 
 import db.SubTaskDb;
 
@@ -93,16 +92,6 @@ public class BinarySubTask extends SubTask {
 	}
 
 	@Override
-	protected Map<Integer, Response> getResponses() {
-		return db.SubTaskDb.getBinaryResponses(id);
-	}
-
-	@Override
-	protected Collection<AccuracyRecord> getAccuracies(Collection<Bee> annotators) {
-		return db.CrowdDb.getBinaryAccuracies(annotators);
-	}
-
-	@Override
 	protected void updateAccuracies(Collection<AccuracyRecord> accuracies) {
 		db.CrowdDb.updateBinaryAccuracies(accuracies);
 	}
@@ -136,5 +125,10 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected void updateEstimates(Collection<Estimate> state) {
 		db.SubTaskDb.updateBinaryEstimates(state, id);
+	}
+
+	@Override
+	protected Collection<AccuracyRecord> getAnnotators() {
+		return db.CrowdDb.getBinaryAnnotators(id);
 	}
 }

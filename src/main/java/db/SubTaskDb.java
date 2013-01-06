@@ -91,7 +91,7 @@ public class SubTaskDb {
 		try {
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()){
-				BinaryR br = new BinaryR(resultSet.getBytes("response"));
+				BinaryR br = new BinaryR(resultSet.getString("response"));
 				responses.put(resultSet.getInt("account"), br);
 			}
 		} catch (SQLException e) {
@@ -342,7 +342,7 @@ public class SubTaskDb {
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
-				BinaryR r = new BinaryR(rs.getBytes("estimate"));
+				BinaryR r = new BinaryR(rs.getString("estimate"));
 				double c = rs.getFloat("confidence");
 				state.add(new Estimate(r,c));
 			}

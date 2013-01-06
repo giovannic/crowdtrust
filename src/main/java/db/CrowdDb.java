@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
+import crowdtrust.BinaryR;
 import crowdtrust.SingleAccuracy;
 import crowdtrust.Account;
 
@@ -446,6 +447,45 @@ public class CrowdDb {
 			return experts; 
 		}
 		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Collection<AccuracyRecord> getBinaryAnnotators(int id) {
+		PreparedStatement preparedStatement;
+		String sql = "SELECT responses.account, response, truePositive, " +
+				"trueNegative, numPositive, numNegative" +
+				"FROM responses JOIN binaryaccuracies " +
+				"ON responses.account = binaryaccuracies.account " +
+				"WHERE subtask = ?";
+    try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return null;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return null;
+    }
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			Collection<AccuracyRecord> as = new ArrayList<AccuracyRecord>();
+			int account;
+			while(resultSet.next()) {
+				account = resultSet.getInt(1);
+				
+				BinaryAccuracy accuracy;
+				accuracy = mapBinaryAccuracy(resultSet);
+				AccuracyRecord record = new AccuracyRecord(new Bee(account), accuracy);
+				record.setMostRecent(new BinaryR(resultSet.getString("response")));
+				as.add(record);
+			}
+			return as;
+		}
+		catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
