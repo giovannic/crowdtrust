@@ -19,7 +19,6 @@ CREATE TABLE accounts
   type SMALLINT NULL,
   session CHARACTER(32) NULL,
   last_active TIMESTAMP NULL,
-  expert BOOLEAN,
   accuracy INTEGER
 );
 
