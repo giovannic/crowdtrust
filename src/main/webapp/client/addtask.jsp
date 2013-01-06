@@ -46,7 +46,7 @@
         </tr>
         <tr>
             <td>What type of response do you expect?</td>
-            <td><select name="annotation_type">
+            <td><select name="input_type">
             <option value="1">Radio</option>
             <option value="2">Slider</option>
             <option value="3">Coordinates</option>
