@@ -98,7 +98,7 @@ public class SubTaskDb {
 		
 		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, " +
 				"COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
-				"LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = 1 " +
+				"LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = ? " +
 				"GROUP BY s,a,m ORDER BY random() LIMIT 1";
 		
 		PreparedStatement preparedStatement;
@@ -132,7 +132,7 @@ public class SubTaskDb {
 
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
-	      sql.append("SELECT tasks.name, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
+	      sql.append("SELECT tasks.id, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
 	      sql.append("WHERE subtasks.file_name LIKE '%.jpg' OR subtasks.file_name LIKE '%.png' ORDER BY tasks.date_created");
 	      List<String> list = new LinkedList<String>();
 	      PreparedStatement preparedStatement;
@@ -164,7 +164,7 @@ public class SubTaskDb {
 		    }
 	        for (int i = 0 ; !resultSet.isLast() && i < 5 ; i++) {
 	        	String subtask = resultSet.getString(2);
-	        	String task = resultSet.getString(1);
+	        	int task = resultSet.getInt(1);
 	        	int submitter = resultSet.getInt(1);
 	        	list.add(submitter + "/" + task + "/" + subtask);
 	        	resultSet.next();
