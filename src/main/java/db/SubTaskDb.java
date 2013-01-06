@@ -62,7 +62,21 @@ public class SubTaskDb {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT account, response");
 		sql.append("FROM responses");
-		sql.append("FROM responses");
+		sql.append("WHERE subtask = ?");
+		PreparedStatement preparedStatement;
+		try {
+		    preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		    preparedStatement.setInt(1, id);
+		    }
+		    catch (ClassNotFoundException e) {
+		    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+		      	return null;
+		    } catch (SQLException e) {
+		      	System.err.println("SQL Error on check finished");
+		      	return null;
+		    }
+		
+		//FINISH THIS!
 		return null;
 	}
 
@@ -71,10 +85,11 @@ public class SubTaskDb {
 		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
 		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
-		sql.append("LEFT JOIN responses ON responses.id");
+		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id");
 		sql.append("WHERE tasks.id = ?");
 		sql.append("GROUP BY s,a,m");
-		sql.append("ORDER BY NEWID()");
+		sql.append("ORDER BY random()");
+		sql.append("LIMIT 1");
 		PreparedStatement preparedStatement;
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
