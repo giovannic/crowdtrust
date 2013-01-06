@@ -84,21 +84,26 @@ public class TestAlgorithm extends TestCase {
 			answers.add(asta);
 		}
 		
-		printAnswers(answers);
-		
 		//Give all the annotators the answers
 		for(int i = 0; i < annotatorNumber; i++){
 			annotators[i].setTasks(answers);
 		}
+		System.out.println("Given annotators answers");
 		
-	
-		/*SubTask t = SubTaskDb.getRandomSubTask();
+		printAnswers(answers);
+		System.out.println("---------Beginnign to answer tasks--------------------");
+		
+		int parent_task_id = TaskDb.getTaskId("BinaryTestTask");
+		
+		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
 		
 		while( t != null){
 			int annotatorIndex = rand.nextInt(annotatorNumber - 1);
+			System.out.println("Annotator: " + annotators[annotatorIndex].username + " |Task: " + t.getId());
 			annotators[annotatorIndex].answerTask(t);
-			t = SubTaskDb.getRandomSubTask();
-		} */
+			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
+		} 
+		System.out.println("------------------------------------------------------  ");
 		
 		}
 	}
