@@ -35,7 +35,6 @@
       </table> 
       <input type="submit" value="Register">
     </form>
-    <p><a href="/">Click Here to return to the Homepage</a></p>
     
   </body>
 </html>
