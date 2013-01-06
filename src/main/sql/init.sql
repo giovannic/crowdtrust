@@ -35,10 +35,13 @@ CREATE TABLE tasks
   submitter INTEGER REFERENCES accounts (id),
   name VARCHAR(100) NOT NULL,
   question VARCHAR(100) NOT NULL,
-  accuracy INTEGER NOT NULL,
-  type INTEGER REFERENCES types (id),
-  ex_time TIMESTAMP,
+  accuracy FLOAT NOT NULL,
+  media_type INTEGER REFERENCES media_types (id),
+  annotation_type INTEGER REFERENCES annotation_types (id),
+  input_type INTEGER REFERENCES input_types (id),
+  answers VARCHAR(256),
   max_labels INTEGER NOT NULL,
+  ex_time TIMESTAMP,
   date_created TIMESTAMP
 );
 
@@ -107,6 +110,26 @@ CREATE TABLE bots
 	type SMALLINT NOT NULL
 );
 
+CREATE TABLE media_types
+(
+  id INTEGER SERIAL,
+  name VARCHAR(32)
+);
+
+CREATE TABLE annotation_types
+(
+  id INTEGER SERIAL,
+  name VARCHAR(32)
+);
+
+CREATE TABLE input_types
+(
+  id INTEGER SERIAL,
+  name VARCHAR(32)
+);
+  annotation_type INTEGER REFERENCES annotation_types (id),
+  input_type INTEGER REFERENCES input_types (id),
+
 INSERT INTO types
 VALUES(1, 'binary');
 
@@ -116,8 +139,26 @@ VALUES(2, 'continuous');
 INSERT INTO types
 VALUES(3, 'multivalue');
 
---INSERT INTO accounts
---VALUES(1,'adam','adam', NULL, NULL, NULL, NULL, true, 1);
+INSERT INTO media_types
+VALUES(1, 'image');
+INSERT INTO media_types
+VALUES(2, 'audio');
+INSERT INTO media_types
+VALUES(3, 'text');
 
---INSERT INTO tasks
---VALUES( 1,1,'test', 'test',10,1,NULL,NULL);
+
+INSERT INTO annotation_types
+VALUES(1, 'binary');
+INSERT INTO annotation_types
+VALUES(2, 'category');
+INSERT INTO annotation_types
+VALUES(3, 'ncontinuous');
+
+INSERT INTO input_types
+VALUES(1, 'radio');
+INSERT INTO input_types
+VALUES(2, 'slider');
+INSERT INTO input_types
+VALUES(3, 'coordinate');
+INSERT INTO input_types
+VALUES(4, 'bounding');
