@@ -30,7 +30,7 @@ import db.TaskDb;
 	        
 	        //validate user credentials
 	        HttpSession session = request.getSession();
-	        if (session == null) {
+	        if (session == null||session.getAttribute("account_id") == null) {
 	        	response.sendRedirect("/");
 	        	return;
 	        }

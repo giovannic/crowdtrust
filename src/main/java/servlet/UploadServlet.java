@@ -43,12 +43,11 @@ public class UploadServlet extends HttpServlet {
         
         //validate user credentials
         HttpSession session = request.getSession();
-        if (session == null) {
+        if (session == null || session.getAttribute("account_id") == null) {
         	response.sendRedirect("/index.jsp");
         	return;
         }
-        
-        int accountID = (Integer) session.getAttribute("account_id");
+        int accountID = (Integer) session.getAttribute("account_id");        ;
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
