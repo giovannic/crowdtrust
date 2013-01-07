@@ -94,7 +94,11 @@ public class BinaryAccuracy extends Accuracy {
 		}
 		
 		OpdfGaussian estimate = new OpdfGaussian();
-		estimate.fit(peak);
+		try{
+			estimate.fit(peak);
+		} catch (Exception e) {
+			return 1;
+		}
 		
 		return estimate.variance();
 	}
