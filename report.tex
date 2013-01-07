@@ -330,6 +330,9 @@ objects of these classes were unwrapped within the database functions and each f
 passed to the database explicitly. Upon return of a (sub)task, the information was again
 wrapped in a (Sub)Task object for the servlet to use as needed.
 
+An outline of the database:
+%Put figure in!!!
+
 When adding tasks, if the database transaction succeeds, a folder is made in our group
 directory of the form TaskFiles/[taskID]/ . Upon adding subtasks to this task, the
 file contents are outputted to the taskID folder. We support Zip uploading via
@@ -339,7 +342,15 @@ have to be modified if we were to deploy our application to an environment outsi
 
 Upon receiving a response from the client for a subtask, its value is passed into our
 EM Algorithm and the annotator's information is updated, along with the answer for the
-subtask as described below.
+subtask as described later.
+
+Tomcat allows us to specify running the servlet container over SSL. This means
+that any information passed between client and server is unable to be intercepted
+by an intruder. This is implemented through parameters in our server.xml specifying
+the port for which SSL connections should be sent (55550 at present). We also have
+an http connection at port 8080 for users who don't wish to use SSL, however this port can
+easily be blocked if the decision is made to require users to authenticate via SSL.
+
 \subsection{Algorithm}
 
 \subsection{Data Processing}
@@ -753,7 +764,7 @@ their estimated ability according to the algorithm. Below are some results of ou
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\linewidth]{images/test1.png}
-\caption{}
+\caption{comparisons of estimated binary accuracies with true binary accuracies. This was done over 10 synthetic accuracies over 10 synthetic subtasks}
 \label{default}
 \end{center}
 \end{figure}
@@ -762,7 +773,7 @@ their estimated ability according to the algorithm. Below are some results of ou
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\linewidth]{images/test2.png}
-\caption{}
+\caption{comparisons of estimated true binary values with true binary values. This was done over 10 synthetic accuracies over 10 synthetic subtasks}
 \label{default}
 \end{center}
 \end{figure}
