@@ -102,17 +102,17 @@ public class SubTaskDb {
 		return null;
 	}
 
-	public static SubTask getRandomBinarySubTask(int task) {
+	public static SubTask getRandomBinarySubTask(int task, int annotator, int type) {
 		
 		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, " +
 				"tasks.max_labels AS m, COUNT(responses.id) AS r " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
-				"WHERE tasks.id = 1 AND subtasks.active " +
+				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
 				"(SELECT * FROM responses answered " +
 				"WHERE answered.subtask = subtasks.id " +
-				"AND answered.account = 1) " +
+				"AND answered.account = ?) " +
 				"GROUP BY s,a,m " +
 				"ORDER BY random() " +
 				"LIMIT 1";
@@ -121,6 +121,7 @@ public class SubTaskDb {
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
 	    preparedStatement.setInt(1, task);
+	    preparedStatement.setInt(1, annotator);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
