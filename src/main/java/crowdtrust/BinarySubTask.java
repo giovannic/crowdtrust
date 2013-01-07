@@ -22,7 +22,7 @@ public class BinarySubTask extends SubTask {
 		if (br.isTrue()){
 			//maximise truePositive
 			total = ba.getPositiveN();
-			w = total/total + 1;
+			w = total/(total + 1);
 			
 			double alpha = ba.getTruePositive()*total;
 			if(bz.isTrue())
@@ -36,7 +36,7 @@ public class BinarySubTask extends SubTask {
 		} else {
 			//maximize trueNegative
 			total = ba.getNegativeN();
-			w = total/total + 1;
+			w = total/(total + 1);
 			
 			double alpha = ba.getTrueNegative()*total;
 			if(bz.isTrue())
