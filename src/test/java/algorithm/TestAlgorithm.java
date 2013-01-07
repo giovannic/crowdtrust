@@ -65,8 +65,8 @@ public class TestAlgorithm extends TestCase {
 			AnnotatorModel a = annotators[i];
 			System.out.println("annotator " + 
 					a.bee.getId() + 
-					" truePosRate =" + a.binary.truePos/a.binary.totalPos +
-					" trueNegRate =" + a.binary.trueNeg/a.binary.totalNeg);
+					" truePosRate =" + a.binary.truePosRate +
+					" trueNegRate =" + a.binary.trueNegRate);
 		}
 		
 		//Lets make a client
