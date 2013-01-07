@@ -21,28 +21,27 @@ public class BinarySubTask extends SubTask {
 		double w;
 		if (br.isTrue()){
 			//maximise truePositive
-			total = ba.getPositiveN();
-			w = total/total + 1;
-			
+			total = ba.getPositiveN() + 1;
+			w = total/(total + 1);
 			double alpha = ba.getTruePositive()*total;
 			if(bz.isTrue())
-				ba.setTruePositive(w*(alpha/total) + (1-w));
+				ba.setTruePositive(w*(alpha + 1/total) + (1-w));
 			else {
-				ba.setTruePositive(w*(alpha/total));
+				ba.setTruePositive(w*(alpha + 1/total));
 			}
 			
 			ba.incrementPositiveN();
 			
 		} else {
 			//maximize trueNegative
-			total = ba.getNegativeN();
-			w = total/total + 1;
+			total = ba.getNegativeN() + 1;
+			w = total/(total + 1);
 			
 			double alpha = ba.getTrueNegative()*total;
 			if(bz.isTrue())
-				ba.setTrueNegative(w*(alpha/total) + (1-w));
+				ba.setTrueNegative(w*(alpha + 1/total) + (1-w));
 			else {
-				ba.setTrueNegative(w*(alpha/total));
+				ba.setTrueNegative(w*(alpha + 1/total));
 			}
 			
 			ba.incrementNegativeN();
