@@ -72,10 +72,10 @@ public class BinaryAccuracy extends Accuracy {
 	@Override
 	protected double variance() {
 		
-		double alphaPos = truePositive * positiveN;
-		double betaPos = positiveN - alphaPos;
-		double alphaNeg = trueNegative * negativeN;
-		double betaNeg = negativeN - alphaNeg;
+		double alphaPos = truePositive * positiveN + 1;
+		double betaPos = positiveN - alphaPos + 1;
+		double alphaNeg = trueNegative * negativeN + 1;
+		double betaNeg = negativeN - alphaNeg + 1;
 		
 		BetaDistribution posCurve = new BetaDistribution(alphaPos, betaPos);
 		BetaDistribution negCurve = new BetaDistribution(alphaNeg, betaNeg);
