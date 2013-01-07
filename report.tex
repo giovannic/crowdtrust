@@ -248,7 +248,7 @@ Crowdtrust seeks to provide a solution to this we aim to:
 for a desired accuracy of the outcome/result and that evaluates the trustworthiness of contributors on the basis of the accuracy of the 
 results they provide.}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\linewidth]{images/crowdtrustinterface.jpg}
 \caption{Crowdtrust Interface}
@@ -475,30 +475,60 @@ If we are confident in our knowledge of the annotator we test its accuracy again
 We used the following languages during the development of Crowdtrust:
 \begin{itemize}
 \item
-\emph{Java} - 
+\emph{Java} - All of our group has a lot of experience with Java, which gave it a huge appeal to us.
+On a project with as large a scope as ours, we decided it was important to be able
+to understand the logic of our code without being confused about the syntax or
+constraints of the language. Java also has an in built servlet class which we
+decided would be ideal for the client-server interactions 
 \item
 \emph{PSQL} - This was chosen for out database language because we have all been
 taking a databases course this term which has involved writing many PSQL queries,
 this makes it the obvious choice as everyone was familiar and comfortable with it.
 \item
 \emph{HTML} -
+HTML is the standard web markup language. HTML5 initially came out in 2011 with many
+browsers now supporting a large majority of its features. As a result of the wide
+adoption of HTML5 amongst browsers, and the feature improvements over HTML4/XHTML1.1
+we decided upon HTML5 being the ideal language.
 \item
-\emph{JSP} -
+\emph{JSP} -As stated above, Java was our ideal programming language to develop in. As Java
+has servlet support built in, we used servlets on our server side. As we developed
+the website more, we found jsp to be the ideal language to connect with our database
+and communicate with our server.
 \item
-\emph{CSS} -
+\emph{CSS3} - We utilised CSS3 to provide the layout information to our website. It is one of the
+most commonly used styling methods for HTML5 pages
 \end{itemize}
 \subsubsection{Development Tools}
 We used the following tools during the development of Crowdtrust:
 \begin{itemize}
 \item
 \emph{Eclipse} - 
-%Go on then.... ADAM FIKSEN
+Eclipse is the standard development tool we use for Java. Our build tool also
+had built in plugins to support making eclipse projects.
 \item
-\emph{Maven} - 
-%ADAM FIKSEN
+\emph{Maven} -As a result of our decision to use Java, we utilised Apache Maven as
+our build tool. Initially we were using Make to build our project as our entire team had 
+previous expirence with it, however almost immediately we ran into problems with
+class dependencies and other project imports. One of our team had previously utilised
+this tool succesfully for a Java project and was proficient enough with it to apply
+it to our project. The use of Maven allowed us to easily work on separate parts of
+the project, combining our code via git, and then importing the project into eclipse
+for easy coding.
+
+Maven also provides in built support for web applications. With the Maven archetype:generate
+goal, we were able to generate a project structure which was both recognisable by
+Maven, enabling the build process, and able to generate a valid war file to run our webapp
+from. Using the Maven Tomcat7 plugin, it was possible to swiftly compile, test, package and
+then deploy our project to a tomcat server, providing instant feedback on changes we made. 
+
 \item
 \emph{Microsoft Expression Web 4} - 
-%ADAM FIKSEN
+To develop our website, we initially set out to use Microsoft Expression Web 4.
+Initially it seemed useful as our website consisted of mainly html pages and so
+could use the ide to assist in coding. We moved away from using the tool, however, and began coding by hand
+when we migrated to jsp -- the in built support for jsp was non existent, and many
+of the `features' of the tool became a hindrance.
 \end{itemize}
 \subsubsection{Libraries}
 We used the following libraries in our project:
@@ -510,7 +540,7 @@ We used the following libraries in our project:
 Location & Name & Version & Use \\
 \hline
 junit                                   & junit               & 4.8.1               & Used for creating Junit tests \\
-org.glassfish.main.\\jdbc.jdbc-ra.jdbc40  & jdbc40              & 4.0-b33           & Used to connect Java with PSQL \\
+org.glassfish.main.\\jdbc.jdbc-ra.jdbc40  & jdbc40            & 4.0-b33             & Used to connect Java with PSQL \\
 org.ancoron.postgresql                  & org.postgresql      & 9.1.901.jdbc4.1-rc8 & Used to provide database functionality \\
 commons-fileupload                      & commons-fileupload  & 1.2.2               & Used to upload files to the database \\
 commons-io                              & commons-io          & 1.3.2               & todo \\
@@ -720,24 +750,24 @@ and given to annotators and their answers were stored in the database. A comparr
 their estimated ability according to the algorithm. Below are some results of our testing explained in the figures. 
 
 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\linewidth]{images/crowdtrustinterfact.jpg}
-%\caption{Crowdtrust Interface}
-%\label{default}
-%\end{center}
-%\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\linewidth]{images/test1.png}
+\caption{}
+\label{default}
+\end{center}
+\end{figure}
 
 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\linewidth]{images/crowdtrustinterfact.jpg}
-%\caption{Crowdtrust Interface}
-%\label{default}
-%\end{center}
-%\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\linewidth]{images/test2.png}
+\caption{}
+\label{default}
+\end{center}
+\end{figure}
 
-The tests below were run on every build:
+The following JUnit tests below were run on every build:
 
 \subsubsection{Validity}
 Validity testing ensures our system can handle erroneous events, below are the validity tests we carried out:
