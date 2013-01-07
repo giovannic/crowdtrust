@@ -70,7 +70,7 @@ public class SubTaskDb {
 		
 		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, " +
 				"tasks.max_labels AS m, COUNT(responses.id) AS r," +
-				"subtasks.file_name f " +
+				"subtasks.file_name AS f " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
 				"WHERE tasks.id = ? AND subtasks.active " +
