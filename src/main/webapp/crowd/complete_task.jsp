@@ -65,7 +65,7 @@
 		  case 2: /*audio*/
 	  %>
 	  <audio controls>
-      <source src=<%=subtaskFile%> type="audio/mpeg">
+      <source src="<%=subtaskFile%>" type="audio/mpeg">
       Your browser does not support the audio element, please choose a new task.
     </audio> 
     <%
@@ -80,8 +80,8 @@
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
 		  %>
-      <input type="radio" name="response" value=<%=answer%> > <%=answer%> </input>
-      <input type="hidden" name=<%=ithAnswer%> value=<%=answer%> />
+      <input type="radio" name="response" value="<%=answer%>" > <%=answer%> </input>
+      <input type="hidden" name="<%=ithAnswer%>" value="<%=answer%>" />
 		  <%
                       break;
 		      }
