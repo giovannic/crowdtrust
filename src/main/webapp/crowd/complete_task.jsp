@@ -74,18 +74,20 @@
 	  %>
 	  <form action="/servlet/responseServlet" method="post">
       <%
-      int it = 0;
+/*      int it = 0;
 		    for( String answer : answers) {
           String ithAnswer = "answer" + (it+1);
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
-		  %>
-      <input type="radio" name="response" value="<%=answer%>" > <%=answer%> </input>
-      <input type="hidden" name="<%=ithAnswer%>" value="<%=answer%>" />
-		  <%
+		  %><br>
+      <input type="radio" name="response" value="yes" > Yes </input>
+      <input type="hidden" name="yes" value="yes" />
+      <input type="radio" name="response" value="yes" > No </input>
+      <input type="hidden" name="yes" value="yes" /><br>
+		  <%/*
                       break;
 		      }
-		    }
+		    }*/
 	    %>
 		  <input type="hidden" name="taskID" value=<%=taskID%> />
 		  <input type="hidden" name="name" value=<%=taskName%> />
@@ -94,7 +96,7 @@
 		  <input type="hidden" name="annotation_type" value=<%=annotationType%> />
 		  <input type="hidden" name="input_type" value=<%=inputType%> />
 		  <input type="hidden" name="answers" value=<%=answersStr%> />
-		  <input type="submit" />
+		  <input type="submit" /><br>
 		  <%
 	    } else {
                   %>
