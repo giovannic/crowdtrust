@@ -726,8 +726,7 @@ Testing the algorithm required creating Java classes to model an annotators beha
 
 \begin{enumerate}
 \item
-[3]
-\emph{Binary behaviour} - This modelled how well a user could answer yes/no questions such as 'Is the bird in this image $i$ a robin?'. The target
+\emph{Binary behaviour} - [3] This modelled how well a user could answer yes/no questions such as 'Is the bird in this image $i$ a robin?'. The target
 value $z_{i}$ and label produced $l_{ij}$ can take on values $z_{i}, l_{ij} \in \{0, 1\}$ An annotators ability to answer questions was 
 parameterised by a true positve rate $a_{j}^{1}$ and a true negative rate $a_{j}^{0}$.
 
@@ -745,19 +744,23 @@ the appropriate Normal distribution to represent his signal:
 $p(x_{i} | z_{i} = k) \sim \mathcal{N}(\mu_{j}^{k} , 1)$
 
 A random sample was taken from the appropriate normal distribution compared to the threshold and the annotators answer was returned. 
-[3]
+
 \item
-\emph{MultiValued Behaviour} - This modelled how well the annotator could respond to questions such as 'How many birds are in this
+\emph{MultiValued Behaviour} - [3]This modelled how well the annotator could respond to questions such as 'How many birds are in this
 picture?' Follwing the advice layed out in the paper we looked into creating a confusion matrix to model how often an annotator
 confuses one particular answer with another, however we decided this wouldn't really be appropriate as one confusion matrix for all
 multi valued questions would be misleading. In the end we chose to follow the method they used in the paper which was to 
 assign the anntator a 'correctness' rate this represented how often he got a question right. We would then generate a uniformly distributed
 random variable to determine wether they answered the question correctly and return their answer.
 
-[3]
 \item
-\emph{Continuous Behaviour} - We chose to model bounding boxes for our continuous question. A bounding box is a tight fitting box surrounding
-a portion of an image represented by its top left $(x_{1}, y_{1})$ and bottom right $(x_{2}, y_{2})$ co-ordinates. 
+\emph{Continuous Behaviour} - [3]We chose to model bounding boxes for our continuous question. A bounding box is a tight fitting box surrounding
+a portion of an image represented by its top left $(x_{1}, y_{1})$ and bottom right $(x_{2}, y_{2})$ co-ordinates. The annotator was given
+an honestly rating between 0 and 1 this represented how often they would try to give a correct answer. First a uniformly distributed random number
+was generated to decide if the annnotator was trying. If he was not trying two co-ordinates would be generated randomly within the area of the
+picture. If he was trying his co-ordinates would be generated from a multi value normal distribution:
+
+$p(l_{ij} | z_{i}) \sim \mathcal{N}(l_{ij} | z_{i}, \sum )$
 
 %Fill in the rest of this
 
@@ -835,14 +838,6 @@ End to end testing ensures a process makes its journey correctly through the sys
 \subsection{Conclusion}
 %%%%%%%%%%%
 \subsubsection{Achievements}
-\begin{enumerate}
-\item
-\emph{}
-\item
-\emph{}
-\item
-\emph{}
-\end{enumerate}
 
 %%%%%%%%%%%
 \subsection{Future Extensions}
