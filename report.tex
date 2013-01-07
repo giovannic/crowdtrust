@@ -785,43 +785,42 @@ their estimated ability according to the algorithm. Below are some results of ou
 \end{center}
 \end{figure}
 
-The following JUnit tests below were run on every build:
+The following JUnit tests from the corresponding test packages were run on every build:
 
 \subsubsection{Validity}
-Validity testing ensures our system can handle erroneous events, below are the validity tests we carried out:
+Validity testing ensures our system can handle erroneous events.
 \begin{itemize}
-\item
-\item
+\item testAddNullSubTask
+\item testAccuracyIsBetweenZeroAndOne
 \end{itemize}
 \subsubsection{Security}
 Security testing ensures our system conforms to the appropriate security standards, below are the security tests we carried out:
 \begin{itemize}
-\item
-\item
+\item testUserRequestUnAuthTaskId
+\item testUserSendUnAuthResponse
 \end{itemize}
 \subsubsection{Scaleability}
 Scalability testing ensures the system can handle increased demand, below and the scalability tests we carried out:
 \begin{itemize}
-\item
-\item
+\item testAlgorithm (annotators > 10000)
+\item testAlgorithm (tasks > 10000)
 \end{itemize}
 \subsubsection{Performance}
 Performance testing ensures the system performs in a timely manner, below are the performance tests we carried out: 
 \begin{itemize}
-\item
-\item
+\item batchUploadAccuracies (time < 500msec)
+\item concurrentResponses (threaded calls of addResponse)
 \end{itemize}
 \subsubsection{Correctness}
 Correctness testing ensures the system outputs what it is supposed to, below are the correctness tests we carried out:
 \begin{itemize}
-\item
-\item
+\item testExperts (expert lists are correct)
+\item testGetRandomSubtask (all generated subtasks are unanswered and match the id)
 \end{itemize}
-\subsubsection{End To End}
+\subsubsection{End To End - algorithm package}
 End to end testing ensures a process makes its journey correctly through the system, below are the end to end tests we carried out:
 \begin{itemize}
-\item
-\item
+\item testAlgorithm
 \end{itemize}
 
 %Evaluate your deliverables in terms of performance usability
