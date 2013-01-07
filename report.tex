@@ -78,20 +78,19 @@ Let's say that I have a 100 photos of birds, and I want to know which birds are
 robins, but I have no prior knowledge of birds. Our product, CrowdTrust, focusses
 on providing a solution for this problem.
 
-Our product provides a framework where a person can submit a task and specify
-the level of accuracy they want achieved in the task. After some calculations,
-the total number of users which need to be sent the task is calculated, and
-then the task is sent out to the optimum number of people. At the moment,
-there is only one main competitor in the market, which is Amazon's Mechanical
-Turk. What differentiates our product from Mechanical Turk is the fact that
-we send out the task to an optimum number of people, which means the user
-would eventually part away with less money for an accuract result.
+Our product provides a framework for a user to submit a task and specify
+the level of accuracy they want achieved in the task. At the moment,
+there is only one main competitor in the market, Amazon's Mechanical
+Turk. Our product aims to improve on Mechanical Turk by prioritising responses
+from experts as well as dynamically deciding when a task is completed (based
+on the responses and desired accuracy).
 
-So how does our product tie in with the problem previously proposed?I can go on 
-CrowdTrust, upload the photos of birds and ask the question "Which of these are 
-robins?". I would then specify the level of accuracy I want to achieve, and then 
-the task is sent out to the crowd. Once completed, I get the solution to the 
-task as proposed by the crowd as to which birds are robins.
+So how does our product tie in with the problem previously posed? CrowdTrust
+provides us with the environment to upload the photos of birds and ask the question
+"Which of these are 
+robins?", specify the level of accuracy desired (say, with 95\% certainty), and then 
+the task is sent out to the crowd. Once completed, a solution to the 
+task as proposed by the crowd is returned, indicating which birds are robins.
 
 \subsection{Why now?}
 Crowdsourcing is become more popular day by day. It allows a person who needs
@@ -111,7 +110,7 @@ wanted solving. Also, in the future, when paying the crowd is implemented,
 using CrowdTrust could be significantly cheaper than Mechanical Turk. The second
 type of user are the crowd members. Crowd members would want to join because
 they might have a passion for solving problems. With the scope of CrowdTrust,
-the types of problems you solve is massive. As mentioned, eventually, the crowd
+the types of problems you solve is massively varied. As mentioned, eventually, the crowd
 would also be paid for solving tasks, which would be a primary reason as to why
 someone would solve problems.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -122,44 +121,42 @@ someone would solve problems.
 %Summarise what you achieved ( contributions )
 %%%%%%%%%%%
 \subsection{What Is Crowdsourcing} %Change the I adam and 'I' will kill you
-Our project concerns \emph{crowdsourcing} 'the book' would describe crowdsourcing as the principle of obtaining an accurate 
-and appropriate result by having many different contributors performing a task but we'd like to start with a story which
+Our project concerns \emph{crowdsourcing}. `the book' would describe crowdsourcing as the principle of obtaining an accurate 
+and appropriate result by having many different contributors performing a task, but we'd like to start with a story which
 we believe encapsulates the idea of crowdsourcing in its most positive and useful light.
-\\
-\\
+
 In January 2009 Timothy Gowers (Fields Medal winner and avid blogger) used his blog to post a striking question \emph{Is massively 
 collaborative mathematics possible?}. He posted a difficult and unsolved mathematical problem he was particularly interested in and invited 
 people to contribute to its solution in the comments section. The project initally got off to a slow start but once the ice was broken the 
 comments flooded in. 37 days , 27 contibuters and 800 comments later Timothy Gowers was able to announce that not only had they solved the 
 original problem but they had also solved a harder generalisation of it, he called his experiment the \emph{Polymath Project}.[6]
-\\
-\\
-This is a nice example of how crowd sourcing can be used to combine the skills of many individuals and produce answers to a complex problems,
+
+This is a nice example of how crowd sourcing can be used to combine the skills of many individuals and produce answers to complex problems,
 but there are many motivations to outsource your task to the crowd:
 \begin{itemize}
 \item
-\emph{Computational Difficulty:} Timothy Gowers provided a nice example of a computationally difficult problem It is extememly unlikely you
-would be able to write a Java program or use Wolphram Alpha to produce a complex mathematical proof, some problems require what we like to call
-the 'human touch'. Problems which require the human touch are in no way confined to the realms of complex mathematics identifing an unknown
-bird in a picture for example would prove quite difficult on a computer you may need access some a program like Google Goggles but even then you 
-would probablly need a good quality photograph, whereas one avid bird enthusiast in the crowd might be able to easilly identify the bird and
-reuturn the correct answer.
+\emph{Computational Difficulty:} Timothy Gowers provided a nice example of a computationally difficult problem. It is extememly unlikely you
+would be able to write a program or use Wolphram Alpha to produce a complex mathematical proof, some problems require what we like to call
+the `human touch'. Problems which require the human touch are in no way confined to the realms of complex mathematics. Identifing an unknown
+bird in a picture, for example, would prove quite difficult. On a computer, it may be possible to utilise a program such as Google Goggles, but even then you 
+would probably need a good quality photograph, whereas one avid bird enthusiast in the crowd might be able to easily identify the bird and
+return the correct answer.
 \item
 \emph{Saving Time:} In 2009 aviator Steve Fosset crash landed deep in the Nevada desert, his friends knew they had a very small
 and time critical window to find him alive and they had little faith in the current search and resuce operations. They organised for satellite 
 images to be taken of the desert and the images were passed to a crowd who were asked to identify foreign object which could be potential crash 
-sites.[7] This is a nice example of how the crowd can be used to literally cover a large ammount of ground in a small ammount of time. Not all 
-examples of saving time are quite this dramatic though, image tagging is an extemely arduous task for an individual or small group of people 
-to perform and tagging a relatively large set of images could take weeks or even months, outsourcing this to the crowd could have the job 
+sites.[7] This is a nice example of how the crowd can be used to literally cover a large amount of ground in a small amount of time. Not all 
+examples of saving time are quite this dramatic though. Image tagging is an extemely arduous task for an individual or small group of people 
+to perform, and tagging a relatively large set of images could take weeks or even months; outsourcing this to the crowd could have the job 
 done in a number of hours.
 \item
-\emph{Saving Money:} Time is money as they say and this goes hand it hand with the point above. If you have to pay a team of high salary computing
+\emph{Saving Money:} `Time is money' as they say and this goes hand in hand with the point above. If you have to pay a team of high salary computing
 professionals to tag images for your project when you could be paying them to write code this is not cost effective, however passing this job off
 to a crowd of lower paid people could potentially save you a lot of money. 
 \item
-\emph{Reaching A Willing Audiance:} Unless it's something they enjoy the fact is that people are not willing to work for free, this is why
-getting the general public to do things such as complete surverys can be difficult as a large number of people will simply not want to do it. The
-crowd memebers will be inventivised to perform work and as such will be more likely to complete your survey.
+\emph{Reaching A Willing Audiance:} Unless it's something they enjoy, people unfortunately are not willing to work for free. This is why
+getting the general public to do things such as complete surverys can be difficult. The
+crowd members will be incentivised to perform work and as such will be more likely to complete a task.
 \end{itemize}
 
 %%%%%%%%%%%
@@ -169,25 +166,23 @@ crowd memebers will be inventivised to perform work and as such will be more lik
 \emph{How do we get these problems to the crowd?} 
 \\
 It is unlikely many people with a problem to be solved would want to go to the trouble
-of creating a crowd themselves as this would be comparitive to the complexity of the problem itself therefore there is a need for a third party
+of creating a crowd themselves, as this would be comparable to the complexity of the problem itself, therefore there is a need for a third party
 crowd management system. 
 \item
 \emph{What problems can we ask the crowd?} 
 \\
-Specialised crowds have been successful and certainly have their uses for instance\\
-www.stackoverflow.com can be thought of as a crowd specialising in the solution of computing problems, however it is unlikely I would
-be able to find a specialised crowd to indentify bird pictures or to search satellite images for crash sites, therefore I need access 
-to a generalised crowd able to adapt to and solve a wide variety of problems. The crowd management party therefore needs to provide
+Specialised crowds have been successful and certainly have their uses. For instance 
+\emph{www.stackoverflow.com} can be thought of as a crowd specialising in the solution of computing problems. It is unlikely, however, that a community exists which specialises in indentifying bird pictures or to search satellite images for crash sites, therefore access to a generalised crowd, able to adapt to, and solve, a wide variety of problems, is desired. The crowd management party therefore needs to provide
 the ability to ask a wide variety of questions and the ability to easily encorporate new questions in response to new technology.
 \item
 \emph{How many people do we ask, who do we ask and how can we trust what they say?} 
 \\
-Crowd members will be a representitive sample of the general 
-population, some will be brighter than others and some will be willing to put in more effort than others based on this you can place all 
-annotators on a scale of trustworthiness which rates how much you believe an answer they give you. This rasises the question of 'how many 
-people do I ask?', is consulting a small number of very trustworthy people better than a large number of non trustworthy people?, However I 
-can't simply ask the same subset of people over and over again as workload will build up and my answers will be delayed. If I have a 
-'specialist' question do I direct it to someone with knowledge of that specialism? Clearly a sophisticated algorithm is needed on the crowd
+Crowd members will be a representative sample of the general 
+population, some will be brighter than others and some will be willing to put in more effort than others. Based on this all 
+annotators can be placed on a scale of trustworthiness, rating how much an answer they give can be believed. This raises the question of `how many 
+people do I ask?'; is consulting a small number of very trustworthy people better than a large number of average trustworthy people? However, the same subset of experts
+can't be asked over and over again as workload will build up and answers will be delayed. If there is a 
+`specialist' question, is it directed to someone with knowledge of that specialism? Clearly a sophisticated algorithm is needed on the crowd
 management side to address these problems. 
 \end{enumerate}
 
@@ -199,12 +194,12 @@ are discussed below.
 
 \subsubsection{Amazon's Mechanical Turk}
 Amazon's Mechanical Turk, or MTurk as it is commonly known is by far the most well known
-internet crowdsourcing platform. Mturk allows 'requestors' to submit jobs to the 
-system which are then solved by a group of around 500,000 'turkers'[8] for each 
-complete job they are rewarded with a payment which is usually around 20 cents, 
-before tax of course. Mechanical turk offers no real garuntee of 'correctness' 
+internet crowdsourcing platform. MTurk allows `requestors' to submit jobs to the 
+system which are then solved by a group of around 500,000 `turkers'[8]. For each 
+complete job, they are rewarded with a payment which is usually around 20 cents.
+Mechanical turk offers no real garuntee of accuracy 
 with its service and many people choose to submit their jobs multiple times to the
-system themselves to validate them, this obviously entails multiple payments.[9]
+system themselves to validate them -- this obviously entails multiple payments.[9]
 
 
 \begin{figure}[htbp]
@@ -218,12 +213,11 @@ system themselves to validate them, this obviously entails multiple payments.[9]
 
 
 \subsubsection{Microworkers}
-Microworkers is very much similar to Mechanical Turk, however Microworkers gives submitters the 
+Microworkers is very much similar to MTurk, however Microworkers gives submitters the 
 option to rate the crowd members work and the crowd members must maintain their rating above 75\% at
 all times. [10]
 
-There are also many others such as CrowdFlower and Elance that follow in a similar vein to Mechanical Turk and
-are not noteworthy.
+There are also many others such as CrowdFlower and Elance that follow in a similar vein to MTurk.
 
 \begin{figure}[H]
 \begin{center}
@@ -235,15 +229,15 @@ are not noteworthy.
 
 
 \subsection{Crowdtrust}
-Although Mechanical Turk offers a very complete platform with the ability to upload and answer a wide variety of questions
-it takes a very naieve approach to making sure the requestor gets what they actually want, it simply offers the requestor
+Although MTurk offers a very complete platform, with the ability to upload and answer a wide variety of questions,
+it takes a very naive approach to making sure the requestor gets what they actually want. MTurk simply offers the requestor
 the choice of not paying if they're dissatisfied with the work. The requestor has to do any validation of the answers themselves. 
-Microworkers goes some way to addressing this problem by giving the crowd a success rating however all this does it get a crowd
-member banned if they just blindly answer questions it gives the requestor no confidence in their answer.
-
+Microworkers goes some way to addressing this problem by giving the crowd a success rating, however all this achieves is banning a crowd
+member if they blindly answer questions -- it gives the requestor no confidence in their answer.
+\\
+\\
 Crowdtrust seeks to provide a solution to this we aim to:
-\\
-\\
+
 \emph{Design and implement a framework that allows the optimum number of contributors to be selected on the basis of their trustworthiness 
 for a desired accuracy of the outcome/result and that evaluates the trustworthiness of contributors on the basis of the accuracy of the 
 results they provide.}
@@ -284,6 +278,7 @@ We seek to complete the following objectives
 %%%%%%%%%%%
 \subsection{Framework}
 % ADAM FIKSEN / RYAN 
+\subsubsection{Client Design and Implementation}
 On the side of the client, the web pages are generated from html5/css and jsp. 
 Our site contains a persistent theme throughout, with the crowdtrust header and
 created by footer appearing on every page, and other modules appearing depending
@@ -314,7 +309,7 @@ The possible answers are diplayed similarly. Upon submitting an answer, the resp
 is sent to the server and a new subtask is retrieved until no more remain, resulting
 in a redirect to the tasklist.
 
-Server side implementation
+\subsubsection{Server Implementation}
 Almost every page has some interaction with our servlet through the use of jsp.
 Many pages will query the database to retrieve subtasks or user information and for
 this we have used inline jsp -- we have conformed to the MVC design pattern, keeping
@@ -332,7 +327,7 @@ wrapped in a (Sub)Task object for the servlet to use as needed.
 
 An outline of the database:
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\linewidth]{images/schema.png}
 \caption{Database Schema}
