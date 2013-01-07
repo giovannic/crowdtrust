@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.iwombat.util.StringUtil;
+
 import crowdtrust.*;
 
 public class TaskDb {
@@ -161,16 +163,20 @@ public class TaskDb {
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String question = resultSet.getString("question");
-				int type = resultSet.getInt("type");
+				int media_type = resultSet.getInt("media_type");
+				int annotation_type = resultSet.getInt("annotation_type");
+				int input_type = resultSet.getInt("input_type");
+				String answersString = resultSet.getString("answers");
+				String[] answers = answersString.split("/");
 				int accuracy = resultSet.getInt("accuracy");
-				if(type == 1) {
-					thisTask = new BinaryTask(id, name, question, accuracy);
+				if(annotation_type == 1) {
+					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
-				if(type == 2) {
+				if(annotation_type == 2) {
 						//thisTask = new SingleContinuousTask(id, name, question, accuracy);
 				}							
-				if(type == 3) {
-						thisTask = new MultiValueTask(id, name, question, accuracy);
+				if(annotation_type == 3) {
+						thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -206,7 +212,7 @@ public class TaskDb {
 	
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT tasks.name FROM tasks ");
+		sql.append("SELECT * FROM tasks ");
 		sql.append("WHERE tasks.ex_time > NOW()");
 		PreparedStatement preparedStatement;
 		List<Task> tasks = new ArrayList<Task>();
@@ -215,9 +221,7 @@ public class TaskDb {
 //			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString(1);
-				Task task = getTask(taskName);
-				tasks.add(task);
+				tasks.add(map(resultSet));
 			}
 		}
 	    catch (ClassNotFoundException e) {

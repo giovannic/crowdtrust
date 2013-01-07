@@ -65,54 +65,28 @@ public class SubTaskDb {
       	  return null;
       }
 	}
-	
-	public static Map<Integer, Response> getBinaryResponses(int id, Bee[] annotators) {
-		HashMap<Integer,Response> responses = new HashMap <Integer,Response>();
-		
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT account, response");
-		sql.append("FROM responses");
-		sql.append("WHERE subtask = ?");
-		PreparedStatement preparedStatement;
-		try {
-		    preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		    preparedStatement.setInt(1, id);
-		    }
-		    catch (ClassNotFoundException e) {
-		    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-		    	e.printStackTrace();
-		    	return null;
-		    } catch (SQLException e) {
-		      	System.err.println("SQL Error on check finished");
-		      	e.printStackTrace();
-		      	return null;
-		    }
-		ResultSet resultSet;
-		try {
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()){
-				BinaryR br = new BinaryR(resultSet.getBytes("response"));
-				responses.put(resultSet.getInt("account"), br);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//FINISH THIS!
-		return null;
-	}
 
-	public static SubTask getRandomBinarySubTask(int task) {
+	public static SubTask getRandomSubTask(int task, int annotator, int type) {
 		
-		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, tasks.max_labels AS m, " +
-				"COUNT(responses.id) AS r FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
-				"LEFT JOIN responses ON responses.subtask = subtasks.id WHERE tasks.id = ? " +
-				"GROUP BY s,a,m ORDER BY random() LIMIT 1";
+		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, " +
+				"tasks.max_labels AS m, COUNT(responses.id) AS r," +
+				"subtasks.file_name AS f " +
+				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
+				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
+				"WHERE tasks.id = ? AND subtasks.active " +
+				"AND NOT EXISTS " +
+				"(SELECT * FROM responses answered " +
+				"WHERE answered.subtask = subtasks.id " +
+				"AND answered.account = ?) " +
+				"GROUP BY s,a,m,f " +
+				"ORDER BY random() " +
+				"LIMIT 1";
 		
 		PreparedStatement preparedStatement;
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
 	    preparedStatement.setInt(1, task);
+	    preparedStatement.setInt(2, annotator);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
@@ -125,12 +99,17 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
-			rs.next();
-			int taskAccuracy = rs.getInt("a");
-			int id = rs.getInt("s");
-			int responses = rs.getInt("r");
-			int maxLabels = rs.getInt("m");
-			return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+			if(rs.next()){
+				int taskAccuracy = rs.getInt("a");
+				int id = rs.getInt("s");
+				int responses = rs.getInt("r");
+				int maxLabels = rs.getInt("m");
+				String fileName = rs.getString("f");
+				BinarySubTask b = new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+				b.addFileName(fileName);
+				return b;
+			}
+			return null;
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
@@ -141,7 +120,7 @@ public class SubTaskDb {
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
 	      sql.append("SELECT tasks.id, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
-	      sql.append("WHERE tasks.media_type=1 ORDER BY DESC tasks.date_created");
+	      sql.append("WHERE tasks.media_type=1 ORDER BY tasks.date_created DES");
 	      List<String> list = new LinkedList<String>();
 	      PreparedStatement preparedStatement;
 	      try {
@@ -204,18 +183,6 @@ public class SubTaskDb {
 				return false;
 			}
         return true;
-	}
-
-	public static Map<Integer, Response> getMultiValueResponses(int id,
-			Bee[] annotators) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static Map<Integer, Response> getContinuousResponses(int id,
-			Bee[] annotators) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	public static int getSubTaskId(String name){
@@ -344,7 +311,7 @@ public class SubTaskDb {
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
-				BinaryR r = new BinaryR(rs.getBytes("estimate"));
+				BinaryR r = new BinaryR(rs.getString("estimate"));
 				double c = rs.getFloat("confidence");
 				state.add(new Estimate(r,c));
 			}
@@ -390,9 +357,9 @@ public class SubTaskDb {
         
 		try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
-	    	preparedStatement.setFloat(1, (float) est.getConfidence());
+			preparedStatement.setInt(1, id);
 			preparedStatement.setString(2, est.getR().serialise());
-			preparedStatement.setInt(3, id);
+	    	preparedStatement.setFloat(3, (float) est.getConfidence());
 			preparedStatement.execute();
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");

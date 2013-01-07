@@ -10,6 +10,9 @@ DROP TABLE IF EXISTS continuousaccuracies CASCADE;
 DROP TABLE IF EXISTS multivalueaccuracies CASCADE;
 DROP TABLE IF EXISTS experts CASCADE;
 DROP TABLE IF EXISTS bots CASCADE;
+DROP TABLE IF EXISTS annotation_types;
+DROP TABLE IF EXISTS media_types;
+DROP TABLE IF EXISTS input_types;
 
 CREATE TABLE accounts
 (
@@ -23,10 +26,22 @@ CREATE TABLE accounts
   accuracy INTEGER
 );
 
-CREATE TABLE types
+CREATE TABLE media_types
 (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL
+  name VARCHAR(32)
+);
+
+CREATE TABLE annotation_types
+(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(32)
+);
+
+CREATE TABLE input_types
+(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(32)
 );
 
 CREATE TABLE tasks
@@ -100,44 +115,17 @@ CREATE TABLE multivalueaccuracies
 
 CREATE TABLE experts
 (
+	entry_id SERIAL PRIMARY KEY,
 	account INTEGER REFERENCES accounts (id),
 	type SMALLINT NOT NULL
 );
 
 CREATE TABLE bots
 (
+	entry_id SERIAL PRIMARY KEY,
 	account INTEGER REFERENCES accounts (id),
 	type SMALLINT NOT NULL
 );
-
-CREATE TABLE media_types
-(
-  id INTEGER SERIAL,
-  name VARCHAR(32)
-);
-
-CREATE TABLE annotation_types
-(
-  id INTEGER SERIAL,
-  name VARCHAR(32)
-);
-
-CREATE TABLE input_types
-(
-  id INTEGER SERIAL,
-  name VARCHAR(32)
-);
-  annotation_type INTEGER REFERENCES annotation_types (id),
-  input_type INTEGER REFERENCES input_types (id),
-
-INSERT INTO types
-VALUES(1, 'binary');
-
-INSERT INTO types
-VALUES(2, 'continuous');
-
-INSERT INTO types
-VALUES(3, 'multivalue');
 
 INSERT INTO media_types
 VALUES(1, 'image');
