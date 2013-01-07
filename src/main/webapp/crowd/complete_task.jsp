@@ -36,7 +36,7 @@
     <%
       if(subtask == null) { 
     %>
-    <META HTTP-EQUIV="refresh" CONTENT="3;URL=/crowd/complete_task.jsp">
+    <META HTTP-EQUIV="refresh" CONTENT="3;URL=/crowd/tasklist.jsp">
     <%
       }
     %>
