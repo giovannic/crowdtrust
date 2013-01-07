@@ -6,8 +6,8 @@ public class ContinuousR extends Response {
 
 	private int value;
 	
-	public ContinuousR(byte [] b) throws NumberFormatException, UnsupportedEncodingException{
-		this.value = Integer.parseInt(new String(b, "UTF-8"));
+	public ContinuousR(String b) throws NumberFormatException, UnsupportedEncodingException{
+		this.value = Integer.parseInt(b);
 	}
 	
 	@Override

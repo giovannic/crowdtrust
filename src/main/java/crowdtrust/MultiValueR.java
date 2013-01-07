@@ -10,8 +10,8 @@ public class MultiValueR extends Response{
 		this.selection = selection;
 	}
 	
-	public MultiValueR(byte [] b) throws NumberFormatException, UnsupportedEncodingException{
-		this.selection = Integer.parseInt(new String(b, "UTF-8"));
+	public MultiValueR(String b) throws NumberFormatException, UnsupportedEncodingException{
+		this.selection = Integer.parseInt(b);
 	}
 	
 	@Override
