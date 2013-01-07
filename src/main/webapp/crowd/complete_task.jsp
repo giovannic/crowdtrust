@@ -1,20 +1,33 @@
 <!DOCTYPE html>
 
+<%@ page import="crowdtrust.SubTask" %>
+<%@ page import="db.SubTaskDb" %>
+
 <html>
   <%
     String question = (String) session.getAttribute("question");
-    String answersStr = (String) request.getParameter("answers");
-    int taskID = (Integer) request.getParameter(taskID);
-    int annotationType = (Integer) request.getParameter("annotation_type");
-    int mediaType = (Integer) request.getParameter("media_type");
-    int inputType = (Integer) request.getParameter("input_type")
-    String taskName = (String) request.getParameter("name");
-    
+    String answersStr = (String) session.getAttribute("answers");
+    String taskName = (String) session.getAttribute("name");
+    int taskID = 0;
+    int annotationType = 0;
+    int mediaType = 0;
+    int inputType = 0;
+    int userID = 0;
+    try {
+      taskID = Integer.parseInt((String)session.getAttribute("taskID"));
+      annotationType = Integer.parseInt((String)session.getAttribute("annotation_type"));
+      mediaType = Integer.parseInt((String)session.getAttribute("media_type"));
+      inputType = Integer.parseInt((String)session.getAttribute("input_type"));
+      userID = Integer.parseInt((String)session.getAttribute("account_id"));
+    } catch( Exception e ) {
+	e.printStackTrace();
+        return;
+    }
     String[] answers = answersStr.split("/");
     
     String TASKS_DIRECTORY = "http://www.doc.ic.ac.uk/project/2012/362/g1236218/TaskFiles/";
     
-    SubTask subtask = SubTaskDb.getRandomSubtask(taskID, userID, annotationType);
+    SubTask subtask = SubTaskDb.getRandomSubTask(taskID, userID, annotationType);
     
     String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
   %>
@@ -53,12 +66,15 @@
 	  <form action="/servlet/responseServlet" method="post">
       <%
 		    for( int i = 0; i < answers.length ; i++ ) {
+                      String answer = answers[i];
+                      String ithAnswer = "answer" + i;
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
 		  %>
-      <input type="radio" name="response" value=<%=answers[i]%> ><%=answers[i]%>
-      <input type="hidden" name=<%"answer" + i%> value=<%answers[i]%> />
+      <input type="radio" name="response" value=<%=answer%> > <%=answer%> </input>
+      <input type="hidden" name=<%=ithAnswer%> value=<%=answer%> />
 		  <%
+                      break;
 		      }
 		    }
 	    %>
@@ -72,8 +88,9 @@
 		  <input type="submit" />
 		  <%
 	    } else {
+                  %>
         <h2>Task completed! Thank you, returning to your task list now</h2>
-	    }
+	    <%}
 	    %>
 	  </form>
 		  
