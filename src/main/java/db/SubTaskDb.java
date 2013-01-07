@@ -65,47 +65,12 @@ public class SubTaskDb {
       	  return null;
       }
 	}
-	
-	public static Map<Integer, Response> getBinaryResponses(int id) {
-		HashMap<Integer,Response> responses = new HashMap <Integer,Response>();
-		
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT account, response ");
-		sql.append("FROM responses ");
-		sql.append("WHERE subtask = ?");
-		PreparedStatement preparedStatement;
-		try {
-		    preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		    preparedStatement.setInt(1, id);
-		    }
-		    catch (ClassNotFoundException e) {
-		    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-		    	e.printStackTrace();
-		    	return null;
-		    } catch (SQLException e) {
-		      	System.err.println("SQL Error on check finished");
-		      	e.printStackTrace();
-		      	return null;
-		    }
-		ResultSet resultSet;
-		try {
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()){
-				BinaryR br = new BinaryR(resultSet.getString("response"));
-				responses.put(resultSet.getInt("account"), br);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//FINISH THIS!
-		return null;
-	}
 
-	public static SubTask getRandomBinarySubTask(int task, int annotator, int type) {
+	public static SubTask getRandomSubTask(int task, int annotator, int type) {
 		
 		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, " +
-				"tasks.max_labels AS m, COUNT(responses.id) AS r " +
+				"tasks.max_labels AS m, COUNT(responses.id) AS r," +
+				"subtasks.file_name f " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
 				"WHERE tasks.id = ? AND subtasks.active " +
@@ -113,7 +78,7 @@ public class SubTaskDb {
 				"(SELECT * FROM responses answered " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
-				"GROUP BY s,a,m " +
+				"GROUP BY s,a,m,f " +
 				"ORDER BY random() " +
 				"LIMIT 1";
 		
@@ -140,7 +105,10 @@ public class SubTaskDb {
 				int id = rs.getInt("s");
 				int responses = rs.getInt("r");
 				int maxLabels = rs.getInt("m");
-				return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+				String fileName = rs.getString("f");
+				BinarySubTask b = new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+				b.addFileName(fileName);
+				return b;
 			}
 			return null;
 		}
@@ -216,16 +184,6 @@ public class SubTaskDb {
 				return false;
 			}
         return true;
-	}
-
-	public static Map<Integer, Response> getMultiValueResponses(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static Map<Integer, Response> getContinuousResponses(int id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	public static int getSubTaskId(String name){
@@ -400,9 +358,9 @@ public class SubTaskDb {
         
 		try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
-	    	preparedStatement.setFloat(1, (float) est.getConfidence());
+			preparedStatement.setInt(1, id);
 			preparedStatement.setString(2, est.getR().serialise());
-			preparedStatement.setInt(3, id);
+	    	preparedStatement.setFloat(2, (float) est.getConfidence());
 			preparedStatement.execute();
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");

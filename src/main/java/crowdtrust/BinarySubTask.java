@@ -5,7 +5,7 @@ import java.util.Collection;
 import db.SubTaskDb;
 
 public class BinarySubTask extends SubTask {
-	
+
 	public BinarySubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
@@ -76,7 +76,8 @@ public class BinarySubTask extends SubTask {
 		
 		if (!matched){
 			Estimate e = new Estimate(r, getZPrior());
-			e.setConfidence(e.getConfidence() * (accuracy/(1-accuracy)));
+			double base = Math.pow((accuracy/(1-accuracy)), this.number_of_labels);
+			e.setConfidence(e.getConfidence() * base);
 			state.add(e);
 			addEstimate(e);
 		}
