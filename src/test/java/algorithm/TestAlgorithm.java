@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.List;
 
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
@@ -106,15 +105,18 @@ public class TestAlgorithm extends TestCase {
 		
 		int parent_task_id = TaskDb.getTaskId("BinaryTestTask");
 		
-		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
+		int annotatorIndex = rand.nextInt(annotatorNumber - 1);
+		AnnotatorModel a = annotators[annotatorIndex];
+		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(), 1);
 		
 		System.out.println("Got first");
 		
 		while( t != null){
-			int annotatorIndex = rand.nextInt(annotatorNumber - 1);
-			System.out.println("Annotator: " + annotators[annotatorIndex].username + " |Task: " + t.getId());
-			annotators[annotatorIndex].answerTask(t);
-			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
+			annotatorIndex = rand.nextInt(annotatorNumber - 1);
+			a = annotators[annotatorIndex];
+			System.out.println("Annotator: " + a.username + " |Task: " + t.getId());
+			a.answerTask(t);
+			t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(),1);
 		} 
 		System.out.println("------------------------------------------------------  ");
 		DbInitialiser.init();

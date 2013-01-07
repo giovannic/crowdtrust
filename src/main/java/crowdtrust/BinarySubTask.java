@@ -1,12 +1,11 @@
 package crowdtrust;
 
 import java.util.Collection;
-import java.util.Map;
 
 import db.SubTaskDb;
 
 public class BinarySubTask extends SubTask {
-	
+
 	public BinarySubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
@@ -76,7 +75,8 @@ public class BinarySubTask extends SubTask {
 		
 		if (!matched){
 			Estimate e = new Estimate(r, getZPrior());
-			e.setConfidence(e.getConfidence() * (accuracy/(1-accuracy)));
+			double base = Math.pow((accuracy/(1-accuracy)), this.number_of_labels);
+			e.setConfidence(e.getConfidence() * base);
 			state.add(e);
 			addEstimate(e);
 		}
@@ -90,16 +90,6 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected Accuracy getAccuracy(int annotatorId) {
 		return db.CrowdDb.getBinaryAccuracy(annotatorId);
-	}
-
-	@Override
-	protected Map<Integer, Response> getResponses() {
-		return db.SubTaskDb.getBinaryResponses(id);
-	}
-
-	@Override
-	protected Collection<AccuracyRecord> getAccuracies(Collection<Bee> annotators) {
-		return db.CrowdDb.getBinaryAccuracies(annotators);
 	}
 
 	@Override
@@ -136,5 +126,10 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected void updateEstimates(Collection<Estimate> state) {
 		db.SubTaskDb.updateBinaryEstimates(state, id);
+	}
+
+	@Override
+	protected Collection<AccuracyRecord> getAnnotators() {
+		return db.CrowdDb.getBinaryAnnotators(id);
 	}
 }

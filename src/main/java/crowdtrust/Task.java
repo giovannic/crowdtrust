@@ -7,15 +7,21 @@ public abstract class Task
   protected String name;
   protected String question;
   protected int accuracy;
-  protected int type;
   protected int owner_id;
+  protected int annotation_type;
+  protected int media_type;
+  protected int input_type;
+  protected String[] answers;
   
-  public Task(int id, String name, String question, int accuracy, int type){
+  public Task(int id, String name, String question, int accuracy, int annotation_type, int media_type, int input_type, String[] answers){
 	  this.id = id;
 	  this.name = name;
 	  this.question = question;
 	  this.accuracy = accuracy;
-	  this.type = type;
+	  this.annotation_type = annotation_type;
+	  this.media_type = media_type;
+	  this.input_type = input_type;
+	  this.answers = answers;
   }
   
   public int getId()
@@ -35,9 +41,24 @@ public abstract class Task
 
 
 
-  public int getType()
+  public int getAnnotationType()
   {
-    return this.type;
+    return this.annotation_type;
+  }
+  
+  public int getMediaType()
+  {
+    return this.media_type;
+  }
+  
+  public int getInputType()
+  {
+    return this.input_type;
+  }
+  
+  public String[] getAnswers()
+  {
+    return this.answers;
   }
 
 
