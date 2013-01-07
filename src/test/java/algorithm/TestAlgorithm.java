@@ -62,10 +62,11 @@ public class TestAlgorithm extends TestCase {
 		for(int i = 0; i < annotatorNumber; i++){
 			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 			annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
+			AnnotatorModel a = annotators[i];
 			System.out.println("annotator " + 
-					annotators[i].bee.getId() + 
-					"truePosRate =" + annotators[i].binary.truePosRate +
-					"trueNegRate =" + annotators[i].binary.trueNegRate);
+					a.bee.getId() + 
+					" truePosRate =" + a.binary.truePos/a.binary.totalPos +
+					" trueNegRate =" + a.binary.trueNeg/a.binary.totalNeg);
 		}
 		
 		//Lets make a client
