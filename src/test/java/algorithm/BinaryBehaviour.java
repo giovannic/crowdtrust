@@ -36,7 +36,7 @@ public class BinaryBehaviour {
 	public BinaryBehaviour(int truePos, int trueNeg, int totalPos, int totalNeg){
 		this.truePos  = truePos ; this.trueNeg = trueNeg ;
 		this.totalPos = totalPos; this.totalNeg = totalNeg;
-//		this.updateRates();      //Set up the inital true pos/neg rates
+		this.updateRates();      //Set up the inital true pos/neg rates
 //		this.updateSensThresh(); //Set up the inital threshold and sensetivity index
 	}
 	
