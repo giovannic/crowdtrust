@@ -31,7 +31,6 @@ public class TaskDb {
 		String answerChoice = "";
 		for (String thisChoice : answerList) {
 			answerChoice += thisChoice + "/";
-			System.out.println(thisChoice);
 		}
 		//get rid of trailing '/'
 		answerChoice = answerChoice.substring(0, answerChoice.length()-1);
