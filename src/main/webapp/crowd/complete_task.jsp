@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html>
+  <head>
   <%
     String question = (String) session.getAttribute("question");
     String answersStr = (String) request.getParameter("answers");
@@ -18,7 +19,6 @@
     
     String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
   %>
-  <head>
     <title>Task: <%=taskName%></title>
     <%
       if(subtask == null) { 
