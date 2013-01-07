@@ -371,5 +371,41 @@ public class SubTaskDb {
 		
 	}
 	
+	public static Collection<Result> getResults(){
+		String sql = "SELECT subtask_id, estimate, confidence " +
+				"FROM estimates " +
+				"WHERE confidence IN (" +
+				"SELECT MAX(confidence) " +
+				"FROM estimates e " +
+				"WHERE e.subtask_id = estimates.subtask_id" +
+				"GROUP BY e.subtask_id)";
+PreparedStatement preparedStatement;
+		
+		ArrayList<Result> state = new ArrayList<Result>();
+		
+	    try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	    	e.printStackTrace();
+	    	return null;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
+	      	return null;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()){
+				int s = rs.getInt("subtask_id");
+				BinaryR r = new BinaryR(rs.getString("estimate"));
+				state.add(new Result(s,r));
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return state;
+	}
 
 }
