@@ -62,6 +62,11 @@ public class TestAlgorithm extends TestCase {
 		for(int i = 0; i < annotatorNumber; i++){
 			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 			annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
+			AnnotatorModel a = annotators[i];
+			System.out.println("annotator " + 
+					a.bee.getId() + 
+					" truePosRate =" + a.binary.truePosRate +
+					" trueNegRate =" + a.binary.trueNegRate);
 		}
 		
 		//Lets make a client
@@ -82,7 +87,7 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("Got it");
 		
 		//Lets create a linked list of subTasks
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 100; i++){
 			String uuid = UUID.randomUUID().toString();
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
@@ -121,6 +126,8 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("------------------------------------------------------  ");
 		DbInitialiser.init();
 		}
+		
+		
 	}
 	
 	protected void printAnswers(LinkedList<AnnotatorSubTaskAnswer> answers){
