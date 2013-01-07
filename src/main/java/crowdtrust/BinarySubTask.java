@@ -98,7 +98,7 @@ public class BinarySubTask extends SubTask {
 
 	@Override
 	protected double getZPrior() {
-		return 1;
+		return 0.5;
 	}
 
 	@Override
