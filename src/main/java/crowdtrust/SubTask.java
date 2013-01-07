@@ -37,7 +37,7 @@ public abstract class SubTask {
 		
 		Estimate z = estimate(state);
 		number_of_labels++;
-		if(z.getConfidence() > Math.log((confidence_threshold/1-confidence_threshold)) || 
+		if(z.getConfidence() > Math.log(confidence_threshold/(1-confidence_threshold)) || 
 				number_of_labels >= max_labels){
 			close();
 			calculateAccuracies(z.getR());
