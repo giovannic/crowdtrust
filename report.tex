@@ -284,7 +284,62 @@ We seek to complete the following objectives
 %%%%%%%%%%%
 \subsection{Framework}
 % ADAM FIKSEN / RYAN 
+On the side of the client, the web pages are generated from html5/css and jsp. 
+Our site contains a persistent theme throughout, with the crowdtrust header and
+created by footer appearing on every page, and other modules appearing depending
+on location (e.g. the nav bar changes once a user is logged in). This was achieved
+utilising \emph{sitemesh} [http://wiki.sitemesh.org/display/sitemesh/Home]
+which provides a framework enabling the use of the Gang of Four decorator pattern.
+As a user moves between contexts, the pages they can navigate to are modified
+to fit with their intention -- from the homepage, pages of information about
+crowdtrust can be accessed easily, whereas once logged in as a client, the user
+is presented with links to adding tasks etc. Logging out will return them to
+the homepage with general information again.
 
+As a client user, tasks are submitted with information such as `task question'
+and `media type' (submitting an incorrect media type will invalidate the task).
+Once added, tasks are retrieved in the `upload subtasks' page via a servlet call,
+allowing the user to submit subtasks to any previously created task. To save time,
+the user may also upload a zip file contatining any number of files to add to the task.
+The client can then observe various statistics about their tasks from their tasklist page,
+also retrieved through a servlet call.
+
+As a crowd user, a list of available tasks is displayed. The
+contents of this list depend upon the user skill level, tasks they've completed
+etc., with the call for retrieving the correct tasks being sent server side. From
+this list a user selects a single task to do, which takes them to a page displaying
+a random subtask of the task. This subtask is displayed through inline jsp, which
+checks the media type of the task and uses the appropriate html tag (<img> for images etc.).
+The possible answers are diplayed similarly. Upon submitting an answer, the response
+is sent to the server and a new subtask is retrieved until no more remain, resulting
+in a redirect to the tasklist.
+
+Server side implementation
+Almost every page has some interaction with our servlet through the use of jsp.
+Many pages will query the database to retrieve subtasks or user information and for
+this we have used inline jsp -- we have conformed to the MVC design pattern, keeping
+our business logic separate from our view. For more in depth tasks, such as
+adding users, tasks and subtasks, and also responding
+to these tasks, we have implemented the functionality in Java. Whenever these servlets
+are called, the user's session is validated initially (redirecting to index if not),
+followed by calls to the database as required. The database calls have all been placed
+in the package `db' to separate interaction with the db from interaction with the webpages.
+On the servlet side, tasks and subtasks are referenced by wrapper classes Task and SubTask
+to provide ease of message passing. Our database however, is not object oriented, so
+objects of these classes were unwrapped within the database functions and each field
+passed to the database explicitly. Upon return of a (sub)task, the information was again
+wrapped in a (Sub)Task object for the servlet to use as needed.
+
+When adding tasks, if the database transaction succeeds, a folder is made in our group
+directory of the form TaskFiles/[taskID]/ . Upon adding subtasks to this task, the
+file contents are outputted to the taskID folder. We support Zip uploading via
+Java's java.util.zip package which lets us output multiple file entries easily.
+The URL to write to is specified by an absolute path to our project dir. Of course, this would
+have to be modified if we were to deploy our application to an environment outside DoC.
+
+Upon receiving a response from the client for a subtask, its value is passed into our
+EM Algorithm and the annotator's information is updated, along with the answer for the
+subtask as described below.
 \subsection{Algorithm}
 
 \subsection{Data Processing}
@@ -659,11 +714,25 @@ a portion of an image represented by its top left $(x_{1}, y_{1})$ and bottom ri
 
 A number of taks and subtasks were then generated and entered into the database along with a number of annotators. Subtaks were selected at random
 and given to annotators and their answers were stored in the database. A comparrison was then drawn between the ability of the annotators and
-their estimated ability according to the algorithm. Below are the results for a test comprising of 
-
-%bla bla bla
+their estimated ability according to the algorithm. Below are some results of our testing explained in the figures. 
 
 
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=\linewidth]{images/crowdtrustinterfact.jpg}
+%\caption{Crowdtrust Interface}
+%\label{default}
+%\end{center}
+%\end{figure}
+
+
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=\linewidth]{images/crowdtrustinterfact.jpg}
+%\caption{Crowdtrust Interface}
+%\label{default}
+%\end{center}
+%\end{figure}
 
 \subsubsection{Validity}
 Validity testing ensures our system can handle erroneous events, below are the validity tests we carried out:
