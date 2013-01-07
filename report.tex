@@ -496,12 +496,16 @@ We used the following languages during the development of Crowdtrust:
 \emph{Java} - All of our group has a lot of experience with Java, which gave it a huge appeal to us.
 On a project with as large a scope as ours, we decided it was important to be able
 to understand the logic of our code without being confused about the syntax or
-constraints of the language. Java also has an in built servlet class which we
+constraints of the language.
+
+It also gave us the comfort of (partial) type safety in our large project. This meant that changes could be made more confidently and tools could easily `understand' our code.
+
+Java also has an in built servlet class which we
 decided would be ideal for the client-server interactions 
 \item
 \emph{PSQL} - This was chosen for out database language because we have all been
 taking a databases course this term which has involved writing many PSQL queries,
-this makes it the obvious choice as everyone was familiar and comfortable with it.
+this makes it the obvious choice as everyone was familiar and comfortable with 
 \item
 \emph{HTML} -
 HTML is the standard web markup language. HTML5 initially came out in 2011 with many
@@ -527,9 +531,9 @@ had built in plugins to support making eclipse projects.
 \item
 \emph{Maven} -As a result of our decision to use Java, we utilised Apache Maven as
 our build tool. Initially we were using Make to build our project as our entire team had 
-previous expirence with it, however almost immediately we ran into problems with
+previous experience with it, however almost immediately we ran into problems with
 class dependencies and other project imports. One of our team had previously utilised
-this tool succesfully for a Java project and was proficient enough with it to apply
+this tool successfully for a Java project and was proficient enough with it to apply
 it to our project. The use of Maven allowed us to easily work on separate parts of
 the project, combining our code via git, and then importing the project into eclipse
 for easy coding.
@@ -544,9 +548,7 @@ then deploy our project to a tomcat server, providing instant feedback on change
 \emph{Microsoft Expression Web 4} - 
 To develop our website, we initially set out to use Microsoft Expression Web 4.
 Initially it seemed useful as our website consisted of mainly html pages and so
-could use the ide to assist in coding. We moved away from using the tool, however, and began coding by hand
-when we migrated to jsp -- the in built support for jsp was non existent, and many
-of the `features' of the tool became a hindrance.
+could use the IDE to assist in coding. We moved away from using the tool, however, and began coding by hand. This was because we migrated to jsp. The in built support for jsp was non existent, and many of the `features' of the tool became a hindrance.
 \end{itemize}
 \subsubsection{Libraries}
 We used the following libraries in our project:
@@ -561,13 +563,11 @@ junit                                   & junit               & 4.8.1           
 org.glassfish.main.\\jdbc.jdbc-ra.jdbc40  & jdbc40            & 4.0-b33             & Used to connect Java with PSQL \\
 org.ancoron.postgresql                  & org.postgresql      & 9.1.901.jdbc4.1-rc8 & Used to provide database functionality \\
 commons-fileupload                      & commons-fileupload  & 1.2.2               & Used to upload files to the database \\
-commons-io                              & commons-io          & 1.3.2               & todo \\
-net.sourceforge.htmlunit                & htmlunit            & 2.11                & todo \\
-javax.servlet                           & javax.servlet-api   & 3.0.1               & todo \\
-org.apache.commons                      & commons-math3       & 3.0                 & todo \\
-be.ac.ulg.montefiore.run                & jahmm               & 0.6.2               & todo \\
-opensymphony                            & sitemesh            & 2.4.2               & todo \\ 
-org.apache.commons                      & commons-lang3       & 3.1                 & todo 
+javax.servlet                           & javax.servlet-api   & 3.0.1               & Used to create Tomcat servlets \\
+org.apache.commons                      & commons-math3       & 3.0                 & Used model the distributions in the algorithm \\
+be.ac.ulg.montefiore.run                & jahmm               & 0.6.2               & Used to model distributions not contained in the apache library, i.e. MultiGaussianDistribution \\
+opensymphony                            & sitemesh            & 2.4.2               & Used to create web templates \\ 
+org.apache.commons                      & commons-lang3       & 3.1                 & Used for string processing 
 
 \end{tabular}
 \end{center}
@@ -582,11 +582,12 @@ The practices we adopted:
 \begin{itemize}
 \item 
 \emph{Pair Programming} - As a group we have always been strong advocates of pair
-		 programming. Criticising each other is an essential part of pair programming
+		 programming. We adopted a system where pairs alternate to test each other`s code. 			 Criticising each other is an essential part of pair programming
 		 having to justify your choices makes you think about them more, it also 
 		 stops you going off track and getting too invested in an idea. Having
-		 one partner thing about ideas and structute and one partner code also speeds
+		 one partner thing about ideas and structure and one partner code also speeds
 		 up development.
+		 
 \item 
 \emph{Sitting and coding together} - Although all of us had different timetables,
 			we tried to sit down and code together as often as possible, so all
@@ -602,9 +603,9 @@ The practices we adopted:
 			you simply need to speak out loud about your problem.
 
 \item 
-\emph{Stand up meetings} - Everytime we coded together we would spend ten minutes
+\emph{Stand up meetings} - Every time we coded together we would spend ten minutes
 			stood around the whiteboard talking about where everyone was up to and what needed to
-			be done that day. These meetings were invaluble it helped to keep everyone on track and
+			be done that day. These meetings were invaluable it helped to keep everyone on track and
 			focussed, it was far easier to see why what you were doing needed to be done, who needed it done 
 			and how it was going to fit into the project as a whole.
 
@@ -613,10 +614,10 @@ The practices we adopted:
 					need to be seen and easy consult, having them tucked away on some professional software
 					just means they're easy to forget about and hard to alter. We would get together and do
 					system designs on the whiteboard they would stay on there for a while (whilst they were in a state of
-					flux and regularly altered) and then once we were sure they would be commited to paper and stuck on the wall.
+					flux and regularly altered) and then once we were sure they would be committed to paper and stuck on the wall.
 					The whiteboard was also used to hold workflow lanes which held the jobs to be done and how complete they were, 
 					different pens were used to indicate different things about the job. Once a job was complete the person who
-					completed it would go up to the board and sign it off, as well as commiting it on git.
+					completed it would go up to the board and sign it off, as well as committing it on git.
 					
 \begin{figure}[H]
 \begin{center}
@@ -649,10 +650,11 @@ of the project development. Being able to read our detailed commit messages
 allowed us to know where everyone was at with their part of the project. Again,
 as with git, Github was available to us anywhere, so that was an added advantage
 for using it.
+
+We exploited branches to develop features without disruption and committed regularly
+to avoid large conflicting commits.
 \item 
-\emph{Google+} - Since the progress of our project slowed down towards the end
-of term due to coursework deadlines and Christmas tests, we planned to complete
-our project over the Christmas break. During this time, communication was going
+\emph{Google+} - To complete our report over the Christmas break, communication was going
 to be a problem as all of us were in different places. To tackle this problem,
 we decided to have regular meetings on Google Plus. We would have them every 2
 days, where we would discuss what we had accomplished, and what we would be working
@@ -691,18 +693,18 @@ Name & Job & Justification\\
 \hline
 
 Giovanni Charles & Algorithm development and testing                                       &
-Giovanni felt he had a strong ground in matematics and states which suited him to the role
+Giovanni felt he had a strong ground in mathematics and states which suited him to the role
 \\ 
 John Walker      & Algorithm testing and development                                       &
 John has worked closed with Giovanni in the past and they have proven themselves as a productive team.
-John also had expirence with testing from his summer internship. 
+John also had experience with testing from his summer internship. 
 \\
 Adam Fiksen      & Website development and client-server interaction, Maven configuration  &
-Adam had expirence with Maven from his summer internship and offered to set up Maven. Adam
+Adam had experience with Maven from his summer internship and offered to set up Maven. Adam
 felt from his distributed systems course he had a good knowledge of client server interaction.
 \\
 Sahil Jain       & Database interaction and structure                                      &
-Sahil had a lot of expirence with PSQL and databases during his summer internship which he felt
+Sahil had a lot of experience with PSQL and databases during his summer internship which he felt
 suited him to the roll.
 \\
 Ryan Jackson     & Handling crowd questions and responses                                  &
@@ -715,8 +717,6 @@ unfamiliar part of the project he felt comfortable in the position.
 \label{jobs}
 \end{table}
 
-\subsection{Challanges}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Evaluation}
 %summarise testing procedures (+ relevant testing results)
@@ -728,7 +728,7 @@ Testing the algorithm required creating Java classes to model an annotators beha
 \item
 \emph{Binary behaviour} - [3] This modelled how well a user could answer yes/no questions such as 'Is the bird in this image $i$ a robin?'. The target
 value $z_{i}$ and label produced $l_{ij}$ can take on values $z_{i}, l_{ij} \in \{0, 1\}$ An annotators ability to answer questions was 
-parameterised by a true positve rate $a_{j}^{1}$ and a true negative rate $a_{j}^{0}$.
+parameterised by a true positive rate $a_{j}^{1}$ and a true negative rate $a_{j}^{0}$.
 
 Binary answers are modelled in a 
 signal threshold manner, When an annotator is presented with a question he generates a signal in his brain $x_{i}$ if this signal is above
@@ -746,12 +746,12 @@ $p(x_{i} | z_{i} = k) \sim \mathcal{N}(\mu_{j}^{k} , 1)$
 A random sample was taken from the appropriate normal distribution compared to the threshold and the annotators answer was returned. 
 
 \item
-\emph{MultiValued Behaviour} - [3]This modelled how well the annotator could respond to questions such as 'How many birds are in this
-picture?' Follwing the advice layed out in the paper we looked into creating a confusion matrix to model how often an annotator
-confuses one particular answer with another, however we decided this wouldn't really be appropriate as one confusion matrix for all
-multi valued questions would be misleading. In the end we chose to follow the method they used in the paper which was to 
-assign the anntator a 'correctness' rate this represented how often he got a question right. We would then generate a uniformly distributed
-random variable to determine wether they answered the question correctly and return their answer.
+\emph{MultiValued Behaviour} - [3]This modelled how well the annotator could respond to categoric questions such as 'How many birds are in this picture?' 
+
+Following the advice laid out in the paper we looked into creating a confusion matrix to model how often an annotator confuses one particular answer with another, however we decided this wouldn't really be appropriate as one confusion matrix for all multi valued questions would be misleading for questions with a varying number of options. 
+
+In the end we chose to follow the method they used in the paper which was to assign the annotator a 'correctness' rate this represented how often he got a question right. We would then generate a uniformly distributed random variable to determine wether they answered the question correctly and return their answer.
+
 
 \item
 \emph{Continuous Behaviour} - [3]We chose to model bounding boxes for our continuous question. A bounding box is a tight fitting box surrounding
@@ -844,11 +844,7 @@ End to end testing ensures a process makes its journey correctly through the sys
 
 %%%%%%%%%%%%%%
 \subsubsection{Tagging}
-Tagging could be used to improve the efficency of our algorithm, for instance when a user signs up to the website he could provide a list of his
-interests such as football or birdwatching and when a client submitts a task to the website he uses a similar tagging system to record what his
-task is related to. If a user provides an answer to a task which is in line with his interests then it is more likely his answer will be correct
-the algorithm would take this into account when calculating how sure it is of an answer. This will result in less people having to be asked 
-for each question which will improve turnaround time for jobs submitted to the system. 
+Tagging could be used to improve the efficiency of our algorithm, for instance when a user signs up to the website he could provide a list of his interests such as football or birdwatching and when a client submits a task to the website he uses a similar tagging system to record what his task is related to. If a user provides an answer to a task which is in line with his interests then it is more likely his answer will be correct the algorithm would take this into account when calculating how sure it is of an answer. This will result in less people having to be asked for each question which will improve turnaround time for jobs submitted to the system. 
 
 
 %%%%%%%%%%%%%%
@@ -856,25 +852,26 @@ for each question which will improve turnaround time for jobs submitted to the s
 If you do any reading into Amazons Mechanical Turk it's not long before you will meet some criticisms on the way they pay their workers with some
 even likening it to an electronic sweat shop. The average wage for a worker is around \$2 far below the minimum wage and the average payment for 
 a task is around 30 cents, whats more the requestor is under no obligation to pay the worker unless he is completely satisfied this is often abused
-with companies simply choosing not to pay the workers. Workers really have no control over their wage and the ammount they are paid simply 
+with companies simply choosing not to pay the workers. Workers really have no control over their wage and the amount they are paid simply 
 reflects how quickly they can complete tasks, crowdtrust could be used to change this.
 
-With crowdtrust you keep track of an annotators 'expertise' and so you can return an answer to a task with a mesaure of how sure you are of its
+With crowdtrust you keep track of an annotators 'expertise' and so you can return an answer to a task with a measure of how sure you are of its
 correctness, this means users will not have to submit tasks multiple times to validate them this saves the user money and as a result some of this
 saving could be passed on to the annotators to reward them for being experts.   
 
 %%%%%%%%%%%%%%
 \subsubsection{Mobile Access}
-Althought Mechanical Turk has over 500000 workers registerd 80\% of HITs are performed by around 20\% of the workforce and this isn't a 
+Although Mechanical Turk has over 500000 workers registered 80\% of HITs are performed by around 20\% of the workforce and this isn't a 
 particularly large number. The reason for this we believe is the pay, if you're at home there are many things you'd rather be doing than sitting
 if front of your computer for \$2 an hour. However if you're stuck on a 4 hour train journey from Newcastle back to London for university and
 you could have access to a crowdtrust app on your phone you may be far more willing to sit there and earn \$8. We believe a mobile app would 
-greatly increase the userbase and therefore the turn around time for tasks submitted to the system. 
+greatly increase the user base and therefore the turn around time for tasks submitted to the system. 
 
 %%%%%%%%%%%
 \subsection{Hybrid Crowdsourcing}
-This was offered as a seperate project by our supervisor, hybrid turk seeks to use both computer and human processing to complete a task. A
-computer starts a processing task and when it reaches something that needs a human touch for example, `For example, for navigation through image recognition users may be asked to take pictures which are then processed automatically. But due to the difficulty of the task in cases where image analysis algorithms do not give sufficiently accurate results, other users may be asked to label the content of the image (or parts of the image), which can then be further processed automatically'. 
+This was offered as a separate project by our supervisor, hybrid turk seeks to use both computer and human processing to complete a task. A computer starts a processing task and when it reaches something that needs a human touch for example, `For example, for navigation through image recognition users may be asked to take pictures which are then processed automatically. But due to the difficulty of the task in cases where image analysis algorithms do not give sufficiently accurate results, other users may be asked to label the content of the image (or parts of the image), which can then be further processed automatically'.
+
+Implementing this would involve modelling a prior probability distribution for $p(z|\zeta)$ and have it taken as an input from a client. At the moment this is modelled as a uniform distribution.[11]
 % from emils project specification
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -929,6 +926,10 @@ computer starts a processing task and when it reaches something that needs a hum
 \bibitem{ten}
 	\emph{MicroWorkers}.
 	http://microworkers.com/faq.php.
+	
+  \bibitem{eleven}
+	\emph{Dr Emil Lupu}.
+	http://doc.ic.ac.uk.
   
   %[1] – Machine Learning Tom M Mitchell
 %[2] - A Compendium of Conjugate Priors - John D. Cook
