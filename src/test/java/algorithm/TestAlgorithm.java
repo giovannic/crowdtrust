@@ -37,7 +37,7 @@ public class TestAlgorithm extends TestCase {
 	}
 	
 	public void testAlgorithm(){
-		boolean labs = false;
+		boolean labs = true;
 		if(labs){
 			DbInitialiser.init();
 		}
