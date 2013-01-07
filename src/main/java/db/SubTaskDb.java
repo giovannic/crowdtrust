@@ -360,7 +360,7 @@ public class SubTaskDb {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
 			preparedStatement.setInt(1, id);
 			preparedStatement.setString(2, est.getR().serialise());
-	    	preparedStatement.setFloat(2, (float) est.getConfidence());
+	    	preparedStatement.setFloat(3, (float) est.getConfidence());
 			preparedStatement.execute();
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
