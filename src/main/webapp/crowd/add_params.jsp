@@ -11,6 +11,7 @@
     session.setAttribute("question", request.getParameter("question"));
     session.setAttribute("media_type", request.getParameter("media_type"));
     session.setAttribute("annotation_type", request.getParameter("annotation_type"));
+    System.out.println("input type in add params:" + request.getParameter("input_type"));
     session.setAttribute("input_type", request.getParameter("input_type"));
     session.setAttribute("answers", request.getParameter("answers"));
   %>

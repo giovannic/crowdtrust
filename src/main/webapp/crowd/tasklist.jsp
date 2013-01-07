@@ -41,6 +41,7 @@
 		  </form>
 		</tr>
 		<%
+    System.out.println("input type in tasklist for optionx:" + task.getInputType();
 			}
 		%>
 	</table>		
