@@ -69,14 +69,45 @@ public class CrowdDb {
 			BinaryAccuracy accuracy;
 			if(resultSet.next())
 				accuracy = mapBinaryAccuracy(resultSet);
-			else
-				accuracy = new BinaryAccuracy(0.5, 0.5, 0, 0);
+			else{
+				accuracy = new BinaryAccuracy(0.55, 0.55, 0, 0);
+				insertBinaryAccuracy(id, accuracy);
+			}
 			return accuracy;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static void insertBinaryAccuracy(int id, BinaryAccuracy accuracy) {
+		PreparedStatement preparedStatement;
+		String sql = "INSERT INTO binaryaccuracies (account, truePositive, " +
+				"trueNegative, numPositive, numNegative) " +
+				"VALUES(?,?,?,?,?)";
+		
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+			double truePositive = accuracy.getTruePositive();
+			double trueNegative = accuracy.getTrueNegative();
+			int positiveN = accuracy.getPositiveN();
+			int negativeN = accuracy.getNegativeN();
+			preparedStatement.setInt(1, id);
+			preparedStatement.setDouble(2, truePositive);
+			preparedStatement.setDouble(3, trueNegative);
+			preparedStatement.setInt(4, positiveN);
+			preparedStatement.setInt(5, negativeN);
+			
+			preparedStatement.execute();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 	}
 
 	public static Collection<Bee> getAnnotators(int subtask_id) {

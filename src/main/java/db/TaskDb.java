@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.iwombat.util.StringUtil;
-
 import crowdtrust.*;
 
 public class TaskDb {
@@ -34,6 +32,8 @@ public class TaskDb {
 		for (String thisChoice : answerList) {
 			answerChoice += thisChoice + "/";
 		}
+		//get rid of trailing '/'
+		answerChoice = answerChoice.substring(0, answerChoice.length()-1);
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
