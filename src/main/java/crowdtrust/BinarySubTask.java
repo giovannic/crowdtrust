@@ -29,7 +29,7 @@ public class BinarySubTask extends SubTask {
 			else {
 				ba.setTruePositive(w*(alpha + 1/total));
 			}
-			System.out.print(ba.getTruePositive());
+			System.out.print(w + " " + alpha + " " + total);
 			ba.incrementPositiveN();
 			
 		} else {
@@ -43,7 +43,7 @@ public class BinarySubTask extends SubTask {
 			else {
 				ba.setTrueNegative(w*(alpha + 1/total));
 			}
-			System.out.print(ba.getTrueNegative());
+			System.out.print(w + " " + alpha + " " + total);
 			ba.incrementNegativeN();
 		}
 	}
