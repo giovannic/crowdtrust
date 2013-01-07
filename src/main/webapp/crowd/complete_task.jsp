@@ -75,8 +75,7 @@
 	  <form action="/servlet/responseServlet" method="post">
       <%
       int it = 0;
-		    for( String ans : answers) {
-          String answer = ans.get(it);
+		    for( String answer : answers) {
           String ithAnswer = "answer" + (it+1);
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
