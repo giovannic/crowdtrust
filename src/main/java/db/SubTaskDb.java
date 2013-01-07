@@ -120,7 +120,7 @@ public class SubTaskDb {
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
 	      sql.append("SELECT tasks.id, subtasks.file_name, tasks.date_created, tasks.submitter FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
-	      sql.append("WHERE tasks.media_type=1 ORDER BY tasks.date_created DES");
+	      sql.append("WHERE tasks.media_type=1 ORDER BY tasks.date_created DESC");
 	      List<String> list = new LinkedList<String>();
 	      PreparedStatement preparedStatement;
 	      try {

@@ -50,6 +50,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>response</servlet-name>
+        <servlet-class>servlet.ResponseServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>response</servlet-name>
+        <url-pattern>/servlet/response</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>initDB</servlet-name>
         <servlet-class>servlet.InitDBServlet</servlet-class>
     </servlet>
