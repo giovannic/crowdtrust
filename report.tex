@@ -269,7 +269,7 @@ To have an appealing web based GUI which links the framework to the algorithm.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\newpage
+\newpage
 \section{Design and Implementation}
 % Detail your design why did you do it this way?
 %Summarise Key implementation details (how did you do it what 
@@ -482,7 +482,7 @@ If we are confident in our knowledge of the annotator we test its accuracy again
 %[4] - Sequential tests of statistical hypotheses – Wald
 %[5] – Bayesian inference for simple problems - Simon Jackman
  
- 
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{Software Engineering}
 \subsection{Technologies}
@@ -714,6 +714,7 @@ unfamiliar part of the project he felt comfortable in the position.
 \label{jobs}
 \end{table}
 
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Evaluation}
 %summarise testing procedures (+ relevant testing results)
@@ -831,6 +832,7 @@ End to end testing ensures a process makes its journey correctly through the sys
 \item \emph{Deployment} - In the beginning we found the framework very hard to deploy as a whole, since it consisted of fragmented parts. We realised that the development tool selection and configuration needed to be coordinated by one person to ensure a productive environment. We left a member to research the options so we could weigh up the pros and cons as a group to finish with a set of tools which would allow efficient development.
 \end{itemize}
 
+\newpage
 
 %Evaluate your deliverables in terms of performance usability
 %usefulness, (how successful was the project?)
@@ -846,16 +848,38 @@ End to end testing ensures a process makes its journey correctly through the sys
 \subsubsection{Achievements}
 We will now reflect back over the three goals we set ourselves in the introduction:
 \begin{enumerate}
-\item
+\item \emph{Framework}
+
+Our primary goal was to develop a generic framework that could be utilised in a
+crowdsourcing application. We feel we have succeeded in developing a framework
+to this spec. A number of factors are attributed to this: one clear necessity
+in this framework is the ability to upload and then view assorted types of tasks. Upload
+is easy enough to implement for multiple file types, actually displaying them could be more tricky. Through clever
+use of jsp, we are able to display numerous types of task on the web page. With
+small modifications -- adding a new media type to the database and a small amount of jsp code --
+we would be able to display any new media type. The use of SubTask class heirarchy also
+enables our internal algorithm to process generic types of tasks/responses.
 
 \item \emph{Algorithm}
 The algorithm was a success in that it estimates accuracies and true vales for the annotations proposed in [3]. It builds on this by generalising the EM algorithm to estimate accuracies and values for N dimensional continuous data.
 
 It also is optimised for online useage in that the state is updated only when necessary, in batch and lazily to cater for large volumes of traffic.
-\item
+
+\item \emph{Web}
+
+The website turned out fairly well in the end. We were able to implement an aesthetically pleasing
+design whilst still providing all the functionality needed. Through the website development
+process we were able to learn a huge amount about both website design and actually coding
+a website. Our group feels confident that given another project we could develop a similar,
+or even improved, website. The development process taught us alot about servlets, a
+valuable resource to use in client-server systems. We also feel that the implementation of
+these servlet classes were well thought out and the coherent structure we used aided us.
 
 \end{enumerate}
 
+We all feel that we have developed extremely well as both individuals and as a team over the course of the project, every member has pulled their weight and we would not have been able to achieve anything without the diverse range of skills our group offers. Throughout the project we have all picked up both hard and soft skills, we have all gained experiences in unfamiliar languages and professional practices which will be invaluable in the future. 
+ 
+ 
 %%%%%%%%%%%
 \subsection{Future Extensions}
 
@@ -891,6 +915,7 @@ This was offered as a separate project by our supervisor, hybrid turk seeks to u
 Implementing this would involve modelling a prior probability distribution for $p(z|\zeta)$ and have it taken as an input from a client. At the moment this is modelled as a uniform distribution.[11]
 % from emils project specification
 
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Appendix}
 
