@@ -36,7 +36,7 @@
 			  <input type="hidden" name="question" value=<%=task.getQuestion()%> />
 			  <input type="hidden" name="media_type" value=<%=task.getMediaType()%> />
 			  <input type="hidden" name="annotation_type" value=<%=task.getAnnotationType()%> />
-			  <input type="hidden" name="input_type" value=<%=task.getInputType()%>/ >
+			  <input type="hidden" name="input_type" value=<%=task.getInputType()%> />
 			  <input type="hidden" name="answers" value=<%=task.getAnswers()%> />
 		  </form>
 		</tr>

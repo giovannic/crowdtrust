@@ -15,16 +15,10 @@
     int inputType = 0;
     int userID = 0;
     try {
-    System.out.println("entered try block");
-    System.out.println("taskID:" + (String)session.getAttribute("taskID"));
       taskID = Integer.parseInt((String)session.getAttribute("taskID"));
-    System.out.println("taskID:" + (String)session.getAttribute("annotation_type"));
       annotationType = Integer.parseInt((String)session.getAttribute("annotation_type"));
-    System.out.println("taskID:" + (String)session.getAttribute("media_type"));
       mediaType = Integer.parseInt((String)session.getAttribute("media_type"));
-    System.out.println("taskID:" + (String)session.getAttribute("input_type"));
       inputType = Integer.parseInt((String)session.getAttribute("input_type"));
-    System.out.println("taskID:" + (String)session.getAttribute("account_id"));
       userID = Integer.parseInt((String)session.getAttribute("account_id"));
     } catch( Exception e ) {
 	e.printStackTrace();
