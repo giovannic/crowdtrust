@@ -331,7 +331,14 @@ passed to the database explicitly. Upon return of a (sub)task, the information w
 wrapped in a (Sub)Task object for the servlet to use as needed.
 
 An outline of the database:
-%Put figure in!!!
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\linewidth]{images/schema.png}
+\caption{Database Schema}
+\label{default}
+\end{center}
+\end{figure}
 
 When adding tasks, if the database transaction succeeds, a folder is made in our group
 directory of the form TaskFiles/[taskID]/ . Upon adding subtasks to this task, the
