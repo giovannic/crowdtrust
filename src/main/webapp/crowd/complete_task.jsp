@@ -19,7 +19,7 @@
       annotationType = Integer.parseInt((String)session.getAttribute("annotation_type"));
       mediaType = Integer.parseInt((String)session.getAttribute("media_type"));
       inputType = Integer.parseInt((String)session.getAttribute("input_type"));
-      userID = Integer.parseInt((String)session.getAttribute("account_id"));
+      userID = (Integer) session.getAttribute("account_id");
     } catch( Exception e ) {
 	e.printStackTrace();
         return;
