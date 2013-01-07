@@ -37,8 +37,6 @@
 
 \date{\today}         % inserts today's date
 
-
-
 \maketitle           % generates the title from the data above
 \newpage
 
@@ -133,7 +131,7 @@ In January 2009 Timothy Gowers (Fields Medal winner and avid blogger) used his b
 collaborative mathematics possible?}. He posted a difficult and unsolved mathematical problem he was particularly interested in and invited 
 people to contribute to its solution in the comments section. The project initally got off to a slow start but once the ice was broken the 
 comments flooded in. 37 days , 27 contibuters and 800 comments later Timothy Gowers was able to announce that not only had they solved the 
-original problem but they had also solved a harder generalisation of it, he called his experiment the \emph{Polymath Project} .
+original problem but they had also solved a harder generalisation of it, he called his experiment the \emph{Polymath Project}.[6]
 \\
 \\
 This is a nice example of how crowd sourcing can be used to combine the skills of many individuals and produce answers to a complex problems,
@@ -150,7 +148,7 @@ reuturn the correct answer.
 \emph{Saving Time:} In 2009 aviator Steve Fosset crash landed deep in the Nevada desert, his friends knew they had a very small
 and time critical window to find him alive and they had little faith in the current search and resuce operations. They organised for satellite 
 images to be taken of the desert and the images were passed to a crowd who were asked to identify foreign object which could be potential crash 
-sites. This is a nice example of how the crowd can be used to literally cover a large ammount of ground in a small ammount of time. Not all 
+sites.[7] This is a nice example of how the crowd can be used to literally cover a large ammount of ground in a small ammount of time. Not all 
 examples of saving time are quite this dramatic though, image tagging is an extemely arduous task for an individual or small group of people 
 to perform and tagging a relatively large set of images could take weeks or even months, outsourcing this to the crowd could have the job 
 done in a number of hours.
@@ -180,7 +178,7 @@ Specialised crowds have been successful and certainly have their uses for instan
 www.stackoverflow.com can be thought of as a crowd specialising in the solution of computing problems, however it is unlikely I would
 be able to find a specialised crowd to indentify bird pictures or to search satellite images for crash sites, therefore I need access 
 to a generalised crowd able to adapt to and solve a wide variety of problems. The crowd management party therefore needs to provide
-the ability to ask a wide variety of questions and the ability to easily encorporate new questions in response to new technology. %EMBELISH?
+the ability to ask a wide variety of questions and the ability to easily encorporate new questions in response to new technology.
 \item
 \emph{How many people do we ask, who do we ask and how can we trust what they say?} 
 \\
@@ -202,19 +200,39 @@ are discussed below.
 \subsubsection{Amazon's Mechanical Turk}
 Amazon's Mechanical Turk, or MTurk as it is commonly known is by far the most well known
 internet crowdsourcing platform. Mturk allows 'requestors' to submit jobs to the 
-system which are then solved by a group of around 500,000 'turkers' for each 
+system which are then solved by a group of around 500,000 'turkers'[8] for each 
 complete job they are rewarded with a payment which is usually around 20 cents, 
 before tax of course. Mechanical turk offers no real garuntee of 'correctness' 
 with its service and many people choose to submit their jobs multiple times to the
-system themselves to validate them, this obviously entails multiple payments.
+system themselves to validate them, this obviously entails multiple payments.[9]
+
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\linewidth]{images/mturkinterface.jpg}
+\caption{MechanicalTurk Interface}
+\label{default}
+\end{center}
+\end{figure}
+
+
 
 \subsubsection{Microworkers}
 Microworkers is very much similar to Mechanical Turk, however Microworkers gives submitters the 
 option to rate the crowd members work and the crowd members must maintain their rating above 75\% at
-all times. 
+all times. [10]
 
 There are also many others such as CrowdFlower and Elance that follow in a similar vein to Mechanical Turk and
 are not noteworthy.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\linewidth]{images/microworkersinterface.jpg}
+\caption{Microworkers Interface}
+\label{default}
+\end{center}
+\end{figure}
+
 
 \subsection{Crowdtrust}
 Although Mechanical Turk offers a very complete platform with the ability to upload and answer a wide variety of questions
@@ -230,20 +248,28 @@ Crowdtrust seeks to provide a solution to this we aim to:
 for a desired accuracy of the outcome/result and that evaluates the trustworthiness of contributors on the basis of the accuracy of the 
 results they provide.}
 
+%\begin{figure}[htbp]
+%\begin{center}
+%\includegraphics[width=\linewidth]{images/crowdtrustinterfact.jpg}
+%\caption{Crowdtrust Interface}
+%\label{default}
+%\end{center}
+%\end{figure}
+
 %%%%%%%%%%%
 \subsection{Formal Objectives}
 We seek to complete the following objectives
 \begin{enumerate}
 \item
-
+%Generalise media
+\item
+%Generalised input
 \item
 
 \item
 
 \item
 
-\item
-%improve group work
 \end{enumerate}
 
 
@@ -255,7 +281,12 @@ We seek to complete the following objectives
 %Summarise Key implementation details (how did you do it what 
 %tools did you use
 %%%%%%%%%%%
+%%%%%%%%%%%
+\subsection{Framework}
+% ADAM FIKSEN / RYAN 
+
 \subsection{Algorithm}
+
 \subsection{Data Processing}
 
 Once clients have submitted their tasks and the crowd are submitting answers, our goals are:
@@ -380,10 +411,6 @@ If we are confident in our knowledge of the annotator we test its accuracy again
 %[3] – Online crowdsourcing: rating annotators and obtaining cost-effective labels - Welinder Perona
 %[4] - Sequential tests of statistical hypotheses – Wald
 %[5] – Bayesian inference for simple problems - Simon Jackman
-
-%%%%%%%%%%%
-\subsection{Framework}
-% ADAM FIKSEN / RYAN 
  
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -393,9 +420,11 @@ If we are confident in our knowledge of the annotator we test its accuracy again
 We used the following languages during the development of Crowdtrust:
 \begin{itemize}
 \item
-\emph{Java} -
+\emph{Java} - 
 \item
-\emph{PSQL} -
+\emph{PSQL} - This was chosen for out database language because we have all been
+taking a databases course this term which has involved writing many PSQL queries,
+this makes it the obvious choice as everyone was familiar and comfortable with it.
 \item
 \emph{HTML} -
 \item
@@ -418,18 +447,17 @@ We used the following tools during the development of Crowdtrust:
 \end{itemize}
 \subsubsection{Libraries}
 We used the following libraries in our project:
-%<dependencies><dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.8.1</version><scope>test</scope><///////<////
 
 \begin{table}[htdp]
 \caption{Libraries Used}
 \begin{center}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|p{4cm}|p{3cm}|p{3cm}|p{6cm}|}
 Location & Name & Version & Use \\
 \hline
-junit                                   & junit               & 4.8.1               & todo \\
-org.glassfish.main.jdbc.jdbc-ra.jdbc40  & jdbc40              & 4.0-b33             & todo \\
-org.ancoron.postgresql                  & org.postgresql      & 9.1.901.jdbc4.1-rc8 & todo \\
-commons-fileupload                      & commons-fileupload  & 1.2.2               & todo \\
+junit                                   & junit               & 4.8.1               & Used for creating Junit tests \\
+org.glassfish.main.\\jdbc.jdbc-ra.jdbc40  & jdbc40              & 4.0-b33           & Used to connect Java with PSQL \\
+org.ancoron.postgresql                  & org.postgresql      & 9.1.901.jdbc4.1-rc8 & Used to provide database functionality \\
+commons-fileupload                      & commons-fileupload  & 1.2.2               & Used to upload files to the database \\
 commons-io                              & commons-io          & 1.3.2               & todo \\
 net.sourceforge.htmlunit                & htmlunit            & 2.11                & todo \\
 javax.servlet                           & javax.servlet-api   & 3.0.1               & todo \\
@@ -485,7 +513,15 @@ The practices we adopted:
 					flux and regularly altered) and then once we were sure they would be commited to paper and stuck on the wall.
 					The whiteboard was also used to hold workflow lanes which held the jobs to be done and how complete they were, 
 					different pens were used to indicate different things about the job. Once a job was complete the person who
-					completed it would go up to the board and sign it off, as well as commiting it on git.  		
+					completed it would go up to the board and sign it off, as well as commiting it on git.
+					
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\linewidth]{images/whiteboard.jpg}
+\caption{Team whiteboard during a brain storming session}
+\label{default}
+\end{center}
+\end{figure}  		
 			
 \end{itemize}
 
@@ -582,6 +618,53 @@ unfamiliar part of the project he felt comfortable in the position.
 \section{Evaluation}
 %summarise testing procedures (+ relevant testing results)
 \subsection{Testing}
+\subsubsection{Algorithm}
+Testing the algorithm required creating Java classes to model an annotators behaviour, an annotator $j$ was given three behaviours:
+
+\begin{enumerate}
+\item
+\emph{Binary behaviour} - This modelled how well a user could answer yes/no questions such as 'Is the bird in this image $i$ a robin?'. The target
+value $z_{i}$ and label produced $l_{ij}$ can take on values $z_{i}, l_{ij} \in \{0, 1\}$ An annotators ability to answer questions was 
+parameterised by a true positve rate $a_{j}^{1}$ and a true negative rate $a_{j}^{0}$.
+
+Binary answers are modelled in a 
+signal threshold manner, When an annotator is presented with a question he generates a signal in his brain $x_{i}$ if this signal is above
+a threshold $t_{j}$ then the annotator returns a positive 'yes' answer, otherwise they return a negative 'no' answer. The threshold represents
+how bias the annotator is toward a particular answer, a threshold approaching 1 represents a predisposition towards a yes answer and 0 a 
+negative answer.
+%Talk about where we got threshold from
+
+When the annotator was given a question
+we would look at some testing information which we attached to the question to find out what the actual answer $z_{i}$ was, we would then generate
+the appropriate Normal distribution to represent his signal:
+
+$p(x_{i} | z_{i} = k) \sim \mathcal{N}(\mu_{j}^{k} , 1)$
+
+A random sample was taken from the appropriate normal distribution compared to the threshold and the annotators answer was returned. 
+\item
+\emph{MultiValued Behaviour} - This modelled how well the annotator could respond to questions such as 'How many birds are in this
+picture?' Follwing the advice layed out in the paper we looked into creating a confusion matrix to model how often an annotator
+confuses one particular answer with another, however we decided this wouldn't really be appropriate as one confusion matrix for all
+multi valued questions would be misleading. In the end we chose to follow the method they used in the paper which was to 
+assign the anntator a 'correctness' rate this represented how often he got a question right. We would then generate a uniformly distributed
+random variable to determine wether they answered the question correctly and return their answer.
+
+\item
+\emph{Continuous Behaviour} - We chose to model bounding boxes for our continuous question. A bounding box is a tight fitting box surrounding
+a portion of an image represented by its top left $(x_{1}, y_{1})$ and bottom right $(x_{2}, y_{2})$ co-ordinates. 
+
+%Fill in the rest of this
+
+\end{enumerate}
+
+A number of taks and subtasks were then generated and entered into the database along with a number of annotators. Subtaks were selected at random
+and given to annotators and their answers were stored in the database. A comparrison was then drawn between the ability of the annotators and
+their estimated ability according to the algorithm. Below are the results for a test comprising of 
+
+%bla bla bla
+
+
+
 \subsubsection{Validity}
 Validity testing ensures our system can handle erroneous events, below are the validity tests we carried out:
 \begin{itemize}
@@ -663,17 +746,70 @@ if front of your computer for \$2 an hour. However if you're stuck on a 4 hour t
 you could have access to a crowdtrust app on your phone you may be far more willing to sit there and earn \$8. We believe a mobile app would 
 greatly increase the userbase and therefore the turn around time for tasks submitted to the system. 
 
+%%%%%%%%%%%
 \subsection{Hybrid Crowdsourcing}
+This was offered as a seperate project by our supervisor, hybrid turk seeks to use both computer and human processing to complete a task. A
+computer starts a processing task and when it reaches something that needs a human touch for example, `For example, for navigation through image recognition users may be asked to take pictures which are then processed automatically. But due to the difficulty of the task in cases where image analysis algorithms do not give sufficiently accurate results, other users may be asked to label the content of the image (or parts of the image), which can then be further processed automatically'. 
+% from emils project specification
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Appendix}
-%e.g user guide
-%%%%%%%%%%%
-\subsection{User Guide}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\newpage
-\begin{thebibliography}{9}
+\begin{thebibliography}{99}
+
+\bibitem{one}
+  Tom M Mitchell,
+  \emph{Machine Learning}.
+  Mcgraw-Hill International,
+  New Edition,
+  1997.
+  
+\bibitem{two}
+  John D. Cook,
+  \emph{A Compendium of Conjugate Priors}.
+
+\bibitem{three}
+  Welinder Perona,
+  \emph{Online crowdsourcing: rating annotators and obtaining cost-effective labels}.
+  
+\bibitem{four}
+  Wald,
+  \emph{Sequential tests of statistical hypotheses}.
+  
+\bibitem{five}
+  Simon Jackman,
+  \emph{Bayesian inference for simple problems}.
+  
+\bibitem{six} 
+  Michael Neilson,
+  \emph{TedXWaterloo Open science}.
+  http://www.youtube.com/watch?v=DnWocYKqvhw.
+
+\bibitem{seven}
+	Elinor Mills,
+	\emph{CNN news}.
+	http://news.cnet.com/8301-10784\_3-9782813-7.html.   
+	
+\bibitem{eight}
+	\emph{Mechanical Turk}.
+	https://www.mturk.com/mturk/welcome.	
+	
+	
+\bibitem{nine}
+	\emph{ProPublicas guide to Mechanical Turk}.
+	http://www.propublica.org/article/propublicas-guide-to-mechanical-turk.
+	
+\bibitem{ten}
+	\emph{MicroWorkers}.
+	http://microworkers.com/faq.php.
+  
+  %[1] – Machine Learning Tom M Mitchell
+%[2] - A Compendium of Conjugate Priors - John D. Cook
+%[3] – Online crowdsourcing: rating annotators and obtaining cost-effective labels - Welinder Perona
+%[4] - Sequential tests of statistical hypotheses – Wald
+%[5] – Bayesian inference for simple problems - Simon Jackman
 
 \end{thebibliography}
 
