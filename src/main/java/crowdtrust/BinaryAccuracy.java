@@ -84,8 +84,8 @@ public class BinaryAccuracy extends Accuracy {
 		
 		Collection <ObservationReal> peak = new ArrayList <ObservationReal>();
 		
-		for (double p = -0.5; p < 0.6; p+=0.5){			
-			for (double n = -0.5; n < 0.6; n+=0.5){
+		for (double p = -0.5; p < 0.6; p+=0.1){			
+			for (double n = -0.5; n < 0.6; n+=0.1){
 				peak.add(new ObservationReal(
 						posCurve.density(maxP+p)*negCurve.density(maxN+n)
 						)
