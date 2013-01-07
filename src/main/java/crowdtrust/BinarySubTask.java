@@ -21,8 +21,8 @@ public class BinarySubTask extends SubTask {
 		double w;
 		if (br.isTrue()){
 			//maximise truePositive
-			total = ba.getPositiveN() + 1;
-			w = total/(total + 1);
+			total = ba.getPositiveN() + 2;
+			w = (total)/(total + 1);
 			double alpha = ba.getTruePositive()*total;
 			if(bz.isTrue())
 				ba.setTruePositive(w*(alpha + 1/total) + (1-w));
@@ -34,7 +34,7 @@ public class BinarySubTask extends SubTask {
 			
 		} else {
 			//maximize trueNegative
-			total = ba.getNegativeN() + 1;
+			total = ba.getNegativeN() + 2;
 			w = total/(total + 1);
 			
 			double alpha = ba.getTrueNegative()*total;
@@ -63,13 +63,11 @@ public class BinarySubTask extends SubTask {
 		boolean matched = false;
 		for (Estimate record : state){
 			if(record.getR().equals(br)){
-				if (accuracy!=0.5)
-					record.setConfidence(record.getConfidence()
+				record.setConfidence(record.getConfidence()
 						+ Math.log(accuracy/(1-accuracy)));
 				matched = true;
 			} else {
-				if (accuracy!=0.5)
-					record.setConfidence(record.getConfidence()
+				record.setConfidence(record.getConfidence()
 						+ Math.log(((1-accuracy)/accuracy)));
 			}
 		}
@@ -77,8 +75,7 @@ public class BinarySubTask extends SubTask {
 		if (!matched){
 			Estimate e = new Estimate(r, Math.log(getZPrior()/(1-getZPrior())));
 			//TODO BASE
-			if (accuracy!=0.5)
-				e.setConfidence(e.getConfidence() + Math.log((accuracy/(1-accuracy))));
+			e.setConfidence(e.getConfidence() + Math.log((accuracy/(1-accuracy))));
 			state.add(e);
 			addEstimate(e);
 		}
