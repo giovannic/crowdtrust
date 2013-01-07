@@ -2,6 +2,8 @@
 
 <%@ page import="crowdtrust.SubTask" %>
 <%@ page import="db.SubTaskDb" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.LinkedList" %>
 
 <html>
   <head>
@@ -24,7 +26,14 @@
 	e.printStackTrace();
         return;
     }
-    String[] answers = answersStr.split("/");
+    String[] answersArr = answersStr.split("/");
+    List<String> answers = new LinkedList();
+    for(int i = 0 ; i < answersArr.length ; i++) {
+      String ans = answersArr[i];
+      if(ans != null) {
+        answers.add(ans);
+      }
+    }
     
     String TASKS_DIRECTORY = "http://www.doc.ic.ac.uk/project/2012/362/g1236218/TaskFiles/";
     
@@ -65,9 +74,10 @@
 	  %>
 	  <form action="/servlet/responseServlet" method="post">
       <%
-		    for( int i = 0; i < answers.length ; i++ ) {
-                      String answer = answers[i];
-                      String ithAnswer = "answer" + i;
+      int it = 0;
+		    for( String ans : answers) {
+          String answer = ans.get(it);
+          String ithAnswer = "answer" + (it+1);
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
 		  %>
