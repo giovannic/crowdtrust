@@ -33,7 +33,9 @@
 
 \title{Crowdtrust - Trustworthy Information From The Crowd\\ Group Project }
 
-\author{Giovanni Charles \and Adam Fiksen \and Ryan Jackson \and Sahil Jain \and John Walker \and \\ Emil Lupu}
+\author{Giovanni Charles \and Adam Fiksen \and Ryan Jackson \and Sahil Jain \and John Walker \and \\ Supervisor: Dr Emil Lupu \and \\ Department of Computing \and \\ Imperial College London}
+
+%Imperial College London, Department of Computing
 
 \date{\today}         % inserts today's date
 
@@ -43,7 +45,7 @@
 
 \begin{abstract}
 \noindent Outsourcing is becoming increasingly popular in a lot of areas and, as a result, providing these required services has 
-become big business. Companies are using the Internet to accept jobs from requestors which often require some human intelligence ,
+become big business. Companies are using the Internet to accept jobs from requestors which often require some human intelligence,
 such as tagging images. They then distribute these jobs to a crowd of workers and return the results to the requestor. This process is called
 crowdsourcing. %Not happy with this
 \\
@@ -202,7 +204,7 @@ with its service and many people choose to submit their jobs multiple times to t
 system themselves to validate them -- this obviously entails multiple payments.[9]
 
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[width=\linewidth]{images/mturkinterface.jpg}
 \caption{MechanicalTurk Interface}
@@ -255,15 +257,13 @@ results they provide.}
 We seek to complete the following objectives
 \begin{enumerate}
 \item
-%Generalise media
+To create a generalised framework which can easilly be extended to encorportate
+new tasks.
 \item
-%Generalised input
+To have a sophisticated algorithm able calculate the sureity of its answers based
+upon the credentials of the crowd users who have responded.
 \item
-
-\item
-
-\item
-
+To have an appealing web based GUI which links the framework to the algorithm.
 \end{enumerate}
 
 
@@ -283,7 +283,7 @@ On the side of the client, the web pages are generated from html5/css and jsp.
 Our site contains a persistent theme throughout, with the crowdtrust header and
 created by footer appearing on every page, and other modules appearing depending
 on location (e.g. the nav bar changes once a user is logged in). This was achieved
-utilising \emph{sitemesh} [http://wiki.sitemesh.org/display/sitemesh/Home]
+utilising \emph{sitemesh} [12]
 which provides a framework enabling the use of the Gang of Four decorator pattern.
 As a user moves between contexts, the pages they can navigate to are modified
 to fit with their intention -- from the homepage, pages of information about
@@ -346,6 +346,8 @@ Upon receiving a response from the client for a subtask, its value is passed int
 EM Algorithm and the annotator's information is updated, along with the answer for the
 subtask as described later.
 
+{\bf SSL}
+\\
 Tomcat allows us to specify running the servlet container over SSL. This means
 that any information passed between client and server is unable to be intercepted
 by an intruder. This is implemented through parameters in our server.xml specifying
@@ -721,8 +723,7 @@ Testing the algorithm required creating Java classes to model an annotators beha
 
 \begin{enumerate}
 \item
-[3]
-\emph{Binary behaviour} - This modelled how well a user could answer yes/no questions such as 'Is the bird in this image $i$ a robin?'. The target
+\emph{Binary behaviour} - [3] This modelled how well a user could answer yes/no questions such as 'Is the bird in this image $i$ a robin?'. The target
 value $z_{i}$ and label produced $l_{ij}$ can take on values $z_{i}, l_{ij} \in \{0, 1\}$ An annotators ability to answer questions was 
 parameterised by a true positive rate $a_{j}^{1}$ and a true negative rate $a_{j}^{0}$.
 
@@ -740,18 +741,23 @@ the appropriate Normal distribution to represent his signal:
 $p(x_{i} | z_{i} = k) \sim \mathcal{N}(\mu_{j}^{k} , 1)$
 
 A random sample was taken from the appropriate normal distribution compared to the threshold and the annotators answer was returned. 
-[3]
+
 \item
-\emph{MultiValued Behaviour} - This modelled how well the annotator could respond to categoric questions such as 'How many birds are in this picture?' 
+\emph{MultiValued Behaviour} - [3]This modelled how well the annotator could respond to categoric questions such as 'How many birds are in this picture?' 
 
 Following the advice laid out in the paper we looked into creating a confusion matrix to model how often an annotator confuses one particular answer with another, however we decided this wouldn't really be appropriate as one confusion matrix for all multi valued questions would be misleading for questions with a varying number of options. 
 
 In the end we chose to follow the method they used in the paper which was to assign the annotator a 'correctness' rate this represented how often he got a question right. We would then generate a uniformly distributed random variable to determine wether they answered the question correctly and return their answer.
 
-[3]
+
 \item
-\emph{Continuous Behaviour} - We chose to model bounding boxes for our continuous question. A bounding box is a tight fitting box surrounding
-a portion of an image represented by its top left $(x_{1}, y_{1})$ and bottom right $(x_{2}, y_{2})$ co-ordinates. 
+\emph{Continuous Behaviour} - [3]We chose to model bounding boxes for our continuous question. A bounding box is a tight fitting box surrounding
+a portion of an image represented by its top left $(x_{1}, y_{1})$ and bottom right $(x_{2}, y_{2})$ co-ordinates. The annotator was given
+an honestly rating between 0 and 1 this represented how often they would try to give a correct answer. First a uniformly distributed random number
+was generated to decide if the annnotator was trying. If he was not trying two co-ordinates would be generated randomly within the area of the
+picture. If he was trying his co-ordinates would be generated from a multi value normal distribution:
+
+$p(l_{ij} | z_{i}) \sim \mathcal{N}(l_{ij} | z_{i}, \sum )$
 
 %Fill in the rest of this
 
@@ -817,6 +823,15 @@ End to end testing ensures a process makes its journey correctly through the sys
 \item testAlgorithm
 \end{itemize}
 
+\subsection{Challenges}
+
+\begin{itemize}
+\item \emph{Bayesian Inference} - This area of machine learning was new to us so we found it challenging to get to grips with the terminology and concepts. We overcame this with our group meetings. They allowed us to voice our concerns and solve issues as a group. If the answer was not found from another group member it was solved through the explanation. By the end of the project we had all gained a healthy knowledge with regard to Bayesian probability.
+
+\item \emph{Deployment} - In the beginning we found the framework very hard to deploy as a whole, since it consisted of fragmented parts. We realised that the development tool selection and configuration needed to be coordinated by one person to ensure a productive environment. We left a member to research the options so we could weigh up the pros and cons as a group to finish with a set of tools which would allow efficient development.
+\end{itemize}
+
+
 %Evaluate your deliverables in terms of performance usability
 %usefulness, (how successful was the project?)
 
@@ -829,7 +844,17 @@ End to end testing ensures a process makes its journey correctly through the sys
 \subsection{Conclusion}
 %%%%%%%%%%%
 \subsubsection{Achievements}
-The algorithm was a success in that it generalised the EM algorithm proposed in 
+We will now reflect back over the three goals we set ourselves in the introduction:
+\begin{enumerate}
+\item
+
+\item \emph{Algorithm}
+The algorithm was a success in that it estimates accuracies and true vales for the annotations proposed in [3]. It builds on this by generalising the EM algorithm to estimate accuracies and values for N dimensional continuous data.
+
+It also is optimised for online useage in that the state is updated only when necessary, in batch and lazily to cater for large volumes of traffic.
+\item
+
+\end{enumerate}
 
 %%%%%%%%%%%
 \subsection{Future Extensions}
@@ -922,6 +947,10 @@ Implementing this would involve modelling a prior probability distribution for $
   \bibitem{eleven}
 	\emph{Dr Emil Lupu}.
 	http://doc.ic.ac.uk.
+	
+  \bibitem{twelve}
+	\emph{Sitemesh}.	
+	http://wiki.sitemesh.org/display/sitemesh/Home.
   
   %[1] – Machine Learning Tom M Mitchell
 %[2] - A Compendium of Conjugate Priors - John D. Cook
