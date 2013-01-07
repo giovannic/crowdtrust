@@ -63,19 +63,22 @@ public class BinarySubTask extends SubTask {
 		boolean matched = false;
 		for (Estimate record : state){
 			if(record.getR().equals(br)){
-				record.setConfidence(record.getConfidence()
-						+ Math.log((double)(accuracy/(1-accuracy))));
+				if (accuracy!=0.5)
+					record.setConfidence(record.getConfidence()
+						+ Math.log(accuracy/(1-accuracy)));
 				matched = true;
 			} else {
-				record.setConfidence(record.getConfidence()
-						+ Math.log((double)(((1-accuracy)/accuracy))));
+				if (accuracy!=0.5)
+					record.setConfidence(record.getConfidence()
+						+ Math.log(((1-accuracy)/accuracy)));
 			}
 		}
 		
 		if (!matched){
-			Estimate e = new Estimate(r, Math.log((double)(getZPrior()/(1-getZPrior()))));
+			Estimate e = new Estimate(r, Math.log(getZPrior()/(1-getZPrior())));
 			//TODO BASE
-			e.setConfidence(e.getConfidence() + Math.log((double)((accuracy/(1-accuracy)))));
+			if (accuracy!=0.5)
+				e.setConfidence(e.getConfidence() + Math.log((accuracy/(1-accuracy))));
 			state.add(e);
 			addEstimate(e);
 		}
