@@ -3,6 +3,8 @@ package crowdtrust;
 public abstract class Accuracy {
 	protected int n;
 	
+	protected boolean ghost = false;
+	
 	int getN(){
 		return n;
 	}
@@ -16,4 +18,14 @@ public abstract class Accuracy {
 	abstract double variance();
 	
 	abstract boolean expert(double threshold);
+
+	public boolean isGhost() {
+		return ghost;
+	}
+
+	public void setGhost() {
+		this.ghost = true;
+	}
+	
+	
 }

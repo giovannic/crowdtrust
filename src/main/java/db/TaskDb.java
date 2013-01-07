@@ -32,6 +32,8 @@ public class TaskDb {
 		for (String thisChoice : answerList) {
 			answerChoice += thisChoice + "/";
 		}
+		//get rid of trailing '/'
+		answerChoice = answerChoice.substring(0, answerChoice.length()-1);
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
@@ -161,16 +163,20 @@ public class TaskDb {
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String question = resultSet.getString("question");
-				int type = resultSet.getInt("annotation_type");
+				int media_type = resultSet.getInt("media_type");
+				int annotation_type = resultSet.getInt("annotation_type");
+				int input_type = resultSet.getInt("input_type");
+				String answersString = resultSet.getString("answers");
+				String[] answers = answersString.split("/");
 				int accuracy = resultSet.getInt("accuracy");
-				if(type == 1) {
-					thisTask = new BinaryTask(id, name, question, accuracy);
+				if(annotation_type == 1) {
+					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
-				if(type == 2) {
+				if(annotation_type == 2) {
 						//thisTask = new SingleContinuousTask(id, name, question, accuracy);
 				}							
-				if(type == 3) {
-						thisTask = new MultiValueTask(id, name, question, accuracy);
+				if(annotation_type == 3) {
+						thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
