@@ -52,7 +52,6 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected void updateLikelihoods(Response r,  Accuracy a, 
 			Collection<Estimate> state){
-		System.out.println("updating likelihood " + id);
 		BinaryR br = (BinaryR) r;
 		BinaryAccuracy ba = (BinaryAccuracy) a;
 		
