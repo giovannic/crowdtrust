@@ -107,7 +107,7 @@ public class TestAlgorithm extends TestCase {
 		
 		int annotatorIndex = rand.nextInt(annotatorNumber - 1);
 		AnnotatorModel a = annotators[annotatorIndex];
-		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id, a.bee.getId(), 1);
+		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(), 1);
 		
 		System.out.println("Got first");
 		
@@ -116,7 +116,7 @@ public class TestAlgorithm extends TestCase {
 			a = annotators[annotatorIndex];
 			System.out.println("Annotator: " + a.username + " |Task: " + t.getId());
 			a.answerTask(t);
-			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id, a.bee.getId(),1);
+			t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(),1);
 		} 
 		System.out.println("------------------------------------------------------  ");
 		DbInitialiser.init();

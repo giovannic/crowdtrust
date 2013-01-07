@@ -115,12 +115,14 @@ CREATE TABLE multivalueaccuracies
 
 CREATE TABLE experts
 (
+	entry_id SERIAL PRIMARY KEY,
 	account INTEGER REFERENCES accounts (id),
 	type SMALLINT NOT NULL
 );
 
 CREATE TABLE bots
 (
+	entry_id SERIAL PRIMARY KEY,
 	account INTEGER REFERENCES accounts (id),
 	type SMALLINT NOT NULL
 );

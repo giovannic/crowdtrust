@@ -11,6 +11,7 @@ public abstract class SubTask {
 	protected double confidence_threshold;
 	protected int number_of_labels;
 	protected int max_labels;
+	protected String fileName;
 	
 	/*
 	 * E step
@@ -120,4 +121,12 @@ public abstract class SubTask {
 	}
 
 	protected abstract void addEstimate(Estimate e);
+	
+	public void addFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
+	public String getFileName(){
+		return this.fileName;
+	}
 }
