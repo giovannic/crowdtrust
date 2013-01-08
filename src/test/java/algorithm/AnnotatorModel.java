@@ -85,12 +85,10 @@ public class AnnotatorModel {
 	}
 	
 	public AnnotatorSubTaskAnswer findTask(int id){
-		System.out.println("Searching for task " + id);
 		Iterator<AnnotatorSubTaskAnswer> i = this.tasks.iterator();
 		while(i.hasNext()){
 			AnnotatorSubTaskAnswer temp = i.next();
 			if(temp.id == id){
-				System.out.println("Found!");
 				return temp;
 			}
 		}
