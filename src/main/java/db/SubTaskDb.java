@@ -67,7 +67,7 @@ public class SubTaskDb {
       }
 	}
 
-	public static SubTask getRandomSubTask(int task, int annotator, int type) {
+	public static SubTask getRandomSubTask(int task, int annotator) {
 		
 		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, " +
 				"tasks.max_labels AS m, COUNT(responses.id) AS r," +
