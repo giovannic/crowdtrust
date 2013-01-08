@@ -30,12 +30,12 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		
 		NormalDistribution nd = 
 				new NormalDistribution(
-						cz.getValue(precision), Math.sqrt(variance));
+						cz.getValues(precision)[0], Math.sqrt(variance));
 		
 		double responseSpace = (range[1] - range[0])*precision;
 		
 		//mle
-		double pLabel = nd.density(cr.getValue(precision));
+		double pLabel = nd.density(cr.getValues(precision)[0]);
 		double mle = pLabel/(pLabel + 1/responseSpace);
 		sa.setAccuracy(w*(alpha/total) + (1-w)*mle);
 		a.increaseN();
@@ -51,7 +51,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		
 		NormalDistribution nd = 
 				new NormalDistribution(
-						cr.getValue(precision), Math.sqrt(variance));
+						cr.getValues(precision)[0], Math.sqrt(variance));
 			
 		double pResponseSpace = 1/(range[1] - range[0])*precision;
 			
@@ -60,18 +60,18 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 				matched = true;
 			}
 			ContinuousR cr2 = (ContinuousR) record.getR();
-			double p = sa.getAccuracy()*nd.density(cr2.getValue(precision)) + 
+			double p = sa.getAccuracy()*nd.density(cr2.getValues(precision)[0]) + 
 				(1-sa.getAccuracy())*pResponseSpace;
 			record.setConfidence(record.getConfidence() * (p/(1-p)));
 		}
 			
 		if (!matched){
 			Estimate e = new Estimate(r, getZPrior());
-			double p = sa.getAccuracy()*nd.density(cr.getValue(precision)) +
+			double p = sa.getAccuracy()*nd.density(cr.getValues(precision)[0]) +
 					(1-sa.getAccuracy())*pResponseSpace;
 			e.setConfidence(e.getConfidence() * (p/1-p));
 			state.add(e);
-			addEstimate(e);
+			initEstimate(e);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 	}
 
 	@Override
-	protected void addEstimate(Estimate e) {
+	protected void initEstimate(Estimate e) {
 		// TODO Auto-generated method stub
 		
 	}

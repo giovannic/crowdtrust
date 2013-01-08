@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <%@ page import="java.util.List" %>
 <%@ page import="db.TaskDb" %>
-<%@ page import="crowdtrust.Task;" %>
+<%@ page import="crowdtrust.Task" %>
 <html>
 
 

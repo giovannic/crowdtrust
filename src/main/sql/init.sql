@@ -73,7 +73,8 @@ CREATE TABLE estimates
   estimate_key SERIAL PRIMARY KEY,
   subtask_id INTEGER REFERENCES subtasks (id),
   estimate VARCHAR(32),
-  confidence FLOAT
+  confidence FLOAT,
+  base BOOLEAN
 );
 
 CREATE TABLE responses
@@ -86,7 +87,7 @@ CREATE TABLE responses
 
 CREATE TABLE ranged
 (
-  subtask INTEGER PRIMARY KEY,
+  task INTEGER PRIMARY KEY,
   start INTEGER,
   finish INTEGER,
   p DOUBLE PRECISION

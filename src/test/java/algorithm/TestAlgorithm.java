@@ -3,6 +3,7 @@ package algorithm;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,6 +12,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import crowdtrust.AccuracyRecord;
+import crowdtrust.Bee;
+import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.Response;
@@ -27,7 +31,7 @@ import junit.framework.TestCase;
 public class TestAlgorithm extends TestCase {
 
 	protected static int annotatorNumber = 10;
-	protected static int subtasks = 10;
+	protected static int subtasks = 100;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
@@ -40,6 +44,7 @@ public class TestAlgorithm extends TestCase {
 	
 	public void testAlgorithm(){
 		boolean labs = true;
+		System.setProperty("test", "true");
 		if(labs){
 			DbInitialiser.init();
 		}
@@ -115,7 +120,7 @@ public class TestAlgorithm extends TestCase {
 		
 		int annotatorIndex = rand.nextInt(annotatorNumber - 1);
 		AnnotatorModel a = annotators[annotatorIndex];
-		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(), 1);
+		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId());
 		
 		
 		while( t != null){
@@ -123,21 +128,59 @@ public class TestAlgorithm extends TestCase {
 			a = annotators[annotatorIndex];
 			System.out.println("Annotator: " + a.username + " |Task: " + t.getId());
 			a.answerTask(t);
-			t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(),1);
+			t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId());
 		} 
 		System.out.println("------------------------------------------------------  ");
 		
-		System.out.println("---------Calculating error rate--------------------");
+		System.out.println("---------Calculating label error rate--------------------");
 		
 		Map<Integer,Response> results = SubTaskDb.getResults(1);
+		int correct = 0;
 		for (AnnotatorSubTaskAnswer answer : answers){
+			Response trueA = answer.getAlgoTestData().getActualAnswer();
+			Response estA = results.get(answer.id);
 			System.out.println("id " + answer.id + 
-					" true answer " + 
-					answer.getAlgoTestData().getActualAnswer().toString() + 
-					" estimate = " + results.get(answer.id));
+					" true answer = " + 
+					trueA + 
+					" estimate = " + estA);
+			if(trueA.equals(estA)){
+				correct++;
+			}
 		}
-		
+		System.out.println("error rate = " + ((double)correct/subtasks));
+
 		System.out.println("------------------------------------------------------  ");
+		System.out.println("----------Calculating Annotator Rates-----------------");
+		System.out.println("Annotator Id      |    TPR    |    TNR    |    TPRE    |    TNRE    ");
+			for(int i = 0; i < annotatorNumber; i++){
+				AnnotatorModel annotator = annotators[i];
+				System.out.print(annotator.getBee().getId() +" | " + annotator.getBinaryBehaviour().getTruePosRate() + " | " + annotator.getBinaryBehaviour().getTrueNegRate() + " | " );
+				BinaryAccuracy binAccuracy = CrowdDb.getBinaryAccuracy(annotator.getBee().getId());
+				System.out.print(binAccuracy.getTruePositive() +" | "+ binAccuracy.getTrueNegative());
+				System.out.println("");
+			}
+		System.out.println("------------------------------------------------------");
+//
+
+		
+		System.out.println("---------Calculating accuracy average difference--------------------");
+		
+		Map<Integer,Response> accuracies = SubTaskDb.getResults(1);
+		for (AnnotatorSubTaskAnswer answer : answers){
+			Response trueA = answer.getAlgoTestData().getActualAnswer();
+			Response estA = results.get(answer.id);
+			System.out.println("id " + answer.id + 
+					" true answer = " + 
+					trueA + 
+					" estimate = " + estA);
+			if(trueA.equals(estA)){
+				correct++;
+			}
+		}
+		System.out.println("error rate = " + (correct/subtasks));
+		
+		System.out.println("------------------------------------------------------ ");
+
 		
 		//DbInitialiser.init();
 		}
