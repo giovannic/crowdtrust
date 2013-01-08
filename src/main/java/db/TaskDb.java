@@ -13,8 +13,7 @@ import crowdtrust.*;
 
 public class TaskDb {
 	
-	
-	public static int addTask(int accountID, String name, String question, float accuracy, 
+public static int addTask(int accountID, String name, String question, float accuracy, 
 			int media_type, int annotation_type, int input_type, int max_labels, long expiryTime, 
 			List<String> answerList){
 		Connection c;
@@ -58,7 +57,7 @@ public class TaskDb {
 			return -1;
 		}
 	}
-	
+
 	/*public static int getSubTaskId(String name){
  		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id FROM subtasks\n");
@@ -85,7 +84,7 @@ public class TaskDb {
 
 		}
 	}*/
-	
+
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks\n");
@@ -110,7 +109,7 @@ public class TaskDb {
 		  	return null;
 		}
 	}
-	
+
 	public static int getTaskId(String name){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id FROM tasks\n");
@@ -136,7 +135,7 @@ public class TaskDb {
 		  	return -1;
 		}
 	}
-	
+
 	public static boolean isPresent(int taskID, int accountID) {
     	PreparedStatement checkTask;
 		try {
@@ -209,7 +208,7 @@ public class TaskDb {
 	    return false;    
 
 	}
-	
+
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks ");
@@ -230,6 +229,36 @@ public class TaskDb {
 	      	System.err.println("SQL Error on get tasks for id");
 	    }
 		return tasks;
+	}
+
+	public static List<Task> getTasksForClientId(int id) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT name FROM task WHERE submitter = ?");
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+		}
+		catch (ClassNotFoundException e) {
+	  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+	  	return null;
+		} catch (SQLException e) {
+	  	System.err.println("SQL Error on get Task");
+	  	return null;
+		}
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			List<Task> tasks = new ArrayList<Task>();
+			while(resultSet.next()) {
+				String taskName = resultSet.getString("task.name");
+				tasks.add(getTask(taskName));
+			}
+			return tasks;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }
