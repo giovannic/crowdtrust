@@ -14,7 +14,7 @@ import crowdtrust.*;
 public class TaskDb {
 	
 public static int addTask(int accountID, String name, String question, float accuracy, 
-			int media_type, int annotation_type, int input_type, int max_labels, long expiryTime, 
+			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
 			List<String> answerList){
 		Connection c;
 		try {
@@ -41,9 +41,9 @@ public static int addTask(int accountID, String name, String question, float acc
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
 			insertTask.setFloat(4, accuracy);
-			insertTask.setInt(5, media_type);
-			insertTask.setInt(6, annotation_type);
-			insertTask.setInt(7, input_type);
+			insertTask.setInt(5, media_type.ordinal());
+			insertTask.setInt(6, annotation_type.ordinal());
+			insertTask.setInt(7, input_type.ordinal());
 			insertTask.setString(8, answerChoice);
 			insertTask.setInt(9, max_labels);
 			insertTask.setTimestamp(10, new Timestamp(expiryTime));
