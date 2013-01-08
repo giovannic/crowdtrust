@@ -72,7 +72,7 @@
 			  break;
 		  }
 	  %>
-	  <form action="/servlet/responseServlet" method="post">
+	  <form action="/servlet/response" method="post">
       <%
       int it = 0;
 		    for( String answer : answers) {
