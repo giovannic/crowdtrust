@@ -7,11 +7,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
+import crowdtrust.Response;
 
 import db.DbInitialiser;
 import db.LoginDb;
@@ -25,6 +27,7 @@ import junit.framework.TestCase;
 public class TestAlgorithm extends TestCase {
 
 	protected static int annotatorNumber = 10;
+	protected static int subtasks = 10;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
@@ -36,7 +39,7 @@ public class TestAlgorithm extends TestCase {
 	}
 	
 	public void testAlgorithm(){
-		boolean labs = true;
+		boolean labs = false;
 		if(labs){
 			DbInitialiser.init();
 		}
@@ -87,7 +90,7 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("Got it");
 		
 		//Lets create a linked list of subTasks
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < subtasks; i++){
 			String uuid = UUID.randomUUID().toString();
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
@@ -106,7 +109,7 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("Given annotators answers");
 		
 		printAnswers(answers);
-		System.out.println("---------Beginnign to answer tasks--------------------");
+		System.out.println("---------Beginning to answer tasks--------------------");
 		
 		int parent_task_id = TaskDb.getTaskId("BinaryTestTask");
 		
@@ -114,7 +117,6 @@ public class TestAlgorithm extends TestCase {
 		AnnotatorModel a = annotators[annotatorIndex];
 		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(), 1);
 		
-		System.out.println("Got first");
 		
 		while( t != null){
 			annotatorIndex = rand.nextInt(annotatorNumber - 1);
@@ -124,7 +126,20 @@ public class TestAlgorithm extends TestCase {
 			t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(),1);
 		} 
 		System.out.println("------------------------------------------------------  ");
-		//DbInitialiser.init();
+		
+		System.out.println("---------Calculating error rate--------------------");
+		
+		Map<Integer,Response> results = SubTaskDb.getResults(1);
+		for (AnnotatorSubTaskAnswer answer : answers){
+			System.out.println("id " + answer.id + 
+					" true answer " + 
+					answer.getAlgoTestData().getActualAnswer().toString() + 
+					" estimate = " + results.get(answer.id));
+		}
+		
+		System.out.println("------------------------------------------------------  ");
+		
+		DbInitialiser.init();
 		}
 		
 		
