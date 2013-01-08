@@ -8,7 +8,7 @@ public class BinarySubTask extends SubTask {
 
 	public BinarySubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
-		super(id, 0.7, number_of_labels, max_labels);
+		super(id, confidence_threshold, number_of_labels, max_labels);
 	} 
 
 	@Override
@@ -60,9 +60,9 @@ public class BinarySubTask extends SubTask {
 		
 		if (state.isEmpty()){
 			BinaryR tR = new BinaryR(true);
-			Estimate t = new Estimate(tR, Math.log(getZPrior()/1 - getZPrior()),0);
+			Estimate t = new Estimate(tR, Math.log(getZPrior()/(1 - getZPrior())),0);
 			BinaryR fR = new BinaryR(false);
-			Estimate f = new Estimate(fR, Math.log(getZPrior()/1 - getZPrior()),0);
+			Estimate f = new Estimate(fR, Math.log(getZPrior()/(1 - getZPrior())),0);
 			state.add(t);
 			initEstimate(t);
 			state.add(f);
@@ -80,8 +80,6 @@ public class BinarySubTask extends SubTask {
 						+ Math.log(((1-accuracy)/accuracy)));
 			}
 		}
-		if (accuracy == 0)
-			System.out.println("accuracy at 0");
 		
 	}
 

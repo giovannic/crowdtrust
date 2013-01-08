@@ -103,7 +103,7 @@ public class TestAlgorithm extends TestCase {
 			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
 			int id = SubTaskDb.getSubTaskId(uuid);
 			System.out.println("Subtask Id: " + id);
-			BinarySubTask bst = new BinarySubTask(id,0,0,0);
+			BinarySubTask bst = new BinarySubTask(id,0.7,0,15);
 			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(2)));
 			answers.add(asta);
 		}

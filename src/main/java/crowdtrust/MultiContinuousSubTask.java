@@ -62,7 +62,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 				new MultiGaussianDistribution(
 						cr.getValues(precision), variance);
 		
-		double freshConfidence = (getZPrior()/1-getZPrior());
+		double freshConfidence = (getZPrior()/(1-getZPrior()));
 		
 		for (Estimate record : state){
 			if(record.getR().equals(r)){
