@@ -45,7 +45,7 @@ public class TestAlgorithmMulti extends TestCase {
 	}
 	
 	public void testAlgorithm(){
-		boolean labs = false;
+/*		boolean labs = false;
 		System.setProperty("test", "true");
 		if(labs){
 			DbInitialiser.init();
@@ -270,6 +270,6 @@ public class TestAlgorithmMulti extends TestCase {
 		List<Account> bots = CrowdDb.getAllExperts();
 		for(Account account : bots) {
 			System.out.println("id =" + account.getId() + " name = " + account.getName());
-		}
-	}
+		}*/
+	} 
 }
