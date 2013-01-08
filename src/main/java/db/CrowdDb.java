@@ -169,6 +169,7 @@ public class CrowdDb {
 		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet.next(); //JOHNNN
 			double accuracy = resultSet.getDouble("accuracy");
 			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy);
 			return singleAccuracy;
