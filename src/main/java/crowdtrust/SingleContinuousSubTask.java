@@ -53,23 +53,26 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 				new NormalDistribution(
 						cr.getValues(precision)[0], Math.sqrt(variance));
 			
-		double pResponseSpace = 1/(range[1] - range[0])*precision;
+		double pResponseSpace = 1/((range[1] - range[0])*precision);
+		
+		double freshConfidence = (getZPrior()/1-getZPrior());
 			
 		for (Estimate record : state){
 			if(record.getR().equals(r)){
 				matched = true;
+				record.incFrequency();
 			}
 			ContinuousR cr2 = (ContinuousR) record.getR();
 			double p = sa.getAccuracy()*nd.density(cr2.getValues(precision)[0]) + 
 				(1-sa.getAccuracy())*pResponseSpace;
-			record.setConfidence(record.getConfidence() * (p/(1-p)));
+			double newRatio = Math.log(p/1-p);
+			record.setConfidence(record.getConfidence() + newRatio);
+			freshConfidence += newRatio;
 		}
 			
 		if (!matched){
-			Estimate e = new Estimate(r, getZPrior());
-			double p = sa.getAccuracy()*nd.density(cr.getValues(precision)[0]) +
-					(1-sa.getAccuracy())*pResponseSpace;
-			e.setConfidence(e.getConfidence() * (p/1-p));
+			Estimate e = new Estimate(r, getZPrior(), 0);
+			e.setConfidence(freshConfidence);
 			state.add(e);
 			initEstimate(e);
 		}
@@ -87,16 +90,5 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		return null;
 	}
 
-	@Override
-	protected void updateEstimates(Collection<Estimate> state) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void initEstimate(Estimate e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
