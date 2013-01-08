@@ -25,7 +25,7 @@
             <td><select name="media_type">
             <option value="1">Image</option>
             <option value="2">Audio</option>
-            <option value="3">Text</option>
+            <option value="3">Video</option>
             </select></td>
         </tr>
         <tr>
