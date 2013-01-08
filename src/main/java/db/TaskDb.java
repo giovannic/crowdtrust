@@ -226,39 +226,30 @@ public static int addTask(int accountID, String name, String question, float acc
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
 	    } catch (SQLException e) {
-	      	System.err.println("SQL Error on get tasks for id");
+	      	System.err.println("SQL Error on get tasks for crowdid");
 	    }
 		return tasks;
 	}
 
 	public static List<Task> getTasksForClientId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT name FROM task WHERE submitter = ?");
+		sql.append("SELECT * FROM tasks WHERE submitter = ?");
+		List<Task> tasks = new ArrayList<Task>();
 		PreparedStatement preparedStatement;
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		}
-		catch (ClassNotFoundException e) {
-	  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
-	  	return null;
-		} catch (SQLException e) {
-	  	System.err.println("SQL Error on get Task");
-	  	return null;
-		}
-		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString("task.name");
-				tasks.add(getTask(taskName));
+				tasks.add(map(resultSet));
 			}
-			return tasks;
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
+		catch (ClassNotFoundException e) {
+			System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		} catch (SQLException e) {
+			System.err.println("SQL Error on get Tasks for crowdid");
 		}
-		return null;
+		return tasks;
 	}
 	
 }

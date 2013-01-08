@@ -1,28 +1,44 @@
 package crowdtrust;
 
-import java.io.UnsupportedEncodingException;
+import org.apache.commons.lang3.StringUtils;
 
 public class ContinuousR extends Response {
 
-	private int value;
+	private int [] values;
 	
-	public ContinuousR(String b) throws NumberFormatException, UnsupportedEncodingException{
-		this.value = Integer.parseInt(b);
+	public ContinuousR(int [] values){
+		this.values = values;
+	}
+	
+	public ContinuousR(String s){
+		String [] split = s.split("/");
+		this.values = new int [split.length];
+		for (int i = 0; i < split.length; i++){
+			values[i] = Integer.parseInt(split[i]);
+		}
 	}
 	
 	@Override
 	public String serialise() {
-		return Integer.toString(value);
+		return StringUtils.join(values);
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		ContinuousR cr = (ContinuousR) o;
-		return value == cr.value;
+		ContinuousR cmr = (ContinuousR) o;
+		for (int i = 0; i < values.length; i++){
+			 if (cmr.values[i] != values[i])
+				 return false;
+		}
+		return true;
 	}
 	
-	public double getValue(double precision) {
-		return value*precision;
+	public double [] getValues(double precision){
+		double [] t = new double [values.length];
+		for (int i = 0; i < values.length; i++){
+			t[i] = values[i] * precision;
+		}
+		return t;
 	}
 
 }

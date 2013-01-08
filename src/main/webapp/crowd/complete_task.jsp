@@ -37,8 +37,8 @@
     
     String TASKS_DIRECTORY = "http://www.doc.ic.ac.uk/project/2012/362/g1236218/TaskFiles/";
     
-    SubTask subtask = SubTaskDb.getRandomSubTask(taskID, userID, annotationType);
-    
+    SubTask subtask = SubTaskDb.getRandomSubTask(taskID, userID);
+    int sid = subtask.getId();
     String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
   %>
     <title>Task: <%=taskName%></title>
@@ -72,7 +72,7 @@
 			  break;
 		  }
 	  %>
-	  <form action="/servlet/responseServlet" method="post">
+	  <form action="/servlet/response" method="post">
       <%
       int it = 0;
 		    for( String answer : answers) {
@@ -80,20 +80,26 @@
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
 		  %><br>
-      <input type="radio" name="response" value="<%=answer/*may change to it*/%>" ><%=answer%></input>
+      <input type="radio" name="response" value=<%=it%>
+      <% if(it == 0) {%> checked <%}%> > <%=answer%> </input>
 		  <%
                       break;
 		      }
 		    }
 	    %>
+	    <input type="hidden" name="annotation_type" value=<%=annotationType%> />
+	    <input type="hidden" name="sid" value=<%=sid%> />
 		  <input type="submit" /><br>
-		  <%
-	    } else {
-                  %>
-        <h2>Task completed! Thank you, returning to your task list now</h2>
-	    <%}
-	    %>
-	  </form>
+		  
+    </form>
+	  <%
+    } else {
+                %>
+      <h2>Task completed! Thank you, returning to your task list now</h2>
+    <%}
+    %>
+  </body>
+</html>
 		  
 
 
