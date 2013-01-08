@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 public class TestAlgorithm extends TestCase {
 
 	protected static int annotatorNumber = 10;
-	protected static int subtasks = 10;
+	protected static int subtasks = 100;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
@@ -127,17 +127,42 @@ public class TestAlgorithm extends TestCase {
 		} 
 		System.out.println("------------------------------------------------------  ");
 		
-		System.out.println("---------Calculating error rate--------------------");
+		System.out.println("---------Calculating label error rate--------------------");
 		
 		Map<Integer,Response> results = SubTaskDb.getResults(1);
+		int correct = 0;
 		for (AnnotatorSubTaskAnswer answer : answers){
+			Response trueA = answer.getAlgoTestData().getActualAnswer();
+			Response estA = results.get(answer.id);
 			System.out.println("id " + answer.id + 
-					" true answer " + 
-					answer.getAlgoTestData().getActualAnswer().toString() + 
-					" estimate = " + results.get(answer.id));
+					" true answer = " + 
+					trueA + 
+					" estimate = " + estA);
+			if(trueA.equals(estA)){
+				correct++;
+			}
 		}
+		System.out.println("error rate = " + ((double)correct/subtasks));
 		
-		System.out.println("------------------------------------------------------  ");
+		System.out.println("------------------------------------------------------ ");
+		
+		System.out.println("---------Calculating accuracy average difference--------------------");
+		
+		Map<Integer,Response> accuracies = SubTaskDb.getResults(1);
+		for (AnnotatorSubTaskAnswer answer : answers){
+			Response trueA = answer.getAlgoTestData().getActualAnswer();
+			Response estA = results.get(answer.id);
+			System.out.println("id " + answer.id + 
+					" true answer = " + 
+					trueA + 
+					" estimate = " + estA);
+			if(trueA.equals(estA)){
+				correct++;
+			}
+		}
+		System.out.println("error rate = " + (correct/subtasks));
+		
+		System.out.println("------------------------------------------------------ ");
 		
 		//DbInitialiser.init();
 		}

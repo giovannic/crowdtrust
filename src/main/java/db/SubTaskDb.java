@@ -351,27 +351,6 @@ public class SubTaskDb {
 		    }
 			
 	}
-
-	public static void addBinaryEstimate(Estimate est, int id) {
-		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?)";
-		
-		PreparedStatement preparedStatement;
-        
-		try {
-	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
-			preparedStatement.setInt(1, id);
-			preparedStatement.setString(2, est.getR().serialise());
-	    	preparedStatement.setFloat(3, (float) est.getConfidence());
-			preparedStatement.execute();
-	    }	    catch (ClassNotFoundException e) {
-	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-	    	e.printStackTrace();
-	    } catch (SQLException e) {
-	      	System.err.println("SQL Error on check finished");
-	      	e.printStackTrace();
-	    }
-		
-	}
 	
 	public static Map<Integer, Response> getResults(int taskId){
 		String sql = "SELECT tasks.annotation_type AS type, " +
@@ -428,6 +407,26 @@ public class SubTaskDb {
 			e.printStackTrace();
 		}
 		return results;
+	}
+
+	public static void addEstimate(Estimate est, int id) {
+		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?)";
+		
+		PreparedStatement preparedStatement;
+        
+		try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
+			preparedStatement.setInt(1, id);
+			preparedStatement.setString(2, est.getR().serialise());
+	    	preparedStatement.setFloat(3, (float) est.getConfidence());
+			preparedStatement.execute();
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	    	e.printStackTrace();
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
+	    }
 	}
 
 }
