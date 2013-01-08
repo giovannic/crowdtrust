@@ -18,6 +18,7 @@ import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
 import crowdtrust.BinarySubTask;
+import crowdtrust.Result;
 import crowdtrust.SubTask;
 import crowdtrust.Task;
 
@@ -357,7 +358,7 @@ public class SubTaskDb {
 			
 	}
 	
-	public static Map<Integer, Response> getResults(int taskId){
+	public static Map<Integer, Response> getMappedResults(int taskId){
 		String sql = "SELECT tasks.annotation_type AS type, " +
 				"estimates.subtask_id, estimate, confidence " +
 				"FROM estimates JOIN (" +
@@ -406,6 +407,56 @@ public class SubTaskDb {
 		return results;
 	}
 
+	public static Collection<Result> getResults(int taskId){
+		String sql = "SELECT tasks.annotation_type AS type, " +
+				"estimates.subtask_id, estimate, confidence " +
+				"FROM estimates JOIN (" +
+				"SELECT task, file_name, subtask_id, MAX(confidence) AS best " +
+				"FROM estimates JOIN subtasks " +
+				"ON estimates.subtask_id = subtasks.id " +
+				"WHERE task = ? " +
+				"GROUP BY subtask_id, file_name, task) AS best_estimates " +
+				"ON estimates.subtask_id = best_estimates.subtask_id " +
+				"JOIN tasks ON best_estimates.task = tasks.id " +
+				"AND confidence = best " +
+				"AND frequency IN( " +
+				"SELECT MAX(frequency) " +
+				"FROM estimates e " +
+				"WHERE e.subtask_id = estimates.subtask_id " +
+				"GROUP BY e.subtask_id)";
+		
+		PreparedStatement preparedStatement;
+		
+		Map<Integer,Response> results = new HashMap<Integer,Response>();
+		
+	    try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    	preparedStatement.setInt(1, taskId);
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	    	e.printStackTrace();
+	    	return null;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
+	      	return null;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()){
+				int s = rs.getInt("subtask_id");
+				int type = rs.getInt("type");
+				String e = rs.getString("estimate");
+				results.put(s, mapResponse(e, type));
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+
+	
 	public static void addEstimate(Estimate est, int id) {
 		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?,?)";
 		

@@ -1,12 +1,11 @@
-<%@ page import="java.util.List" %>
+<%@ page import="java.util.Collection" %>
 <%@ page import="db.SubTaskDb" %>
 <%@ page import="crowdtrust.Task" %>
-<%@ page import="crowdtrust.ClientEstimate" %>
 
 <html>
   <%
     int tid = Integer.parseInt(request.getParameter("task_id"));
-    estimates = SOME JAVA CALL;
+    Collection <Result> results = SubTaskDb.getResults(tid);
     
   %>
   <head>
@@ -22,14 +21,14 @@
       <th>Percentage Confidence in Answer</th>
     </tr>
     <%
-    for( int i = 0 ; i < estimates.length ; estimates++ ) {
-      e = estimates[i];
-      subtask = e.getSubTask();
-      response = e.getResponse();    
+    for( Result r : results ) {
+      subtask = r.getSubTask();
+      estimate = r.getEstimate();    
+      %>
     <tr>
-      <td><%=subtask.getFileName%></td>
-      <td><%=response.serialise()%></td>
-      <td><%=get confidence (t=e^c/(1+e^c))%></td>
+      <td><%=subtask.getFileName()%></td>
+      <td><%=estimate.getR().toString()%></td>
+      <td><%=estimate.getPercentage()%></td>
     </tr>
     <%
     }

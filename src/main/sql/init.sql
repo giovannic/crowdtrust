@@ -88,8 +88,8 @@ CREATE TABLE responses
 CREATE TABLE ranged
 (
   task INTEGER PRIMARY KEY,
-  start INTEGER,
-  finish INTEGER,
+  start VARCHAR(32),
+  finish VARCHAR(32),
   p DOUBLE PRECISION
 );
 

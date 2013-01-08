@@ -144,7 +144,7 @@ public class TestAlgorithm extends TestCase {
 		
 		System.out.println("---------Calculating label error rate--------------------");
 		
-		Map<Integer,Response> results = SubTaskDb.getResults(1);
+		Map<Integer,Response> results = SubTaskDb.getMappedResults(1);
 		int correct = 0;
 		for (AnnotatorSubTaskAnswer answer : answers){
 			Response trueA = answer.getAlgoTestData().getActualAnswer();
