@@ -293,7 +293,7 @@ public class SubTaskDb {
 	}
 
 	private static Collection<Estimate> getEstimates(int id, int type) {
-		String sql = "SELECT estimate, confidence " +
+		String sql = "SELECT estimate, confidence, frequency " +
 				"FROM estimates " +
 				"WHERE subtask_id = ?";
 		
