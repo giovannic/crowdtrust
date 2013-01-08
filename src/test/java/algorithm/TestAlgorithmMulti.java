@@ -18,6 +18,7 @@ import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinaryR;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
+import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 
 import db.DbInitialiser;
@@ -29,7 +30,7 @@ import db.CrowdDb;
 
 import junit.framework.TestCase;
 
-public class TestAlgorithm extends TestCase {
+public class TestAlgorithmMulti extends TestCase {
 
 	protected static int annotatorNumber = 10;
 	protected static int subtasks = 100;
@@ -39,7 +40,7 @@ public class TestAlgorithm extends TestCase {
 	
 	protected AnnotatorModel[] annotators;
 	
-	public TestAlgorithm(String name){
+	public TestAlgorithmMulti(String name){
 		super(name);
 	}
 	
@@ -58,12 +59,11 @@ public class TestAlgorithm extends TestCase {
 			annotators[i] = new AnnotatorModel(uuid, uuid);
 		}
 		
-		//Set up the annotators so they can answer binary question
+		//Set up the annotators so they can answer multi question
 		Random rand = new Random();
 		for(int i = 0; i < annotatorNumber; i++){
-			int truePos = rand.nextInt(999) + 1;	
-			int trueNeg = rand.nextInt(999) + 1;
-			annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
+			int correct = rand.nextInt(999) + 1;	
+			annotators[i].setUpMulti(correct, 1000);
 		}
 
 		if(labs){
@@ -87,12 +87,12 @@ public class TestAlgorithm extends TestCase {
 		List<String> testQs = new LinkedList<String>();
 		testQs.add("test q1");
 		testQs.add("test q2");
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, 1, 1, 1, 15, expiry, testQs)>0);
+		assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, 1, 2, 1, 15, expiry, testQs)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
 		System.out.println("About to get Task id");
-		System.out.println("John Task Id: " + TaskDb.getTaskId("BinaryTestTask"));
+		System.out.println("John Task Id: " + TaskDb.getTaskId("MultiTestTask"));
 		System.out.println("Got it");
 		
 		//Lets create a linked list of subTasks
@@ -100,12 +100,13 @@ public class TestAlgorithm extends TestCase {
 			String uuid = UUID.randomUUID().toString();
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
-			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
+			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("MultiTestTask"));
 			int id = SubTaskDb.getSubTaskId(uuid);
 			System.out.println("Subtask Id: " + id);
-			BinarySubTask bst = new BinarySubTask(id,0.7,0,15);
-			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(2)));
-			answers.add(asta);
+			
+			MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, 0, 15, 10);
+		//	AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiValueTestData(rand.nextInt(2)));
+			//answers.add(asta);
 		}
 		
 		//Give all the annotators the answers
