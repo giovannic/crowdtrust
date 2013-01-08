@@ -233,7 +233,7 @@ public static int addTask(int accountID, String name, String question, float acc
 
 	public static List<Task> getTasksForClientId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM task WHERE submitter = ?");
+		sql.append("SELECT * FROM tasks WHERE submitter = ?");
 		List<Task> tasks = new ArrayList<Task>();
 		PreparedStatement preparedStatement;
 		try {
