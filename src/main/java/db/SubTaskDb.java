@@ -364,7 +364,7 @@ public class SubTaskDb {
 				"SELECT task, file_name, subtask_id, MAX(confidence) AS best " +
 				"FROM estimates JOIN subtasks " +
 				"ON estimates.subtask_id = subtasks.id " +
-				"WHERE task = 1 " +
+				"WHERE task = ? " +
 				"GROUP BY subtask_id, file_name, task) AS best_estimates " +
 				"ON estimates.subtask_id = best_estimates.subtask_id " +
 				"JOIN tasks ON best_estimates.task = tasks.id " +
