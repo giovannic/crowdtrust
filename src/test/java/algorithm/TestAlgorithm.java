@@ -15,11 +15,14 @@ import java.util.UUID;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 import crowdtrust.AccuracyRecord;
+import crowdtrust.AnnotationType;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinaryR;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
+import crowdtrust.InputType;
+import crowdtrust.MediaType;
 import crowdtrust.Response;
 
 import db.DbInitialiser;
@@ -46,7 +49,7 @@ public class TestAlgorithm extends TestCase {
 	}
 	
 	public void testAlgorithm(){
-		boolean labs = true;
+		boolean labs = false;
 		System.setProperty("test", "true");
 		if(labs){
 			DbInitialiser.init();
@@ -96,7 +99,7 @@ public class TestAlgorithm extends TestCase {
 		List<String> testQs = new LinkedList<String>();
 		testQs.add("test q1");
 		testQs.add("test q2");
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, 1, 1, 1, 15, expiry, testQs)>0);
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, 15, expiry, testQs)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
@@ -157,7 +160,7 @@ public class TestAlgorithm extends TestCase {
 				correct++;
 			}
 		}
-		System.out.println("error rate = " + ((double)correct/subtasks));
+		System.out.println("success rate = " + ((double)correct/subtasks));
 
 		System.out.println("------------------------------------------------------  ");
 		
