@@ -36,11 +36,15 @@ public class ResponseServlet extends HttpServlet {
 		int id = -1;
 		if(request.isRequestedSessionIdValid()){
 			HttpSession s = request.getSession();
-			id = (Integer) s.getAttribute("account_id");
+			try{
+				id = (Integer) s.getAttribute("account_id");
+			}catch(Exception e) {
+				
+			}
 		}
 		
 		if (id < 1){
-			response.sendRedirect("/login.html");
+			response.sendRedirect("/");
 		} else {
 			Response r = null;
 			SubTask subtask = null;
