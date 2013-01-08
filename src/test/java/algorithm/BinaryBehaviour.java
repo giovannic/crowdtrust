@@ -157,4 +157,12 @@ public class BinaryBehaviour {
 		return this.sensitivityIndex;
 	}
 	
+	public double getTruePosRate(){
+		return this.truePosRate;
+	}
+	
+	public double getTrueNegRate(){
+		return this.trueNegRate;
+	}
+	
 }

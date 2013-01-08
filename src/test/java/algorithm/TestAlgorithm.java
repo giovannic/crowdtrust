@@ -3,6 +3,7 @@ package algorithm;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,6 +12,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import crowdtrust.AccuracyRecord;
+import crowdtrust.Bee;
+import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.Response;
@@ -40,6 +44,7 @@ public class TestAlgorithm extends TestCase {
 	
 	public void testAlgorithm(){
 		boolean labs = false;
+		System.setProperty("test", "true");
 		if(labs){
 			DbInitialiser.init();
 		}
@@ -143,8 +148,20 @@ public class TestAlgorithm extends TestCase {
 			}
 		}
 		System.out.println("error rate = " + ((double)correct/subtasks));
-		
-		System.out.println("------------------------------------------------------ ");
+
+		System.out.println("------------------------------------------------------  ");
+		System.out.println("----------Calculating Annotator Rates-----------------");
+		System.out.println("Annotator Id      |    TPR    |    TNR    |    TPRE    |    TNRE    ");
+			for(int i = 0; i < annotatorNumber; i++){
+				AnnotatorModel annotator = annotators[i];
+				System.out.print(annotator.getBee().getId() +" | " + annotator.getBinaryBehaviour().getTruePosRate() + " | " + annotator.getBinaryBehaviour().getTrueNegRate() + " | " );
+				BinaryAccuracy binAccuracy = CrowdDb.getBinaryAccuracy(annotator.getBee().getId());
+				System.out.print(binAccuracy.getTruePositive() +" | "+ binAccuracy.getTrueNegative());
+				System.out.println("");
+			}
+		System.out.println("------------------------------------------------------");
+//
+
 		
 		System.out.println("---------Calculating accuracy average difference--------------------");
 		
@@ -163,6 +180,7 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("error rate = " + (correct/subtasks));
 		
 		System.out.println("------------------------------------------------------ ");
+
 		
 		//DbInitialiser.init();
 		}
