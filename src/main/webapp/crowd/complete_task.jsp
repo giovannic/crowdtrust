@@ -36,10 +36,7 @@
     }
     
     String TASKS_DIRECTORY = "http://www.doc.ic.ac.uk/project/2012/362/g1236218/TaskFiles/";
-    
     SubTask subtask = SubTaskDb.getRandomSubTask(taskID, userID);
-    int sid = subtask.getId();
-    String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
   %>
     <title>Task: <%=taskName%></title>
     <%
@@ -56,6 +53,8 @@
     <h2 id="question"><%=question%>?</h2>
     <%
     if(subtask != null) {
+      String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
+      int sid = subtask.getId();
 		  switch(mediaType) {
 		  case 1: /*image*/ 
 	  %>
