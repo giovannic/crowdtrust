@@ -33,8 +33,8 @@ import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
 
-	protected static int annotatorNumber = 10;
-	protected static int subtasks = 100;
+	protected static int annotatorNumber = 20;
+	protected static int subtasks = 300;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
