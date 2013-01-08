@@ -73,7 +73,7 @@ public class AnnotatorModel {
 			task.addResponse(this.bee, new BinaryR(boolAnswer));
 		}else if(task instanceof MultiValueSubTask){
 			MultiTestData testData = ((MultiTestData) savedTask.getAlgoTestData());
-			int answer = this.multi.generateAnswer((MultiValueR) testData.getActualAnswer());
+			int answer = this.multi.generateAnswer((MultiValueR) testData.getActualAnswer(), testData.getNumOptions());
 			//Link with gios code
 			task.addResponse(this.bee, new MultiValueR(answer));
 		}else if(task instanceof SingleContinuousSubTask){
@@ -85,10 +85,12 @@ public class AnnotatorModel {
 	}
 	
 	public AnnotatorSubTaskAnswer findTask(int id){
+		System.out.println("Searching for task " + id);
 		Iterator<AnnotatorSubTaskAnswer> i = this.tasks.iterator();
 		while(i.hasNext()){
 			AnnotatorSubTaskAnswer temp = i.next();
 			if(temp.id == id){
+				System.out.println("Found!");
 				return temp;
 			}
 		}
