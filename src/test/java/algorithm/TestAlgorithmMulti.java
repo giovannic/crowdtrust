@@ -15,11 +15,14 @@ import java.util.UUID;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 import crowdtrust.AccuracyRecord;
+import crowdtrust.AnnotationType;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinaryR;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
+import crowdtrust.InputType;
+import crowdtrust.MediaType;
 import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 import crowdtrust.SingleAccuracy;
@@ -98,7 +101,7 @@ public class TestAlgorithmMulti extends TestCase {
 		List<String> testQs = new LinkedList<String>();
 		testQs.add("test q1");
 		testQs.add("test q2");
-		assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, 1, 2, 1, 15, expiry, testQs)>0);
+		assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 15, expiry, testQs)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
