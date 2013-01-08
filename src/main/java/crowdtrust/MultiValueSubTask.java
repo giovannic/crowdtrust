@@ -35,7 +35,7 @@ public class MultiValueSubTask extends SubTask{
 			Estimate e = new Estimate(r, getZPrior());
 			e.setConfidence(e.getConfidence() * (sa.getAccuracy()/(1-sa.getAccuracy())));
 			state.add(e);
-			addEstimate(e);
+			initEstimate(e);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected void addEstimate(Estimate e) {
+	protected void initEstimate(Estimate e) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -120,7 +120,9 @@ public abstract class SubTask {
 		return this.id;
 	}
 
-	protected abstract void addEstimate(Estimate e);
+	protected void initEstimate(Estimate e) {
+		db.SubTaskDb.addEstimate(e, id);
+	}
 	
 	public void addFileName(String fileName) {
 		this.fileName = fileName;
