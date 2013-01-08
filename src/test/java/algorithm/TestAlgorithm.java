@@ -175,12 +175,16 @@ public class TestAlgorithm extends TestCase {
 					}
 					int annotatorAnswer = annotators[i].getBinaryBehaviour().generateAnswer(new BinaryR(answerBool));
 					if(annotatorAnswer == 1 & actualAnswer == 1){
-						trueNeg ++;
+						truePos ++;
 					}else if(annotatorAnswer == 0 & actualAnswer == 0){
 						trueNeg ++;
 					}
 				}
-				System.out.print((truePos / posQuestions) + " | " + (trueNeg / negQuestions));
+				double tpr = ((truePos * 1.0) / (posQuestions * 1.0));
+				double tnr = ((trueNeg * 1.0) / (negQuestions * 1.0));
+						
+				System.out.print(tpr + " | " + tnr);
+				System.out.println("");
 				System.out.println("NumPos = " + posQuestions + " NumNeg = " + negQuestions + " TruePos = " + truePos  + " TrueNeg = " + trueNeg);
 				System.out.println("");
 			}
