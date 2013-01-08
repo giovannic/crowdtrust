@@ -233,29 +233,21 @@ public static int addTask(int accountID, String name, String question, float acc
 
 	public static List<Task> getTasksForClientId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT name FROM task WHERE submitter = ?");
+		sql.append("SELECT * FROM task WHERE submitter = ?");
 		List<Task> tasks = new ArrayList<Task>();
 		PreparedStatement preparedStatement;
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		}
-		catch (ClassNotFoundException e) {
-	  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
-	  	return tasks;
-		} catch (SQLException e) {
-	  	System.err.println("SQL Error on get Tasks for crowdid");
-	  	return tasks;
-		}
-		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString("task.name");
-				tasks.add(getTask(taskName));
+				tasks.add(map(resultSet));
 			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
+		catch (ClassNotFoundException e) {
+			System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		} catch (SQLException e) {
+			System.err.println("SQL Error on get Tasks for crowdid");
 		}
 		return tasks;
 	}
