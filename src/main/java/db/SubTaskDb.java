@@ -359,17 +359,21 @@ public class SubTaskDb {
 	
 	public static Map<Integer, Response> getResults(int taskId){
 		String sql = "SELECT tasks.annotation_type AS type, " +
-				"subtask_id, estimate, confidence " +
+				"estimates.subtask_id, estimate, confidence " +
+				"FROM estimates JOIN (" +
+				"SELECT task, file_name, subtask_id, MAX(confidence) AS best " +
 				"FROM estimates JOIN subtasks " +
 				"ON estimates.subtask_id = subtasks.id " +
-				"JOIN tasks ON subtasks.task = tasks.id " +
-				"WHERE tasks.id = ? " +
-				"AND confidence IN ( " +
-				"SELECT MAX(confidence) FROM estimates e " +
+				"WHERE task = ? " +
+				"GROUP BY subtask_id, file_name, task) AS best_estimates " +
+				"ON estimates.subtask_id = best_estimates.subtask_id " +
+				"JOIN tasks ON best_estimates.task = tasks.id " +
+				"AND confidence = best " +
+				"AND frequency IN( " +
+				"SELECT MAX(frequency) " +
+				"FROM estimates e " +
 				"WHERE e.subtask_id = estimates.subtask_id " +
 				"GROUP BY e.subtask_id)";
-		
-		//TODO frequency
 		
 		PreparedStatement preparedStatement;
 		
