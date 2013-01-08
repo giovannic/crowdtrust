@@ -63,19 +63,21 @@
 		  	break;
 		  case 2: /*audio*/
 	  %>
-	  <audio controls>
-      <source src="<%=subtaskFile%>" type="audio/mpeg">
+	  <audio src="<%=subtaskFile%>" controls preload="auto">
       Your browser does not support the audio element, please choose a new task.
     </audio> 
     <%
 			  break;
+		  case 3: /*video*/
+	  %>
+	  <video height=240 width=320 src="<%=subtaskFile%>" />
+	  <%
 		  }
 	  %>
 	  <form action="/servlet/response" method="post">
       <%
       int it = 0;
 		    for( String answer : answers) {
-          String ithAnswer = "answer" + (it+1);
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
 		  %><br>

@@ -23,17 +23,17 @@
         <tr>
             <td>What type of media are you uploading?</td>
             <td><select name="media_type">
-            <option value="1">Image</option>
-            <option value="2">Audio</option>
-            <option value="3">Text</option>
+            <option value="IMAGE">Image</option>
+            <option value="AUDIO">Audio</option>
+            <option value="VIDEO">Video</option>
             </select></td>
         </tr>
         <tr>
             <td>What type of annotation?</td>
             <td><select name="annotation_type">
-            <option value="1">Binary</option>
-            <option value="2">Category</option>
-            <option value="3">NContinuous</option>
+            <option value="BINARY">Binary</option>
+            <option value="MULTIVALUED">Category</option>
+            <option value="CONTINUOUS">NContinuous</option>
             </select></td>
         </tr>
         <tr>
@@ -47,10 +47,10 @@
         <tr>
             <td>What type of response do you expect?</td>
             <td><select name="input_type">
-            <option value="1">Radio</option>
-            <option value="2">Slider</option>
-            <option value="3">Coordinates</option>
-            <option value="4">Bounding Box</option>
+            <option value="RADIO">Radio</option>
+            <option value="SLIDER">Slider</option>
+            <option value="COORDINATES">Coordinates</option>
+            <option value="BOUNDING_BOX">Bounding Box</option>
             </select></td>
         </tr>
         </tr>

@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import crowdtrust.AnnotationType;
+import crowdtrust.InputType;
+import crowdtrust.MediaType;
+
 import db.TaskDb;
 
 	public class CreateTaskServlet extends HttpServlet {
@@ -40,15 +44,17 @@ import db.TaskDb;
 	        String name = request.getParameter("name");
 	        float accuracy;
 	        int max_labels;
-	        int media_type;
-	        int annotation_type;
-	        int input_type;
+	        int num_answers;
+	        MediaType media_type;
+	        AnnotationType annotation_type;
+	        InputType input_type;
 			try {
 				accuracy = Float.parseFloat(request.getParameter("accuracy"));
 				max_labels = Integer.parseInt(request.getParameter("max_labels"));
-				media_type = Integer.parseInt(request.getParameter("media_type"));
-				annotation_type = Integer.parseInt(request.getParameter("annotation_type"));
-				input_type = Integer.parseInt(request.getParameter("input_type"));
+				num_answers = Integer.parseInt(request.getParameter("num_answers"));
+				media_type = MediaType.valueOf(request.getParameter("media_type"));
+				annotation_type = AnnotationType.valueOf(request.getParameter("annotation_type"));
+				input_type = InputType.valueOf(request.getParameter("input_type"));
 			} catch (NumberFormatException e) {
 				out.println("accuracy or type not an integer");
 				e.printStackTrace();
@@ -57,9 +63,11 @@ import db.TaskDb;
 			long expiry;
 			try {
 				expiry = getLongDate(request);
-			} catch (ParseException e) {					
-		    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"addtask.jsp\">");
+			} catch (ParseException e) {		
 		        out.println("<html>");
+		        out.println("<head>");			
+		    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"addtask.jsp\">");
+		        out.println("</head>");
 		        out.println("<body>");
 		        out.println("bad date given, returning to add task page");
 		        out.println("</body>");
@@ -68,7 +76,7 @@ import db.TaskDb;
 			}
 			List<String> answers = new LinkedList<String>();
 			String answer = request.getParameter("answer1");
-			for(int i = 2 ; i < 5 && answer != null ; i++) {
+			for(int i = 2 ; i < num_answers ; i++) {
 				answers.add(answer);
 				answer = request.getParameter("answer" + i);
 			}

@@ -1,6 +1,7 @@
 package db;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,8 +47,10 @@ public class SubTaskDb {
 		StringBuilder sql = new StringBuilder();
       sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
       sql.append("WHERE subtasks.id = ?");
+      Connection c = null;
       try {
-        PreparedStatement preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    	c = DbAdaptor.connect();
+        PreparedStatement preparedStatement = c.prepareStatement(sql.toString());
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         if(!resultSet.next()) {
@@ -58,12 +61,19 @@ public class SubTaskDb {
         return TaskDb.map(resultSet);
       } catch (ClassNotFoundException e) {
       	  System.err.println("Error connecting to DB on get Subtask: PSQL driver not present");
-      	e.printStackTrace();
+      	  e.printStackTrace();
       	  return null;
       } catch (SQLException e) {
       	  System.err.println("SQL Error on get Subtask");
-      	e.printStackTrace();
+      	  e.printStackTrace();
       	  return null;
+      } finally {
+    	  try {
+			c.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
       }
 	}
 
@@ -117,8 +127,8 @@ public class SubTaskDb {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	public static List<String> getImageSubtasks() {
