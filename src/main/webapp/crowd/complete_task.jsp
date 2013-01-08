@@ -80,20 +80,23 @@
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
 		  %><br>
-      <input type="radio" name="response" value="<%=answer/*may change to it*/%>" ><%=answer%></input>
+      <input type="radio" name="response" value="<%=it/%>"
+      <% if(it == 0) {%>checked<%}%>><%=answer%></input>
 		  <%
                       break;
 		      }
 		    }
 	    %>
 		  <input type="submit" /><br>
-		  <%
-	    } else {
-                  %>
-        <h2>Task completed! Thank you, returning to your task list now</h2>
-	    <%}
-	    %>
-	  </form>
+    </form>
+	  <%
+    } else {
+                %>
+      <h2>Task completed! Thank you, returning to your task list now</h2>
+    <%}
+    %>
+  </body>
+</html>
 		  
 
 

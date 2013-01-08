@@ -50,10 +50,11 @@ public class ResponseServlet extends HttpServlet {
 			SubTask subtask = null;
 			int type = Integer.parseInt(request.getParameter("annotation_type"));
 			int subTaskId = Integer.parseInt(request.getParameter("sid"));
+			int rInt = Integer.parseInt(request.getParameter("response"));
 			//TODO 
 			switch(type){
 			case 1:
-				if (request.getParameter("response").equals(request.getParameter("answer1")))
+				if (rInt == 0)
 					r = new BinaryR(true);
 				else
 					r = new BinaryR(false);
