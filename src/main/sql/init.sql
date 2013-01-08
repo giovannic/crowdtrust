@@ -133,7 +133,7 @@ VALUES(1, 'image');
 INSERT INTO media_types
 VALUES(2, 'audio');
 INSERT INTO media_types
-VALUES(3, 'text');
+VALUES(3, 'video');
 
 
 INSERT INTO annotation_types
