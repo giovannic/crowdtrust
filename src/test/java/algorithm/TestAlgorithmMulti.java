@@ -127,7 +127,7 @@ public class TestAlgorithmMulti extends TestCase {
 		}
 		System.out.println("Given annotators answers");
 		
-		printAnswers(answers);
+		//printAnswers(answers);
 		System.out.println("---------Beginning to answer tasks--------------------");
 		
 		int parent_task_id = TaskDb.getTaskId("MultiTestTask");
