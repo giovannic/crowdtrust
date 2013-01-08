@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
-import crowdtrust.Bee;
 import crowdtrust.BinaryR;
 import crowdtrust.ContinuousR;
 import crowdtrust.MultiValueR;
@@ -376,16 +374,15 @@ public class SubTaskDb {
 	}
 	
 	public static Map<Integer, Response> getResults(int taskId){
-		String sql = "SELECT tasks.annotation_type AS type" +
-				", subtask_id, estimate, confidence " +
-				"FROM estimates JOIN subtasks " +
-				"ON estimates.subtask_id = subtasks.id " +
-				"JOIN tasks ON subtasks.task = tasks.id" +
-				"WHERE tasks.id = ?" +
-				"AND confidence IN (" +
-				"SELECT MAX(confidence) " +
-				"FROM estimates e " +
-				"WHERE e.subtask_id = estimates.subtask_id" +
+		String sql = "SELECT tasks.annotation_type AS type, " +
+				"subtask_id, estimate, " +
+				"confidence FROM estimates " +
+				"JOIN subtasks ON estimates.subtask_id = subtasks.id " +
+				"JOIN tasks ON subtasks.task = tasks.id " +
+				"WHERE tasks.id = ? " +
+				"AND confidence IN ( " +
+				"SELECT MAX(confidence) FROM estimates e " +
+				"WHERE e.subtask_id = estimates.subtask_id " +
 				"GROUP BY e.subtask_id)";
 		PreparedStatement preparedStatement;
 		
