@@ -29,12 +29,20 @@ public class AnnotatorModel {
 		this.password = password;
 	}
 	
+	public BinaryBehaviour getBinaryBehaviour(){
+		return this.binary;
+	}
+	
 	public void setTasks(LinkedList<AnnotatorSubTaskAnswer> tasks){
 		this.tasks = tasks;
 	}
 	
 	public void setId(int id){
 		this.bee = new Bee(id);
+	}
+	
+	public Bee getBee(){
+		return this.bee;
 	}
 	
 	public void setUpBinary(int truePos, int trueNeg, int totalPos, int totalNeg){

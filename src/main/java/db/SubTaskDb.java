@@ -220,7 +220,7 @@ public class SubTaskDb {
 		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
 		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r ");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id ");
-		sql.append("LEFT JOIN responses ON responses.id ");
+		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id ");
 		sql.append("WHERE subtasks.id = ? ");
 		sql.append("GROUP BY s,a,m ");
 		PreparedStatement preparedStatement;
@@ -238,11 +238,14 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
-			int taskAccuracy = rs.getInt("a");
-			int id = rs.getInt("s");
-			int responses = rs.getInt("r");
-			int maxLabels = rs.getInt("m");
-			return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+			if( rs.next() ) {
+				int taskAccuracy = rs.getInt("a");
+				int id = rs.getInt("s");
+				int responses = rs.getInt("r");
+				int maxLabels = rs.getInt("m");
+				return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+			}
+			return null;
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
