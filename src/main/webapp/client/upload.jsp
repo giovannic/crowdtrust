@@ -8,6 +8,9 @@
       if (session == null) {
     %>
       <META HTTP-EQUIV="refresh" CONTENT="0;URL=/" />
+    <%
+      }
+    %>
   </head>
   <body>
 
