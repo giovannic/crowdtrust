@@ -43,11 +43,11 @@ public class BinaryBehaviour {
 	}
 	
 	public int generateAnswer(BinaryR response){
-		int answer;
+		int realanswer;
 		if (response.isTrue()){
-			answer = 1;
+			realanswer = 1;
 		}else{
-			answer = 0;
+			realanswer = 0;
 		}
 		//update the sensory index and threshold for the calculation of ujk
 	//	this.updateRates();
@@ -62,7 +62,7 @@ public class BinaryBehaviour {
 		 */
 
 		double signal = dist.sample();
-		System.out.println("Rate" + this.truePosRate + " Answer " +  answer + " Signal " + signal );
+		System.out.println("Rate" + this.truePosRate + " Answer " +  realanswer + " Signal " + signal );
 		int answer = (Double.compare(signal, this.threshold) > 0) ? 1 : 0;
 		//this.updateNumbers(answer, actualAnswer);	//Update truePos/neg and totalpos/neg
 		this.updateRates();		//Update truePos/negRates
