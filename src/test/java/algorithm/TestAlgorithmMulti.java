@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
+
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
@@ -20,6 +22,7 @@ import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
+import crowdtrust.SingleAccuracy;
 
 import db.DbInitialiser;
 import db.LoginDb;
@@ -45,7 +48,7 @@ public class TestAlgorithmMulti extends TestCase {
 	}
 	
 	public void testAlgorithm(){
-/*		boolean labs = false;
+		boolean labs = false;
 		System.setProperty("test", "true");
 		if(labs){
 			DbInitialiser.init();
@@ -60,10 +63,18 @@ public class TestAlgorithmMulti extends TestCase {
 		}
 		
 		//Set up the annotators so they can answer multi question
+		
 		Random rand = new Random();
 		for(int i = 0; i < annotatorNumber; i++){
-			int correct = rand.nextInt(999) + 1;	
-			annotators[i].setUpMulti(correct, 1000);
+			double honestPeople = 0.75;
+			if(rand.nextDouble() > honestPeople){
+				//bot
+				annotators[i].setUpMulti(800, 1000);
+			}else{
+				//honest annotator
+				annotators[i].setUpMulti(200, 1000);
+			}
+			
 		}
 
 		if(labs){
@@ -74,8 +85,8 @@ public class TestAlgorithmMulti extends TestCase {
 			AnnotatorModel a = annotators[i];
 			System.out.println("annotator " + 
 					a.bee.getId() + 
-					" truePosRate =" + a.binary.truePosRate +
-					" trueNegRate =" + a.binary.trueNegRate);
+					" successRate =" + a.multi.successRate);
+					
 		}
 		
 		//Lets make a client
@@ -104,9 +115,10 @@ public class TestAlgorithmMulti extends TestCase {
 			int id = SubTaskDb.getSubTaskId(uuid);
 			System.out.println("Subtask Id: " + id);
 			
-			MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, 0, 15, 10);
-		//	AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiValueTestData(rand.nextInt(2)));
-			//answers.add(asta);
+			
+			MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, 0, 15, 5);
+			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiTestData(rand.nextInt(6), 5));
+			answers.add(asta);
 		}
 		
 		//Give all the annotators the answers
@@ -118,11 +130,11 @@ public class TestAlgorithmMulti extends TestCase {
 		printAnswers(answers);
 		System.out.println("---------Beginning to answer tasks--------------------");
 		
-		int parent_task_id = TaskDb.getTaskId("BinaryTestTask");
+		int parent_task_id = TaskDb.getTaskId("MultiTestTask");
 		
 		int annotatorIndex = rand.nextInt(annotatorNumber - 1);
 		AnnotatorModel a = annotators[annotatorIndex];
-		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId());
+		MultiValueSubTask t = (MultiValueSubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId());
 		
 		
 		while( t != null){
@@ -130,7 +142,7 @@ public class TestAlgorithmMulti extends TestCase {
 			a = annotators[annotatorIndex];
 			System.out.println("Annotator: " + a.username + " |Task: " + t.getId());
 			a.answerTask(t);
-			t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId());
+			t = (MultiValueSubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId());
 		} 
 		System.out.println("------------------------------------------------------  ");
 		
@@ -153,7 +165,7 @@ public class TestAlgorithmMulti extends TestCase {
 
 		System.out.println("------------------------------------------------------  ");
 		
-		System.out.println("----------------Offline Binary Testing-------------------");
+		/*System.out.println("----------------Offline Binary Testing-------------------");
 		System.out.println("Id |    ATPR    |    ATNR    |    TPRE    |    TNRE    ");
 			for(int i = 0; i < annotatorNumber; i++){
 				int totalQuestions = 1000;
@@ -190,21 +202,21 @@ public class TestAlgorithmMulti extends TestCase {
 				System.out.println("");
 			}
 		System.out.println("----------------------------------------------------------");
-		
+		*/
 		System.out.println("----------Calculating Annotator Rates-----------------");
-		System.out.println("Id |    TPR    |    TNR    |    TPRE    |    TNRE    ");
+		System.out.println("Id |    A    |    AE     ");
 			for(int i = 0; i < annotatorNumber; i++){
 				AnnotatorModel annotator = annotators[i];
-				System.out.print(annotator.getBee().getId() +" | " + annotator.getBinaryBehaviour().getTruePosRate() + " | " + annotator.getBinaryBehaviour().getTrueNegRate() + " | " );
-				BinaryAccuracy binAccuracy = CrowdDb.getBinaryAccuracy(annotator.getBee().getId());
-				System.out.print(binAccuracy.getTruePositive() +" | "+ binAccuracy.getTrueNegative());
+				System.out.print(annotator.getBee().getId() +" | " + annotator.getMultiBehaviour().getSuccessRate() + " | " );
+				SingleAccuracy singAccuracy = CrowdDb.getMultiValueAccuracy(annotator.getBee().getId());
+				System.out.print(singAccuracy.getAccuracy());
 				System.out.println("");
 			}
 		System.out.println("------------------------------------------------------");
 //
 
 		
-		System.out.println("---------Calculating accuracy average difference--------------------");
+	/*	System.out.println("---------Calculating accuracy average difference--------------------");
 		
 		Map<Integer,Response> accuracies = SubTaskDb.getResults(1);
 		for (AnnotatorSubTaskAnswer answer : answers){
@@ -221,7 +233,7 @@ public class TestAlgorithmMulti extends TestCase {
 		System.out.println("error rate = " + (correct/subtasks));
 		
 		System.out.println("------------------------------------------------------ ");
-
+*/
 		
 		//DbInitialiser.init();
 		}
@@ -270,6 +282,6 @@ public class TestAlgorithmMulti extends TestCase {
 		List<Account> bots = CrowdDb.getAllExperts();
 		for(Account account : bots) {
 			System.out.println("id =" + account.getId() + " name = " + account.getName());
-		}*/
+		}
 	} 
 }
