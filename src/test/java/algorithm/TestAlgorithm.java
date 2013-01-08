@@ -139,7 +139,7 @@ public class TestAlgorithm extends TestCase {
 		
 		System.out.println("------------------------------------------------------  ");
 		
-		DbInitialiser.init();
+		//DbInitialiser.init();
 		}
 		
 		

@@ -410,10 +410,13 @@ public class SubTaskDb {
 				switch (type){
 				case 1:
 					r = new BinaryR(e);
+					break;
 				case 2:
 					r = new MultiValueR(e);
+					break;
 				case 3:
 					r = new ContinuousR(e);
+					break;
 				}
 				results.put(s, r);
 			}
