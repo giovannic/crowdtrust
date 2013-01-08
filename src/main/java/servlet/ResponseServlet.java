@@ -30,33 +30,30 @@ public class ResponseServlet extends HttpServlet {
     }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
-	}
-
-	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = -1;
 		if(request.isRequestedSessionIdValid()){
 			HttpSession s = request.getSession();
-			id = (Integer) s.getAttribute("account_id");
+			try{
+				id = (Integer) s.getAttribute("account_id");
+			}catch(Exception e) {
+				
+			}
 		}
 		
 		if (id < 1){
-			response.sendRedirect("/login.html");
+			response.sendRedirect("/");
 		} else {
 			Response r = null;
 			SubTask subtask = null;
-			int type = Integer.parseInt(request.getParameter("type"));
+			int type = Integer.parseInt(request.getParameter("annotation_type"));
 			int subTaskId = Integer.parseInt(request.getParameter("sid"));
 			//TODO 
 			switch(type){
 			case 1:
-				if (request.getParameter("bool") == "1")
+				if (request.getParameter("response").equals(request.getParameter("answer1")))
 					r = new BinaryR(true);
 				else
 					r = new BinaryR(false);
@@ -72,6 +69,7 @@ public class ResponseServlet extends HttpServlet {
 			}
 			
 			subtask.addResponse(new Bee(id), r);
+			response.sendRedirect("/crowd/complete_task.jsp");
 		}
 	}
 

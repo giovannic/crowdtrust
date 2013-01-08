@@ -8,8 +8,8 @@ public class BinaryR extends Response {
 		this.value = value;
 	}
 	
-	public BinaryR(byte [] b){
-		this.value = Boolean.parseBoolean(new String(b));
+	public BinaryR(String b){
+		this.value = Boolean.parseBoolean(b);
 	}
 	
 	@Override
@@ -31,4 +31,8 @@ public class BinaryR extends Response {
 		return value == br.isTrue();
 	}
 
+	@Override
+	public String toString() {
+		return Boolean.toString(value);
+	}
 }

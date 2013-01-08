@@ -2,7 +2,7 @@ package crowdtrust;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+
 public abstract class SubTask {
 	
 	//threshold accuracy variance
@@ -11,6 +11,7 @@ public abstract class SubTask {
 	protected double confidence_threshold;
 	protected int number_of_labels;
 	protected int max_labels;
+	protected String fileName;
 	
 	/*
 	 * E step
@@ -36,10 +37,10 @@ public abstract class SubTask {
 		
 		Estimate z = estimate(state);
 		number_of_labels++;
-		if(z.getConfidence() > confidence_threshold || 
+		if(z.getConfidence() > Math.log(confidence_threshold/(1-confidence_threshold)) || 
 				number_of_labels >= max_labels){
 			close();
-			updateAccuracies(z.getR());
+			calculateAccuracies(z.getR());
 		}
 	}
 	
@@ -63,16 +64,14 @@ public abstract class SubTask {
 	/*
 	 * M step
 	 * */
-	protected void updateAccuracies(Response z) {
-		Bee [] annotators = db.CrowdDb.getAnnotators(id);
-		AccuracyRecord [] accuracies = getAccuracies(annotators);
-		Map <Integer, Response> responses = getResponses(annotators);
+	protected void calculateAccuracies(Response z) {
+		Collection<AccuracyRecord> accuracies = getAnnotators();
 		
 		Collection<Bee> experts = new ArrayList<Bee>();
 		Collection<Bee> bots = new ArrayList<Bee>();
 		
 		for (AccuracyRecord r : accuracies){
-			maximiseAccuracy(r.getAccuracy(), responses.get(r.getBee().getId()), z);
+			maximiseAccuracy(r.getAccuracy(), r.getMostRecent(), z);
 			if (r.getAccuracy().variance() < THETA){
 				if (r.getAccuracy().expert(expertLimit()))
 					experts.add(r.getBee());
@@ -86,6 +85,8 @@ public abstract class SubTask {
 		updateBots(bots);
 	}
 	
+	protected abstract Collection<AccuracyRecord> getAnnotators();
+
 	protected abstract void updateExperts(Collection<Bee> experts);
 	
 	protected abstract void updateBots(Collection<Bee> bots);
@@ -97,11 +98,8 @@ public abstract class SubTask {
 	/*
 	 * Helper functions
 	 * */
-	protected abstract Map<Integer, Response> getResponses(Bee[] annotators);
-
-	protected abstract AccuracyRecord[] getAccuracies(Bee[] annotators);
 	
-	protected abstract void updateAccuracies(AccuracyRecord [] accuracies);
+	protected abstract void updateAccuracies(Collection<AccuracyRecord> accuracies);
 	
 	protected abstract Accuracy getAccuracy(int annotatorId);
 	
@@ -123,4 +121,12 @@ public abstract class SubTask {
 	}
 
 	protected abstract void addEstimate(Estimate e);
+	
+	public void addFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
+	public String getFileName(){
+		return this.fileName;
+	}
 }

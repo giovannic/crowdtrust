@@ -72,10 +72,10 @@ public class BinaryAccuracy extends Accuracy {
 	@Override
 	protected double variance() {
 		
-		double alphaPos = truePositive * positiveN;
-		double betaPos = positiveN - alphaPos;
-		double alphaNeg = trueNegative * negativeN;
-		double betaNeg = negativeN - alphaNeg;
+		double alphaPos = truePositive * positiveN + 1;
+		double betaPos = positiveN - alphaPos + 1;
+		double alphaNeg = trueNegative * negativeN + 1;
+		double betaNeg = negativeN - alphaNeg + 1;
 		
 		BetaDistribution posCurve = new BetaDistribution(alphaPos, betaPos);
 		BetaDistribution negCurve = new BetaDistribution(alphaNeg, betaNeg);
@@ -84,9 +84,10 @@ public class BinaryAccuracy extends Accuracy {
 		
 		Collection <ObservationReal> peak = new ArrayList <ObservationReal>();
 		
-		for (double p = -0.1; p < 0.2; p+=0.1){			
-			for (double n = -0.1; n < 0.2; n+=0.1){
-				peak.add(new ObservationReal(
+		for (double p = -0.5; p < 0.6; p+=0.1){			
+			for (double n = -0.5; n < 0.6; n+=0.1){
+				if (maxP+p < 1 && maxN+n < 1)
+					peak.add(new ObservationReal(
 						posCurve.density(maxP+p)*negCurve.density(maxN+n)
 						)
 				);
@@ -94,7 +95,11 @@ public class BinaryAccuracy extends Accuracy {
 		}
 		
 		OpdfGaussian estimate = new OpdfGaussian();
-		estimate.fit(peak);
+		try{
+			estimate.fit(peak);
+		} catch (Exception e) {
+			return 1;
+		}
 		
 		return estimate.variance();
 	}

@@ -1,7 +1,6 @@
 package crowdtrust;
 
 import java.util.Collection;
-import java.util.Map;
 
 public class MultiValueSubTask extends SubTask{
 	
@@ -67,17 +66,7 @@ public class MultiValueSubTask extends SubTask{
 	}
 
 	@Override
-	protected Map<Integer, Response> getResponses(Bee[] annotators) {
-		return db.SubTaskDb.getMultiValueResponses(id, annotators);
-	}
-
-	@Override
-	protected AccuracyRecord[] getAccuracies(Bee[] annotators) {
-		return db.CrowdDb.getMultiValueAccuracies(annotators);
-	}
-
-	@Override
-	protected void updateAccuracies(AccuracyRecord[] accuracies) {
+	protected void updateAccuracies(Collection<AccuracyRecord> accuracies) {
 		db.CrowdDb.updateMultiValueAccuracies(accuracies);
 	}
 
@@ -119,6 +108,12 @@ public class MultiValueSubTask extends SubTask{
 	protected void addEstimate(Estimate e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected Collection<AccuracyRecord> getAnnotators() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

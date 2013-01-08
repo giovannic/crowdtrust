@@ -6,12 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.List;
 
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
+import crowdtrust.Response;
 
 import db.DbInitialiser;
 import db.LoginDb;
@@ -25,6 +27,7 @@ import junit.framework.TestCase;
 public class TestAlgorithm extends TestCase {
 
 	protected static int annotatorNumber = 10;
+	protected static int subtasks = 10;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
@@ -61,9 +64,12 @@ public class TestAlgorithm extends TestCase {
 		//Add them to the Database
 		for(int i = 0; i < annotatorNumber; i++){
 			RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
-			int id = LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword());
-			annotators[i].setId(id);
-			System.out.println(i + " : " + id);
+			annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
+			AnnotatorModel a = annotators[i];
+			System.out.println("annotator " + 
+					a.bee.getId() + 
+					" truePosRate =" + a.binary.truePosRate +
+					" trueNegRate =" + a.binary.trueNegRate);
 		}
 		
 		//Lets make a client
@@ -71,8 +77,11 @@ public class TestAlgorithm extends TestCase {
 		int accountId = LoginDb.checkUserDetails("gio", "gio");
 		//Lets add a binary task to the database
 		long expiry = getDate();
-		double accuracy = 0.7;
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test", accuracy, 1, expiry, 15)>0);
+		float accuracy = (float)0.7;
+		List<String> testQs = new LinkedList<String>();
+		testQs.add("test q1");
+		testQs.add("test q2");
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, 1, 1, 1, 15, expiry, testQs)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
@@ -81,7 +90,7 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("Got it");
 		
 		//Lets create a linked list of subTasks
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < subtasks; i++){
 			String uuid = UUID.randomUUID().toString();
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
@@ -100,23 +109,40 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("Given annotators answers");
 		
 		printAnswers(answers);
-		System.out.println("---------Beginnign to answer tasks--------------------");
+		System.out.println("---------Beginning to answer tasks--------------------");
 		
 		int parent_task_id = TaskDb.getTaskId("BinaryTestTask");
 		
-		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
+		int annotatorIndex = rand.nextInt(annotatorNumber - 1);
+		AnnotatorModel a = annotators[annotatorIndex];
+		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(), 1);
 		
-		System.out.println("Got first");
 		
 		while( t != null){
-			int annotatorIndex = rand.nextInt(annotatorNumber - 1);
-			System.out.println("Annotator: " + annotators[annotatorIndex].username + " |Task: " + t.getId());
-			annotators[annotatorIndex].answerTask(t);
-			t = (BinarySubTask) SubTaskDb.getRandomBinarySubTask(parent_task_id);
+			annotatorIndex = rand.nextInt(annotatorNumber - 1);
+			a = annotators[annotatorIndex];
+			System.out.println("Annotator: " + a.username + " |Task: " + t.getId());
+			a.answerTask(t);
+			t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId(),1);
 		} 
 		System.out.println("------------------------------------------------------  ");
-		DbInitialiser.init();
+		
+		System.out.println("---------Calculating error rate--------------------");
+		
+		Map<Integer,Response> results = SubTaskDb.getResults(1);
+		for (AnnotatorSubTaskAnswer answer : answers){
+			System.out.println("id " + answer.id + 
+					" true answer " + 
+					answer.getAlgoTestData().getActualAnswer().toString() + 
+					" estimate = " + results.get(answer.id));
 		}
+		
+		System.out.println("------------------------------------------------------  ");
+		
+		//DbInitialiser.init();
+		}
+		
+		
 	}
 	
 	protected void printAnswers(LinkedList<AnnotatorSubTaskAnswer> answers){

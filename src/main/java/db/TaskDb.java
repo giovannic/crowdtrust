@@ -1,6 +1,5 @@
 package db;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,8 +13,9 @@ import crowdtrust.*;
 
 public class TaskDb {
 	
-	
-	public static int addTask(int accountID, String name, String question, double accuracy, int type, long expiryTime, int max_labels){
+public static int addTask(int accountID, String name, String question, float accuracy, 
+			int media_type, int annotation_type, int input_type, int max_labels, long expiryTime, 
+			List<String> answerList){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -27,18 +27,27 @@ public class TaskDb {
 		  	System.err.println("SQL Error on add Task");
 		  	return -1;
 		}
+		String answerChoice = "";
+		for (String thisChoice : answerList) {
+			answerChoice += thisChoice + "/";
+		}
+		//get rid of trailing '/'
+		answerChoice = answerChoice.substring(0, answerChoice.length()-1);
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
-        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?) RETURNING id");
+        	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?,?,?,?) RETURNING id");
 			insertTask.setInt(1, accountID);
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
-			insertTask.setDouble(4, accuracy);
-			insertTask.setInt(5, type);
-			insertTask.setTimestamp(6, new Timestamp(expiryTime));
-			insertTask.setInt(7, max_labels);
-			insertTask.setTimestamp(8, new Timestamp(currentTime));
+			insertTask.setFloat(4, accuracy);
+			insertTask.setInt(5, media_type);
+			insertTask.setInt(6, annotation_type);
+			insertTask.setInt(7, input_type);
+			insertTask.setString(8, answerChoice);
+			insertTask.setInt(9, max_labels);
+			insertTask.setTimestamp(10, new Timestamp(expiryTime));
+			insertTask.setTimestamp(11, new Timestamp(currentTime));
 			insertTask.execute();
 			ResultSet rs = insertTask.getResultSet();
 			rs.next();
@@ -48,7 +57,7 @@ public class TaskDb {
 			return -1;
 		}
 	}
-	
+
 	/*public static int getSubTaskId(String name){
  		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id FROM subtasks\n");
@@ -75,7 +84,7 @@ public class TaskDb {
 
 		}
 	}*/
-	
+
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks\n");
@@ -100,7 +109,7 @@ public class TaskDb {
 		  	return null;
 		}
 	}
-	
+
 	public static int getTaskId(String name){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id FROM tasks\n");
@@ -126,7 +135,7 @@ public class TaskDb {
 		  	return -1;
 		}
 	}
-	
+
 	public static boolean isPresent(int taskID, int accountID) {
     	PreparedStatement checkTask;
 		try {
@@ -153,16 +162,20 @@ public class TaskDb {
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				String question = resultSet.getString("question");
-				int type = resultSet.getInt("type");
+				int media_type = resultSet.getInt("media_type");
+				int annotation_type = resultSet.getInt("annotation_type");
+				int input_type = resultSet.getInt("input_type");
+				String answersString = resultSet.getString("answers");
+				String[] answers = answersString.split("/");
 				int accuracy = resultSet.getInt("accuracy");
-				if(type == 1) {
-					thisTask = new BinaryTask(id, name, question, accuracy);
+				if(annotation_type == 1) {
+					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
-				if(type == 2) {
+				if(annotation_type == 2) {
 						//thisTask = new SingleContinuousTask(id, name, question, accuracy);
 				}							
-				if(type == 3) {
-						thisTask = new MultiValueTask(id, name, question, accuracy);
+				if(annotation_type == 3) {
+						thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -195,10 +208,10 @@ public class TaskDb {
 	    return false;    
 
 	}
-	
+
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT tasks.name FROM tasks ");
+		sql.append("SELECT * FROM tasks ");
 		sql.append("WHERE tasks.ex_time > NOW()");
 		PreparedStatement preparedStatement;
 		List<Task> tasks = new ArrayList<Task>();
@@ -207,16 +220,35 @@ public class TaskDb {
 //			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString(1);
-				Task task = getTask(taskName);
-				tasks.add(task);
+				tasks.add(map(resultSet));
 			}
 		}
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
 	    } catch (SQLException e) {
-	      	System.err.println("SQL Error on get tasks for id");
+	      	System.err.println("SQL Error on get tasks for crowdid");
 	    }
+		return tasks;
+	}
+
+	public static List<Task> getTasksForClientId(int id) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT * FROM tasks WHERE submitter = ?");
+		List<Task> tasks = new ArrayList<Task>();
+		PreparedStatement preparedStatement;
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while(resultSet.next()) {
+				tasks.add(map(resultSet));
+			}
+		}
+		catch (ClassNotFoundException e) {
+			System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		} catch (SQLException e) {
+			System.err.println("SQL Error on get Tasks for crowdid");
+		}
 		return tasks;
 	}
 	
