@@ -9,7 +9,7 @@
 	<body>
 		
 		<div id="content">
-		<h1>What is CrowdTrust?<h1>
+		<h1>What is CrowdTrust?</h1>
 <p>Let’s say that I have a 100 photos of birds, and I want to know which birds are robins, but I have
 no prior knowledge of birds. Our product, CrowdTrust, focusses on providing a solution for this
 problem.
