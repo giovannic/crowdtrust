@@ -55,7 +55,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 			
 		double pResponseSpace = 1/((range[1] - range[0])*precision);
 		
-		double freshConfidence = (getZPrior()/1-getZPrior());
+		double freshConfidence = (getZPrior()/(1-getZPrior()));
 			
 		for (Estimate record : state){
 			if(record.getR().equals(r)){
@@ -71,8 +71,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		}
 			
 		if (!matched){
-			Estimate e = new Estimate(r, getZPrior(), 0);
-			e.setConfidence(freshConfidence);
+			Estimate e = new Estimate(r, freshConfidence, 0);
 			state.add(e);
 			initEstimate(e);
 		}

@@ -431,7 +431,7 @@ public class SubTaskDb {
 				r = new BinaryR(s);
 				break;
 			case 2:
-					r = new MultiValueR(s);
+				r = new MultiValueR(s);
 				break;
 			case 3:
 				r = new ContinuousR(s);

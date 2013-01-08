@@ -16,7 +16,9 @@ public class DbAdaptor {
 		Properties properties = new Properties();
 		properties.setProperty("user", USER);
 		properties.setProperty("password", PASSWORD);
-		return DriverManager.getConnection(URL, properties);
+		Connection conn = DriverManager.getConnection(URL, properties);
+		conn.prepareStatement("SET search_path TO john;").execute();
+		return conn;
 	}
 	
 }

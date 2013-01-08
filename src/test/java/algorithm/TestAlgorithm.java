@@ -46,7 +46,7 @@ public class TestAlgorithm extends TestCase {
 	}
 	
 	public void testAlgorithm(){
-		boolean labs = false;
+		boolean labs = true;
 		System.setProperty("test", "true");
 		if(labs){
 			DbInitialiser.init();
@@ -74,7 +74,7 @@ public class TestAlgorithm extends TestCase {
 			}
 			
 		}
-
+		
 		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < annotatorNumber; i++){
