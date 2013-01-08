@@ -43,8 +43,10 @@ public abstract class SubTask {
 			calculateAccuracies(z.getR());
 		}
 	}
-	
-	protected abstract void updateEstimates(Collection<Estimate> state);
+
+	protected void updateEstimates(Collection<Estimate> state){
+		db.SubTaskDb.updateEstimates(state, id);
+	};
 
 	protected abstract Collection<Estimate> getEstimates(int id);
 	

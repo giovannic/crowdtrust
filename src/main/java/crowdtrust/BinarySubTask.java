@@ -8,7 +8,7 @@ public class BinarySubTask extends SubTask {
 
 	public BinarySubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
-		super(id, 0.7, number_of_labels, max_labels);
+		super(id, confidence_threshold, number_of_labels, max_labels);
 	} 
 
 	@Override
@@ -58,11 +58,11 @@ public class BinarySubTask extends SubTask {
 		else
 			accuracy = ba.getTrueNegative();
 		
-		if (state.size() == 0){
+		if (state.isEmpty()){
 			BinaryR tR = new BinaryR(true);
-			Estimate t = new Estimate(tR, Math.log(getZPrior()/1 - getZPrior()));
+			Estimate t = new Estimate(tR, Math.log(getZPrior()/(1 - getZPrior())),0);
 			BinaryR fR = new BinaryR(false);
-			Estimate f = new Estimate(fR, Math.log(getZPrior()/1 - getZPrior()));
+			Estimate f = new Estimate(fR, Math.log(getZPrior()/(1 - getZPrior())),0);
 			state.add(t);
 			initEstimate(t);
 			state.add(f);
@@ -73,10 +73,11 @@ public class BinarySubTask extends SubTask {
 			Response recordResponse = record.getR();
 			if (!recordResponse.equals(br)){
 				record.setConfidence(record.getConfidence()
-						+ Math.log(((1-accuracy)/accuracy)));
+						+ Math.log(accuracy/(1-accuracy)));
+				record.incFrequency();
 			} else {
 				record.setConfidence(record.getConfidence()
-						+ Math.log(accuracy/(1-accuracy)));
+						+ Math.log(((1-accuracy)/accuracy)));
 			}
 		}
 		
@@ -116,11 +117,6 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected Collection <Estimate> getEstimates(int id) {
 		return SubTaskDb.getBinaryEstimates(id);
-	}
-
-	@Override
-	protected void updateEstimates(Collection<Estimate> state) {
-		db.SubTaskDb.updateBinaryEstimates(state, id);
 	}
 
 	@Override

@@ -12,14 +12,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
-
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinaryR;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
+import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 
 import db.DbInitialiser;
@@ -31,22 +30,22 @@ import db.CrowdDb;
 
 import junit.framework.TestCase;
 
-public class TestAlgorithm extends TestCase {
+public class TestAlgorithmMulti extends TestCase {
 
-	protected static int annotatorNumber = 50;
-	protected static int subtasks = 200;
+	protected static int annotatorNumber = 10;
+	protected static int subtasks = 100;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
 	protected static int totalNeg = 1000;   //'Answered' 2000 questions
 	
 	protected AnnotatorModel[] annotators;
 	
-	public TestAlgorithm(String name){
+	public TestAlgorithmMulti(String name){
 		super(name);
 	}
 	
 	public void testAlgorithm(){
-		boolean labs = true;
+		boolean labs = false;
 		System.setProperty("test", "true");
 		if(labs){
 			DbInitialiser.init();
@@ -60,21 +59,13 @@ public class TestAlgorithm extends TestCase {
 			annotators[i] = new AnnotatorModel(uuid, uuid);
 		}
 		
-		//Set up the annotators so they can answer binary question
+		//Set up the annotators so they can answer multi question
 		Random rand = new Random();
 		for(int i = 0; i < annotatorNumber; i++){
-			//int truePos = rand.nextInt(999) + 1;	
-			//int trueNeg = rand.nextInt(999) + 1;
-			//annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
-			double percentageNormal = 0.75;
-			if(rand.nextDouble() > percentageNormal){
-				annotators[i].setUpBinary(500, 500, totalPos, totalNeg);
-			}else{
-				annotators[i].setUpBinary(850, 850, 1000, 1000);
-			}
-			
+			int correct = rand.nextInt(999) + 1;	
+			annotators[i].setUpMulti(correct, 1000);
 		}
-		
+
 		if(labs){
 		//Add them to the Database
 		for(int i = 0; i < annotatorNumber; i++){
@@ -96,12 +87,12 @@ public class TestAlgorithm extends TestCase {
 		List<String> testQs = new LinkedList<String>();
 		testQs.add("test q1");
 		testQs.add("test q2");
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, 1, 1, 1, 15, expiry, testQs)>0);
+		assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, 1, 2, 1, 15, expiry, testQs)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
 		System.out.println("About to get Task id");
-		System.out.println("John Task Id: " + TaskDb.getTaskId("BinaryTestTask"));
+		System.out.println("John Task Id: " + TaskDb.getTaskId("MultiTestTask"));
 		System.out.println("Got it");
 		
 		//Lets create a linked list of subTasks
@@ -109,12 +100,13 @@ public class TestAlgorithm extends TestCase {
 			String uuid = UUID.randomUUID().toString();
 			uuid = uuid.replace("-", "");
 			uuid = uuid.substring(0, 12);
-			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
+			SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("MultiTestTask"));
 			int id = SubTaskDb.getSubTaskId(uuid);
 			System.out.println("Subtask Id: " + id);
-			BinarySubTask bst = new BinarySubTask(id,0.7,0,15);
-			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(2)));
-			answers.add(asta);
+			
+			MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, 0, 15, 10);
+		//	AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiValueTestData(rand.nextInt(2)));
+			//answers.add(asta);
 		}
 		
 		//Give all the annotators the answers
@@ -212,7 +204,7 @@ public class TestAlgorithm extends TestCase {
 //
 
 		
-	/*	System.out.println("---------Calculating accuracy average difference--------------------");
+		System.out.println("---------Calculating accuracy average difference--------------------");
 		
 		Map<Integer,Response> accuracies = SubTaskDb.getResults(1);
 		for (AnnotatorSubTaskAnswer answer : answers){
@@ -228,7 +220,7 @@ public class TestAlgorithm extends TestCase {
 		}
 		System.out.println("error rate = " + (correct/subtasks));
 		
-		System.out.println("------------------------------------------------------ "); */
+		System.out.println("------------------------------------------------------ ");
 
 		
 		//DbInitialiser.init();

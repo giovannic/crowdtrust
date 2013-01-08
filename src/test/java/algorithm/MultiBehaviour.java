@@ -17,27 +17,19 @@ public class MultiBehaviour {
 		this.updateRates();
 	}
 	
-	/*
-	 * return 1: user given correct answer
-	 * return 0: user given wrong answer
-	 * 
-	 * Returns 1 with the probability correct answers/total answers
-	 * and returns 0 with the probability total - correct answers / total answers
-	 * 
-	 * It's done like this because generating an incorrect answer is suprisingly hard
-	 * unless you have all the possible answers it can take.
-	 */
-	public int generateAnswer(MultiValueR multiValueR){
+	public int generateAnswer(MultiValueR multiValueR, int numOptions){
 		Random generator = new Random();
 		int answer;
 		if(generator.nextDouble() > this.successRate){
-			this.totalAnswers++;
-			answer = 0;
+			if(multiValueR.getSelection() < numOptions)
+				answer = multiValueR.getSelection() + 1;
+			else
+				answer = multiValueR.getSelection() - 1;
 		}else{
 			this.correctAnswers++; this.totalAnswers++;
-			answer = 1;
+			answer = multiValueR.getSelection();
 		}
-		this.updateRates();
+		//this.updateRates();
 		return answer;
 	}
 	
