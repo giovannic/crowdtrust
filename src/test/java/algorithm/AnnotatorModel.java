@@ -95,6 +95,10 @@ public class AnnotatorModel {
 		return null;
 	}
 	
+	public MultiBehaviour getMultiBehaviour(){
+		return this.multi;
+	}
+	
 	public String getUsername(){
 		return this.username;
 	}

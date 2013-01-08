@@ -117,7 +117,9 @@ public class SubTaskDb {
 				int responses = rs.getInt("r");
 				int maxLabels = rs.getInt("m");
 				String fileName = rs.getString("f");
-				BinarySubTask b = new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+			//	BinarySubTask b = new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+			//MASSIVE HACK!!!!!!!!!!!!!!!!!!!	
+				MultiValueSubTask b = new MultiValueSubTask(id, taskAccuracy, responses, maxLabels, 5);
 				b.addFileName(fileName);
 				return b;
 			}

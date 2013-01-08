@@ -33,6 +33,10 @@ public class MultiBehaviour {
 		return answer;
 	}
 	
+	public double getSuccessRate(){
+		return this.successRate;
+	}
+	
 	//Creates a success rate correct answers / total answers
 	public void updateRates(){
 		this.successRate = ((this.correctAnswers * 1.0)/(this.totalAnswers * 1.0));
