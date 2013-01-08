@@ -238,11 +238,14 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
-			int taskAccuracy = rs.getInt("a");
-			int id = rs.getInt("s");
-			int responses = rs.getInt("r");
-			int maxLabels = rs.getInt("m");
-			return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+			if( rs.next() ) {
+				int taskAccuracy = rs.getInt("a");
+				int id = rs.getInt("s");
+				int responses = rs.getInt("r");
+				int maxLabels = rs.getInt("m");
+				return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
+			}
+			return null;
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
