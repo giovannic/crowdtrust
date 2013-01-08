@@ -289,7 +289,7 @@ public class SubTaskDb {
 		return null;
 	}
 
-	public static Collection<Estimate> getBinaryEstimates(int id) {
+	private static Collection<Estimate> getEstimates(int id, int type) {
 		String sql = "SELECT estimate, confidence " +
 				"FROM estimates " +
 				"WHERE subtask_id = ?";
@@ -313,9 +313,10 @@ public class SubTaskDb {
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
-				BinaryR r = new BinaryR(rs.getString("estimate"));
+				String serialised = rs.getString("estimate");
 				double c = rs.getFloat("confidence");
-				state.add(new Estimate(r,c));
+				int f = rs.getInt("frequency");
+				state.add(new Estimate(mapResponse(serialised, type),c,f));
 			}
 		}
 		catch(SQLException e) {
@@ -324,9 +325,9 @@ public class SubTaskDb {
 		return state;
 	}
 
-	public static void updateBinaryEstimates(Collection<Estimate> state, int id) {
+	public static void updateEstimates(Collection<Estimate> state, int id) {
 
-			String query = "UPDATE estimates SET confidence = ? " +
+			String query = "UPDATE estimates SET (confidence, frequency) = (?,?) " +
 					"WHERE subtask_id = ? AND estimate = ?";
 			
 			PreparedStatement preparedStatement;
@@ -335,8 +336,9 @@ public class SubTaskDb {
 		    	preparedStatement = DbAdaptor.connect().prepareStatement(query);
 		    	for (Estimate e : state){
 		    		preparedStatement.setFloat(1, (float) e.getConfidence());
-		    		preparedStatement.setInt(2, id);
-					preparedStatement.setString(3, e.getR().serialise());
+		    		preparedStatement.setInt(2, e.getFrequency());
+		    		preparedStatement.setInt(3, id);
+					preparedStatement.setString(4, e.getR().serialise());
 					preparedStatement.addBatch();
 				}  
 		    	preparedStatement.executeBatch();
@@ -354,15 +356,18 @@ public class SubTaskDb {
 	
 	public static Map<Integer, Response> getResults(int taskId){
 		String sql = "SELECT tasks.annotation_type AS type, " +
-				"subtask_id, estimate, " +
-				"confidence FROM estimates " +
-				"JOIN subtasks ON estimates.subtask_id = subtasks.id " +
+				"subtask_id, estimate, confidence " +
+				"FROM estimates JOIN subtasks " +
+				"ON estimates.subtask_id = subtasks.id " +
 				"JOIN tasks ON subtasks.task = tasks.id " +
 				"WHERE tasks.id = ? " +
 				"AND confidence IN ( " +
 				"SELECT MAX(confidence) FROM estimates e " +
 				"WHERE e.subtask_id = estimates.subtask_id " +
 				"GROUP BY e.subtask_id)";
+		
+		//TODO frequency
+		
 		PreparedStatement preparedStatement;
 		
 		Map<Integer,Response> results = new HashMap<Integer,Response>();
@@ -381,36 +386,21 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
-			Response r = null;
 			while(rs.next()){
 				int s = rs.getInt("subtask_id");
 				int type = rs.getInt("type");
 				String e = rs.getString("estimate");
-				switch (type){
-				case 1:
-					r = new BinaryR(e);
-					break;
-				case 2:
-					r = new MultiValueR(e);
-					break;
-				case 3:
-					r = new ContinuousR(e);
-					break;
-				}
-				results.put(s, r);
+				results.put(s, mapResponse(e, type));
 			}
 		}
 		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
 		return results;
 	}
 
 	public static void addEstimate(Estimate est, int id) {
-		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?)";
+		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?,?)";
 		
 		PreparedStatement preparedStatement;
         
@@ -419,6 +409,7 @@ public class SubTaskDb {
 			preparedStatement.setInt(1, id);
 			preparedStatement.setString(2, est.getR().serialise());
 	    	preparedStatement.setFloat(3, (float) est.getConfidence());
+	    	preparedStatement.setInt(4, est.getFrequency());
 			preparedStatement.execute();
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
@@ -427,6 +418,32 @@ public class SubTaskDb {
 	      	System.err.println("SQL Error on check finished");
 	      	e.printStackTrace();
 	    }
+	}
+	
+	private static Response mapResponse (String s, int type){
+		Response r = null;
+		try {
+			switch (type){
+			case 1:
+				r = new BinaryR(s);
+				break;
+			case 2:
+					r = new MultiValueR(s);
+				break;
+			case 3:
+				r = new ContinuousR(s);
+				break;
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return r;
+	}
+
+	public static Collection<Estimate> getBinaryEstimates(int id) {
+		return getEstimates(id, 1);
 	}
 
 }

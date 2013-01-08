@@ -3,10 +3,12 @@ package crowdtrust;
 public class Estimate {
 	private Response r;
 	private double confidence;
+	private int frequency;
 	
-	public Estimate(Response r, double c){
+	public Estimate(Response r, double confidence, int frequency){
 		this.setR(r);
-		setConfidence(c);
+		this.confidence = confidence;
+		this.frequency = frequency;
 	}
 
 	public Response getR() {
@@ -23,5 +25,13 @@ public class Estimate {
 
 	public void setConfidence(double confidence) {
 		this.confidence = confidence;
+	}
+
+	public int getFrequency() {
+		return frequency;
+	}
+
+	public void incFrequency() {
+		this.frequency++;
 	}
 }
