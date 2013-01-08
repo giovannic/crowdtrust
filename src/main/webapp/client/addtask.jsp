@@ -17,7 +17,7 @@
         </tr>
         <tr>
             <td>To what accuracy do you want the subtasks answered?</td>
-            <td><input type="number" name="accuracy" step="any" placeholder="between 0 and 1 e.g. 0.7" /></td>
+            <td><input type="number" name="accuracy" step="any" placeholder="between 0 and 1 e.g. 0.7" min=0 max=1/></td>
         </tr>
         
         <tr>
@@ -73,15 +73,15 @@
         </tr>
         <tr>
             <td>Expiry Day</td>
-            <td><input type="number" name="day" min="1" max="31" /></td>
+            <td><input type="number" name="day" min=1 max=31 /></td>
         </tr>
         <tr>
             <td>Expiry Month</td>
-            <td><input type="number" name="month" min="1" max="12" /></td>
+            <td><input type="number" name="month" min=1 max=12 /></td>
         </tr>
         <tr>
             <td>Expiry Year</td>
-            <td><input type="number" name="year" min="2013" max="2015" /></td>
+            <td><input type="number" name="year" min=2013 max=2015 /></td>
         </tr>
         <tr><td /><td><input type="submit" /></td></tr>
     </table>
