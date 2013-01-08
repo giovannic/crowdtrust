@@ -181,6 +181,7 @@ public class TestAlgorithm extends TestCase {
 					}
 				}
 				System.out.print((truePos / posQuestions) + " | " + (trueNeg / negQuestions));
+				System.out.println("NumPos = " + posQuestions + " NumNeg = " + negQuestions + " TruePos = " + truePos  + " TrueNeg = " + trueNeg);
 				System.out.println("");
 			}
 		System.out.println("----------------------------------------------------------");
