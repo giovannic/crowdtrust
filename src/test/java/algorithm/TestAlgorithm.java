@@ -15,6 +15,7 @@ import java.util.UUID;
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
+import crowdtrust.BinaryR;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.Response;
@@ -150,8 +151,42 @@ public class TestAlgorithm extends TestCase {
 		System.out.println("error rate = " + ((double)correct/subtasks));
 
 		System.out.println("------------------------------------------------------  ");
+		
+		System.out.println("----------------Offline Binary Testing-------------------");
+		System.out.println("Id |    ATPR    |    ATNR    |    TPRE    |    TNRE    ");
+			for(int i = 0; i < annotatorNumber; i++){
+				int totalQuestions = 1000;
+				int negQuestions   = 0;
+				int posQuestions   = 0;
+				int truePos        = 0;
+				int trueNeg        = 0;
+				AnnotatorModel annotator = annotators[i];
+				System.out.print(annotator.getBee().getId() +" | " + annotator.getBinaryBehaviour().getTruePosRate() + " | " + annotator.getBinaryBehaviour().getTrueNegRate() + " | " );
+				for(int j = 0; j < totalQuestions; j++){
+					Random r = new Random();
+					int actualAnswer   = r.nextInt(2);
+					boolean answerBool;
+					if(actualAnswer == 1){
+						answerBool = true;
+						posQuestions++;
+					}else{
+						answerBool = false;
+						negQuestions++;
+					}
+					int annotatorAnswer = annotators[i].getBinaryBehaviour().generateAnswer(new BinaryR(answerBool));
+					if(annotatorAnswer == 1 & actualAnswer == 1){
+						trueNeg ++;
+					}else if(annotatorAnswer == 0 & actualAnswer == 0){
+						trueNeg ++;
+					}
+				}
+				System.out.print((truePos / posQuestions) + " | " + (trueNeg / negQuestions));
+				System.out.println("");
+			}
+		System.out.println("----------------------------------------------------------");
+		
 		System.out.println("----------Calculating Annotator Rates-----------------");
-		System.out.println("Annotator Id      |    TPR    |    TNR    |    TPRE    |    TNRE    ");
+		System.out.println("Id |    TPR    |    TNR    |    TPRE    |    TNRE    ");
 			for(int i = 0; i < annotatorNumber; i++){
 				AnnotatorModel annotator = annotators[i];
 				System.out.print(annotator.getBee().getId() +" | " + annotator.getBinaryBehaviour().getTruePosRate() + " | " + annotator.getBinaryBehaviour().getTrueNegRate() + " | " );

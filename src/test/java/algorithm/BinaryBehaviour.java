@@ -44,7 +44,7 @@ public class BinaryBehaviour {
 	
 	public int generateAnswer(BinaryR response){
 		//update the sensory index and threshold for the calculation of ujk
-		this.updateRates();
+	//	this.updateRates();
 		this.updateSensThresh();
 		//generate ujk
 		double ujk = calculateujk(response.isTrue() ? 1 : 0);
