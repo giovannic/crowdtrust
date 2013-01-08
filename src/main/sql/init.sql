@@ -74,6 +74,7 @@ CREATE TABLE estimates
   subtask_id INTEGER REFERENCES subtasks (id),
   estimate VARCHAR(32),
   confidence FLOAT,
+  frequency INTEGER,
   base BOOLEAN
 );
 

@@ -18,6 +18,10 @@ public class MultiValueR extends Response{
 	public String serialise() {
 		return Integer.toString(selection);
 	}
+	
+	public int getSelection(){
+		return this.selection;
+	}
 
 	@Override
 	public boolean equals(Object o) {
