@@ -2,6 +2,8 @@ package algorithm;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
+import crowdtrust.BinaryR;
+
 public class BinaryBehaviour {
 	/*
 	 * Represents how biased the member is towards 0/1 1(low threshold)
@@ -40,12 +42,12 @@ public class BinaryBehaviour {
 //		this.updateSensThresh(); //Set up the inital threshold and sensetivity index
 	}
 	
-	public int generateAnswer(int actualAnswer){
+	public int generateAnswer(BinaryR response){
 		//update the sensory index and threshold for the calculation of ujk
 		this.updateRates();
 		this.updateSensThresh();
 		//generate ujk
-		double ujk = calculateujk(actualAnswer);
+		double ujk = calculateujk(response.isTrue() ? 1 : 0);
 		//generate the appropriate normal distribution
 		NormalDistribution dist = new NormalDistribution(ujk, this.standardDev);
 		/*

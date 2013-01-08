@@ -1,5 +1,7 @@
 package algorithm;
 
+import crowdtrust.BinaryR;
+import crowdtrust.Response;
 import crowdtrust.TaskType;
 
 public class BinaryTestData extends AlgoTestData {
@@ -9,8 +11,9 @@ public class BinaryTestData extends AlgoTestData {
 		super(TaskType.BINARY);
 		this.actualAnswer = actualAnswer;
 	}
-	
-	public int getActualAnswer(){
-		return this.actualAnswer;
+
+	@Override
+	public Response getActualAnswer() {
+		return actualAnswer == 1 ? new BinaryR(true) : new BinaryR(false);
 	}
 }

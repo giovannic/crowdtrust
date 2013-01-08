@@ -1,5 +1,6 @@
 package db;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,8 @@ import java.util.Map;
 
 import crowdtrust.Bee;
 import crowdtrust.BinaryR;
+import crowdtrust.ContinuousR;
+import crowdtrust.MultiValueR;
 import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
@@ -372,20 +375,25 @@ public class SubTaskDb {
 		
 	}
 	
-	public static Collection<Result> getResults(){
-		String sql = "SELECT subtask_id, estimate, confidence " +
-				"FROM estimates " +
-				"WHERE confidence IN (" +
+	public static Map<Integer, Response> getResults(int taskId){
+		String sql = "SELECT tasks.annotation_type AS type" +
+				", subtask_id, estimate, confidence " +
+				"FROM estimates JOIN subtasks " +
+				"ON estimates.subtask_id = subtasks.id " +
+				"JOIN tasks ON subtasks.task = tasks.id" +
+				"WHERE tasks.id = ?" +
+				"AND confidence IN (" +
 				"SELECT MAX(confidence) " +
 				"FROM estimates e " +
 				"WHERE e.subtask_id = estimates.subtask_id" +
 				"GROUP BY e.subtask_id)";
-PreparedStatement preparedStatement;
+		PreparedStatement preparedStatement;
 		
-		ArrayList<Result> state = new ArrayList<Result>();
+		Map<Integer,Response> results = new HashMap<Integer,Response>();
 		
 	    try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    	preparedStatement.setInt(1, taskId);
 	    }	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
 	    	e.printStackTrace();
@@ -397,16 +405,29 @@ PreparedStatement preparedStatement;
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
+			Response r = null;
 			while(rs.next()){
 				int s = rs.getInt("subtask_id");
-				BinaryR r = new BinaryR(rs.getString("estimate"));
-				state.add(new Result(s,r));
+				int type = rs.getInt("type");
+				String e = rs.getString("estimate");
+				switch (type){
+				case 1:
+					r = new BinaryR(e);
+				case 2:
+					r = new MultiValueR(e);
+				case 3:
+					r = new ContinuousR(e);
+				}
+				results.put(s, r);
 			}
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return state;
+		catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
+		return results;
 	}
 
 }

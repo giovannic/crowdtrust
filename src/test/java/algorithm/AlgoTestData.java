@@ -1,9 +1,10 @@
 package algorithm;
 
+import crowdtrust.Response;
 import crowdtrust.Task;
 import crowdtrust.TaskType;
 
-public class AlgoTestData {
+public abstract class AlgoTestData {
 	protected TaskType taskType;
 	
 	public AlgoTestData(TaskType taskType){
@@ -13,4 +14,6 @@ public class AlgoTestData {
 	public TaskType getTaskType(){
 		return this.taskType;
 	}
+	
+	public abstract Response getActualAnswer();
 }

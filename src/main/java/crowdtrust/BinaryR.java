@@ -31,4 +31,8 @@ public class BinaryR extends Response {
 		return value == br.isTrue();
 	}
 
+	@Override
+	public String toString() {
+		return Boolean.toString(value);
+	}
 }

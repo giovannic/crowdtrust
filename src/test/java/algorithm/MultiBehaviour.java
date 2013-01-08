@@ -2,6 +2,8 @@ package algorithm;
 
 import java.util.Random;
 
+import crowdtrust.MultiValueR;
+
 public class MultiBehaviour {
 	public int correctAnswers;
 	public int totalAnswers;
@@ -25,7 +27,7 @@ public class MultiBehaviour {
 	 * It's done like this because generating an incorrect answer is suprisingly hard
 	 * unless you have all the possible answers it can take.
 	 */
-	public int generateAnswer(int actualAnswer){
+	public int generateAnswer(MultiValueR multiValueR){
 		Random generator = new Random();
 		int answer;
 		if(generator.nextDouble() > this.successRate){

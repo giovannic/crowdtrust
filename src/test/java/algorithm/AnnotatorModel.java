@@ -55,7 +55,7 @@ public class AnnotatorModel {
 		AnnotatorSubTaskAnswer savedTask = this.findTask(task.getId());
 		if(task instanceof BinarySubTask){
 			BinaryTestData testData = ((BinaryTestData) savedTask.getAlgoTestData());
-			int answer = this.binary.generateAnswer(testData.getActualAnswer());
+			int answer = this.binary.generateAnswer((BinaryR) testData.getActualAnswer());
 			//Link with gios code
 			boolean boolAnswer;
 			if(answer == 1)
@@ -65,7 +65,7 @@ public class AnnotatorModel {
 			task.addResponse(this.bee, new BinaryR(boolAnswer));
 		}else if(task instanceof MultiValueSubTask){
 			MultiTestData testData = ((MultiTestData) savedTask.getAlgoTestData());
-			int answer = this.multi.generateAnswer(testData.getActualAnswer());
+			int answer = this.multi.generateAnswer((MultiValueR) testData.getActualAnswer());
 			//Link with gios code
 			task.addResponse(this.bee, new MultiValueR(answer));
 		}else if(task instanceof SingleContinuousSubTask){
