@@ -33,7 +33,7 @@ import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
 
-	protected static int annotatorNumber = 20;
+	protected static int annotatorNumber = 30;
 	protected static int subtasks = 300;
 	
 	protected static int totalPos = 1000;	//Annotators when created have 
@@ -212,7 +212,7 @@ public class TestAlgorithm extends TestCase {
 //
 
 		
-		System.out.println("---------Calculating accuracy average difference--------------------");
+	/*	System.out.println("---------Calculating accuracy average difference--------------------");
 		
 		Map<Integer,Response> accuracies = SubTaskDb.getResults(1);
 		for (AnnotatorSubTaskAnswer answer : answers){
@@ -228,7 +228,7 @@ public class TestAlgorithm extends TestCase {
 		}
 		System.out.println("error rate = " + (correct/subtasks));
 		
-		System.out.println("------------------------------------------------------ ");
+		System.out.println("------------------------------------------------------ "); */
 
 		
 		//DbInitialiser.init();
