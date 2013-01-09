@@ -62,7 +62,6 @@ public class BinaryBehaviour {
 		 */
 
 		double signal = dist.sample();
-		System.out.println("Rate" + this.truePosRate + " Answer " +  realanswer + " Signal " + signal );
 		int answer = (Double.compare(signal, this.threshold) > 0) ? 1 : 0;
 		//this.updateNumbers(answer, actualAnswer);	//Update truePos/neg and totalpos/neg
 		this.updateRates();		//Update truePos/negRates
