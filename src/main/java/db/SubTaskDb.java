@@ -229,7 +229,7 @@ public class SubTaskDb {
 				"subtasks.id AS sid, tasks.accuracy AS acc, ");
 		sql.append("tasks.max_labels AS ml, ranged.finish AS finish, " +
 				"ranged.start AS start, ranged.p AS p, " +
-				"COUNT(responses.id) AS c");
+				"COUNT(responses.id) AS c ");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id ");
 		sql.append("LEFT JOIN ranged ON subtasks.id = ranged.id ");
 		sql.append("LEFT JOIN responses ON responses.id ");
