@@ -440,6 +440,7 @@ public class SubTaskDb {
 	private static SubTask mapSubTask(ResultSet rs, int type) throws SQLException {
 		SubTask s = null;
 		int taskAccuracy = rs.getInt("acc");
+		System.out.println("Task acc: " + taskAccuracy);
 		int id = rs.getInt("sid");
 		int responses = rs.getInt("c");
 		int maxLabels = rs.getInt("ml");
