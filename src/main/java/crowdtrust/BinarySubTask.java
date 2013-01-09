@@ -9,7 +9,7 @@ public class BinarySubTask extends SubTask {
 	public BinarySubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		
-		super(id, confidence_threshold, number_of_labels, max_labels);
+		super(id, 0.8, number_of_labels, max_labels);
 	} 
 
 	@Override
