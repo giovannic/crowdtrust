@@ -452,7 +452,7 @@ public class SubTaskDb {
 				"JOIN tasks t ON s.task = t.id " +
 				"LEFT JOIN ranged r ON t.id = r.task " +
 				"JOIN responses res ON res.subtask = e.subtask_id " +
-				"GROUP BY type, sid, f, est, ml, start, finish, p, conf, acc;)";
+				"GROUP BY type, sid, f, est, ml, start, finish, p, conf, acc)";
 		
 		PreparedStatement preparedStatement;
 		
