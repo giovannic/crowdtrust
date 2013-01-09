@@ -50,7 +50,6 @@ import db.TaskDb;
 	        MediaType media_type;
 	        AnnotationType annotation_type;
 	        InputType input_type;
-	        System.out.println(request.getParameterMap().toString());
 			try {
 				accuracy = Float.parseFloat(request.getParameter("accuracy"));
 				max_labels = Integer.parseInt(request.getParameter("max_labels"));
@@ -79,10 +78,9 @@ import db.TaskDb;
 		        return;
 			}
 			List<String> answers = new LinkedList<String>();
-			String answer = request.getParameter("answer1");
-			for(int i = 2 ; i < num_answers ; i++) {
+			for(int i = 1 ; i <= num_answers ; i++) {
+				String answer = request.getParameter("answer" + i);
 				answers.add(answer);
-				answer = request.getParameter("answer" + i);
 			}
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
 					accuracy, media_type, annotation_type, input_type, max_labels, expiry,
