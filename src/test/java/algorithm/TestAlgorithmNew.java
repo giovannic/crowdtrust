@@ -58,7 +58,17 @@ public class TestAlgorithmNew extends TestCase {
 				if(rand.nextDouble() > percentageNormal){
 					annotators[i].setUpBinary(500, 500, 1000, 1000);
 				}else{
-					annotators[i].setUpBinary(850, 850, 1000, 1000);
+					int addsub = rand.nextInt(2);
+					int neg;
+					int pos;
+					if(addsub == 1){
+						neg = rand.nextInt(125) * -1;
+						pos = rand.nextInt(125) * -1;
+					}else{
+						neg = rand.nextInt(125);
+						pos = rand.nextInt(125);						
+					}
+					annotators[i].setUpBinary((850 + pos), (850 + neg), 1000, 1000);
 				}
 				
 			}
