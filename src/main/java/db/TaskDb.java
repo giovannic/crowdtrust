@@ -16,6 +16,7 @@ public class TaskDb {
 public static int addTask(int accountID, String name, String question, float accuracy, 
 			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
 			List<String> answerList){
+		System.out.println("float acc " + accuracy);
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
