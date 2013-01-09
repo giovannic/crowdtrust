@@ -81,17 +81,19 @@ public class SubTaskDb {
 
 	public static SubTask getRandomSubTask(int task, int annotator) {
 		
-		String sql = "SELECT subtasks.id AS s, tasks.accuracy AS a, " +
-				"tasks.max_labels AS m, COUNT(responses.id) AS r," +
-				"subtasks.file_name AS f " +
+		String sql = "SELECT tasks.annotation_type AS type, " +
+				"subtasks.id AS sid, tasks.accuracy AS acc, " +
+				"tasks.max_labels AS ml, COUNT(responses.id) AS c," +
+				"subtasks.file_name AS f, start, finish, p " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
+				"LEFT JOIN ranged ON tasks.id = ranged.task " +
 				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
 				"(SELECT * FROM responses answered " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
-				"GROUP BY s,a,m,f " +
+				"GROUP BY sid, acc, ml, f, start, finish, p, type " +
 				"ORDER BY random() " +
 				"LIMIT 1";
 		
@@ -114,16 +116,8 @@ public class SubTaskDb {
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()){
-				int taskAccuracy = rs.getInt("a");
-				int id = rs.getInt("s");
-				int responses = rs.getInt("r");
-				int maxLabels = rs.getInt("m");
-				String fileName = rs.getString("f");
-				BinarySubTask b = new BinarySubTask(id, taskAccuracy, responses, maxLabels);
-			//MASSIVE HACK!!!!!!!!!!!!!!!!!!!	
-			//	MultiValueSubTask b = new MultiValueSubTask(id, taskAccuracy, responses, maxLabels, 5);
-				b.addFileName(fileName);
-				return b;
+				int type = rs.getInt("type");
+				return mapSubTask(rs, type);
 			}
 			return null;
 		}
@@ -229,52 +223,13 @@ public class SubTaskDb {
 		}
 	}
 
-	public static BinarySubTask getBinarySubTask(int subTaskId) {
+	public static SubTask getSubtask(int subTaskId) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
-		sql.append("tasks.max_labels AS m, COUNT(responses.id) AS r ");
-		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id ");
-		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id ");
-		sql.append("WHERE subtasks.id = ? ");
-		sql.append("GROUP BY s,a,m ");
-		PreparedStatement preparedStatement;
-	    try {
-	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-	    	preparedStatement.setInt(1, subTaskId);
-	    }	    catch (ClassNotFoundException e) {
-	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
-	    	e.printStackTrace();
-	    	return null;
-	    } catch (SQLException e) {
-	      	System.err.println("SQL Error on check finished");
-	      	e.printStackTrace();
-	      	return null;
-	    }
-		try {
-			ResultSet rs = preparedStatement.executeQuery();
-			if( rs.next() ) {
-				int taskAccuracy = rs.getInt("a");
-				int id = rs.getInt("s");
-				int responses = rs.getInt("r");
-				int maxLabels = rs.getInt("m");
-				return new BinarySubTask(id, taskAccuracy, responses, maxLabels);
-			}
-			return null;
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	    
-	    
-	}
-
-	public static MultiValueSubTask getSubtask(int subTaskId) {
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT subtasks.id AS sid, tasks.accuracy AS acc,");
+		sql.append("SELECT tasks.annotator_type AS type, " +
+				"subtasks.id AS sid, tasks.accuracy AS acc,");
 		sql.append("tasks.max_labels AS ml, ranged.finish AS finish, " +
 				"ranged.start AS start, ranged.p AS p, " +
-				"COUNT(responses.id) AS r");
+				"COUNT(responses.id) AS c");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
 		sql.append("LEFT JOIN ranged ON subtasks.id = ranged.id");
 		sql.append("LEFT JOIN responses ON responses.id");
@@ -295,12 +250,8 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
-			int taskAccuracy = rs.getInt("a");
-			int id = rs.getInt("s");
-			int responses = rs.getInt("r");
-			int maxLabels = rs.getInt("m");
-			int options = rs.getInt("o");
-			return new MultiValueSubTask(id, taskAccuracy, responses, maxLabels, options);
+			int type = rs.getInt("type");
+			return mapSubTask(rs, type);
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
@@ -431,7 +382,8 @@ public class SubTaskDb {
 				"t.accuracy AS acc, " +
 				"e.subtask_id AS sid, e.estimate AS est, " +
 				"t.max_labels AS ml, start, finish, p, " +
-				"e.confidence AS conf, COUNT(res.id) AS c " +
+				"e.confidence AS conf, COUNT(res.id) AS c, " +
+				"s.file_name AS f " +
 				"FROM estimates e " +
 				"JOIN( " +
 				"SELECT subtasks.id, estimates.confidence, " +
@@ -494,18 +446,23 @@ public class SubTaskDb {
 		String finish = rs.getString("finish");
 		String start = rs.getString("start");
 		float precision = rs.getFloat("p");
+		String fileName = rs.getString("f");
 		switch(type){
 		case 1:
-			return new BinarySubTask(id, taskAccuracy,
+			s = new BinarySubTask(id, taskAccuracy,
 					responses, maxLabels);
+			break;
 		case 2:
-			return new MultiValueSubTask(id, taskAccuracy, responses, 
+			s = new MultiValueSubTask(id, taskAccuracy, responses, 
 					maxLabels, Integer.parseInt(finish));
+			break;
 		case 3:
-			return ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
+			s = ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
 					maxLabels, start, finish, precision);
+			break;
 		}
-		return null;
+		s.addFileName(fileName);
+		return s;
 	}
 
 	public static void addEstimate(Estimate est, int id) {
