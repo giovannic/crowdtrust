@@ -1,6 +1,6 @@
 package crowdtrust;
 
 public enum MediaType {
-	IMAGE, AUDIO, VIDEO;
+	NONE,IMAGE, AUDIO, VIDEO;
 
 }
