@@ -58,12 +58,12 @@ public class ResponseServlet extends HttpServlet {
 					r = new BinaryR(true);
 				else
 					r = new BinaryR(false);
-				subtask = db.SubTaskDb.getBinarySubTask(subTaskId);
+				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 2:
 				int s = Integer.parseInt(request.getParameter("selection"));
 				r = new MultiValueR(s);
-				subtask = db.SubTaskDb.getMultiValueSubtask(subTaskId);
+				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 3:
 				break;
