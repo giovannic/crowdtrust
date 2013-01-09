@@ -194,7 +194,7 @@ public static int addTask(int accountID, String name, String question, float acc
 					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
 				if(annotation_type == 2) {
-						thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, min, max, step );
+						//thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, min, max, step );
 				}							
 				if(annotation_type == 3) {
 						thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
