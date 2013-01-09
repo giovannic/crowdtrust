@@ -14,19 +14,39 @@
 		}
 
 		function binary() {
-			document.getElementById("numans").style.display = 'none';
 			for(j = 10; j > 2; j--) {
 				var ans = "ans".concat(j);
 				document.getElementById(ans).style.display = 'none';
 			}
+			document.getElementById("numans").style.display = 'none';
+			document.getElementById("input_type").style.display = 'none';
+			document.getElementById("minimum").style.display = 'none';
+			document.getElementById("maximum").style.display = 'none';
+			document.getElementById("steprow").style.display = 'none';
+			document.getElementById("ans1").style.display = 'inline';
+			document.getElementById("ans2").style.display = 'inline';
 		}
 
 		function category() {
+			document.getElementById("input_type").style.display = 'none';
+		  document.getElementById("minimum").style.display = 'none';
+			document.getElementById("maximum").style.display = 'none';
+			document.getElementById("steprow").style.display = 'none';
 			document.getElementById("numans").style.display = 'inline';
 		}
 
 		function continuous() {
-
+			document.getElementById("input_type").style.display = 'inline';
+			document.getElementById("minimum").style.display = 'inline';
+			document.getElementById("maximum").style.display = 'inline';
+			document.getElementById("steprow").style.display = 'inline';
+			document.getElementById("numans").style.display = 'none';
+			document.getElementById("ans1").style.display = 'none';
+			document.getElementById("ans2").style.display = 'none';
+			for(j = 10; j > 0; j--) {
+				var ans = "ans".concat(j);
+				document.getElementById(ans).style.display = 'none';
+			}
 		}
 
 		function displayAnswers(e) {
@@ -81,15 +101,27 @@
             <option value="CONTINUOUS">NContinuous</option>
             </select></td>
         </tr>
+				<tr id="minimum" style="display:none;">
+						<td>Minimum</td>
+						<td><input type="number" id="min" name="min"/></td>
+				</tr>
+				<tr id="maximum" style="display:none;">
+						<td>Maximum</td>
+						<td><input type="number" id="max" name="max"/></td>
+				</tr>
+				<tr id="steprow" style="display:none;">
+						<td>Number of steps</td>
+						<td><input type="number" id="step" name="step"/></td>
+				</tr>
 				<tr id="numans" style="display:none;">
 						<td>How many answers would you like?</td>
 						<td><input type="number" id="num_answers "name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)"/></td>
 				</tr>
-        <tr>
+        <tr id="ans1">
             <td>answer 1?</td>
             <td><input type="text" name="answer1" /></td>
         </tr>
-        <tr>
+        <tr id="ans2">
             <td>answer 2?</td>
             <td><input type="text" name="answer2" /></td>
         </tr>
@@ -127,7 +159,7 @@
         </tr>
         <tr>
             <td style="display:none;">>What type of response do you expect?</td>
-            <td style="display:none;"><select name="input_type">
+            <td style="display:none;"><select id="input_type" name="input_type">
             <option value="RADIO">Radio</option>
             <option value="SLIDER">Slider</option>
             <option value="COORDINATES">Coordinates</option>
