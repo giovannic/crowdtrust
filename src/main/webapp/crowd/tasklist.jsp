@@ -25,11 +25,12 @@
 
 		<%
 			for(Task task : tasks) {
-			String[] answers = task.getAnswers();
+			List<String> answers = task.getAnswers();
 			String answersStr = "";
-			for(int i = 0 ; i < answers.length ; i++) {
-        answersStr += answers[i] + "/";
+			for(String ans : answers) {
+        answersStr += ans + "/";
 			} 
+			/*add stuff for x and y*/
 		%>
 		<tr>
 			<td><%=task.getName()%></td>

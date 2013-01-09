@@ -187,8 +187,19 @@ public static int addTask(int accountID, String name, String question, float acc
 					answers.add(answersArr[i]);
 				}
 				int accuracy = resultSet.getInt("accuracy");
-				String min = resultSet.getString("start");
-				String max = resultSet.getString("finish");
+				String minJoined = resultSet.getString("start");
+				String[] minArr = minJoined.split("/");
+				List<String> mins = new LinkedList<String>();
+				for (int i = 0; i < minArr.length ; i++ ) {
+					mins.add(minArr[i]);
+				}
+				String maxJoined = resultSet.getString("finish");
+				String[] maxArr = maxJoined.split("/");
+				List<String> maxes = new LinkedList<String>();
+				for (int i = 0; i < maxArr.length ; i++ ) {
+					maxes.add(maxArr[i]);
+				}
+
 				double step = resultSet.getInt("p");
 				if(annotation_type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
@@ -197,7 +208,7 @@ public static int addTask(int accountID, String name, String question, float acc
 					thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
 				}							
 				if(annotation_type == 3) {
-					//thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, mins, maxes, step );
+					thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, mins, maxes, step );
 				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -233,8 +244,8 @@ public static int addTask(int accountID, String name, String question, float acc
 
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM tasks ");
-		sql.append("WHERE tasks.ex_time > NOW()");
+		sql.append("SELECT * FROM tasks LEFT JOIN ranged ");
+		sql.append("ON tasks.id = ranged.task WHERE tasks.ex_time > NOW()");
 		PreparedStatement preparedStatement;
 		List<Task> tasks = new ArrayList<Task>();
 		try {
@@ -249,6 +260,7 @@ public static int addTask(int accountID, String name, String question, float acc
 	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
 	    } catch (SQLException e) {
 	      	System.err.println("SQL Error on get tasks for crowdid");
+e.printStackTrace();
 	    }
 		return tasks;
 	}
@@ -269,7 +281,8 @@ public static int addTask(int accountID, String name, String question, float acc
 		catch (ClassNotFoundException e) {
 			System.err.println("Error connecting to DB on get Task: PSQL driver not present");
 		} catch (SQLException e) {
-			System.err.println("SQL Error on get Tasks for crowdid");
+			System.err.println("SQL Error on get Tasks for clientid");
+e.printStackTrace();
 		}
 		return tasks;
 	}

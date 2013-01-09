@@ -83,7 +83,7 @@ public class TestAlgorithmNew extends TestCase {
 			List<String> testQs = new LinkedList<String>();
 			testQs.add("test q1");
 			testQs.add("test q2");
-			assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, numPeople, expiry, testQs, 0, 0, 0)>0);
+			assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, numPeople , expiry, testQs, 0, 0, 0)>0);
 			
 			//List of answers
 			LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
@@ -110,11 +110,15 @@ public class TestAlgorithmNew extends TestCase {
 			}
 			System.out.println("Given annotators answers");
 			
+			BinarySubTask t;
 			for(int i = 0; i < numTasks; i++){
 				for(int j = 0; j < numPeople; j++){
-					BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(TaskDb.getTaskId("BinaryTestTask"), annotators[i].bee.getId());
+					System.out.println("Person " + (j + 1) + " answering task " + i);
+				    t = (BinarySubTask) SubTaskDb.getSequentialSubTask(TaskDb.getTaskId("BinaryTestTask"), annotators[j].bee.getId());
+				    System.out.println("Sending in task " + t.getId());
 					annotators[i].answerTask(t);
 				}
+				System.out.println();
 				System.out.println("Task " + i + " done.");
 				printAnnotators();
 			}
