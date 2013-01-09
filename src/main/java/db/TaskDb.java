@@ -66,7 +66,7 @@ public static int addTask(int accountID, String name, String question, float acc
         } catch (SQLException e) {
         	e.printStackTrace();
         }
-        
+        return tid;
 	}
 
 	/*public static int getSubTaskId(String name){
