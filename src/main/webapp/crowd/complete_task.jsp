@@ -46,7 +46,7 @@
   <%
     }
   %>
-  <% if (mediaType == 4 ) /*bounding box*/ { %>
+  <% if (inputType == 4 ) /*bounding box*/ { %>
     
   <link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />
   <script type="text/javascript" src="scripts/jquery.min.js"></script>
@@ -58,7 +58,7 @@
     $('#x1').val(selection.x1);
     $('#y1').val(selection.y1);
     $('#x2').val(selection.x2);
-    $('#xy2).val(selection.y2);
+    $('#y2).val(selection.y2);
   }
   
   $(function () {
@@ -100,17 +100,15 @@
       <%
       int it = 0;
 		    for( String answer : answers) {
-		      switch(inputType) {
-		      case 1: /*radio buttons*/
+		    /*radio buttons only if multiple answers*/
 		  %><br>
       <input type="radio" name="response" value=<%=it%>
       <% if(it == 0) {%> checked <%}%> > <%=answer%> </input>
 		  <%
-                      break;
-		      }
+		      it++;
 		    }
 	    %>
-      <% if (mediaType == 4 ) /*bounding box*/ { %>
+      <% if (inputType == 4 ) /*bounding box*/ { %>
       <input type="hidden" name="x1" value="0" />
       <input type="hidden" name="y1" value="0" />
       <input type="hidden" name="x2" value="0" />
