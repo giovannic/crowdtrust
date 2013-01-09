@@ -50,6 +50,7 @@ import db.TaskDb;
 	        MediaType media_type;
 	        AnnotationType annotation_type;
 	        InputType input_type;
+	        System.out.println(request.getParameterMap().toString());
 			try {
 				accuracy = Float.parseFloat(request.getParameter("accuracy"));
 				max_labels = Integer.parseInt(request.getParameter("max_labels"));
