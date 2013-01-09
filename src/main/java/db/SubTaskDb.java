@@ -126,6 +126,54 @@ public class SubTaskDb {
 			return null;
 		}
 	}
+	
+	public static SubTask getSequentialSubTask(int task, int annotator) {
+		
+		String sql = "SELECT tasks.annotation_type AS type, " +
+				"subtasks.id AS sid, tasks.accuracy AS acc, " +
+				"tasks.max_labels AS ml, COUNT(responses.id) AS c, " +
+				"subtasks.file_name AS f, start, finish, p " +
+				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
+				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
+				"LEFT JOIN ranged ON tasks.id = ranged.task " +
+				"WHERE tasks.id = ? AND subtasks.active " +
+				"AND NOT EXISTS " +
+				"(SELECT * FROM responses answered " +
+				"WHERE answered.subtask = subtasks.id " +
+				"AND answered.account = ?) " +
+				"GROUP BY sid, acc, ml, f, start, finish, p, type " +
+				"ORDER BY sid " +
+				"LIMIT 1";
+		
+		PreparedStatement preparedStatement;
+	    try {
+	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    preparedStatement.setInt(1, task);
+	    preparedStatement.setInt(2, annotator);
+	    }
+	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	      	e.printStackTrace();
+	    	return null;
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
+	      	return null;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()){
+				int type = rs.getInt("type");
+				return mapSubTask(rs, type);
+			}
+			return null;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public static List<String> getImageSubtasks() {
 		StringBuilder sql = new StringBuilder();
