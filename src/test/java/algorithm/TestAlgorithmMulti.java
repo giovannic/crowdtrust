@@ -151,7 +151,7 @@ public class TestAlgorithmMulti extends TestCase {
 		
 		System.out.println("---------Calculating label error rate--------------------");
 		
-		Map<Integer,Response> results = SubTaskDb.getResults(1);
+		Map<Integer,Response> results = SubTaskDb.getMappedResults(1);
 		int correct = 0;
 		for (AnnotatorSubTaskAnswer answer : answers){
 			Response trueA = answer.getAlgoTestData().getActualAnswer();
@@ -221,7 +221,7 @@ public class TestAlgorithmMulti extends TestCase {
 		
 	/*	System.out.println("---------Calculating accuracy average difference--------------------");
 		
-		Map<Integer,Response> accuracies = SubTaskDb.getResults(1);
+		Map<Integer,Response> accuracies = SubTaskDb.getMappedResults(1);
 		for (AnnotatorSubTaskAnswer answer : answers){
 			Response trueA = answer.getAlgoTestData().getActualAnswer();
 			Response estA = results.get(answer.id);
