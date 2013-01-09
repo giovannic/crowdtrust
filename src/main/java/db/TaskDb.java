@@ -265,7 +265,7 @@ public static int addTask(int accountID, String name, String question, float acc
 
 	public static List<Task> getTasksForClientId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM tasks WHERE submitter = ?");
+		sql.append("SELECT * FROM tasks  LEFT JOIN ranged ON tasks.id = ranged.task WHERE submitter = ?");
 		List<Task> tasks = new ArrayList<Task>();
 		PreparedStatement preparedStatement;
 		try {
