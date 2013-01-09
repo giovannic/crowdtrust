@@ -38,17 +38,39 @@
     String TASKS_DIRECTORY = "http://www.doc.ic.ac.uk/project/2012/362/g1236218/TaskFiles/";
     SubTask subtask = SubTaskDb.getRandomSubTask(taskID, userID);
   %>
-    <title>Task: <%=taskName%></title>
-    <%
-      if(subtask == null) {
-    %>
-    <META HTTP-EQUIV="refresh" CONTENT="3;URL=/crowd/tasklist.jsp">
-    <%
-      }
-    %>
+  <title>Task: <%=taskName%></title>
+  <%
+    if(subtask == null) {
+  %>
+  <META HTTP-EQUIV="refresh" CONTENT="3;URL=/crowd/tasklist.jsp">
+  <%
+    }
+  %>
+  <% if (mediaType == 4 ) /*bounding box*/ { %>
+    
+  <link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />
+  <script type="text/javascript" src="scripts/jquery.min.js"></script>
+  <script type="text/javascript" src="scripts/jquery.imgareaselect.pack.js"></script>
+
+  
+  <script type="text/javascript">
+  function getCoords(img, selection) {
+    $('#x1').val(selection.x1);
+    $('#y1').val(selection.y1);
+    $('#x2').val(selection.x2);
+    $('#xy2).val(selection.y2);
+  }
+  
+  $(function () {
+    $('#image').imgAreaSelect({ handles: true onSelectChange: getCoords });
+  });
+  </script>
+  
+  <% } %>
   </head>
 
   <body>
+  
     <h1>Task: <%=taskName%></h1>
     <h2 id="question"><%=question%>?</h2>
     <%
@@ -58,7 +80,7 @@
 		  switch(mediaType) {
 		  case 1: /*image*/ 
 	  %>
-	  <img src="<%=subtaskFile %>" />
+	  <img id="image" src="<%=subtaskFile %>" />
 		<%
 		  	break;
 		  case 2: /*audio*/
@@ -88,6 +110,12 @@
 		      }
 		    }
 	    %>
+      <% if (mediaType == 4 ) /*bounding box*/ { %>
+      <input type="hidden" name="x1" value="0" />
+      <input type="hidden" name="y1" value="0" />
+      <input type="hidden" name="x2" value="0" />
+      <input type="hidden" name="y2" value="0" />
+      <% } %>
 	    <input type="hidden" name="annotation_type" value=<%=annotationType%> />
 	    <input type="hidden" name="sid" value=<%=sid%> />
 		  <input type="submit" /><br>
