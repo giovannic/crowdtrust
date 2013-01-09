@@ -84,7 +84,7 @@ public class SubTaskDb {
 		String sql = "SELECT tasks.annotator_type AS type, " +
 				"subtasks.id AS sid, tasks.accuracy AS acc, " +
 				"tasks.max_labels AS ml, COUNT(responses.id) AS c," +
-				"subtasks.file_name AS f, start, finish, p" +
+				"subtasks.file_name AS f, start, finish, p " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
 				"LEFT JOIN ranged ON tasks.id = ranged.task" +
