@@ -16,6 +16,7 @@ public class TaskDb {
 public static int addTask(int accountID, String name, String question, float accuracy, 
 			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
 			List<String> answerList){
+		System.out.println("float acc " + accuracy);
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -31,8 +32,6 @@ public static int addTask(int accountID, String name, String question, float acc
 		for (String thisChoice : answerList) {
 			answerChoice += thisChoice + "/";
 		}
-		//get rid of trailing '/'
-		answerChoice = answerChoice.substring(0, answerChoice.length()-1);
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {
