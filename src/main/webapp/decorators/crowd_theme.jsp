@@ -6,6 +6,13 @@
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 		<link href="/css/styles.css" rel="stylesheet" type="text/css" media="screen">
 		<decorator:head />
+    <%
+      if (session == null) {
+    %>
+      <META HTTP-EQUIV="refresh" CONTENT="0;URL=/" />
+    <%
+      }
+    %>
 	</head>
 	
 	<body>

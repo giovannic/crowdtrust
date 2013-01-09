@@ -1,5 +1,7 @@
 package crowdtrust;
 
+import java.util.List;
+
 public abstract class Task
 {
 
@@ -11,9 +13,12 @@ public abstract class Task
   protected int annotation_type;
   protected int media_type;
   protected int input_type;
-  protected String[] answers;
+  protected List<String> answers;
+  protected int min;
+  protected int max;
+  protected double step;
   
-  public Task(int id, String name, String question, int accuracy, int annotation_type, int media_type, int input_type, String[] answers){
+  public Task(int id, String name, String question, int accuracy, int annotation_type, int media_type, int input_type, List<String> answers, int min, int max, double step){
 	  this.id = id;
 	  this.name = name;
 	  this.question = question;
@@ -22,6 +27,9 @@ public abstract class Task
 	  this.media_type = media_type;
 	  this.input_type = input_type;
 	  this.answers = answers;
+	  this.min = min;
+	  this.max = max;
+	  this.step = step;
   }
   
   public int getId()
@@ -56,15 +64,29 @@ public abstract class Task
     return this.input_type;
   }
   
-  public String[] getAnswers()
+  public List<String> getAnswers()
   {
     return this.answers;
   }
 
-
   public int getAccuracy()
   {
     return this.accuracy;
+  }
+
+  public int getMin()
+  {
+    return this.accuracy;
+  }
+
+  public int getMax()
+  {
+    return this.max;
+  }
+
+  public double getStep()
+  {
+    return this.step;
   }
 
   public boolean addToDatabase()

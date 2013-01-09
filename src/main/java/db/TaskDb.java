@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import crowdtrust.*;
@@ -15,7 +16,7 @@ public class TaskDb {
 	
 public static int addTask(int accountID, String name, String question, float accuracy, 
 			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
-			List<String> answerList){
+			List<String> answerList, int min, int max, double step){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -55,16 +56,19 @@ public static int addTask(int accountID, String name, String question, float acc
 			e.printStackTrace();
 			return -1;
 		}
-        try {
-//        	String minStr = "" + min + "/" + min + "/";
-//        	String maxStr = "" + max + "/" + max + "/";
-        	insertTask = c.prepareStatement("INSERT INTO ranged VALUES(?,?,?,?)");
-        	insertTask.setInt(1,tid);
-//        	insertTask.setString(2,minStr);
-//        	insertTask.setString(3,maxStr);
-//        	insertTask.setDouble(4, step)
-        } catch (SQLException e) {
-        	e.printStackTrace();
+        if( min != 0 || max != 0) {
+	        try {
+	        	String minStr = "" + min + "/" + min + "/";
+	        	String maxStr = "" + max + "/" + max + "/";
+	        	insertTask = c.prepareStatement("INSERT INTO ranged VALUES(?,?,?,?)");
+	        	insertTask.setInt(1,tid);
+	        	insertTask.setString(2,minStr);
+	        	insertTask.setString(3,maxStr);
+	        	insertTask.setDouble(4, step);
+	        	insertTask.execute();
+	        } catch (SQLException e) {
+	        	e.printStackTrace();
+	        }
         }
         return tid;
 	}
@@ -177,13 +181,20 @@ public static int addTask(int accountID, String name, String question, float acc
 				int annotation_type = resultSet.getInt("annotation_type");
 				int input_type = resultSet.getInt("input_type");
 				String answersString = resultSet.getString("answers");
-				String[] answers = answersString.split("/");
+				String[] answersArr = answersString.split("/");
+				List<String> answers = new LinkedList<String>();
+				for (int i = 0 ; i < answersArr.length ; i++) {
+					answers.add(answersArr[i]);
+				}
 				int accuracy = resultSet.getInt("accuracy");
+				int min = resultSet.getInt("min");
+				int max = resultSet.getInt("max");
+				double step = resultSet.getInt("p");
 				if(annotation_type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
 				if(annotation_type == 2) {
-						//thisTask = new SingleContinuousTask(id, name, question, accuracy);
+						thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, min, max, step );
 				}							
 				if(annotation_type == 3) {
 						thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);

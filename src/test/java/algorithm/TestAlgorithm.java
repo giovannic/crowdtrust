@@ -99,7 +99,7 @@ public class TestAlgorithm extends TestCase {
 		List<String> testQs = new LinkedList<String>();
 		testQs.add("test q1");
 		testQs.add("test q2");
-		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, 15, expiry, testQs)>0);
+		assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, 15, expiry, testQs, 0, 0, 0)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();

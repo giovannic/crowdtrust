@@ -44,35 +44,35 @@ import db.TaskDb;
 	        float accuracy;
 	        int max_labels;
 	        int num_answers = 0;
+	        int min = 0;
+	        int max = 0;
+	        double step = 0;
 	        MediaType media_type;
 	        AnnotationType annotation_type;
 	        InputType input_type;
 			try {
 				accuracy = Float.parseFloat(request.getParameter("accuracy"));
 				max_labels = Integer.parseInt(request.getParameter("max_labels"));
-				String nas = request.getParameter("num_answers");
-//				if( nas.equals("") )
-//					num_answers = Integer.parseInt(nas);
 				media_type = MediaType.valueOf(request.getParameter("media_type"));
 				annotation_type = AnnotationType.valueOf(request.getParameter("annotation_type"));
+				if(annotation_type.equals(AnnotationType.CONTINUOUS)) {
+					min = Integer.parseInt(request.getParameter("min"));
+					max = Integer.parseInt(request.getParameter("max"));
+					step = Double.parseDouble(request.getParameter("step"));
+				}else {
+					num_answers = Integer.parseInt(request.getParameter("num_answers"));
+				}
 				input_type = InputType.valueOf(request.getParameter("input_type"));
 			} catch (NumberFormatException e) {
-				out.println("accuracy or type not an integer");
+				printAndRedirect(out, "invalid input");
 				e.printStackTrace();
 				return;
 			}
 			long expiry;
 			try {
 				expiry = getLongDate(request);
-			} catch (ParseException e) {		
-		        out.println("<html>");
-		        out.println("<head>");			
-		    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"addtask.jsp\">");
-		        out.println("</head>");
-		        out.println("<body>");
-		        out.println("bad date given, returning to add task page");
-		        out.println("</body>");
-		        out.println("</html>");
+			} catch (ParseException e) {	
+				printAndRedirect(out, "invalid date format");	
 		        return;
 			}
 			List<String> answers = new LinkedList<String>();
@@ -82,7 +82,8 @@ import db.TaskDb;
 				answer = request.getParameter("answer" + i);
 			}
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
-					accuracy, media_type, annotation_type, input_type, max_labels, expiry, answers);
+					accuracy, media_type, annotation_type, input_type, max_labels, expiry,
+					answers, min, max, step);
 	        if( tid > 0) {
 	            File taskFolder = new File(TASKS_DIRECTORY + "/" + tid);
 	        	taskFolder.mkdirs();
@@ -90,6 +91,18 @@ import db.TaskDb;
 	        }
 	}
 		
+
+	private void printAndRedirect(PrintWriter out, String string) {
+        out.println("<html>");
+        out.println("<head>");			
+    	out.println("<meta http-equiv=\"Refresh\" content=\"3\"; url=\"addtask.jsp\">");
+        out.println("</head>");
+        out.println("<body>");
+        out.println(string + ", returning to add task page");
+        out.println("</body>");
+        out.println("</html>");
+	}
+
 
 	private long getLongDate(HttpServletRequest request) throws ParseException{
 		String expiryDateStr = request.getParameter("day") + request.getParameter("month") + request.getParameter("year");
