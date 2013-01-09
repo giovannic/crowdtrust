@@ -10,13 +10,15 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import crowdtrust.*;
 
 public class TaskDb {
 	
 public static int addTask(int accountID, String name, String question, float accuracy, 
 			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
-			List<String> answerList, int min, int max, double step){
+			List<String> answerList, int [][] ranges, double step){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -56,10 +58,10 @@ public static int addTask(int accountID, String name, String question, float acc
 			e.printStackTrace();
 			return -1;
 		}
-        if( min != 0 || max != 0) {
+        if(ranges != null) {
 	        try {
-	        	String minStr = "" + min + "/" + min + "/";
-	        	String maxStr = "" + max + "/" + max + "/";
+	        	String minStr = StringUtils.join(ranges[0], "/");
+	        	String maxStr = StringUtils.join(ranges[1], "/");
 	        	insertTask = c.prepareStatement("INSERT INTO ranged VALUES(?,?,?,?)");
 	        	insertTask.setInt(1,tid);
 	        	insertTask.setString(2,minStr);
