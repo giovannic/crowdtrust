@@ -14,6 +14,7 @@ import java.util.Map;
 
 import crowdtrust.BinaryR;
 import crowdtrust.ContinuousR;
+import crowdtrust.ContinuousSubTask;
 import crowdtrust.MultiValueR;
 import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
@@ -268,10 +269,12 @@ public class SubTaskDb {
 	    
 	}
 
-	public static MultiValueSubTask getMultiValueSubtask(int subTaskId) {
+	public static MultiValueSubTask getSubtask(int subTaskId) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT subtasks.id AS s, tasks.accuracy AS a,");
-		sql.append("tasks.max_labels AS m, ranged.finish AS o, COUNT(responses.id) AS r");
+		sql.append("SELECT subtasks.id AS sid, tasks.accuracy AS acc,");
+		sql.append("tasks.max_labels AS ml, ranged.finish AS finish, " +
+				"ranged.start AS start, ranged.p AS p, " +
+				"COUNT(responses.id) AS r");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id");
 		sql.append("LEFT JOIN ranged ON subtasks.id = ranged.id");
 		sql.append("LEFT JOIN responses ON responses.id");
@@ -424,26 +427,35 @@ public class SubTaskDb {
 	}
 
 	public static Collection<Result> getResults(int taskId){
-		String sql = "SELECT tasks.annotation_type AS type, " +
-				"estimates.subtask_id, estimate, confidence " +
-				"FROM estimates JOIN (" +
-				"SELECT task, file_name, subtask_id, MAX(confidence) AS best " +
-				"FROM estimates JOIN subtasks " +
-				"ON estimates.subtask_id = subtasks.id " +
-				"WHERE task = ? " +
-				"GROUP BY subtask_id, file_name, task) AS best_estimates " +
-				"ON estimates.subtask_id = best_estimates.subtask_id " +
-				"JOIN tasks ON best_estimates.task = tasks.id " +
-				"AND confidence = best " +
-				"AND frequency IN( " +
-				"SELECT MAX(frequency) " +
+		String sql = "SELECT t.annotation_type AS type, " +
+				"t.accuracy AS acc, " +
+				"e.subtask_id AS sid, e.estimate AS est, " +
+				"t.max_labels AS ml, start, finish, p, " +
+				"e.confidence AS conf, COUNT(res.id) AS c " +
 				"FROM estimates e " +
-				"WHERE e.subtask_id = estimates.subtask_id " +
-				"GROUP BY e.subtask_id)";
+				"JOIN( " +
+				"SELECT subtasks.id, estimates.confidence, " +
+				"MAX(estimates.frequency) AS f FROM " +
+				"tasks JOIN subtasks ON subtasks.task = tasks.id " +
+				"JOIN estimates ON subtasks.id = estimates.subtask_id " +
+				"WHERE tasks.id = 1 AND estimates.confidence IN( " +
+				"SELECT MAX(confidence) " +
+				"FROM estimates best " +
+				"WHERE best.subtask_id = estimates.subtask_id " +
+				"GROUP BY best.subtask_id) " +
+				"GROUP BY subtasks.id, confidence ) AS foo " +
+				"ON e.subtask_id = foo.id " +
+				"AND e.confidence = foo.confidence " +
+				"AND e.frequency = foo.f " +
+				"JOIN subtasks s ON e.subtask_id = s.id " +
+				"JOIN tasks t ON s.task = t.id " +
+				"LEFT JOIN ranged r ON t.id = r.task " +
+				"JOIN responses res ON res.subtask = e.subtask_id " +
+				"GROUP BY type, sid, est, ml, start, finish, p, conf;)";
 		
 		PreparedStatement preparedStatement;
 		
-		Map<Integer,Response> results = new HashMap<Integer,Response>();
+		Collection<Result> results = new ArrayList<Result>();
 		
 	    try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql);
@@ -463,7 +475,7 @@ public class SubTaskDb {
 				int s = rs.getInt("subtask_id");
 				int type = rs.getInt("type");
 				String e = rs.getString("estimate");
-				results.put(s, mapResponse(e, type));
+				results.add(new Result(mapSubTask(rs, type), mapResponse(e, type)));
 			}
 		}
 		catch(SQLException e) {
@@ -473,6 +485,29 @@ public class SubTaskDb {
 	}
 
 	
+	private static SubTask mapSubTask(ResultSet rs, int type) throws SQLException {
+		SubTask s = null;
+		int taskAccuracy = rs.getInt("acc");
+		int id = rs.getInt("sid");
+		int responses = rs.getInt("c");
+		int maxLabels = rs.getInt("ml");
+		String finish = rs.getString("finish");
+		String start = rs.getString("start");
+		float precision = rs.getFloat("p");
+		switch(type){
+		case 1:
+			return new BinarySubTask(id, taskAccuracy,
+					responses, maxLabels);
+		case 2:
+			return new MultiValueSubTask(id, taskAccuracy, responses, 
+					maxLabels, Integer.parseInt(finish));
+		case 3:
+			return ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
+					maxLabels, start, finish, precision);
+		}
+		return null;
+	}
+
 	public static void addEstimate(Estimate est, int id) {
 		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?,?)";
 		
