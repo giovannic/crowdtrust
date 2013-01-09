@@ -197,7 +197,7 @@ public static int addTask(int accountID, String name, String question, float acc
 					thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
 				}							
 				if(annotation_type == 3) {
-					thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, mins, maxes, step );
+					//thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, mins, maxes, step );
 				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
