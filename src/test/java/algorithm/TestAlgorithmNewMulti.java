@@ -69,10 +69,10 @@ public class TestAlgorithmNewMulti extends TestCase {
 				RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 				annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
 				AnnotatorModel a = annotators[i];
-				System.out.println("annotator " + 
-						a.bee.getId() + 
-						" truePosRate =" + a.binary.truePosRate +
-						" trueNegRate =" + a.binary.trueNegRate);
+	//			System.out.println("annotator " + 
+		//				a.bee.getId() + 
+			//			" truePosRate =" + a.binary.truePosRate +
+			//			" trueNegRate =" + a.binary.trueNegRate);
 			}
 			
 			//Lets make a client
