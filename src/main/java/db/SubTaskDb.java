@@ -371,22 +371,26 @@ public class SubTaskDb {
 	}
 	
 	public static Map<Integer, Response> getMappedResults(int taskId){
-		String sql = "SELECT tasks.annotation_type AS type, " +
-				"estimates.subtask_id, estimate, confidence " +
-				"FROM estimates JOIN (" +
-				"SELECT task, file_name, subtask_id, MAX(confidence) AS best " +
-				"FROM estimates JOIN subtasks " +
-				"ON estimates.subtask_id = subtasks.id " +
-				"WHERE task = ? " +
-				"GROUP BY subtask_id, file_name, task) AS best_estimates " +
-				"ON estimates.subtask_id = best_estimates.subtask_id " +
-				"JOIN tasks ON best_estimates.task = tasks.id " +
-				"AND confidence = best " +
-				"AND frequency IN( " +
-				"SELECT MAX(frequency) " +
-				"FROM estimates e " +
-				"WHERE e.subtask_id = estimates.subtask_id " +
-				"GROUP BY e.subtask_id)";
+		String sql = "SELECT t.annotation_type AS type, " +
+				"e.subtask_id AS sid, e.estimate AS est " +
+				"FROM estimates e JOIN(" +
+				"SELECT subtasks.id, estimates.confidence, " +
+				"MAX(estimates.frequency) AS f FROM " +
+				"tasks JOIN subtasks ON subtasks.task = tasks.id " +
+				"JOIN estimates ON subtasks.id = estimates.subtask_id " +
+				"WHERE tasks.id = ? " +
+				"AND estimates.confidence IN(" +
+				"SELECT MAX(confidence) " +
+				"FROM estimates best " +
+				"WHERE best.subtask_id = estimates.subtask_id " +
+				"GROUP BY best.subtask_id) " +
+				"GROUP BY subtasks.id, confidence " +
+				") AS foo  " +
+				"ON e.subtask_id = foo.id " +
+				"AND e.confidence = foo.confidence " +
+				"AND e.frequency = foo.f " +
+				"JOIN subtasks s ON e.subtask_id = s.id " +
+				"JOIN tasks t ON s.task = t.id";
 		
 		PreparedStatement preparedStatement;
 		
@@ -407,9 +411,9 @@ public class SubTaskDb {
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
-				int s = rs.getInt("subtask_id");
+				int s = rs.getInt("sid");
 				int type = rs.getInt("type");
-				String e = rs.getString("estimate");
+				String e = rs.getString("est");
 				results.put(s, mapResponse(e, type));
 			}
 		}
@@ -465,7 +469,7 @@ public class SubTaskDb {
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return results;
+		return null;
 	}
 
 	
