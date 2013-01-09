@@ -133,8 +133,9 @@ public class TestAlgorithm extends TestCase {
 		
 		int annotatorIndex = rand.nextInt(annotatorNumber - 1);
 		AnnotatorModel a = annotators[annotatorIndex];
+		System.out.println("Getting first random");
 		BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(parent_task_id, a.bee.getId());
-		
+		System.out.println("Got it");
 		
 		while( t != null){
 			annotatorIndex = rand.nextInt(annotatorNumber - 1);
