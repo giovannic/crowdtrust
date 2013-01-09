@@ -19,7 +19,7 @@
 				document.getElementById(ans).style.display = 'none';
 			}
 			document.getElementById("numans").style.display = 'none';
-			document.getElementById("input_type").style.display = 'none';
+			document.getElementById("type").style.display = 'none';
 			document.getElementById("minimum").style.display = 'none';
 			document.getElementById("maximum").style.display = 'none';
 			document.getElementById("steprow").style.display = 'none';
@@ -28,15 +28,17 @@
 		}
 
 		function category() {
-			document.getElementById("input_type").style.display = 'none';
+			document.getElementById("type").style.display = 'none';
 		  document.getElementById("minimum").style.display = 'none';
 			document.getElementById("maximum").style.display = 'none';
 			document.getElementById("steprow").style.display = 'none';
 			document.getElementById("numans").style.display = 'inline';
+			document.getElementById("ans1").style.display = 'none';
+			document.getElementById("ans2").style.display = 'none';
 		}
 
 		function continuous() {
-			document.getElementById("input_type").style.display = 'inline';
+			document.getElementById("type").style.display = 'inline';
 			document.getElementById("minimum").style.display = 'inline';
 			document.getElementById("maximum").style.display = 'inline';
 			document.getElementById("steprow").style.display = 'inline';
@@ -52,7 +54,7 @@
 		function displayAnswers(e) {
 			var num = e.value;
 			var i;
-			for(i = 3; i <= num; i++) {
+			for(i = 1; i <= num; i++) {
 				var ans = "ans".concat(i);
 				document.getElementById(ans).style.display = 'inline';
 			}
@@ -110,7 +112,7 @@
 						<td><input type="number" id="max" name="max"/></td>
 				</tr>
 				<tr id="steprow" style="display:none;">
-						<td>Number of steps</td>
+						<td>Step size</td>
 						<td><input type="number" id="step" name="step"/></td>
 				</tr>
 				<tr id="numans" style="display:none;">
@@ -157,9 +159,9 @@
             <td>answer 10?</td>
             <td><input type="text" name="answer10" /></td>
         </tr>
-        <tr>
-            <td style="display:none;">>What type of response do you expect?</td>
-            <td style="display:none;"><select id="input_type" name="input_type">
+        <tr id="type" style="display:none;">
+            <td>What type of response do you expect?</td>
+            <td><select id="input_type" name="input_type">
             <option value="RADIO">Radio</option>
             <option value="SLIDER">Slider</option>
             <option value="COORDINATES">Coordinates</option>
