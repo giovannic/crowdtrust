@@ -83,14 +83,14 @@ public class SubTaskDb {
 		
 		String sql = "SELECT tasks.annotation_type AS type, " +
 				"subtasks.id AS sid, tasks.accuracy AS acc, " +
-				"tasks.max_labels AS ml, COUNT(responses.id) AS c," +
+				"tasks.max_labels AS ml, COUNT(responses.id) AS c, " +
 				"subtasks.file_name AS f, start, finish, p " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
 				"LEFT JOIN ranged ON tasks.id = ranged.task " +
 				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
-				"(SELECT * FROM responses answeed " +
+				"(SELECT * FROM responses answered " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
 				"GROUP BY sid, acc, ml, f, start, finish, p, type " +
@@ -386,7 +386,7 @@ public class SubTaskDb {
 				"e.subtask_id AS sid, e.estimate AS est, " +
 				"t.max_labels AS ml, start, finish, p, " +
 				"e.confidence AS conf, COUNT(res.id) AS c, " +
-				"s.file_name AS f " +
+				"s.file_name AS f, e.frequency AS freq " +
 				"FROM estimates e " +
 				"JOIN( " +
 				"SELECT subtasks.id, estimates.confidence, " +
@@ -427,10 +427,12 @@ public class SubTaskDb {
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
-				int s = rs.getInt("subtask_id");
 				int type = rs.getInt("type");
 				String e = rs.getString("estimate");
-				results.add(new Result(mapSubTask(rs, type), mapResponse(e, type)));
+				int freq = rs.getInt("freq");
+				float conf = rs.getFloat("conf");
+				results.add(new Result(mapSubTask(rs, type), 
+						new Estimate(mapResponse(e, type), conf, freq)));
 			}
 		}
 		catch(SQLException e) {
