@@ -101,7 +101,10 @@ public class TestAlgorithmMulti extends TestCase {
 		List<String> testQs = new LinkedList<String>();
 		testQs.add("test q1");
 		testQs.add("test q2");
-		assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 15, expiry, testQs, 0, 0, 0)>0);
+		int[][] range = {{0},
+						{5}};
+		
+		assertTrue(TaskDb.addTask(accountId, "MultiTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 15, expiry, testQs, range, 0)>0);
 		
 		//List of answers
 		LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();

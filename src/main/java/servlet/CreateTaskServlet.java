@@ -82,9 +82,11 @@ import db.TaskDb;
 				String answer = request.getParameter("answer" + i);
 				answers.add(answer);
 			}
+			int [][] ranges = {{min, min},
+							   {max, max}};
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
 					accuracy, media_type, annotation_type, input_type, max_labels, expiry,
-					answers, min, max, step);
+					answers, ranges, step);
 	        if( tid > 0) {
 	            File taskFolder = new File(TASKS_DIRECTORY + "/" + tid);
 	        	taskFolder.mkdirs();
