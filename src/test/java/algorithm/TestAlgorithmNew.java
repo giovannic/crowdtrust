@@ -111,7 +111,7 @@ public class TestAlgorithmNew extends TestCase {
 			System.out.println("Given annotators answers");
 			
 			for(int i = 0; i < numTasks; i++){
-				for(int j = 0; j < numTasks; j++){
+				for(int j = 0; j < numPeople; j++){
 					BinarySubTask t = (BinarySubTask) SubTaskDb.getRandomSubTask(TaskDb.getTaskId("BinaryTestTask"), annotators[i].bee.getId());
 					annotators[i].answerTask(t);
 				}
