@@ -187,18 +187,8 @@ public static int addTask(int accountID, String name, String question, float acc
 					answers.add(answersArr[i]);
 				}
 				int accuracy = resultSet.getInt("accuracy");
-				String minJoined = resultSet.getString("start");
-				String[] minArr = minJoined.split("/");
-				List<String> mins = new LinkedList<String>();
-				for (int i = 0; i < minArr.length ; i++ ) {
-					mins.add(minArr[i]);
-				}
-				String maxJoined = resultSet.getString("finish");
-				String[] maxArr = maxJoined.split("/");
-				List<String> maxes = new LinkedList<String>();
-				for (int i = 0; i < maxArr.length ; i++ ) {
-					maxes.add(maxArr[i]);
-				}
+				String min = resultSet.getString("start");
+				String max = resultSet.getString("finish");
 				double step = resultSet.getInt("p");
 				if(annotation_type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
@@ -207,7 +197,7 @@ public static int addTask(int accountID, String name, String question, float acc
 					thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
 				}							
 				if(annotation_type == 3) {
-					thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, mins, maxes, step );
+					//thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, mins, maxes, step );
 				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
