@@ -18,40 +18,44 @@ public class BinarySubTask extends SubTask {
 		BinaryR bz = (BinaryR) z;
 		
 		int total;
-		double maximum;
+		double w;
 		if (br.isTrue()){
 			//maximise truePositive
 			total = ba.getPositiveN() + 2;
 			double alpha = ba.getTruePositive()*total;
-			double expected = ba.getTruePositive();
 			double advAlpha = ba.getTrueNegative()*total;
+			double estimate = 0;
+			w = total/(total + 1);
 			//prior normal
-			if(!bz.isTrue())
-				expected = (1 - ba.getTruePositive());
 			
-			maximum = peak(alpha, advAlpha, Math.log(expected), total);
-			ba.setTruePositive(maximum);
-			System.out.print("old: " + ba.getTruePositive() + " mle: " + maximum);
+			if(bz.isTrue())
+				estimate = 1;
+			
+			double prior = (alpha+advAlpha)/(2*total);
+			ba.setTruePositive(w*prior + (1-w)*estimate);
 			ba.incrementPositiveN();
 			
 		} else {
 			//maximize trueNegative
 			total = ba.getNegativeN() + 2;
-			
 			double alpha = ba.getTrueNegative()*total;
-			double expected = ba.getTrueNegative();
 			double advAlpha = ba.getTruePositive()*total;
+			w = total/(total + 1);
+			double estimate = 0;
+			//prior normal
+			if(bz.isTrue())
+				estimate = 1;
 			
-			if(!bz.isTrue())
-				expected = (1 - ba.getTrueNegative());
+			double prior = (alpha+advAlpha)/(2*total);
 			
-			maximum = peak(alpha, advAlpha, Math.log(expected), total);
-			ba.setTrueNegative(maximum);
-			System.out.print("old: " + ba.getTrueNegative() + " mle: " + maximum);
+			ba.setTrueNegative(w*prior + (1-w)*estimate);
+			
 			ba.incrementNegativeN();
 		}
+		
+		
 	}
-	
+	/*	
 	private double peak(double alpha, double advAlpha, double logExpected,
 			int total) {
 		
@@ -81,14 +85,15 @@ public class BinarySubTask extends SubTask {
 		double f = Math.pow(x,alpha)*Math.pow(1-x, beta);
 		double fAdv = Math.pow(x,alphaAdv)*Math.pow(1-x, betaAdv);
 		
-		double coF = x*(total - 2) - alpha + 1;
-		double coFAdv = x*(total - 2) - alphaAdv + 1;
+		double coF = x*(alpha + beta - 2) - alpha + 1;
+		double coFAdv = x*(alphaAdv + betaAdv - 2) - alphaAdv + 1;
 		
 		double coDen = (x - 1)*x;
 		
 		return (f*coF + fAdv*coFAdv)/(coDen*(f + fAdv));
 	}
-
+	*/
+	
 	@Override
 	protected void updateLikelihoods(Response r,  Accuracy a, 
 			Collection<Estimate> state){

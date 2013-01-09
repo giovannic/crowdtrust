@@ -10,6 +10,7 @@
     int tid = Integer.parseInt(request.getParameter("task_id"));
     Collection <Result> results = SubTaskDb.getResults(tid);
     
+    
   %>
   <head>
     
@@ -24,15 +25,21 @@
       <th>Percentage Confidence in Answer</th>
     </tr>
     <%
-    for( Result r : results ) {
-      SubTask subtask = r.getSubtask();
-      Estimate estimate = r.getE();    
-      %>
+    if(results != null) {
+      for( Result r : results ) {
+        SubTask subtask = r.getSubtask();
+        Estimate estimate = r.getE();    
+    %>
     <tr>
       <td><%=subtask.getFileName()%></td>
       <td><%=estimate.getR().toString()%></td>
       <td><%=estimate.getPercentage()%></td>
     </tr>
+    <%
+      }
+    } else {
+    %>
+      <td>no responses to task yet!</td>
     <%
     }
     %>

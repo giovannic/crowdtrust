@@ -439,7 +439,7 @@ public class SubTaskDb {
 				"MAX(estimates.frequency) AS f FROM " +
 				"tasks JOIN subtasks ON subtasks.task = tasks.id " +
 				"JOIN estimates ON subtasks.id = estimates.subtask_id " +
-				"WHERE tasks.id = 1 AND estimates.confidence IN( " +
+				"WHERE tasks.id = ? AND estimates.confidence IN( " +
 				"SELECT MAX(confidence) " +
 				"FROM estimates best " +
 				"WHERE best.subtask_id = estimates.subtask_id " +
@@ -452,7 +452,7 @@ public class SubTaskDb {
 				"JOIN tasks t ON s.task = t.id " +
 				"LEFT JOIN ranged r ON t.id = r.task " +
 				"JOIN responses res ON res.subtask = e.subtask_id " +
-				"GROUP BY type, sid, est, ml, start, finish, p, conf;)";
+				"GROUP BY type, sid, est, ml, start, finish, p, conf, acc;)";
 		
 		PreparedStatement preparedStatement;
 		

@@ -26,8 +26,8 @@
 	e.printStackTrace();
         return;
     }
-    List<String> answers = new LinkedList(); %>answersStr <%=answersStr%>
-    if( answersStr != null ) {
+    List<String> answers = new LinkedList(); 
+    if( answersStr.trim().length() > 0 ) {
       String[] answersArr = answersStr.split("/");
       for(int i = 0 ; i < answersArr.length ; i++) {
         String ans = answersArr[i];
@@ -49,9 +49,9 @@
   %>
   <% if (inputType == 4 ) /*bounding box*/ { %>
     
-  <link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />
-  <script type="text/javascript" src="scripts/jquery.min.js"></script>
-  <script type="text/javascript" src="scripts/jquery.imgareaselect.pack.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/imgareaselect-default.css" />
+  <script type="text/javascript" src="/scripts/jquery.min.js"></script>
+  <script type="text/javascript" src="/scripts/jquery.imgareaselect.pack.js"></script>
 
   
   <script type="text/javascript">
@@ -59,11 +59,11 @@
     $('#x1').val(selection.x1);
     $('#y1').val(selection.y1);
     $('#x2').val(selection.x2);
-    $('#y2).val(selection.y2);
+    $('#y2').val(selection.y2);
   }
   
   $(function () {
-    $('#image').imgAreaSelect({ handles: true onSelectChange: getCoords });
+    $('#image').imgAreaSelect({ handles: true, onSelectChange: getCoords });
   });
   </script>
   
@@ -101,7 +101,7 @@
       <%
       int it = 0;
 		    for( String answer : answers) {
-		    /*radio buttons only if multiple answers*/
+		    /*radio buttons only if answers*/
 		  %><br>
       <input type="radio" name="response" value=<%=it%>
       <% if(it == 0) {%> checked <%}%> > <%=answer%> </input>
