@@ -451,12 +451,15 @@ public class SubTaskDb {
 		case 1:
 			s = new BinarySubTask(id, taskAccuracy,
 					responses, maxLabels);
+			break;
 		case 2:
 			s = new MultiValueSubTask(id, taskAccuracy, responses, 
 					maxLabels, Integer.parseInt(finish));
+			break;
 		case 3:
 			s = ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
 					maxLabels, start, finish, precision);
+			break;
 		}
 		s.addFileName(fileName);
 		return s;
