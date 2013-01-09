@@ -90,7 +90,7 @@ public class SubTaskDb {
 				"LEFT JOIN ranged ON tasks.id = ranged.task " +
 				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
-				"(SELECT * FROM responses answeed " +
+				"(SELECT * FROM responses answered " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
 				"GROUP BY sid, acc, ml, f, start, finish, p, type " +
@@ -101,9 +101,7 @@ public class SubTaskDb {
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
 	    preparedStatement.setInt(1, task);
-	    System.out.println("Task num " + task);
 	    preparedStatement.setInt(2, annotator);
-	    System.out.println("ann num " + annotator);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
@@ -119,7 +117,6 @@ public class SubTaskDb {
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()){
 				int type = rs.getInt("type");
-				System.out.println("acc before " + rs.getInt("acc"));
 				return mapSubTask(rs, type);
 			}
 			return null;
@@ -445,9 +442,7 @@ public class SubTaskDb {
 	private static SubTask mapSubTask(ResultSet rs, int type) throws SQLException {
 		SubTask s = null;
 		int taskAccuracy = rs.getInt("acc");
-		System.out.println("Task acc: " + taskAccuracy);
 		int id = rs.getInt("sid");
-		System.out.println("Task acc: " + id);
 		int responses = rs.getInt("c");
 		int maxLabels = rs.getInt("ml");
 		String finish = rs.getString("finish");
