@@ -87,7 +87,7 @@ public class SubTaskDb {
 				"subtasks.file_name AS f, start, finish, p " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
-				"LEFT JOIN ranged ON tasks.id = ranged.task" +
+				"LEFT JOIN ranged ON tasks.id = ranged.task " +
 				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
 				"(SELECT * FROM responses answered " +
