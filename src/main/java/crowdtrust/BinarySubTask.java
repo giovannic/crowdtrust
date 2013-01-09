@@ -18,43 +18,36 @@ public class BinarySubTask extends SubTask {
 		BinaryR bz = (BinaryR) z;
 		
 		int total;
-		double w;
+		double maximum;
 		if (br.isTrue()){
 			//maximise truePositive
 			total = ba.getPositiveN() + 2;
-			w = (double) total/(total + 1);
 			double alpha = ba.getTruePositive()*total;
 			double expected = ba.getTruePositive();
 			double advAlpha = ba.getTrueNegative()*total;
 			//prior normal
-			if(bz.isTrue()){
-				ba.setTruePositive(w*(alpha/total) + (1-w));
-			} else {
-				ba.setTruePositive(w*(alpha/total));
+			if(!bz.isTrue())
 				expected = (1 - ba.getTruePositive());
-			}
 			
-			
-			ba.setTruePositive(peak(alpha, advAlpha, Math.log(expected), total));
-			
+			maximum = peak(alpha, advAlpha, Math.log(expected), total);
+			ba.setTruePositive(maximum);
+			System.out.print("old: " + ba.getTruePositive() + " mle: " + maximum);
 			ba.incrementPositiveN();
 			
 		} else {
 			//maximize trueNegative
 			total = ba.getNegativeN() + 2;
-			w = (double) total/(total + 1);
 			
 			double alpha = ba.getTrueNegative()*total;
 			double expected = ba.getTrueNegative();
 			double advAlpha = ba.getTruePositive()*total;
 			
-			if(bz.isTrue())
-				ba.setTrueNegative(w*(alpha/total) + (1-w));
-			else {
-				ba.setTrueNegative(w*(alpha/total));
+			if(!bz.isTrue())
 				expected = (1 - ba.getTrueNegative());
-			}
-			ba.setTrueNegative(peak(alpha, advAlpha, Math.log(expected), total));
+			
+			maximum = peak(alpha, advAlpha, Math.log(expected), total);
+			ba.setTrueNegative(maximum);
+			System.out.print("old: " + ba.getTrueNegative() + " mle: " + maximum);
 			ba.incrementNegativeN();
 		}
 	}
