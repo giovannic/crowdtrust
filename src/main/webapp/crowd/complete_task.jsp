@@ -60,11 +60,11 @@
     $('#x1').val(selection.x1);
     $('#y1').val(selection.y1);
     $('#x2').val(selection.x2);
-    $('#y2).val(selection.y2);
+    $('#y2').val(selection.y2);
   }
   
   $(function () {
-    $('#image').imgAreaSelect({ handles: true onSelectChange: getCoords });
+    $('#image').imgAreaSelect({ handles: true, onSelectChange: getCoords });
   });
   </script>
   
