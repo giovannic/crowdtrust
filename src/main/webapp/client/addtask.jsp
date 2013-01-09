@@ -38,6 +38,8 @@
 		}
 
 		function continuous() {
+			document.getElementById("num_answers").value = 0;
+			alert(document.getElementById("num_answers").value);
 			document.getElementById("type").style.display = 'inline';
 			document.getElementById("minimum").style.display = 'inline';
 			document.getElementById("maximum").style.display = 'inline';
@@ -117,7 +119,7 @@
 				</tr>
 				<tr id="numans" style="display:none;">
 						<td>How many answers would you like?</td>
-						<td><input type="number" id="num_answers "name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)"/></td>
+						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)"/></td>
 				</tr>
         <tr id="ans1">
             <td>answer 1?</td>
