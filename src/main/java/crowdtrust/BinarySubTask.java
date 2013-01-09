@@ -81,8 +81,8 @@ public class BinarySubTask extends SubTask {
 		double f = Math.pow(x,alpha)*Math.pow(1-x, beta);
 		double fAdv = Math.pow(x,alphaAdv)*Math.pow(1-x, betaAdv);
 		
-		double coF = x*(total - 2) - alpha + 1;
-		double coFAdv = x*(total - 2) - alphaAdv + 1;
+		double coF = x*(alpha + beta - 2) - alpha + 1;
+		double coFAdv = x*(alphaAdv + betaAdv - 2) - alphaAdv + 1;
 		
 		double coDen = (x - 1)*x;
 		
