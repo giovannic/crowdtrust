@@ -105,13 +105,15 @@ CREATE TABLE binaryaccuracies
 CREATE TABLE continuousaccuracies
 (
 	account INTEGER REFERENCES accounts (id),
-	accuracy DOUBLE PRECISION NOT NULL
+	accuracy DOUBLE PRECISION NOT NULL,
+	total INTEGER
 );
 
 CREATE TABLE multivalueaccuracies
 (
 	account INTEGER REFERENCES accounts (id),
-	accuracy DOUBLE PRECISION NOT NULL
+	accuracy DOUBLE PRECISION NOT NULL,
+	total INTEGER
 );
 
 CREATE TABLE experts

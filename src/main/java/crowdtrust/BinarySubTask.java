@@ -24,11 +24,19 @@ public class BinarySubTask extends SubTask {
 			total = ba.getPositiveN() + 2;
 			w = (double) total/(total + 1);
 			double alpha = ba.getTruePositive()*total;
-			if(bz.isTrue())
+			double expected = ba.getTruePositive();
+			double advAlpha = ba.getTrueNegative()*total;
+			//prior normal
+			if(bz.isTrue()){
 				ba.setTruePositive(w*(alpha/total) + (1-w));
-			else {
+			} else {
 				ba.setTruePositive(w*(alpha/total));
+				expected = (1 - ba.getTruePositive());
 			}
+			
+			
+			ba.setTruePositive(peak(alpha, advAlpha, Math.log(expected), total));
+			
 			ba.incrementPositiveN();
 			
 		} else {
@@ -37,15 +45,57 @@ public class BinarySubTask extends SubTask {
 			w = (double) total/(total + 1);
 			
 			double alpha = ba.getTrueNegative()*total;
+			double expected = ba.getTrueNegative();
+			double advAlpha = ba.getTruePositive()*total;
+			
 			if(bz.isTrue())
 				ba.setTrueNegative(w*(alpha/total) + (1-w));
 			else {
 				ba.setTrueNegative(w*(alpha/total));
+				expected = (1 - ba.getTrueNegative());
 			}
+			ba.setTrueNegative(peak(alpha, advAlpha, Math.log(expected), total));
 			ba.incrementNegativeN();
 		}
 	}
 	
+	private double peak(double alpha, double advAlpha, double logExpected,
+			int total) {
+		
+		double start = 0;
+		double end = 1;
+		double mid;
+		double diff;
+		
+		while (end - start > 0.0001){
+			mid = (start + end)/2;
+			diff = logDiffPrior(mid, alpha, advAlpha, total) + (1/logExpected);
+			if (diff > 0)
+				start = mid;
+			else if (diff < 0)
+				end = mid;
+			else if (diff == 0){
+				return mid;
+			}
+		}
+		return (start + end)/2;
+	}
+
+	private double logDiffPrior(double x, double alpha, double alphaAdv, int total) {
+		double beta = total - alpha;
+		double betaAdv = total - alphaAdv;
+		
+		double f = Math.pow(x,alpha)*Math.pow(1-x, beta);
+		double fAdv = Math.pow(x,alphaAdv)*Math.pow(1-x, betaAdv);
+		
+		double coF = x*(total - 2) - alpha + 1;
+		double coFAdv = x*(total - 2) - alphaAdv + 1;
+		
+		double coDen = (x - 1)*x;
+		
+		return (f*coF + fAdv*coFAdv)/(coDen*(f + fAdv));
+	}
+
 	@Override
 	protected void updateLikelihoods(Response r,  Accuracy a, 
 			Collection<Estimate> state){

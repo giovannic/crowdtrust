@@ -43,8 +43,7 @@ public abstract class ContinuousSubTask extends SubTask {
 	
 	@Override
 	protected Collection<AccuracyRecord> getAnnotators() {
-		// TODO Auto-generated method stub
-		return null;
+		return db.CrowdDb.getContinuousAnnotators(id);
 	}
 
 	public static SubTask makeSubtask(int id, int taskAccuracy, int responses,

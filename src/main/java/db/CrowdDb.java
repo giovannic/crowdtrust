@@ -155,7 +155,7 @@ public class CrowdDb {
 	public static SingleAccuracy getMultiValueAccuracy(int id) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT accuracy FROM multivalueaccuracies WHERE account = ?");
+		sql.append("SELECT accuracy, total FROM multivalueaccuracies WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
     }
@@ -171,7 +171,8 @@ public class CrowdDb {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			resultSet.next(); //JOHNNN
 			double accuracy = resultSet.getDouble("accuracy");
-			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy);
+			int total = resultSet.getInt("total");
+			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy, total);
 			return singleAccuracy;
 		}
 		catch (SQLException e) {
@@ -264,7 +265,7 @@ public class CrowdDb {
 	public static SingleAccuracy getContinuousAccuracy(int annotatorId) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT accuracy FROM continuousaccuracies WHERE account = ?");
+		sql.append("SELECT accuracy, total FROM continuousaccuracies WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
     }
@@ -279,7 +280,8 @@ public class CrowdDb {
 			preparedStatement.setInt(1, annotatorId);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			double accuracy = resultSet.getDouble("accuracy");
-			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy);
+			int total = resultSet.getInt("total");
+			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy, total);
 			return singleAccuracy;
 		}
 		catch (SQLException e) {
@@ -511,6 +513,45 @@ public class CrowdDb {
 				
 				BinaryAccuracy accuracy;
 				accuracy = mapBinaryAccuracy(resultSet);
+				AccuracyRecord record = new AccuracyRecord(new Bee(account), accuracy);
+				record.setMostRecent(new BinaryR(resultSet.getString("response")));
+				as.add(record);
+			}
+			return as;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Collection<AccuracyRecord> getContinuousAnnotators(int id) {
+		PreparedStatement preparedStatement;
+		String sql = "SELECT responses.account, response, accuracy, total " +
+				"FROM responses JOIN continuousaccuracies " +
+				"ON responses.account = continuousaccuracies.account " +
+				"WHERE subtask = ?";
+    try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return null;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return null;
+    }
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			Collection<AccuracyRecord> as = new ArrayList<AccuracyRecord>();
+			int account;
+			while(resultSet.next()) {
+				account = resultSet.getInt(1);
+				
+				SingleAccuracy accuracy;
+				accuracy = new SingleAccuracy(resultSet.getFloat("accuracy"), 
+						resultSet.getInt("total"));
 				AccuracyRecord record = new AccuracyRecord(new Bee(account), accuracy);
 				record.setMostRecent(new BinaryR(resultSet.getString("response")));
 				as.add(record);

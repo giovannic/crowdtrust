@@ -3,8 +3,9 @@ package crowdtrust;
 public class SingleAccuracy extends Accuracy{
 	private double accuracy;
 	
-	public SingleAccuracy(double a){
+	public SingleAccuracy(double a, int n){
 		accuracy = a;
+		this.n = n;
 	}
 
 	public double getAccuracy() {
