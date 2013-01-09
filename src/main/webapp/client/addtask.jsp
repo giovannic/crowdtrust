@@ -42,7 +42,7 @@
 			var media = e.options[e.selectedIndex].value;
 			if((document.getElementById("media_type").options[document.getElementById("media_type").selectedIndex].value.localeCompare("AUDIO") == 0 ||
 				  media == "VIDEO") &&
-				 document.getElementById("input_type").options.length = 4) {
+				 document.getElementById("input_type").options.length == 4) {
 				var list = document.getElementById("input_type");
 				var boundingBox = list.options[3];
 				var coordinates = list.options[2];
@@ -129,7 +129,7 @@
 				</tr>
 				<tr id="numans" style="display:none;">
 						<td>How many answers would you like?</td>
-						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)"/></td>
+						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)" value=0/></td>
 				</tr>
         <tr id="ans1">
             <td>answer 1?</td>

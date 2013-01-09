@@ -14,11 +14,11 @@ public abstract class Task
   protected int media_type;
   protected int input_type;
   protected List<String> answers;
-  protected int min;
-  protected int max;
+  protected List<String> min;
+  protected List<String> max;
   protected double step;
   
-  public Task(int id, String name, String question, int accuracy, int annotation_type, int media_type, int input_type, List<String> answers, int min, int max, double step){
+  public Task(int id, String name, String question, int accuracy, int annotation_type, int media_type, int input_type, List<String> answers, List<String> min, List<String> max, double step){
 	  this.id = id;
 	  this.name = name;
 	  this.question = question;
@@ -74,12 +74,12 @@ public abstract class Task
     return this.accuracy;
   }
 
-  public int getMin()
+  public List<String> getMin()
   {
-    return this.accuracy;
+    return this.min;
   }
 
-  public int getMax()
+  public List<String> getMax()
   {
     return this.max;
   }

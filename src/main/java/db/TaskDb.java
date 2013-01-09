@@ -194,10 +194,10 @@ public static int addTask(int accountID, String name, String question, float acc
 					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
 				}
 				if(annotation_type == 2) {
-						//thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, min, max, step );
+					thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
 				}							
 				if(annotation_type == 3) {
-						thisTask = new MultiValueTask(id, name, question, accuracy, media_type, input_type, answers);
+					thisTask = new SingleContinuousTask(id, name, question, accuracy, media_type, input_type, mins, maxes, step );
 				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -255,7 +255,7 @@ public static int addTask(int accountID, String name, String question, float acc
 
 	public static List<Task> getTasksForClientId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT * FROM tasks WHERE submitter = ?");
+		sql.append("SELECT * FROM tasks  LEFT JOIN ranged ON tasks.id = ranged.task WHERE submitter = ?");
 		List<Task> tasks = new ArrayList<Task>();
 		PreparedStatement preparedStatement;
 		try {
