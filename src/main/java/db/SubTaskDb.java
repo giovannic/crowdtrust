@@ -81,19 +81,19 @@ public class SubTaskDb {
 
 	public static SubTask getRandomSubTask(int task, int annotator) {
 		
-		String sql = "SELECT tasks.annotator_type AS type, " +
+		String sql = "SELECT tasks.annotation_type AS type, " +
 				"subtasks.id AS sid, tasks.accuracy AS acc, " +
-				"tasks.max_labels AS ml, COUNT(responses.id) AS c," +
+				"tasks.max_labels AS ml, COUNT(responses.id) AS c, " +
 				"subtasks.file_name AS f, start, finish, p " +
 				"FROM subtasks JOIN tasks ON subtasks.task = tasks.id " +
 				"LEFT JOIN responses ON responses.subtask = subtasks.id " +
-				"LEFT JOIN ranged ON tasks.id = ranged.task" +
+				"LEFT JOIN ranged ON tasks.id = ranged.task " +
 				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
-				"(SELECT * FROM responses answered " +
+				"(SELECT * FROM responses answeed " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
-				"GROUP BY s,a,m,f " +
+				"GROUP BY sid, acc, ml, f, start, finish, p, type " +
 				"ORDER BY random() " +
 				"LIMIT 1";
 		
@@ -101,7 +101,9 @@ public class SubTaskDb {
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
 	    preparedStatement.setInt(1, task);
+	    System.out.println("Task num " + task);
 	    preparedStatement.setInt(2, annotator);
+	    System.out.println("ann num " + annotator);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
@@ -117,6 +119,7 @@ public class SubTaskDb {
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()){
 				int type = rs.getInt("type");
+				System.out.println("acc before " + rs.getInt("acc"));
 				return mapSubTask(rs, type);
 			}
 			return null;
@@ -383,7 +386,7 @@ public class SubTaskDb {
 				"e.subtask_id AS sid, e.estimate AS est, " +
 				"t.max_labels AS ml, start, finish, p, " +
 				"e.confidence AS conf, COUNT(res.id) AS c, " +
-				"s.file_name AS f " +
+				"s.file_name AS f, e.frequency AS freq " +
 				"FROM estimates e " +
 				"JOIN( " +
 				"SELECT subtasks.id, estimates.confidence, " +
@@ -424,10 +427,12 @@ public class SubTaskDb {
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
-				int s = rs.getInt("subtask_id");
 				int type = rs.getInt("type");
 				String e = rs.getString("estimate");
-				results.add(new Result(mapSubTask(rs, type), mapResponse(e, type)));
+				int freq = rs.getInt("freq");
+				float conf = rs.getFloat("conf");
+				results.add(new Result(mapSubTask(rs, type), 
+						new Estimate(mapResponse(e, type), conf, freq)));
 			}
 		}
 		catch(SQLException e) {
@@ -440,7 +445,9 @@ public class SubTaskDb {
 	private static SubTask mapSubTask(ResultSet rs, int type) throws SQLException {
 		SubTask s = null;
 		int taskAccuracy = rs.getInt("acc");
+		System.out.println("Task acc: " + taskAccuracy);
 		int id = rs.getInt("sid");
+		System.out.println("Task acc: " + id);
 		int responses = rs.getInt("c");
 		int maxLabels = rs.getInt("ml");
 		String finish = rs.getString("finish");
@@ -451,12 +458,15 @@ public class SubTaskDb {
 		case 1:
 			s = new BinarySubTask(id, taskAccuracy,
 					responses, maxLabels);
+			break;
 		case 2:
 			s = new MultiValueSubTask(id, taskAccuracy, responses, 
 					maxLabels, Integer.parseInt(finish));
+			break;
 		case 3:
 			s = ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
 					maxLabels, start, finish, precision);
+			break;
 		}
 		s.addFileName(fileName);
 		return s;

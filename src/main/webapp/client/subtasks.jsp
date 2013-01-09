@@ -1,6 +1,9 @@
 <%@ page import="java.util.Collection" %>
 <%@ page import="db.SubTaskDb" %>
 <%@ page import="crowdtrust.Task" %>
+<%@ page import="crowdtrust.Result" %>
+<%@ page import="crowdtrust.SubTask" %>
+<%@ page import="crowdtrust.Estimate" %>
 
 <html>
   <%
@@ -22,8 +25,8 @@
     </tr>
     <%
     for( Result r : results ) {
-      subtask = r.getSubTask();
-      estimate = r.getEstimate();    
+      SubTask subtask = r.getSubtask();
+      Estimate estimate = r.getE();    
       %>
     <tr>
       <td><%=subtask.getFileName()%></td>

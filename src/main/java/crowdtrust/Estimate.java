@@ -34,4 +34,9 @@ public class Estimate {
 	public void incFrequency() {
 		this.frequency++;
 	}
+	
+	public double getPercentage() {
+		double ec = Math.pow(Math.E, confidence);
+		return ec/(ec+1);
+	}
 }
