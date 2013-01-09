@@ -27,6 +27,7 @@
         return;
     }
     List<String> answers = new LinkedList(); %>answersStr <%=answersStr%>
+    <%
     if( answersStr != null ) {
       String[] answersArr = answersStr.split("/");
       for(int i = 0 ; i < answersArr.length ; i++) {
@@ -50,8 +51,8 @@
   <% if (inputType == 4 ) /*bounding box*/ { %>
     
   <link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />
-  <script type="text/javascript" src="scripts/jquery.min.js"></script>
-  <script type="text/javascript" src="scripts/jquery.imgareaselect.pack.js"></script>
+  <script type="text/javascript" src="/scripts/jquery.min.js"></script>
+  <script type="text/javascript" src="/scripts/jquery.imgareaselect.pack.js"></script>
 
   
   <script type="text/javascript">
