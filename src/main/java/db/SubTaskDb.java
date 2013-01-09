@@ -93,7 +93,7 @@ public class SubTaskDb {
 				"(SELECT * FROM responses answered " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
-				"GROUP BY s,a,m,f " +
+				"GROUP BY sid, acc, ml, f, start, finish, p, type, c " +
 				"ORDER BY random() " +
 				"LIMIT 1";
 		
