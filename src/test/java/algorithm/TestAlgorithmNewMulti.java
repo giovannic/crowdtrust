@@ -34,8 +34,8 @@ public class TestAlgorithmNewMulti extends TestCase {
 		super(name);
 	}
 	
-	public void testAlgorithmNew(){
-		System.setProperty("test", "true");
+	public void testAlgorithmNewMulti(){
+		System.setProperty("test", "false");
 		boolean labs = false;
 		if(labs){
 			//Clean the database 
@@ -62,7 +62,7 @@ public class TestAlgorithmNewMulti extends TestCase {
 
 				}
 				
-			}
+			
 			
 			//Create and print their rates and names
 			for(int i = 0; i < numPeople; i++){
@@ -103,9 +103,8 @@ public class TestAlgorithmNewMulti extends TestCase {
 			//	System.out.println("Subtask Id: " + id);
 				//BinarySubTask bst = new BinarySubTask(id,0.7,0, numPeople);
 				//id conf num labels max options
-				Random rand2 = new Random();
 				MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, options, numPeople, options);
-				AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiTestData(rand2.nextInt(options + 1), options));
+				AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiTestData(rand.nextInt(options + 1), options));
 				answers.add(asta);
 			}
 			
@@ -133,8 +132,8 @@ public class TestAlgorithmNewMulti extends TestCase {
 				}
 
 			}
-		
-		
+	
+		}	
 		
 	}
 	

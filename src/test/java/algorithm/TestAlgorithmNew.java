@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinarySubTask;
 import crowdtrust.InputType;
 import crowdtrust.MediaType;
+import crowdtrust.Response;
 
 import db.CrowdDb;
 import db.DbInitialiser;
@@ -134,13 +136,35 @@ public class TestAlgorithmNew extends TestCase {
 			//	System.out.println();
 			//	System.out.println("Task " + i + " done.");
 				if(i == (numTasks - 1)){
-					printAnnotators();					
+					printAnnotators();
+					errorRates(answers);
 				}
 
 			}
 		
 		
 		}
+	}
+	
+	protected void errorRates(LinkedList<AnnotatorSubTaskAnswer> answers){
+		System.out.println("---------Calculating label error rate--------------------");
+		
+		Map<Integer,Response> results = SubTaskDb.getMappedResults(1);
+		int correct = 0;
+		for (AnnotatorSubTaskAnswer answer : answers){
+			Response trueA = answer.getAlgoTestData().getActualAnswer();
+			Response estA = results.get(answer.id);
+			System.out.println("id " + answer.id + 
+					" true answer = " + 
+					trueA + 
+					" estimate = " + estA);
+			if(trueA.equals(estA)){
+				correct++;
+			}
+		}
+		System.out.println("success rate = " + ((double)correct/numTasks));
+
+		System.out.println("------------------------------------------------------  ");
 	}
 	
 	protected void printAnnotators(){
