@@ -17,6 +17,7 @@ public class ContinuousBehaviour {
 	}
 	
 	public double[] generateContinuousAnswer(int pictureArea, double[] answer){
+		
 		//Mean is the actual answer
 		double[]   mean        = {answer[0], answer[1], answer[2], answer[3]};
 		//Covariance as stated in the paper

@@ -14,7 +14,7 @@ import crowdtrust.*;
 public class TaskDb {
 	
 public static int addTask(int accountID, String name, String question, float accuracy, 
-			int media_type, int annotation_type, int input_type, int max_labels, long expiryTime, 
+			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
 			List<String> answerList){
 		Connection c;
 		try {
@@ -41,9 +41,9 @@ public static int addTask(int accountID, String name, String question, float acc
 			insertTask.setString(2, name);
 			insertTask.setString(3, question);
 			insertTask.setFloat(4, accuracy);
-			insertTask.setInt(5, media_type);
-			insertTask.setInt(6, annotation_type);
-			insertTask.setInt(7, input_type);
+			insertTask.setInt(5, media_type.ordinal());
+			insertTask.setInt(6, annotation_type.ordinal());
+			insertTask.setInt(7, input_type.ordinal());
 			insertTask.setString(8, answerChoice);
 			insertTask.setInt(9, max_labels);
 			insertTask.setTimestamp(10, new Timestamp(expiryTime));
@@ -226,39 +226,30 @@ public static int addTask(int accountID, String name, String question, float acc
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on get tasks for id: PSQL driver not present");
 	    } catch (SQLException e) {
-	      	System.err.println("SQL Error on get tasks for id");
+	      	System.err.println("SQL Error on get tasks for crowdid");
 	    }
 		return tasks;
 	}
 
 	public static List<Task> getTasksForClientId(int id) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT name FROM task WHERE submitter = ?");
+		sql.append("SELECT * FROM tasks WHERE submitter = ?");
+		List<Task> tasks = new ArrayList<Task>();
 		PreparedStatement preparedStatement;
 		try {
 			preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-		}
-		catch (ClassNotFoundException e) {
-	  	System.err.println("Error connecting to DB on get Task: PSQL driver not present");
-	  	return null;
-		} catch (SQLException e) {
-	  	System.err.println("SQL Error on get Task");
-	  	return null;
-		}
-		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<Task> tasks = new ArrayList<Task>();
 			while(resultSet.next()) {
-				String taskName = resultSet.getString("task.name");
-				tasks.add(getTask(taskName));
+				tasks.add(map(resultSet));
 			}
-			return tasks;
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
+		catch (ClassNotFoundException e) {
+			System.err.println("Error connecting to DB on get Task: PSQL driver not present");
+		} catch (SQLException e) {
+			System.err.println("SQL Error on get Tasks for crowdid");
 		}
-		return null;
+		return tasks;
 	}
 	
 }

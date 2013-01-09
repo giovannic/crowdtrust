@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <%@ page import="java.util.List" %>
 <%@ page import="db.TaskDb" %>
-<%@ page import="crowdtrust.Task;" %>
+<%@ page import="crowdtrust.Task" %>
 <html>
 
 
@@ -25,11 +25,16 @@
 
 		<%
 			for(Task task : tasks) {
+			String[] answers = task.getAnswers();
+			String answersStr = "";
+			for(int i = 0 ; i < answers.length ; i++) {
+        answersStr += answers[i] + "/";
+			} 
 		%>
 		<tr>
 			<td><%=task.getName()%></td>
 			<td><%=task.getQuestion()%></td>
-			<form action="/crowd/add_params.jsp" method=post>
+			<td><form action="/crowd/add_params.jsp" method=post>
 			  <input type="submit" value="Complete Task"/>
 			  <input type="hidden" name="taskID" value=<%=task.getId()%> />
 			  <input type="hidden" name="name" value="<%=task.getName()%>" />
@@ -37,8 +42,8 @@
 			  <input type="hidden" name="media_type" value=<%=task.getMediaType()%> />
 			  <input type="hidden" name="annotation_type" value=<%=task.getAnnotationType()%> />
 			  <input type="hidden" name="input_type" value=<%=task.getInputType()%> />
-			  <input type="hidden" name="answers" value=<%=task.getAnswers()%> />
-		  </form>
+			  <input type="hidden" name="answers" value="<%=answersStr%>" />
+		  </form></td>
 		</tr>
 		<%
 			}

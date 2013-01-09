@@ -70,7 +70,7 @@ public class CrowdDb {
 			if(resultSet.next())
 				accuracy = mapBinaryAccuracy(resultSet);
 			else{
-				accuracy = new BinaryAccuracy(0.55, 0.55, 0, 0);
+				accuracy = new BinaryAccuracy(0.5, 0.5, 0, 0);
 				insertBinaryAccuracy(id, accuracy);
 			}
 			return accuracy;
@@ -169,6 +169,7 @@ public class CrowdDb {
 		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet.next(); //JOHNNN
 			double accuracy = resultSet.getDouble("accuracy");
 			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy);
 			return singleAccuracy;

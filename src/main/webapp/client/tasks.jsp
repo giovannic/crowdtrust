@@ -1,6 +1,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="db.TaskDb" %>
+<<<<<<< HEAD
 <%@ page import="crowdtrust.Task;" %>
+=======
+<%@ page import="crowdtrust.Task" %>
+>>>>>>> d6a2e1ea5e3551688c2c0c62d96fa1559f69b0c3
 <html>
 <body>
 
@@ -24,7 +28,10 @@
 		<tr>
 			<td><%=task.getName()%></td>
 			<td><%=task.getQuestion()%></td>
-			<td><button onclick="window.location.href='subtasks.jsp'">View Subtasks</button></td>
+			<td><form action="/client/subtasks.jsp" method=post>
+			  <input type="hidden" name="task_id" value=<%=task.getId()%> />
+			  <input type="submit" value="View Task" />
+			</form></td>
 		</tr>
 		<%
 			}

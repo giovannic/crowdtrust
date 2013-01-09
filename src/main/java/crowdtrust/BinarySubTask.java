@@ -8,7 +8,7 @@ public class BinarySubTask extends SubTask {
 
 	public BinarySubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
-		super(id, 0.7, number_of_labels, max_labels);
+		super(id, confidence_threshold, number_of_labels, max_labels);
 	} 
 
 	@Override
@@ -29,7 +29,6 @@ public class BinarySubTask extends SubTask {
 			else {
 				ba.setTruePositive(w*(alpha/total));
 			}
-			System.out.println(w + " " + alpha + " " + total);
 			ba.incrementPositiveN();
 			
 		} else {
@@ -43,7 +42,6 @@ public class BinarySubTask extends SubTask {
 			else {
 				ba.setTrueNegative(w*(alpha/total));
 			}
-			System.out.println(w + " " + alpha + " " + total);
 			ba.incrementNegativeN();
 		}
 	}
@@ -60,30 +58,29 @@ public class BinarySubTask extends SubTask {
 		else
 			accuracy = ba.getTrueNegative();
 		
-		boolean matched = false;
+		if (state.isEmpty()){
+			BinaryR tR = new BinaryR(true);
+			Estimate t = new Estimate(tR, Math.log(getZPrior()/(1 - getZPrior())),0);
+			BinaryR fR = new BinaryR(false);
+			Estimate f = new Estimate(fR, Math.log(getZPrior()/(1 - getZPrior())),0);
+			state.add(t);
+			initEstimate(t);
+			state.add(f);
+			initEstimate(f);
+		}
+			
 		for (Estimate record : state){
-			if(record.getR().equals(br)){
+			Response recordResponse = record.getR();
+			if (!recordResponse.equals(br)){
 				record.setConfidence(record.getConfidence()
 						+ Math.log(accuracy/(1-accuracy)));
-				matched = true;
+				record.incFrequency();
 			} else {
 				record.setConfidence(record.getConfidence()
 						+ Math.log(((1-accuracy)/accuracy)));
 			}
 		}
 		
-		if (!matched){
-			Estimate e = new Estimate(r, Math.log(getZPrior()/(1-getZPrior())));
-			//TODO BASE
-			e.setConfidence(e.getConfidence() + Math.log((accuracy/(1-accuracy))));
-			state.add(e);
-			addEstimate(e);
-		}
-	}
-	
-	@Override
-	protected void addEstimate(Estimate e) {
-		db.SubTaskDb.addBinaryEstimate(e, id);
 	}
 
 	@Override
@@ -120,11 +117,6 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected Collection <Estimate> getEstimates(int id) {
 		return SubTaskDb.getBinaryEstimates(id);
-	}
-
-	@Override
-	protected void updateEstimates(Collection<Estimate> state) {
-		db.SubTaskDb.updateBinaryEstimates(state, id);
 	}
 
 	@Override

@@ -3,7 +3,7 @@
 
 <html>
   <head>
-    <META HTTP-EQUIV="refresh" CONTENT="3;URL=/crowd/complete_task.jsp" />
+    <META HTTP-EQUIV="refresh" CONTENT="0;URL=/crowd/complete_task.jsp" />
   </head>
   <%
     session.setAttribute("taskID", request.getParameter("taskID"));

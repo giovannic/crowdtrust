@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -24,7 +21,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
-import db.DbAdaptor;
 import db.SubTaskDb;
 import db.TaskDb;
 
@@ -39,15 +35,14 @@ public class UploadServlet extends HttpServlet {
             throws ServletException, IOException {
 		
 		response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         
         //validate user credentials
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("account_id") == null) {
-        	response.sendRedirect("/index.jsp");
+        	response.sendRedirect("/");
         	return;
         }
-        int accountID = (Integer) session.getAttribute("account_id");        ;
+        int accountID = (Integer) session.getAttribute("account_id");
         //Process post parameters
 		List<FileItem> items = null;
     	FileItem files = null;
@@ -57,7 +52,7 @@ public class UploadServlet extends HttpServlet {
 			items = (List<FileItem>) new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			response.sendRedirect(request.getRequestURI());
 			return;
 		}
     	for( FileItem item : items ) {
@@ -83,8 +78,10 @@ public class UploadServlet extends HttpServlet {
         	}
     	}
         //add to db - check task in db, add to subtasks,
-    	if (!TaskDb.isPresent(taskID, accountID))
+    	if (!TaskDb.isPresent(taskID, accountID)) {
+			response.sendRedirect(request.getRequestURI());
     		return;
+    	}
     	
         //on upload page retrieve task id, submit task id as a parameter
         //check id and submitter appear in tasks
@@ -121,17 +118,13 @@ public class UploadServlet extends HttpServlet {
         //add to subtasks
     	for (int i = 0 ; i < filenames.size() ; i++) {
 	        String filename = filenames.get(i);
-    		if( !SubTaskDb.addSubtask(filename, taskID) ) 
-			return; 
+    		if( !SubTaskDb.addSubtask(filename, taskID) ) {
+    			response.sendRedirect(request.getRequestURI());
+    			return;
+    		}
     	}		
-		
-    	out.println("<meta http-equiv=\"Refresh\" content=\"5\"; url=\"/client/upload.jsp\">");
-        out.println("<html>");
-        out.println("<body>");
-        out.println("uploaded to task " + taskDir + "<br>");                	
-        out.println("click <a href=/client/addtask.jsp>here</a> to to add tasks");
-        out.println("</body>");
-        out.println("</html>");
+    	
+    	response.sendRedirect("/client/addtask.jsp");
     }
 	
 }

@@ -73,7 +73,8 @@ CREATE TABLE estimates
   estimate_key SERIAL PRIMARY KEY,
   subtask_id INTEGER REFERENCES subtasks (id),
   estimate VARCHAR(32),
-  confidence FLOAT
+  confidence FLOAT,
+  frequency INTEGER
 );
 
 CREATE TABLE responses
@@ -86,7 +87,7 @@ CREATE TABLE responses
 
 CREATE TABLE ranged
 (
-  subtask INTEGER PRIMARY KEY,
+  task INTEGER PRIMARY KEY,
   start INTEGER,
   finish INTEGER,
   p DOUBLE PRECISION
@@ -132,7 +133,7 @@ VALUES(1, 'image');
 INSERT INTO media_types
 VALUES(2, 'audio');
 INSERT INTO media_types
-VALUES(3, 'text');
+VALUES(3, 'video');
 
 
 INSERT INTO annotation_types

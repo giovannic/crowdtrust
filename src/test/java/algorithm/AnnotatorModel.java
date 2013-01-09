@@ -29,12 +29,20 @@ public class AnnotatorModel {
 		this.password = password;
 	}
 	
+	public BinaryBehaviour getBinaryBehaviour(){
+		return this.binary;
+	}
+	
 	public void setTasks(LinkedList<AnnotatorSubTaskAnswer> tasks){
 		this.tasks = tasks;
 	}
 	
 	public void setId(int id){
 		this.bee = new Bee(id);
+	}
+	
+	public Bee getBee(){
+		return this.bee;
 	}
 	
 	public void setUpBinary(int truePos, int trueNeg, int totalPos, int totalNeg){
@@ -65,7 +73,7 @@ public class AnnotatorModel {
 			task.addResponse(this.bee, new BinaryR(boolAnswer));
 		}else if(task instanceof MultiValueSubTask){
 			MultiTestData testData = ((MultiTestData) savedTask.getAlgoTestData());
-			int answer = this.multi.generateAnswer((MultiValueR) testData.getActualAnswer());
+			int answer = this.multi.generateAnswer((MultiValueR) testData.getActualAnswer(), testData.getNumOptions());
 			//Link with gios code
 			task.addResponse(this.bee, new MultiValueR(answer));
 		}else if(task instanceof SingleContinuousSubTask){
@@ -85,6 +93,10 @@ public class AnnotatorModel {
 			}
 		}
 		return null;
+	}
+	
+	public MultiBehaviour getMultiBehaviour(){
+		return this.multi;
 	}
 	
 	public String getUsername(){

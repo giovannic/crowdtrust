@@ -36,14 +36,11 @@
     }
     
     String TASKS_DIRECTORY = "http://www.doc.ic.ac.uk/project/2012/362/g1236218/TaskFiles/";
-    
-    SubTask subtask = SubTaskDb.getRandomSubTask(taskID, userID, annotationType);
-    
-    String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
+    SubTask subtask = SubTaskDb.getRandomSubTask(taskID, userID);
   %>
     <title>Task: <%=taskName%></title>
     <%
-      if(subtask == null) { 
+      if(subtask == null) {
     %>
     <META HTTP-EQUIV="refresh" CONTENT="3;URL=/crowd/tasklist.jsp">
     <%
@@ -56,54 +53,54 @@
     <h2 id="question"><%=question%>?</h2>
     <%
     if(subtask != null) {
+      String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
+      int sid = subtask.getId();
 		  switch(mediaType) {
 		  case 1: /*image*/ 
 	  %>
-	  <img src=<%=subtaskFile %> />
+	  <img src="<%=subtaskFile %>" />
 		<%
 		  	break;
 		  case 2: /*audio*/
 	  %>
-	  <audio controls>
-      <source src="<%=subtaskFile%>" type="audio/mpeg">
+	  <audio src="<%=subtaskFile%>" controls preload="auto">
       Your browser does not support the audio element, please choose a new task.
     </audio> 
     <%
 			  break;
+		  case 3: /*video*/
+	  %>
+	  <video height=240 width=320 src="<%=subtaskFile%>" />
+	  <%
 		  }
 	  %>
-	  <form action="/servlet/responseServlet" method="post">
+	  <form action="/servlet/response" method="post">
       <%
-/*      int it = 0;
+      int it = 0;
 		    for( String answer : answers) {
-          String ithAnswer = "answer" + (it+1);
 		      switch(inputType) {
 		      case 1: /*radio buttons*/
 		  %><br>
-      <input type="radio" name="response" value="yes" > Yes </input>
-      <input type="hidden" name="yes" value="yes" />
-      <input type="radio" name="response" value="yes" > No </input>
-      <input type="hidden" name="yes" value="yes" /><br>
-		  <%/*
+      <input type="radio" name="response" value=<%=it%>
+      <% if(it == 0) {%> checked <%}%> > <%=answer%> </input>
+		  <%
                       break;
 		      }
-		    }*/
+		    }
 	    %>
-		  <input type="hidden" name="taskID" value=<%=taskID%> />
-		  <input type="hidden" name="name" value=<%=taskName%> />
-		  <input type="hidden" name="question" value=<%=question%> />
-		  <input type="hidden" name="media_type" value=<%=mediaType%> />
-		  <input type="hidden" name="annotation_type" value=<%=annotationType%> />
-		  <input type="hidden" name="input_type" value=<%=inputType%> />
-		  <input type="hidden" name="answers" value=<%=answersStr%> />
+	    <input type="hidden" name="annotation_type" value=<%=annotationType%> />
+	    <input type="hidden" name="sid" value=<%=sid%> />
 		  <input type="submit" /><br>
-		  <%
-	    } else {
-                  %>
-        <h2>Task completed! Thank you, returning to your task list now</h2>
-	    <%}
-	    %>
-	  </form>
+		  
+    </form>
+	  <%
+    } else {
+                %>
+      <h2>Task completed! Thank you, returning to your task list now</h2>
+    <%}
+    %>
+  </body>
+</html>
 		  
 
 

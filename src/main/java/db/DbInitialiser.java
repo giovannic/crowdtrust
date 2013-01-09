@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
-import java.sql.Statement;
 
 import org.apache.commons.io.FileUtils;
 
@@ -28,8 +27,10 @@ public class DbInitialiser {
 			connection.createStatement().execute(sb.toString());
 			connection.close();
 			connection = null;
-			FileUtils.deleteDirectory(new File(TASKS_DIRECTORY));
-			FileUtils.forceMkdir(new File(TASKS_DIRECTORY));
+			if(System.getProperty("test") == null){
+				FileUtils.deleteDirectory(new File(TASKS_DIRECTORY));
+				FileUtils.forceMkdir(new File(TASKS_DIRECTORY));
+			}
 		} catch (Exception e) {
 			System.err.println("SOMEBODY MOVED OR FUDGED init.sql");
 			System.err.println("currently looking for it in: " + INITSQL_LOC);

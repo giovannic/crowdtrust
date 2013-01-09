@@ -43,8 +43,10 @@ public abstract class SubTask {
 			calculateAccuracies(z.getR());
 		}
 	}
-	
-	protected abstract void updateEstimates(Collection<Estimate> state);
+
+	protected void updateEstimates(Collection<Estimate> state){
+		db.SubTaskDb.updateEstimates(state, id);
+	};
 
 	protected abstract Collection<Estimate> getEstimates(int id);
 	
@@ -120,7 +122,9 @@ public abstract class SubTask {
 		return this.id;
 	}
 
-	protected abstract void addEstimate(Estimate e);
+	protected void initEstimate(Estimate e) {
+		db.SubTaskDb.addEstimate(e, id);
+	}
 	
 	public void addFileName(String fileName) {
 		this.fileName = fileName;

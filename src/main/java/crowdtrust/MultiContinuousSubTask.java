@@ -23,8 +23,8 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		SingleAccuracy sa = (SingleAccuracy) a;
-		ContinuousMultiR cr = (ContinuousMultiR) r;
-		ContinuousMultiR cz = (ContinuousMultiR) z;
+		ContinuousR cr = (ContinuousR) r;
+		ContinuousR cz = (ContinuousR) z;
 		
 		int total = a.getN();
 		double w = total/total + 1;
@@ -49,7 +49,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	@Override
 	protected void updateLikelihoods(Response r, Accuracy a,
 			Collection<Estimate> state) {
-		ContinuousMultiR cr = (ContinuousMultiR) r;
+		ContinuousR cr = (ContinuousR) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
@@ -61,24 +61,27 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		MultiGaussianDistribution mgd =
 				new MultiGaussianDistribution(
 						cr.getValues(precision), variance);
-			
+		
+		double freshConfidence = (getZPrior()/(1-getZPrior()));
+		
 		for (Estimate record : state){
 			if(record.getR().equals(r)){
 				matched = true;
+				record.incFrequency();
 			}
-			ContinuousMultiR cr2 = (ContinuousMultiR) record.getR();
+			ContinuousR cr2 = (ContinuousR) record.getR();
 			double p = sa.getAccuracy()*mgd.probability(cr2.getValues(precision)) +
 					(1 - sa.getAccuracy())/responseSpace;
-			record.setConfidence(record.getConfidence() * (p/1-p));
+			double newRatio = Math.log(p/1-p);
+			record.setConfidence(record.getConfidence() + newRatio);
+			freshConfidence += newRatio;
 		}
 			
 		if (!matched){
-			Estimate e = new Estimate(r, getZPrior());
-			double p = sa.getAccuracy()*mgd.probability(cr.getValues(precision)) +
-					(1 - sa.getAccuracy())/responseSpace;
-			e.setConfidence(e.getConfidence() * (p/1-p));
+			Estimate e = new Estimate(r, getZPrior(), 0);
+			e.setConfidence(freshConfidence);
 			state.add(e);
-			addEstimate(e);
+			initEstimate(e);
 		}
 	}
 
@@ -106,7 +109,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	}
 
 	@Override
-	protected void addEstimate(Estimate e) {
+	protected void initEstimate(Estimate e) {
 		// TODO Auto-generated method stub
 		
 	}

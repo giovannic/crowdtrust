@@ -2,6 +2,8 @@ package crowdtrust;
 
 import java.util.Collection;
 
+import db.SubTaskDb;
+
 public class MultiValueSubTask extends SubTask{
 	
 	int options;
@@ -18,25 +20,27 @@ public class MultiValueSubTask extends SubTask{
 		MultiValueR mvr = (MultiValueR) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
-		boolean matched = false;
-		for (Estimate record : state){
-			if(record.getR().equals(mvr)){
-				record.setConfidence(record.getConfidence()
-						* (sa.getAccuracy()/(1-sa.getAccuracy())));
-				matched = true;
-			} else {
-				double ia = inverseAccuracy(sa.getAccuracy());
-				record.setConfidence(record.getConfidence()
-						* (ia/(1-ia)));
+		if (state.isEmpty()){
+			for (int option = 1; option <= options; option++){
+				MultiValueR initR = new MultiValueR(option);
+				Estimate initE = new Estimate(initR, Math.log(getZPrior()/1 - getZPrior()),0);
+				state.add(initE);
+				initEstimate(initE);
 			}
 		}
 		
-		if (!matched){
-			Estimate e = new Estimate(r, getZPrior());
-			e.setConfidence(e.getConfidence() * (sa.getAccuracy()/(1-sa.getAccuracy())));
-			state.add(e);
-			addEstimate(e);
+		for (Estimate record : state){
+			if(record.getR().equals(mvr)){
+				record.setConfidence(record.getConfidence() +
+						Math.log(sa.getAccuracy()/(1-sa.getAccuracy())));
+				record.incFrequency();
+			} else {
+				double ia = inverseAccuracy(sa.getAccuracy());
+				record.setConfidence(record.getConfidence() +
+						Math.log(ia/(1-ia)));
+			}
 		}
+		
 	}
 
 	private double inverseAccuracy(double accuracy) {
@@ -72,7 +76,6 @@ public class MultiValueSubTask extends SubTask{
 
 	@Override
 	protected double getZPrior() {
-		// TODO Auto-generated method stub
 		double p = 1/options;
 		return p/(1-p);
 	}
@@ -94,20 +97,7 @@ public class MultiValueSubTask extends SubTask{
 
 	@Override
 	protected Collection<Estimate> getEstimates(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void updateEstimates(Collection<Estimate> state) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void addEstimate(Estimate e) {
-		// TODO Auto-generated method stub
-		
+		return SubTaskDb.getBinaryEstimates(id);
 	}
 
 	@Override

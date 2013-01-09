@@ -1,4 +1,49 @@
 <html>
+<head>
+	<script type="text/javascript">
+		function changeAnnotation(annotation) {
+			if(annotation == "BINARY") {
+				binary();
+			}
+			if(annotation == "MULTIVALUED") {
+				category();
+			}
+			if(annotation == "CONTINUOUS") {
+				continuous();
+			}
+		}
+
+		function binary() {
+			document.getElementById("numans").style.display = 'none';
+			for(j = 10; j > 2; j--) {
+				var ans = "ans".concat(j);
+				document.getElementById(ans).style.display = 'none';
+			}
+		}
+
+		function category() {
+			document.getElementById("numans").style.display = 'inline';
+		}
+
+		function continuous() {
+
+		}
+
+		function displayAnswers(e) {
+			var num = e.value;
+			var i;
+			for(i = 3; i <= num; i++) {
+				var ans = "ans".concat(i);
+				document.getElementById(ans).style.display = 'inline';
+			}
+			var j;
+			for(j = 10; j > num; j--) {
+				var ans = "ans".concat(j);
+				document.getElementById(ans).style.display = 'none';
+			}
+		}
+	</script>
+</head>
 <body>
 
 <h1>Add task</h1> 
@@ -17,25 +62,29 @@
         </tr>
         <tr>
             <td>To what accuracy do you want the subtasks answered?</td>
-            <td><input type="number" name="accuracy" step="any" placeholder="between 0 and 1 e.g. 0.7" /></td>
+            <td><input type="number" name="accuracy" step="any" placeholder="between 0 and 1 e.g. 0.7" min=0 max=1/></td>
         </tr>
         
         <tr>
             <td>What type of media are you uploading?</td>
             <td><select name="media_type">
-            <option value="1">Image</option>
-            <option value="2">Audio</option>
-            <option value="3">Text</option>
+            <option value="IMAGE">Image</option>
+            <option value="AUDIO">Audio</option>
+            <option value="VIDEO">Video</option>
             </select></td>
         </tr>
         <tr>
             <td>What type of annotation?</td>
-            <td><select name="annotation_type">
-            <option value="1">Binary</option>
-            <option value="2">Category</option>
-            <option value="3">NContinuous</option>
+            <td><select id="annotation_type" name="annotation_type" onchange="changeAnnotation(this.value);">
+            <option value="BINARY">Binary</option>
+            <option value="MULTIVALUED">Category</option>
+            <option value="CONTINUOUS">NContinuous</option>
             </select></td>
         </tr>
+				<tr id="numans" style="display:none;">
+						<td>How many answers would you like?</td>
+						<td><input type="number" id="num_answers "name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)"/></td>
+				</tr>
         <tr>
             <td>answer 1?</td>
             <td><input type="text" name="answer1" /></td>
@@ -44,13 +93,45 @@
             <td>answer 2?</td>
             <td><input type="text" name="answer2" /></td>
         </tr>
+				<tr id="ans3" style="display:none;">
+            <td >answer 3?</td>
+            <td><input type="text" name="answer3" /></td>
+        </tr>
+        <tr id="ans4" style="display:none;">
+            <td>answer 4?</td>
+            <td><input type="text" name="answer4" /></td>
+        </tr>
+				<tr id="ans5" style="display:none;">
+            <td>answer 5?</td>
+            <td><input type="text" name="answer5" /></td>
+        </tr>
+        <tr id="ans6" style="display:none;">
+            <td>answer 6?</td>
+            <td><input type="text" name="answer6" /></td>
+        </tr>
+				<tr id="ans7" style="display:none;">
+            <td>answer 7?</td>
+            <td><input type="text" name="answer7" /></td>
+        </tr>
+        <tr id="ans8" style="display:none;">
+            <td>answer 8?</td>
+            <td><input type="text" name="answer8" /></td>
+        </tr>
+				<tr id="ans9" style="display:none;">
+            <td>answer 9?</td>
+            <td><input type="text" name="answer9" /></td>
+        </tr>
+        <tr id="ans10" style="display:none;">
+            <td>answer 10?</td>
+            <td><input type="text" name="answer10" /></td>
+        </tr>
         <tr>
-            <td>What type of response do you expect?</td>
-            <td><select name="input_type">
-            <option value="1">Radio</option>
-            <option value="2">Slider</option>
-            <option value="3">Coordinates</option>
-            <option value="4">Bounding Box</option>
+            <td style="display:none;">>What type of response do you expect?</td>
+            <td style="display:none;"><select name="input_type">
+            <option value="RADIO">Radio</option>
+            <option value="SLIDER">Slider</option>
+            <option value="COORDINATES">Coordinates</option>
+            <option value="BOUNDING_BOX">Bounding Box</option>
             </select></td>
         </tr>
         </tr>
@@ -73,15 +154,15 @@
         </tr>
         <tr>
             <td>Expiry Day</td>
-            <td><input type="number" name="day" min="1" max="31" /></td>
+            <td><input type="number" name="day" min=1 max=31 /></td>
         </tr>
         <tr>
             <td>Expiry Month</td>
-            <td><input type="number" name="month" min="1" max="12" /></td>
+            <td><input type="number" name="month" min=1 max=12 /></td>
         </tr>
         <tr>
             <td>Expiry Year</td>
-            <td><input type="number" name="year" min="2013" max="2015" /></td>
+            <td><input type="number" name="year" min=2013 max=2015 /></td>
         </tr>
         <tr><td /><td><input type="submit" /></td></tr>
     </table>

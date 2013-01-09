@@ -30,12 +30,12 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		
 		NormalDistribution nd = 
 				new NormalDistribution(
-						cz.getValue(precision), Math.sqrt(variance));
+						cz.getValues(precision)[0], Math.sqrt(variance));
 		
 		double responseSpace = (range[1] - range[0])*precision;
 		
 		//mle
-		double pLabel = nd.density(cr.getValue(precision));
+		double pLabel = nd.density(cr.getValues(precision)[0]);
 		double mle = pLabel/(pLabel + 1/responseSpace);
 		sa.setAccuracy(w*(alpha/total) + (1-w)*mle);
 		a.increaseN();
@@ -51,27 +51,29 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		
 		NormalDistribution nd = 
 				new NormalDistribution(
-						cr.getValue(precision), Math.sqrt(variance));
+						cr.getValues(precision)[0], Math.sqrt(variance));
 			
-		double pResponseSpace = 1/(range[1] - range[0])*precision;
+		double pResponseSpace = 1/((range[1] - range[0])*precision);
+		
+		double freshConfidence = (getZPrior()/(1-getZPrior()));
 			
 		for (Estimate record : state){
 			if(record.getR().equals(r)){
 				matched = true;
+				record.incFrequency();
 			}
 			ContinuousR cr2 = (ContinuousR) record.getR();
-			double p = sa.getAccuracy()*nd.density(cr2.getValue(precision)) + 
+			double p = sa.getAccuracy()*nd.density(cr2.getValues(precision)[0]) + 
 				(1-sa.getAccuracy())*pResponseSpace;
-			record.setConfidence(record.getConfidence() * (p/(1-p)));
+			double newRatio = Math.log(p/1-p);
+			record.setConfidence(record.getConfidence() + newRatio);
+			freshConfidence += newRatio;
 		}
 			
 		if (!matched){
-			Estimate e = new Estimate(r, getZPrior());
-			double p = sa.getAccuracy()*nd.density(cr.getValue(precision)) +
-					(1-sa.getAccuracy())*pResponseSpace;
-			e.setConfidence(e.getConfidence() * (p/1-p));
+			Estimate e = new Estimate(r, freshConfidence, 0);
 			state.add(e);
-			addEstimate(e);
+			initEstimate(e);
 		}
 	}
 
@@ -87,16 +89,5 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		return null;
 	}
 
-	@Override
-	protected void updateEstimates(Collection<Estimate> state) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void addEstimate(Estimate e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
