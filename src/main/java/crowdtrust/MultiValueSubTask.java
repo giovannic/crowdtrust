@@ -54,7 +54,7 @@ public class MultiValueSubTask extends SubTask{
 		MultiValueR mvz = (MultiValueR) z;
 		
 		int total = a.getN();
-		double w = total/total + 1;
+		double w = (double)total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		if (mvr.equals(mvz)){
 			sa.setAccuracy(w*(alpha/total) + (1-w));

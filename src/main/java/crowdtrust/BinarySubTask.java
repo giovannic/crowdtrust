@@ -25,8 +25,7 @@ public class BinarySubTask extends SubTask {
 			double alpha = ba.getTruePositive()*total;
 			double advAlpha = ba.getTrueNegative()*total;
 			double estimate = 0;
-			w = total/(total + 1);
-			//prior normal
+			w = (double) total/(total + 1);
 			
 			if(bz.isTrue())
 				estimate = 1;
@@ -40,59 +39,20 @@ public class BinarySubTask extends SubTask {
 			total = ba.getNegativeN() + 2;
 			double alpha = ba.getTrueNegative()*total;
 			double advAlpha = ba.getTruePositive()*total;
-			w = total/(total + 1);
+			w = (double) total/(total + 1);
 			double estimate = 0;
-			//prior normal
+
 			if(bz.isTrue())
 				estimate = 1;
 			
 			double prior = (alpha+advAlpha)/(2*total);
 			
 			ba.setTrueNegative(w*prior + (1-w)*estimate);
-			
 			ba.incrementNegativeN();
 		}
 		
 		
 	}
-	/*	
-	private double peak(double alpha, double advAlpha, double logExpected,
-			int total) {
-		
-		double start = 0;
-		double end = 1;
-		double mid;
-		double diff;
-		
-		while (end - start > 0.0001){
-			mid = (start + end)/2;
-			diff = logDiffPrior(mid, alpha, advAlpha, total) + (1/logExpected);
-			if (diff > 0)
-				start = mid;
-			else if (diff < 0)
-				end = mid;
-			else if (diff == 0){
-				return mid;
-			}
-		}
-		return (start + end)/2;
-	}
-
-	private double logDiffPrior(double x, double alpha, double alphaAdv, int total) {
-		double beta = total - alpha;
-		double betaAdv = total - alphaAdv;
-		
-		double f = Math.pow(x,alpha)*Math.pow(1-x, beta);
-		double fAdv = Math.pow(x,alphaAdv)*Math.pow(1-x, betaAdv);
-		
-		double coF = x*(alpha + beta - 2) - alpha + 1;
-		double coFAdv = x*(alphaAdv + betaAdv - 2) - alphaAdv + 1;
-		
-		double coDen = (x - 1)*x;
-		
-		return (f*coF + fAdv*coFAdv)/(coDen*(f + fAdv));
-	}
-	*/
 	
 	@Override
 	protected void updateLikelihoods(Response r,  Accuracy a, 
@@ -119,7 +79,7 @@ public class BinarySubTask extends SubTask {
 			
 		for (Estimate record : state){
 			Response recordResponse = record.getR();
-			if (!recordResponse.equals(br)){
+			if (recordResponse.equals(br)){
 				record.setConfidence(record.getConfidence()
 						+ Math.log(accuracy/(1-accuracy)));
 				record.incFrequency();
