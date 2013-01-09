@@ -90,7 +90,7 @@ public class SubTaskDb {
 				"LEFT JOIN ranged ON tasks.id = ranged.task " +
 				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
-				"(SELECT * FROM responses answeed " +
+				"(SELECT * FROM responses answered " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
 				"GROUP BY sid, acc, ml, f, start, finish, p, type " +
