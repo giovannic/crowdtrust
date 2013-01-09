@@ -33,7 +33,7 @@ public class BinarySubTask extends SubTask {
 				estimate = 1;
 			
 			if (total > 4){
-				prior = (alpha+advAlpha-2)/(2*total - 4);
+				prior = (alpha+advAlpha)/(2*total);
 			}
 			
 			ba.setTruePositive(w*prior + (1-w)*estimate);
@@ -52,7 +52,7 @@ public class BinarySubTask extends SubTask {
 				estimate = 1;
 			
 			if (total > 4){
-				prior = (alpha+advAlpha-2)/(2*total - 4);
+				prior = (alpha+advAlpha)/(2*total);
 			}
 			
 			ba.setTrueNegative(w*prior + (1-w)*estimate);
