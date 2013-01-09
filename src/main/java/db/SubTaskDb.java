@@ -47,7 +47,8 @@ public class SubTaskDb {
 
 	public static Task getTask(int id) {
 		StringBuilder sql = new StringBuilder();
-      sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
+      sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task " +
+      		"LEFT JOIN ranged ON tasks.id = ranged.task ");
       sql.append("WHERE subtasks.id = ?");
       Connection c = null;
       try {

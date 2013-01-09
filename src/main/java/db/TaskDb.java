@@ -187,8 +187,8 @@ public static int addTask(int accountID, String name, String question, float acc
 					answers.add(answersArr[i]);
 				}
 				int accuracy = resultSet.getInt("accuracy");
-				int min = resultSet.getInt("min");
-				int max = resultSet.getInt("max");
+				String min = resultSet.getString("start");
+				String max = resultSet.getString("finish");
 				double step = resultSet.getInt("p");
 				if(annotation_type == 1) {
 					thisTask = new BinaryTask(id, name, question, accuracy, media_type, input_type, answers);
