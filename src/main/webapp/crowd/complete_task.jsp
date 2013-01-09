@@ -26,9 +26,8 @@
 	e.printStackTrace();
         return;
     }
-    List<String> answers = new LinkedList(); %>answersStr <%=answersStr%>
-    <%
-    if( answersStr != null ) {
+    List<String> answers = new LinkedList(); 
+    if( answersStr.trim().length() > 0 ) {
       String[] answersArr = answersStr.split("/");
       for(int i = 0 ; i < answersArr.length ; i++) {
         String ans = answersArr[i];
@@ -102,7 +101,7 @@
       <%
       int it = 0;
 		    for( String answer : answers) {
-		    /*radio buttons only if multiple answers*/
+		    /*radio buttons only if answers*/
 		  %><br>
       <input type="radio" name="response" value=<%=it%>
       <% if(it == 0) {%> checked <%}%> > <%=answer%> </input>
