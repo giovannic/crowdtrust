@@ -1,6 +1,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="db.TaskDb" %>
+<<<<<<< HEAD
+<%@ page import="crowdtrust.Task;" %>
+=======
 <%@ page import="crowdtrust.Task" %>
+>>>>>>> d6a2e1ea5e3551688c2c0c62d96fa1559f69b0c3
 <html>
 <body>
 
