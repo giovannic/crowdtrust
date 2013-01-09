@@ -18,40 +18,39 @@ public class BinarySubTask extends SubTask {
 		BinaryR bz = (BinaryR) z;
 		
 		int total;
-		double maximum;
+		double w;
 		if (br.isTrue()){
 			//maximise truePositive
 			total = ba.getPositiveN() + 2;
 			double alpha = ba.getTruePositive()*total;
-			double expected = ba.getTruePositive();
 			double advAlpha = ba.getTrueNegative()*total;
+			w = total/total + 1;
 			//prior normal
-			if(!bz.isTrue())
-				expected = (1 - ba.getTruePositive());
+			if(bz.isTrue())
+				ba.setTruePositive(w*(alpha+advAlpha-2)/(2*total - 4) + (1-w));
+			else
+				ba.setTruePositive(w*(alpha+advAlpha-2)/(2*total - 4));
 			
-			maximum = peak(alpha, advAlpha, Math.log(expected), total);
-			ba.setTruePositive(maximum);
-			System.out.print("old: " + ba.getTruePositive() + " mle: " + maximum);
 			ba.incrementPositiveN();
 			
 		} else {
 			//maximize trueNegative
 			total = ba.getNegativeN() + 2;
-			
 			double alpha = ba.getTrueNegative()*total;
-			double expected = ba.getTrueNegative();
 			double advAlpha = ba.getTruePositive()*total;
+			w = total/total + 1;
+			//prior normal
+			if(bz.isTrue())
+				ba.setTrueNegative(w*(alpha+advAlpha-2)/(2*total - 4) + (1-w));
+			else
+				ba.setTrueNegative(w*(alpha+advAlpha-2)/(2*total - 4));
 			
-			if(!bz.isTrue())
-				expected = (1 - ba.getTrueNegative());
-			
-			maximum = peak(alpha, advAlpha, Math.log(expected), total);
-			ba.setTrueNegative(maximum);
-			System.out.print("old: " + ba.getTrueNegative() + " mle: " + maximum);
 			ba.incrementNegativeN();
 		}
+		
+		
 	}
-	
+	/*	
 	private double peak(double alpha, double advAlpha, double logExpected,
 			int total) {
 		
@@ -88,7 +87,8 @@ public class BinarySubTask extends SubTask {
 		
 		return (f*coF + fAdv*coFAdv)/(coDen*(f + fAdv));
 	}
-
+	*/
+	
 	@Override
 	protected void updateLikelihoods(Response r,  Accuracy a, 
 			Collection<Estimate> state){
