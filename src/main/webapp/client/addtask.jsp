@@ -38,8 +38,18 @@
 		}
 
 		function continuous() {
+			var e = document.getElementById("media_type");
+			var media = e.options[e.selectedIndex].value;
+			if((document.getElementById("media_type").options[document.getElementById("media_type").selectedIndex].value.localeCompare("AUDIO") == 0 ||
+				  media == "VIDEO") &&
+				 document.getElementById("input_type").options.length = 4) {
+				var list = document.getElementById("input_type");
+				var boundingBox = list.options[3];
+				var coordinates = list.options[2];
+				list.removeChild(boundingBox);
+				list.removeChild(coordinates);
+			}
 			document.getElementById("num_answers").value = 0;
-			alert(document.getElementById("num_answers").value);
 			document.getElementById("type").style.display = 'inline';
 			document.getElementById("minimum").style.display = 'inline';
 			document.getElementById("maximum").style.display = 'inline';
@@ -91,7 +101,7 @@
         
         <tr>
             <td>What type of media are you uploading?</td>
-            <td><select name="media_type">
+            <td><select id="media_type" name="media_type">
             <option value="IMAGE">Image</option>
             <option value="AUDIO">Audio</option>
             <option value="VIDEO">Video</option>
