@@ -19,6 +19,7 @@ import crowdtrust.MultiValueSubTask;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
 import crowdtrust.BinarySubTask;
+import crowdtrust.Result;
 import crowdtrust.SubTask;
 import crowdtrust.Task;
 
@@ -369,7 +370,60 @@ public class SubTaskDb {
 			
 	}
 	
-	public static Map<Integer, Response> getResults(int taskId){
+	public static Map<Integer, Response> getMappedResults(int taskId){
+		String sql = "SELECT t.annotation_type AS type, " +
+				"e.subtask_id AS sid, e.estimate AS est " +
+				"FROM estimates e JOIN(" +
+				"SELECT subtasks.id, estimates.confidence, " +
+				"MAX(estimates.frequency) AS f FROM " +
+				"tasks JOIN subtasks ON subtasks.task = tasks.id " +
+				"JOIN estimates ON subtasks.id = estimates.subtask_id " +
+				"WHERE tasks.id = ? " +
+				"AND estimates.confidence IN(" +
+				"SELECT MAX(confidence) " +
+				"FROM estimates best " +
+				"WHERE best.subtask_id = estimates.subtask_id " +
+				"GROUP BY best.subtask_id) " +
+				"GROUP BY subtasks.id, confidence " +
+				") AS foo  " +
+				"ON e.subtask_id = foo.id " +
+				"AND e.confidence = foo.confidence " +
+				"AND e.frequency = foo.f " +
+				"JOIN subtasks s ON e.subtask_id = s.id " +
+				"JOIN tasks t ON s.task = t.id";
+		
+		PreparedStatement preparedStatement;
+		
+		Map<Integer,Response> results = new HashMap<Integer,Response>();
+		
+	    try {
+	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    	preparedStatement.setInt(1, taskId);
+	    }	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	    	e.printStackTrace();
+	    	return null;
+	    } catch (SQLException e) {
+	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
+	      	return null;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()){
+				int s = rs.getInt("sid");
+				int type = rs.getInt("type");
+				String e = rs.getString("est");
+				results.put(s, mapResponse(e, type));
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+
+	public static Collection<Result> getResults(int taskId){
 		String sql = "SELECT tasks.annotation_type AS type, " +
 				"estimates.subtask_id, estimate, confidence " +
 				"FROM estimates JOIN (" +
@@ -415,9 +469,10 @@ public class SubTaskDb {
 		catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return results;
+		return null;
 	}
 
+	
 	public static void addEstimate(Estimate est, int id) {
 		String query = "INSERT INTO estimates VALUES (DEFAULT,?,?,?,?)";
 		
