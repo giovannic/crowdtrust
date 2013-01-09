@@ -50,7 +50,7 @@
   %>
   <% if (inputType == 4 ) /*bounding box*/ { %>
     
-  <link rel="stylesheet" type="text/css" href="css/imgareaselect-default.css" />
+  <link rel="stylesheet" type="text/css" href="/css/imgareaselect-default.css" />
   <script type="text/javascript" src="/scripts/jquery.min.js"></script>
   <script type="text/javascript" src="/scripts/jquery.imgareaselect.pack.js"></script>
 
