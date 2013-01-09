@@ -25,17 +25,13 @@ public class BinarySubTask extends SubTask {
 			double alpha = ba.getTruePositive()*total;
 			double advAlpha = ba.getTrueNegative()*total;
 			double estimate = 0;
-			double prior = 0.5;
 			w = total/(total + 1);
 			//prior normal
 			
 			if(bz.isTrue())
 				estimate = 1;
 			
-			if (total > 4){
-				prior = (alpha+advAlpha)/(2*total);
-			}
-			
+			double prior = (alpha+advAlpha)/(2*total);
 			ba.setTruePositive(w*prior + (1-w)*estimate);
 			ba.incrementPositiveN();
 			
@@ -46,14 +42,11 @@ public class BinarySubTask extends SubTask {
 			double advAlpha = ba.getTruePositive()*total;
 			w = total/(total + 1);
 			double estimate = 0;
-			double prior = 0.5;
 			//prior normal
 			if(bz.isTrue())
 				estimate = 1;
 			
-			if (total > 4){
-				prior = (alpha+advAlpha)/(2*total);
-			}
+			double prior = (alpha+advAlpha)/(2*total);
 			
 			ba.setTrueNegative(w*prior + (1-w)*estimate);
 			
