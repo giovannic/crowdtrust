@@ -78,10 +78,9 @@ import db.TaskDb;
 		        return;
 			}
 			List<String> answers = new LinkedList<String>();
-			String answer = request.getParameter("answer1");
-			for(int i = 2 ; i < num_answers ; i++) {
+			for(int i = 1 ; i <= num_answers ; i++) {
+				String answer = request.getParameter("answer" + i);
 				answers.add(answer);
-				answer = request.getParameter("answer" + i);
 			}
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
 					accuracy, media_type, annotation_type, input_type, max_labels, expiry,

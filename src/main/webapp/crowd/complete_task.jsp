@@ -110,10 +110,10 @@
 		    }
 	    %>
       <% if (inputType == 4 ) /*bounding box*/ { %>
-      <input type="hidden" name="x1" value="0" />
-      <input type="hidden" name="y1" value="0" />
-      <input type="hidden" name="x2" value="0" />
-      <input type="hidden" name="y2" value="0" />
+      <input type="hidden" name="x1" id="x1" value="-" />
+      <input type="hidden" name="y1" id="y1" value="-" />
+      <input type="hidden" name="x2" id="x2" value="-" />
+      <input type="hidden" name="y2" id="y2" value="-" />
       <% } %>
 	    <input type="hidden" name="annotation_type" value=<%=annotationType%> />
 	    <input type="hidden" name="sid" value=<%=sid%> />

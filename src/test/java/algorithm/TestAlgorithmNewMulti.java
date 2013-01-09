@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -15,7 +14,7 @@ import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinarySubTask;
 import crowdtrust.InputType;
 import crowdtrust.MediaType;
-import crowdtrust.Response;
+import crowdtrust.MultiValueSubTask;
 
 import db.CrowdDb;
 import db.DbInitialiser;
@@ -25,17 +24,18 @@ import db.SubTaskDb;
 import db.TaskDb;
 import junit.framework.TestCase;
 
-public class TestAlgorithmNew extends TestCase {
+public class TestAlgorithmNewMulti extends TestCase {
 	protected static int numTasks = 9;
 	protected static int numPeople = 10;
 	protected static AnnotatorModel[] annotators;
+	protected static int options = 5;
 	
-	public TestAlgorithmNew(String name){
+	public TestAlgorithmNewMulti(String name){
 		super(name);
 	}
 	
-	public void testAlgorithmNew(){
-		System.setProperty("test", "true");
+	public void testAlgorithmNewMulti(){
+		System.setProperty("test", "false");
 		boolean labs = false;
 		if(labs){
 			//Clean the database 
@@ -52,38 +52,27 @@ public class TestAlgorithmNew extends TestCase {
 			
 			//Set up the annotators so they can answer binary question
 			Random rand = new Random();
+			double percentageNormal = 0.8;
 			for(int i = 0; i < numPeople; i++){
-				//int truePos = rand.nextInt(999) + 1;	
-				//int trueNeg = rand.nextInt(999) + 1;
-				//annotators[i].setUpBinary(truePos, trueNeg, totalPos, totalNeg);
-				double percentageNormal = 0.75;
-				if(rand.nextDouble() > percentageNormal){
-					annotators[i].setUpBinary(500, 500, 1000, 1000);
-				}else{
-					int addsub = rand.nextInt(2);
-					int neg;
-					int pos;
-					if(addsub == 1){
-						neg = rand.nextInt(125) * -1;
-						pos = rand.nextInt(125) * -1;
+					if(rand.nextDouble() > percentageNormal){
+						annotators[i].setUpMulti(200, 1000);						
 					}else{
-						neg = rand.nextInt(125);
-						pos = rand.nextInt(125);						
+						annotators[i].setUpMulti(900, 1000);							
 					}
-					annotators[i].setUpBinary((850 + pos), (850 + neg), 1000, 1000);
+
 				}
 				
-			}
+			
 			
 			//Create and print their rates and names
 			for(int i = 0; i < numPeople; i++){
 				RegisterDb.addUser("test@test.com", annotators[i].getUsername(), annotators[i].getPassword(), true);
 				annotators[i].setId(LoginDb.checkUserDetails(annotators[i].getUsername(), annotators[i].getPassword()));
 				AnnotatorModel a = annotators[i];
-				System.out.println("annotator " + 
-						a.bee.getId() + 
-						" truePosRate =" + a.binary.truePosRate +
-						" trueNegRate =" + a.binary.trueNegRate);
+	//			System.out.println("annotator " + 
+		//				a.bee.getId() + 
+			//			" truePosRate =" + a.binary.truePosRate +
+			//			" trueNegRate =" + a.binary.trueNegRate);
 			}
 			
 			//Lets make a client
@@ -95,7 +84,8 @@ public class TestAlgorithmNew extends TestCase {
 			List<String> testQs = new LinkedList<String>();
 			testQs.add("test q1");
 			testQs.add("test q2");
-			assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, numPeople , expiry, testQs, 0, 0, 0)>0);
+			//GIO
+			assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, numPeople , expiry, testQs, 0, 0, 0)>0);
 			
 			//List of answers
 			LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
@@ -108,11 +98,13 @@ public class TestAlgorithmNew extends TestCase {
 				String uuid = UUID.randomUUID().toString();
 				uuid = uuid.replace("-", "");
 				uuid = uuid.substring(0, 12);
-				SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("BinaryTestTask"));
+				SubTaskDb.addSubtask(uuid, TaskDb.getTaskId("MultiTestTask"));
 				int id = SubTaskDb.getSubTaskId(uuid);
 			//	System.out.println("Subtask Id: " + id);
-				BinarySubTask bst = new BinarySubTask(id,0.7,0, numPeople);
-				AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(bst.getId(), bst, new BinaryTestData(rand.nextInt(2)));
+				//BinarySubTask bst = new BinarySubTask(id,0.7,0, numPeople);
+				//id conf num labels max options
+				MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, options, numPeople, options);
+				AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiTestData(rand.nextInt(options + 1), options));
 				answers.add(asta);
 			}
 			
@@ -122,11 +114,11 @@ public class TestAlgorithmNew extends TestCase {
 			}
 			System.out.println("Given annotators answers");
 			
-			BinarySubTask t;
+			MultiValueSubTask t;
 			for(int i = 0; i < numTasks; i++){
 				for(int j = 0; j < numPeople; j++){
 					//System.out.println("Person " + (j + 1) + " answering task " + i);
-				    t = (BinarySubTask) SubTaskDb.getSequentialSubTask(TaskDb.getTaskId("BinaryTestTask"), annotators[j].bee.getId());
+				    t = (MultiValueSubTask) SubTaskDb.getSequentialSubTask(TaskDb.getTaskId("MultiTestTask"), annotators[j].bee.getId());
 				    if(t == null){
 				    	break;
 				    }
@@ -136,35 +128,13 @@ public class TestAlgorithmNew extends TestCase {
 			//	System.out.println();
 			//	System.out.println("Task " + i + " done.");
 				if(i == (numTasks - 1)){
-					printAnnotators();
-					errorRates(answers);
+					printAnnotators();					
 				}
 
 			}
-		
-		
-		}
-	}
 	
-	protected void errorRates(LinkedList<AnnotatorSubTaskAnswer> answers){
-		System.out.println("---------Calculating label error rate--------------------");
+		}	
 		
-		Map<Integer,Response> results = SubTaskDb.getMappedResults(1);
-		int correct = 0;
-		for (AnnotatorSubTaskAnswer answer : answers){
-			Response trueA = answer.getAlgoTestData().getActualAnswer();
-			Response estA = results.get(answer.id);
-			System.out.println("id " + answer.id + 
-					" true answer = " + 
-					trueA + 
-					" estimate = " + estA);
-			if(trueA.equals(estA)){
-				correct++;
-			}
-		}
-		System.out.println("success rate = " + ((double)correct/numTasks));
-
-		System.out.println("------------------------------------------------------  ");
 	}
 	
 	protected void printAnnotators(){
