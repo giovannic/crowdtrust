@@ -19,12 +19,10 @@ public abstract class SubTask {
 	
 	public SubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
-		System.out.println("Constructor has been called");
 		this.id = id;
 		this.confidence_threshold = confidence_threshold;
 		this.number_of_labels = number_of_labels;
 		this.max_labels = max_labels;
-		System.out.println("Original confidence in constructor " + confidence_threshold);
 	}
 	
 	public void addResponse(Bee annotator, Response r) {
