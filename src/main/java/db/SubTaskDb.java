@@ -90,7 +90,7 @@ public class SubTaskDb {
 				"LEFT JOIN ranged ON tasks.id = ranged.task " +
 				"WHERE tasks.id = ? AND subtasks.active " +
 				"AND NOT EXISTS " +
-				"(SELECT * FROM responses answered " +
+				"(SELECT * FROM responses answeed " +
 				"WHERE answered.subtask = subtasks.id " +
 				"AND answered.account = ?) " +
 				"GROUP BY sid, acc, ml, f, start, finish, p, type " +
@@ -445,6 +445,7 @@ public class SubTaskDb {
 		int taskAccuracy = rs.getInt("acc");
 		System.out.println("Task acc: " + taskAccuracy);
 		int id = rs.getInt("sid");
+		System.out.println("Task acc: " + id);
 		int responses = rs.getInt("c");
 		int maxLabels = rs.getInt("ml");
 		String finish = rs.getString("finish");
