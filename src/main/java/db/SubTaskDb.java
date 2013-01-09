@@ -101,7 +101,9 @@ public class SubTaskDb {
 	    try {
 	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
 	    preparedStatement.setInt(1, task);
+	    System.out.println("Task num " + task);
 	    preparedStatement.setInt(2, annotator);
+	    System.out.println("ann num " + annotator);
 	    }
 	    catch (ClassNotFoundException e) {
 	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
@@ -117,6 +119,7 @@ public class SubTaskDb {
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()){
 				int type = rs.getInt("type");
+				System.out.println("acc before " + rs.getInt("acc"));
 				return mapSubTask(rs, type);
 			}
 			return null;
