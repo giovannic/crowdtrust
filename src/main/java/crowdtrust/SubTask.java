@@ -23,6 +23,7 @@ public abstract class SubTask {
 		this.confidence_threshold = confidence_threshold;
 		this.number_of_labels = number_of_labels;
 		this.max_labels = max_labels;
+		System.out.println("Original confidence in constructor " + confidence_threshold);
 	}
 	
 	public void addResponse(Bee annotator, Response r) {
