@@ -427,34 +427,9 @@ public class SubTaskDb {
 	}
 
 	public static Collection<Result> getResults(int taskId){
-		String sql = "SELECT t.annotation_type AS type, " +
-				"t.accuracy AS acc, " +
-				"e.subtask_id AS sid, e.estimate AS est, " +
-				"t.max_labels AS ml, start, finish, p, " +
-				"e.confidence AS conf, COUNT(res.id) AS c, " +
-				"s.file_name AS f, e.frequency AS freq " +
-				"FROM estimates e " +
-				"JOIN( " +
-				"SELECT subtasks.id, estimates.confidence, " +
-				"MAX(estimates.frequency) AS f FROM " +
-				"tasks JOIN subtasks ON subtasks.task = tasks.id " +
-				"JOIN estimates ON subtasks.id = estimates.subtask_id " +
-				"WHERE tasks.id = ? AND estimates.confidence IN( " +
-				"SELECT MAX(confidence) " +
-				"FROM estimates best " +
-				"WHERE best.subtask_id = estimates.subtask_id " +
-				"GROUP BY best.subtask_id) " +
-				"GROUP BY subtasks.id, confidence ) AS foo " +
-				"ON e.subtask_id = foo.id " +
-				"AND e.confidence = foo.confidence " +
-				"AND e.frequency = foo.f " +
-				"JOIN subtasks s ON e.subtask_id = s.id " +
-				"JOIN tasks t ON s.task = t.id " +
-				"LEFT JOIN ranged r ON t.id = r.task " +
-				"JOIN responses res ON res.subtask = e.subtask_id " +
-				"GROUP BY type, sid, f, est, ml, start, finish, p, conf, acc)";
-		
+		String sql = "SELECT t.annotation_type AS type, t.accuracy AS acc, e.subtask_id AS sid, e.estimate AS est,  t.max_labels AS ml, start, finish, p,  e.confidence AS conf, COUNT(res.id) AS c,  s.file_name AS f, e.frequency AS freq  FROM estimates e  JOIN (SELECT subtasks.id, estimates.confidence,  MAX(estimates.frequency) AS f FROM  tasks JOIN subtasks ON subtasks.task = tasks.id  JOIN estimates ON subtasks.id = estimates.subtask_id  WHERE tasks.id = ? AND estimates.confidence IN(  SELECT MAX(confidence)  FROM estimates best  WHERE best.subtask_id = estimates.subtask_id  GROUP BY best.subtask_id)  GROUP BY subtasks.id, confidence ) AS foo  ON e.subtask_id = foo.id  AND e.confidence = foo.confidence  AND e.frequency = foo.f  JOIN subtasks s ON e.subtask_id = s.id  JOIN tasks t ON s.task = t.id  LEFT JOIN ranged r ON t.id = r.task  JOIN responses res ON res.subtask = e.subtask_id  GROUP BY type, sid, s.file_name, est, ml, start, finish, p, conf, acc, freq";
 		PreparedStatement preparedStatement;
+
 		
 		Collection<Result> results = new ArrayList<Result>();
 		
