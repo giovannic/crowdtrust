@@ -32,7 +32,7 @@ public static int addTask(int accountID, String name, String question, float acc
 			answerChoice += thisChoice + "/";
 		}
 		//get rid of trailing '/'
-		answerChoice = answerChoice.substring(0, answerChoice.length()-1);
+//		answerChoice = answerChoice.substring(0, answerChoice.length()-1);
         long currentTime = (new Date()).getTime();
 		PreparedStatement insertTask;
         try {

@@ -51,8 +51,8 @@ import db.TaskDb;
 				accuracy = Float.parseFloat(request.getParameter("accuracy"));
 				max_labels = Integer.parseInt(request.getParameter("max_labels"));
 				String nas = request.getParameter("num_answers");
-				if( nas != null )
-					num_answers = Integer.parseInt(null);
+//				if( nas.equals("") )
+//					num_answers = Integer.parseInt(nas);
 				media_type = MediaType.valueOf(request.getParameter("media_type"));
 				annotation_type = AnnotationType.valueOf(request.getParameter("annotation_type"));
 				input_type = InputType.valueOf(request.getParameter("input_type"));

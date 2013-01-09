@@ -51,6 +51,10 @@ public class ResponseServlet extends HttpServlet {
 			int type = Integer.parseInt(request.getParameter("annotation_type"));
 			int subTaskId = Integer.parseInt(request.getParameter("sid"));
 			int rInt = Integer.parseInt(request.getParameter("response"));
+System.out.println("x1: " + request.getParameter("x1"));
+System.out.println("y1: " + request.getParameter("y1"));
+System.out.println("x2: " + request.getParameter("x2"));
+System.out.println("y2: " + request.getParameter("y2"));
 			//TODO 
 			switch(type){
 			case 1:
