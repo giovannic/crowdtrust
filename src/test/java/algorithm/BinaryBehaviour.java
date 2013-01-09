@@ -66,7 +66,7 @@ public class BinaryBehaviour {
 		int answer = (Double.compare(signal, this.threshold) > 0) ? 1 : 0;
 		//this.updateNumbers(answer, actualAnswer);	//Update truePos/neg and totalpos/neg
 		this.updateRates();		//Update truePos/negRates
-		return realanswer;
+		return answer;
 	}
 
 	/*
