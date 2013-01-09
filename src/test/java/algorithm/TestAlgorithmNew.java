@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 
 public class TestAlgorithmNew extends TestCase {
 	protected static int numTasks = 9;
-	protected static int numPeople = 10;
+	protected static int numPeople = 9;
 	protected static AnnotatorModel[] annotators;
 	
 	public TestAlgorithmNew(String name){
