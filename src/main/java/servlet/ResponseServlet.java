@@ -50,14 +50,14 @@ public class ResponseServlet extends HttpServlet {
 			SubTask subtask = null;
 			int type = Integer.parseInt(request.getParameter("annotation_type"));
 			int subTaskId = Integer.parseInt(request.getParameter("sid"));
-			int rInt = Integer.parseInt(request.getParameter("response"));
-System.out.println("x1: " + request.getParameter("x1"));
-System.out.println("y1: " + request.getParameter("y1"));
-System.out.println("x2: " + request.getParameter("x2"));
-System.out.println("y2: " + request.getParameter("y2"));
+			System.out.println("x1: " + request.getParameter("x1"));
+			System.out.println("y1: " + request.getParameter("y1"));
+			System.out.println("x2: " + request.getParameter("x2"));
+			System.out.println("y2: " + request.getParameter("y2"));
 			//TODO 
 			switch(type){
 			case 1:
+				int rInt = Integer.parseInt(request.getParameter("response"));
 				if (rInt == 0)
 					r = new BinaryR(true);
 				else
@@ -65,11 +65,12 @@ System.out.println("y2: " + request.getParameter("y2"));
 				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 2:
-				int s = Integer.parseInt(request.getParameter("selection"));
+				int s = Integer.parseInt(request.getParameter("response"));
 				r = new MultiValueR(s);
 				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 3:
+				
 				break;
 			}
 			
