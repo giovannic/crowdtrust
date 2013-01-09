@@ -38,9 +38,9 @@
     <%
       }
     } else {
-    <%
-      <td>no responses to task yet!</td>
     %>
+      <td>no responses to task yet!</td>
+    <%
     }
     %>
     </table>
