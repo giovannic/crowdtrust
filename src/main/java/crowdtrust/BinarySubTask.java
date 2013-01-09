@@ -21,29 +21,34 @@ public class BinarySubTask extends SubTask {
 		double w;
 		if (br.isTrue()){
 			//maximise truePositive
-			total = ba.getPositiveN() + 3;
+			total = ba.getPositiveN() + 2;
 			double alpha = ba.getTruePositive()*total;
 			double advAlpha = ba.getTrueNegative()*total;
-			w = total/total + 1;
+			double estimate = 0;
+			w = total/(total + 1);
 			//prior normal
-			if(bz.isTrue())
-				ba.setTruePositive(w*(alpha+advAlpha-2)/(2*total - 4) + (1-w));
-			else
-				ba.setTruePositive(w*(alpha+advAlpha-2)/(2*total - 4));
 			
+			if(bz.isTrue())
+				estimate = 1;
+			
+			double prior = (alpha+advAlpha)/(2*total);
+			ba.setTruePositive(w*prior + (1-w)*estimate);
 			ba.incrementPositiveN();
 			
 		} else {
 			//maximize trueNegative
-			total = ba.getNegativeN() + 3;
+			total = ba.getNegativeN() + 2;
 			double alpha = ba.getTrueNegative()*total;
 			double advAlpha = ba.getTruePositive()*total;
-			w = total/total + 1;
+			w = total/(total + 1);
+			double estimate = 0;
 			//prior normal
 			if(bz.isTrue())
-				ba.setTrueNegative(w*(alpha+advAlpha-2)/(2*total - 4) + (1-w));
-			else
-				ba.setTrueNegative(w*(alpha+advAlpha-2)/(2*total - 4));
+				estimate = 1;
+			
+			double prior = (alpha+advAlpha)/(2*total);
+			
+			ba.setTrueNegative(w*prior + (1-w)*estimate);
 			
 			ba.incrementNegativeN();
 		}
