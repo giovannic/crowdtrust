@@ -16,7 +16,6 @@ public class TaskDb {
 public static int addTask(int accountID, String name, String question, float accuracy, 
 			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
 			List<String> answerList){
-		System.out.println("float acc " + accuracy);
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -33,6 +32,7 @@ public static int addTask(int accountID, String name, String question, float acc
 			answerChoice += thisChoice + "/";
 		}
         long currentTime = (new Date()).getTime();
+        int tid;
 		PreparedStatement insertTask;
         try {
         	insertTask = c.prepareStatement("INSERT INTO tasks VALUES(DEFAULT,?,?,?,?,?,?,?,?,?,?,?) RETURNING id");
@@ -50,11 +50,23 @@ public static int addTask(int accountID, String name, String question, float acc
 			insertTask.execute();
 			ResultSet rs = insertTask.getResultSet();
 			rs.next();
-			return rs.getInt(1);
+			tid = rs.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return -1;
 		}
+        try {
+//        	String minStr = "" + min + "/" + min + "/";
+//        	String maxStr = "" + max + "/" + max + "/";
+        	insertTask = c.prepareStatement("INSERT INTO ranged VALUES(?,?,?,?)");
+        	insertTask.setInt(1,tid);
+//        	insertTask.setString(2,minStr);
+//        	insertTask.setString(3,maxStr);
+//        	insertTask.setDouble(4, step)
+        } catch (SQLException e) {
+        	e.printStackTrace();
+        }
+        
 	}
 
 	/*public static int getSubTaskId(String name){
