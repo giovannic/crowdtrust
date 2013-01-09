@@ -24,13 +24,19 @@ public class BinarySubTask extends SubTask {
 			total = ba.getPositiveN();
 			double alpha = ba.getTruePositive()*total;
 			double advAlpha = ba.getTrueNegative()*total;
+			double estimate = 0;
+			double prior = 0.5;
 			w = total/total + 1;
 			//prior normal
-			if(bz.isTrue())
-				ba.setTruePositive(w*(alpha+advAlpha-2)/(2*total - 4) + (1-w));
-			else
-				ba.setTruePositive(w*(alpha+advAlpha-2)/(2*total - 4));
 			
+			if(bz.isTrue())
+				estimate = 1;
+			
+			if (total > 4){
+				prior = (alpha+advAlpha-2)/(2*total - 4);
+			}
+			
+			ba.setTruePositive(w*prior + (1-w)*estimate);
 			ba.incrementPositiveN();
 			
 		} else {
@@ -39,11 +45,17 @@ public class BinarySubTask extends SubTask {
 			double alpha = ba.getTrueNegative()*total;
 			double advAlpha = ba.getTruePositive()*total;
 			w = total/total + 1;
+			double estimate = 0;
+			double prior = 0.5;
 			//prior normal
 			if(bz.isTrue())
-				ba.setTrueNegative(w*(alpha+advAlpha-2)/(2*total - 4) + (1-w));
-			else
-				ba.setTrueNegative(w*(alpha+advAlpha-2)/(2*total - 4));
+				estimate = 1;
+			
+			if (total > 4){
+				prior = (alpha+advAlpha-2)/(2*total - 4);
+			}
+			
+			ba.setTrueNegative(w*prior + (1-w)*estimate);
 			
 			ba.incrementNegativeN();
 		}
