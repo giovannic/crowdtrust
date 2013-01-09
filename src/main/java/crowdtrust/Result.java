@@ -2,11 +2,11 @@ package crowdtrust;
 
 public class Result {
 	private SubTask subtask;
-	private Response r;
+	private Estimate e;
 	
-	public Result(SubTask subtask, Response r){
+	public Result(SubTask subtask, Estimate r){
 		this.subtask = subtask;
-		this.r = r;
+		this.e = r;
 	}
 	
 	public SubTask getSubtask() {
@@ -15,10 +15,10 @@ public class Result {
 	public void setSubtask(SubTask subtask) {
 		this.subtask = subtask;
 	}
-	public Response getR() {
-		return r;
+	public Estimate getE() {
+		return e;
 	}
-	public void setR(Response r) {
-		this.r = r;
+	public void setE(Estimate r) {
+		this.e = r;
 	}
 }
