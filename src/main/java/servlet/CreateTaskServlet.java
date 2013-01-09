@@ -59,7 +59,9 @@ import db.TaskDb;
 					min = Integer.parseInt(request.getParameter("min"));
 					max = Integer.parseInt(request.getParameter("max"));
 					step = Double.parseDouble(request.getParameter("step"));
-				}else {
+				} else if(annotation_type.equals(AnnotationType.BINARY)) {
+					num_answers = 2;
+				} else {
 					num_answers = Integer.parseInt(request.getParameter("num_answers"));
 				}
 				input_type = InputType.valueOf(request.getParameter("input_type"));
