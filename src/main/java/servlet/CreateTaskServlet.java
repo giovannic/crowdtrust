@@ -33,7 +33,7 @@ import db.TaskDb;
 	        
 	        //validate user credentials
 	        HttpSession session = request.getSession();
-	        if (session == null||session.getAttribute("account_id") == null) {
+	        if (session == null||!request.isRequestedSessionIdValid()) {
 	        	response.sendRedirect("/");
 	        	return;
 	        }
@@ -45,6 +45,7 @@ import db.TaskDb;
 	        int max_labels;
 	        int num_answers = 0;
 	        int dimensions = 0;
+	        //slider 1 dim, coord 2dim, bounding 4 dim, 
 	        double step = 0;
 	        MediaType media_type;
 	        AnnotationType annotation_type;
@@ -80,16 +81,20 @@ import db.TaskDb;
 				String answer = request.getParameter("answer" + i);
 				answers.add(answer);
 			}
+//			List<String> mins = new LinkedList<String>();
+//			for(int i = 1 ; i <= dimensions ; i++) {
+//				String answer = request.getParameter("min" + i);
+//				answers.add(answer);
+//			}
+//			List<String> maxes = new LinkedList<String>();
+//			for(int i = 1 ; i <= dimensions ; i++) {
+//				String answer = request.getParameter("max" + i);
+//				answers.add(answer);
+//			}
 			List<String> mins = new LinkedList<String>();
-			for(int i = 1 ; i <= num_answers ; i++) {
-				String answer = request.getParameter("min" + i);
-				answers.add(answer);
-			}
+			mins.add(request.getParameter("min"));
 			List<String> maxes = new LinkedList<String>();
-			for(int i = 1 ; i <= num_answers ; i++) {
-				String answer = request.getParameter("max" + i);
-				answers.add(answer);
-			}
+			maxes.add(request.getParameter("max"));
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
 					accuracy, media_type, annotation_type, input_type, max_labels, expiry,
 					answers, mins, maxes, step);

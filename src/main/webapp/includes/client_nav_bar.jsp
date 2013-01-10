@@ -4,6 +4,7 @@
 				<li><a href="/client/addtask.jsp">ADD TASK</a></li>
 				<li><a href="/client/upload.jsp">ADD SUBTASK(S)</a></li>
 				<li><a href="/client/tasks.jsp">YOUR TASKS</a></li>
+				<li><a href="/logout.jsp">LOGOUT</a></li>
 			</ul>
 		</div>
 		

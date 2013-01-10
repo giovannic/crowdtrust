@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import crowdtrust.Bee;
 import crowdtrust.BinaryR;
+import crowdtrust.ContinuousR;
 import crowdtrust.MultiValueR;
 import crowdtrust.Response;
 import crowdtrust.SubTask;
@@ -48,16 +49,11 @@ public class ResponseServlet extends HttpServlet {
 		} else {
 			Response r = null;
 			SubTask subtask = null;
-			int type = Integer.parseInt(request.getParameter("annotation_type"));
+			int annotationType = Integer.parseInt(request.getParameter("annotation_type"));
 			int subTaskId = Integer.parseInt(request.getParameter("sid"));
-			System.out.println("x1: " + request.getParameter("x1"));
-			System.out.println("y1: " + request.getParameter("y1"));
-			System.out.println("x2: " + request.getParameter("x2"));
-			System.out.println("y2: " + request.getParameter("y2"));
-			System.out.println("width: " + request.getParameter("width"));
-			System.out.println("height: " + request.getParameter("height"));
+			int inputType = Integer.parseInt(request.getParameter("input_type"));
 			//TODO 
-			switch(type){
+			switch(annotationType){
 			case 1:
 				int rInt = Integer.parseInt(request.getParameter("response"));
 				if (rInt == 0)
@@ -72,7 +68,17 @@ public class ResponseServlet extends HttpServlet {
 				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 3:
-				
+				switch(inputType) {
+				//only bounding boxes for now, TODO: change later
+				case 4:
+					int r4 = Integer.parseInt(request.getParameter("resp4"));
+					int r3 = Integer.parseInt(request.getParameter("resp3"));
+					int r2 = Integer.parseInt(request.getParameter("resp2"));
+					int r1 = Integer.parseInt(request.getParameter("resp1"));
+					int[] rs = {r1,r2,r3,r4};
+					r = new ContinuousR(rs);
+					subtask = db.SubTaskDb.getSubtask(subTaskId);
+				}
 				break;
 			}
 			

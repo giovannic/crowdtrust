@@ -4,7 +4,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -38,7 +37,7 @@ public class UploadServlet extends HttpServlet {
         
         //validate user credentials
         HttpSession session = request.getSession();
-        if (session == null || session.getAttribute("account_id") == null) {
+        if (session == null || !request.isRequestedSessionIdValid()) {
         	response.sendRedirect("/");
         	return;
         }
