@@ -493,6 +493,7 @@ public class SubTaskDb {
 				results.add(new Result(mapSubTask(rs, type), 
 						new Estimate(mapResponse(e, type), conf, freq)));
 			}
+			return results;
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
