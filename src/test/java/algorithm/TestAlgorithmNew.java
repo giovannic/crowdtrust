@@ -31,7 +31,7 @@ public class TestAlgorithmNew extends TestCase {
 	protected static AnnotatorModel[] annotators;
 	protected static int[] askPerTask = new int[numTasks];
 	protected static double successRateSum = 0;
-	protected static int repeats = 3;
+	protected static int repeats = 1;
 	
 	public TestAlgorithmNew(String name){
 		super(name);
@@ -162,14 +162,14 @@ public class TestAlgorithmNew extends TestCase {
 	
 	protected void printTimesAsked(){
 		for(int i = 0; i < askPerTask.length; i++){
-			double out = ((askPerTask[i] * 1.0) / (numTasks * 1.0));
+			double out = ((askPerTask[i] * 1.0) / (repeats * 1.0));
 			System.out.println("Average times question " + i + " asked: " + out);
 		}
 	}
 	
 	protected void updateTimesAsked(){
 		for(int i = 0; i < askPerTask.length; i++){
-			askPerTask[i] += SubTaskDb.getResponses(i);
+			askPerTask[i] += SubTaskDb.getResponses(i + 1);
 		}
 	}
 	
