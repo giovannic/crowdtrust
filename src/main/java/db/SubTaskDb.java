@@ -127,7 +127,7 @@ public class SubTaskDb {
 			return null;
 		}
 	}
-	
+
 	public static SubTask getSequentialSubTask(int task, int annotator) {
 		
 		String sql = "SELECT tasks.annotation_type AS type, " +
@@ -174,6 +174,42 @@ public class SubTaskDb {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static int getResponses(int id) {
+		
+		String sql = "SELECT COUNT(responses.id) AS c " +
+				"FROM responses " +
+				"WHERE responses.subtask = ? " +
+				"GROUP BY responses.subtask";
+		
+		PreparedStatement preparedStatement;
+	    try {
+	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    preparedStatement.setInt(1, id);
+	    }
+	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	      	e.printStackTrace();
+	    	return -1;
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
+	      	return -1;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()){
+				int freq = rs.getInt("c");
+				return freq;
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return -1;
 	}
 
 	public static List<String> getImageSubtasks() {
@@ -274,16 +310,16 @@ public class SubTaskDb {
 
 	public static SubTask getSubtask(int subTaskId) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT tasks.annotator_type AS type, " +
-				"subtasks.id AS sid, tasks.accuracy AS acc, ");
+		sql.append("SELECT tasks.annotation_type AS type, " +
+				"subtasks.id AS sid, subtasks.file_name AS f, tasks.accuracy AS acc, ");
 		sql.append("tasks.max_labels AS ml, ranged.finish AS finish, " +
 				"ranged.start AS start, ranged.p AS p, " +
 				"COUNT(responses.id) AS c ");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id ");
-		sql.append("LEFT JOIN ranged ON subtasks.id = ranged.id ");
-		sql.append("LEFT JOIN responses ON responses.id ");
+		sql.append("LEFT JOIN ranged ON tasks.id = ranged.task ");
+		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id ");
 		sql.append("WHERE subtasks.id = ? ");
-		sql.append("GROUP BY s,a,m,o ");
+		sql.append("GROUP BY sid, type, acc, ml, finish, start, p, f");
 		PreparedStatement preparedStatement;
 	    try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
@@ -299,6 +335,8 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
+			if(!rs.next())
+				return null;
 			int type = rs.getInt("type");
 			return mapSubTask(rs, type);
 		}
@@ -449,7 +487,7 @@ public class SubTaskDb {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
 				int type = rs.getInt("type");
-				String e = rs.getString("estimate");
+				String e = rs.getString("est");
 				int freq = rs.getInt("freq");
 				float conf = rs.getFloat("conf");
 				results.add(new Result(mapSubTask(rs, type), 
@@ -458,8 +496,9 @@ public class SubTaskDb {
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
-		return null;
+		return results;
 	}
 
 	

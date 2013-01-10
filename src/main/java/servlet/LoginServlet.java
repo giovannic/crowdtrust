@@ -9,16 +9,17 @@ import javax.servlet.ServletException;
 import db.LoginDb;
 
 import java.sql.SQLException;
-import java.util.Properties;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import web.*;
-
 public class LoginServlet extends HttpServlet {
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8552683134862056264L;
+
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
 	  
 
@@ -46,8 +47,10 @@ public class LoginServlet extends HttpServlet {
 		session.setAttribute("account_id", id);
 		session.setAttribute("account_name", username);
         if( isCrowd ) {
+        	session.setAttribute("crowd", "true");
     		response.sendRedirect("/crowd/profile.jsp");
         } else {
+        	session.setAttribute("crowd", "false");
         	response.sendRedirect("/client/profile.jsp");
         }
         return;

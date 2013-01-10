@@ -29,6 +29,9 @@ public class TestAlgorithmNew extends TestCase {
 	protected static int numTasks = 9;
 	protected static int numPeople = 10;
 	protected static AnnotatorModel[] annotators;
+	protected static int[] askPerTask = new int[numTasks];
+	protected static double successRateSum = 0;
+	protected static int repeats = 3;
 	
 	public TestAlgorithmNew(String name){
 		super(name);
@@ -38,6 +41,9 @@ public class TestAlgorithmNew extends TestCase {
 		System.setProperty("test", "true");
 		boolean labs = false;
 		if(labs){
+			//Stuff for testing
+			initTimesAsked();
+			for(int k = 0; k < repeats; k++){
 			//Clean the database 
 			DbInitialiser.init();
 			
@@ -95,7 +101,7 @@ public class TestAlgorithmNew extends TestCase {
 			List<String> testQs = new LinkedList<String>();
 			testQs.add("test q1");
 			testQs.add("test q2");
-			assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, numPeople , expiry, testQs, 0, 0, 0)>0);
+			assertTrue(TaskDb.addTask(accountId,"BinaryTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, numPeople , expiry, testQs, new LinkedList<String>(), new LinkedList<String>(), 0)>0);
 			
 			//List of answers
 			LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();
@@ -127,22 +133,49 @@ public class TestAlgorithmNew extends TestCase {
 				for(int j = 0; j < numPeople; j++){
 					//System.out.println("Person " + (j + 1) + " answering task " + i);
 				    t = (BinarySubTask) SubTaskDb.getSequentialSubTask(TaskDb.getTaskId("BinaryTestTask"), annotators[j].bee.getId());
+				    
+				    
 				    if(t == null){
 				    	break;
 				    }
 			//	    System.out.println("Sending in task " + t.getId());
 					annotators[j].answerTask(t);
 				}
+
 			//	System.out.println();
 			//	System.out.println("Task " + i + " done.");
 				if(i == (numTasks - 1)){
 					printAnnotators();
 					errorRates(answers);
+				
 				}
 
 			}
+			updateTimesAsked();
 		
-		
+			} //end of for
+			double average = (successRateSum / (repeats * 1.0));
+			System.out.println("Average Success Rate: " + average );
+			printTimesAsked();
+		}
+	}
+	
+	protected void printTimesAsked(){
+		for(int i = 0; i < askPerTask.length; i++){
+			double out = ((askPerTask[i] * 1.0) / (repeats * 1.0));
+			System.out.println("Average times question " + i + " asked: " + out);
+		}
+	}
+	
+	protected void updateTimesAsked(){
+		for(int i = 0; i < askPerTask.length; i++){
+			askPerTask[i] += SubTaskDb.getResponses(i + 1);
+		}
+	}
+	
+	protected void initTimesAsked(){
+		for(int i = 0; i < askPerTask.length; i++){
+			askPerTask[i] = 0;
 		}
 	}
 	
@@ -163,7 +196,7 @@ public class TestAlgorithmNew extends TestCase {
 			}
 		}
 		System.out.println("success rate = " + ((double)correct/numTasks));
-
+		successRateSum += ((double)correct/numTasks);
 		System.out.println("------------------------------------------------------  ");
 	}
 	

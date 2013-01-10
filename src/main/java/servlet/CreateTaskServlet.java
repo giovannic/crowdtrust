@@ -33,7 +33,7 @@ import db.TaskDb;
 	        
 	        //validate user credentials
 	        HttpSession session = request.getSession();
-	        if (session == null||session.getAttribute("account_id") == null) {
+	        if (session == null||!request.isRequestedSessionIdValid()) {
 	        	response.sendRedirect("/");
 	        	return;
 	        }
@@ -44,8 +44,8 @@ import db.TaskDb;
 	        float accuracy;
 	        int max_labels;
 	        int num_answers = 0;
-	        int min = 0;
-	        int max = 0;
+//	        int dimensions = 0;
+	        //slider 1 dim, coord 2dim, bounding 4 dim, 
 	        double step = 0;
 	        MediaType media_type;
 	        AnnotationType annotation_type;
@@ -56,9 +56,8 @@ import db.TaskDb;
 				media_type = MediaType.valueOf(request.getParameter("media_type"));
 				annotation_type = AnnotationType.valueOf(request.getParameter("annotation_type"));
 				if(annotation_type.equals(AnnotationType.CONTINUOUS)) {
-					min = Integer.parseInt(request.getParameter("min"));
-					max = Integer.parseInt(request.getParameter("max"));
-					step = Double.parseDouble(request.getParameter("step"));
+//					dimensions = Integer.parseInt(request.getParameter("dimensions"));
+//					step = Double.parseDouble(request.getParameter("step"));
 				} else if(annotation_type.equals(AnnotationType.BINARY)) {
 					num_answers = 2;
 				} else {
@@ -82,9 +81,25 @@ import db.TaskDb;
 				String answer = request.getParameter("answer" + i);
 				answers.add(answer);
 			}
+//			List<String> mins = new LinkedList<String>();
+//			for(int i = 1 ; i <= dimensions ; i++) {
+//				String answer = request.getParameter("min" + i);
+//				answers.add(answer);
+//			}
+//			List<String> maxes = new LinkedList<String>();
+//			for(int i = 1 ; i <= dimensions ; i++) {
+//				String answer = request.getParameter("max" + i);
+//				answers.add(answer);
+//			}
+			List<String> mins = new LinkedList<String>();
+//			mins.add(request.getParameter("min"));
+			mins.add("0");
+			List<String> maxes = new LinkedList<String>();
+//			maxes.add(request.getParameter("max"));
+			maxes.add("0");
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
 					accuracy, media_type, annotation_type, input_type, max_labels, expiry,
-					answers, min, max, step);
+					answers, mins, maxes, step);
 	        if( tid > 0) {
 	            File taskFolder = new File(TASKS_DIRECTORY + "/" + tid);
 	        	taskFolder.mkdirs();

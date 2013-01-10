@@ -85,7 +85,9 @@ public class TestAlgorithmNewMulti extends TestCase {
 			testQs.add("test q1");
 			testQs.add("test q2");
 			//GIO
-			assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, numPeople , expiry, testQs, 0, 0, 0)>0);
+			LinkedList<String> tired = new LinkedList<String>();
+			tired.add("5");
+			assertTrue(TaskDb.addTask(accountId,"MultiTestTask", "This is a test?", accuracy, MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, numPeople , expiry, testQs, new LinkedList<String>(), tired, 0)>0);
 			
 			//List of answers
 			LinkedList<AnnotatorSubTaskAnswer> answers = new LinkedList<AnnotatorSubTaskAnswer>();

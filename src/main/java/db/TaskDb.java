@@ -16,7 +16,7 @@ public class TaskDb {
 	
 public static int addTask(int accountID, String name, String question, float accuracy, 
 			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
-			List<String> answerList, int min, int max, double step){
+			List<String> answerList, List<String> mins, List<String> maxes, double step){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -56,10 +56,16 @@ public static int addTask(int accountID, String name, String question, float acc
 			e.printStackTrace();
 			return -1;
 		}
-        if( min != 0 || max != 0) {
+        if( mins.size() != 0) {
 	        try {
-	        	String minStr = "" + min + "/" + min + "/";
-	        	String maxStr = "" + max + "/" + max + "/";
+	        	String minStr = "";
+	        	for( String min : mins ) {
+	        		minStr += min + "/";
+	        	}
+	        	String maxStr = "";
+	        	for( String max : maxes ) {
+	        		maxStr += max + "/";
+	        	}
 	        	insertTask = c.prepareStatement("INSERT INTO ranged VALUES(?,?,?,?)");
 	        	insertTask.setInt(1,tid);
 	        	insertTask.setString(2,minStr);
