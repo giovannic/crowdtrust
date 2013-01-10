@@ -9,16 +9,17 @@ import javax.servlet.ServletException;
 import db.LoginDb;
 
 import java.sql.SQLException;
-import java.util.Properties;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import web.*;
-
 public class LoginServlet extends HttpServlet {
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8552683134862056264L;
+
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
                  throws ServletException, IOException {
 	  
 
