@@ -31,6 +31,7 @@ public class TestAlgorithmNew extends TestCase {
 	protected static AnnotatorModel[] annotators;
 	protected static int[] askPerTask = new int[numTasks];
 	protected static double successRateSum = 0;
+	protected static int repeats = 3;
 	
 	public TestAlgorithmNew(String name){
 		super(name);
@@ -42,7 +43,7 @@ public class TestAlgorithmNew extends TestCase {
 		if(labs){
 			//Stuff for testing
 			
-			for(int k = 0; k < 3; k++){
+			for(int k = 0; k < repeats; k++){
 			//Clean the database 
 			DbInitialiser.init();
 			
@@ -152,7 +153,7 @@ public class TestAlgorithmNew extends TestCase {
 		
 		
 			} //end of for
-			System.out.println("Average Success Rate: " + successRateSum);
+			System.out.println("Average Success Rate: " + (successRateSum / repeats) );
 		}
 	}
 	
