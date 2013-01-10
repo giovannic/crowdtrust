@@ -311,7 +311,7 @@ public class SubTaskDb {
 	public static SubTask getSubtask(int subTaskId) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tasks.annotation_type AS type, " +
-				"subtasks.id AS sid, tasks.accuracy AS acc, ");
+				"subtasks.id AS sid, subtasks.file_name AS f, tasks.accuracy AS acc, ");
 		sql.append("tasks.max_labels AS ml, ranged.finish AS finish, " +
 				"ranged.start AS start, ranged.p AS p, " +
 				"COUNT(responses.id) AS c ");
@@ -319,7 +319,7 @@ public class SubTaskDb {
 		sql.append("LEFT JOIN ranged ON tasks.id = ranged.task ");
 		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id ");
 		sql.append("WHERE subtasks.id = ? ");
-		sql.append("GROUP BY sid, type, acc, ml, finish, start, p");
+		sql.append("GROUP BY sid, type, acc, ml, finish, start, p, f");
 		PreparedStatement preparedStatement;
 	    try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
