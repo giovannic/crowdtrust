@@ -335,6 +335,8 @@ public class SubTaskDb {
 	    }
 		try {
 			ResultSet rs = preparedStatement.executeQuery();
+			if(!rs.next())
+				return null;
 			int type = rs.getInt("type");
 			return mapSubTask(rs, type);
 		}
