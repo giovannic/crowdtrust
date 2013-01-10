@@ -487,7 +487,7 @@ public class SubTaskDb {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
 				int type = rs.getInt("type");
-				String e = rs.getString("estimate");
+				String e = rs.getString("est");
 				int freq = rs.getInt("freq");
 				float conf = rs.getFloat("conf");
 				results.add(new Result(mapSubTask(rs, type), 
