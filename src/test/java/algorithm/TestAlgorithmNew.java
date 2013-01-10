@@ -147,10 +147,11 @@ public class TestAlgorithmNew extends TestCase {
 				if(i == (numTasks - 1)){
 					printAnnotators();
 					errorRates(answers);
+				
 				}
 
 			}
-		
+			updateTimesAsked();
 		
 			} //end of for
 			double average = (successRateSum / (repeats * 1.0));
