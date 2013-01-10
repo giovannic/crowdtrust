@@ -1,6 +1,31 @@
 <html>
 <head>
 	<script type="text/javascript">
+		function removeInput(input) {
+			var type = document.getElementById("input_type");
+			type.options.length = 0;
+			var radio = document.createElement("option");
+			radio.text = "Radio";
+			radio.value = "RADIO";
+			type.add(radio);
+			var annotations = document.getElementById("annotation_type")
+			annotations.options.length = 0;
+			var	binary = document.createElement("option");
+			binary.text = "Binary";
+			binary.value = "BINARY";
+			var multi = document.createElement("option");
+			multi.text = "Category";
+			multi.value = "MULTIVALUED";
+			annotations.add(binary);
+			annotations.add(multi);
+			if(input == "IMAGE") {
+				var cont = document.createElement("option");
+				cont.text = "NContinuous";
+				cont.value = "CONTINUOUS";
+				annotations.add(cont);
+			}
+		}
+
 		function changeAnnotation(annotation) {
 			if(annotation == "BINARY") {
 				binary();
@@ -13,56 +38,6 @@
 			}
 		}
 
-		function binary() {
-			for(j = 10; j > 2; j--) {
-				var ans = "ans".concat(j);
-				document.getElementById(ans).style.display = 'none';
-			}
-			document.getElementById("numans").style.display = 'none';
-			document.getElementById("type").style.display = 'none';
-			document.getElementById("minimum").style.display = 'none';
-			document.getElementById("maximum").style.display = 'none';
-			document.getElementById("steprow").style.display = 'none';
-			document.getElementById("ans1").style.display = 'inline';
-			document.getElementById("ans2").style.display = 'inline';
-		}
-
-		function category() {
-			document.getElementById("type").style.display = 'none';
-		  document.getElementById("minimum").style.display = 'none';
-			document.getElementById("maximum").style.display = 'none';
-			document.getElementById("steprow").style.display = 'none';
-			document.getElementById("numans").style.display = 'inline';
-			document.getElementById("ans1").style.display = 'none';
-			document.getElementById("ans2").style.display = 'none';
-		}
-
-		function continuous() {
-			var e = document.getElementById("media_type");
-			var media = e.options[e.selectedIndex].value;
-			if((document.getElementById("media_type").options[document.getElementById("media_type").selectedIndex].value.localeCompare("AUDIO") == 0 ||
-				  media == "VIDEO") &&
-				 document.getElementById("input_type").options.length == 4) {
-				var list = document.getElementById("input_type");
-				var boundingBox = list.options[3];
-				var coordinates = list.options[2];
-				list.removeChild(boundingBox);
-				list.removeChild(coordinates);
-			}
-			document.getElementById("num_answers").value = 0;
-			document.getElementById("type").style.display = 'inline';
-			document.getElementById("minimum").style.display = 'inline';
-			document.getElementById("maximum").style.display = 'inline';
-			document.getElementById("steprow").style.display = 'inline';
-			document.getElementById("numans").style.display = 'none';
-			document.getElementById("ans1").style.display = 'none';
-			document.getElementById("ans2").style.display = 'none';
-			for(j = 10; j > 0; j--) {
-				var ans = "ans".concat(j);
-				document.getElementById(ans).style.display = 'none';
-			}
-		}
-
 		function displayAnswers(e) {
 			var num = e.value;
 			var i;
@@ -72,6 +47,41 @@
 			}
 			var j;
 			for(j = 10; j > num; j--) {
+				var ans = "ans".concat(j);
+				document.getElementById(ans).style.display = 'none';
+			}
+		}
+
+		
+
+		function binary() {
+			for(j = 10; j > 2; j--) {
+				var ans = "ans".concat(j);
+				document.getElementById(ans).style.display = 'none';
+			}
+			document.getElementById("numans").style.display = 'none';
+			document.getElementById("ans1").style.display = 'inline';
+			document.getElementById("ans2").style.display = 'inline';
+		}
+
+		function category() {
+			document.getElementById("numans").style.display = 'inline';
+			document.getElementById("ans1").style.display = 'none';
+			document.getElementById("ans2").style.display = 'none';
+		}
+
+		function continuous() {
+			var type = document.getElementById("input_type");
+			type.options.length = 0;
+			var boundingbox = document.createElement("option");
+			boundingbox.text = "Bounding Box";
+			boundingbox.value = "BOUNDING_BOX";
+			type.add(boundingbox);
+			document.getElementById("num_answers").value = 0;
+			document.getElementById("numans").style.display = 'none';
+			document.getElementById("ans1").style.display = 'none';
+			document.getElementById("ans2").style.display = 'none';
+			for(j = 10; j > 0; j--) {
 				var ans = "ans".concat(j);
 				document.getElementById(ans).style.display = 'none';
 			}
@@ -98,10 +108,9 @@
             <td>To what accuracy do you want the subtasks answered?</td>
             <td><input type="number" name="accuracy" step="any" placeholder="between 0 and 1 e.g. 0.7" min=0 max=1/></td>
         </tr>
-        
-        <tr>
+				<tr>
             <td>What type of media are you uploading?</td>
-            <td><select id="media_type" name="media_type">
+            <td><select id="media_type" name="media_type" onchange="removeInput(this.value)">
             <option value="IMAGE">Image</option>
             <option value="AUDIO">Audio</option>
             <option value="VIDEO">Video</option>
@@ -115,18 +124,6 @@
             <option value="CONTINUOUS">NContinuous</option>
             </select></td>
         </tr>
-				<tr id="minimum" style="display:none;">
-						<td>Minimum</td>
-						<td><input type="number" id="min" name="min"/></td>
-				</tr>
-				<tr id="maximum" style="display:none;">
-						<td>Maximum</td>
-						<td><input type="number" id="max" name="max"/></td>
-				</tr>
-				<tr id="steprow" style="display:none;">
-						<td>Step size</td>
-						<td><input type="number" id="step" name="step"/></td>
-				</tr>
 				<tr id="numans" style="display:none;">
 						<td>How many answers would you like?</td>
 						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)" value=0/></td>
@@ -171,29 +168,13 @@
             <td>answer 10?</td>
             <td><input type="text" name="answer10" /></td>
         </tr>
-        <tr id="type" style="display:none;">
+        <tr>
             <td>What type of response do you expect?</td>
             <td><select id="input_type" name="input_type">
             <option value="RADIO">Radio</option>
-            <option value="SLIDER">Slider</option>
-            <option value="COORDINATES">Coordinates</option>
-            <option value="BOUNDING_BOX">Bounding Box</option>
             </select></td>
         </tr>
         </tr>
-        <!--<tr>
-            <td>What type of response do you expect?</td>
-            <td><input type="text" name="question" value="binary" /></td>
-        </tr>
-        <tr>
-            <td>What type of response do you expect?</td>
-            <td><input type="text" name="question" placeholder="question" /></td>
-        </tr>
-        <tr>
-            <td>What type of response do you expect?</td>
-            <td><input type="text" name="question" placeholder="question" /></td>
-        </tr>
-        -->
         <tr>
             <td>What is the maximum number of responses you'd like for each subtask?</td>
             <td><input type="number" name="max_labels" value="15" /></td>
