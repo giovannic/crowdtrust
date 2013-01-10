@@ -316,10 +316,10 @@ public class SubTaskDb {
 				"ranged.start AS start, ranged.p AS p, " +
 				"COUNT(responses.id) AS c ");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id ");
-		sql.append("LEFT JOIN ranged ON subtasks.id = ranged.id ");
+		sql.append("LEFT JOIN ranged ON tasks.id = ranged.task ");
 		sql.append("LEFT JOIN responses ON responses.id ");
 		sql.append("WHERE subtasks.id = ? ");
-		sql.append("GROUP BY s,a,m,o ");
+		sql.append("GROUP BY sid, type, acc, ml, finish, start, p");
 		PreparedStatement preparedStatement;
 	    try {
 	    	preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
