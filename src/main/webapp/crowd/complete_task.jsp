@@ -79,8 +79,16 @@
       String subtaskFile = TASKS_DIRECTORY + taskID + "/" + subtask.getFileName();
       int sid = subtask.getId();
 		  switch(mediaType) {
-		  case 1: /*image*/ 
+		  case 1: /*image*/
 	  %>
+	  <script type="text/javascript">
+	  $(function () {
+      var img = new Image();
+      img.src = <%=subtaskFile %>;
+      $('width').val(img.width);
+      $('height').val(img.height);
+	  });
+	  </script>
 	  <img id="image" src="<%=subtaskFile %>" />
 		<%
 		  	break;
@@ -109,12 +117,25 @@
 		      it++;
 		    }
 	    %>
-      <% if (inputType == 4 ) /*bounding box*/ { %>
-      <input type="hidden" name="x1" id="x1" value="-" />
-      <input type="hidden" name="y1" id="y1" value="-" />
+      <% 
+        switch (inputType) {
+        case 4:  /*bounding box*/
+      %>
       <input type="hidden" name="x2" id="x2" value="-" />
       <input type="hidden" name="y2" id="y2" value="-" />
-      <% } %>
+      <%
+        case 3:
+      %>
+      <input type="hidden" name="y1" id="y1" value="-" />
+      <input type="hidden" name="height" id="width" value="-" />
+      <input type="hidden" name="width" id="height" value="-" />
+      <%
+        case 2:
+      %>      
+      <input type="hidden" name="x1" id="x1" value="-" />
+      <% 
+      } 
+      %>
 	    <input type="hidden" name="annotation_type" value=<%=annotationType%> />
 	    <input type="hidden" name="sid" value=<%=sid%> />
 		  <input type="submit" /><br>
@@ -122,9 +143,10 @@
     </form>
 	  <%
     } else {
-                %>
+    %>
       <h2>Task completed! Thank you, returning to your task list now</h2>
-    <%}
+    <%
+    }
     %>
   </body>
 </html>

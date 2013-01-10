@@ -44,8 +44,7 @@ import db.TaskDb;
 	        float accuracy;
 	        int max_labels;
 	        int num_answers = 0;
-	        int min = 0;
-	        int max = 0;
+	        int dimensions = 0;
 	        double step = 0;
 	        MediaType media_type;
 	        AnnotationType annotation_type;
@@ -56,8 +55,7 @@ import db.TaskDb;
 				media_type = MediaType.valueOf(request.getParameter("media_type"));
 				annotation_type = AnnotationType.valueOf(request.getParameter("annotation_type"));
 				if(annotation_type.equals(AnnotationType.CONTINUOUS)) {
-					min = Integer.parseInt(request.getParameter("min"));
-					max = Integer.parseInt(request.getParameter("max"));
+					dimensions = Integer.parseInt(request.getParameter("dimensions"));
 					step = Double.parseDouble(request.getParameter("step"));
 				} else if(annotation_type.equals(AnnotationType.BINARY)) {
 					num_answers = 2;
@@ -82,11 +80,19 @@ import db.TaskDb;
 				String answer = request.getParameter("answer" + i);
 				answers.add(answer);
 			}
-			int [][] ranges = {{min, min},
-							   {max, max}};
+			List<String> mins = new LinkedList<String>();
+			for(int i = 1 ; i <= num_answers ; i++) {
+				String answer = request.getParameter("min" + i);
+				answers.add(answer);
+			}
+			List<String> maxes = new LinkedList<String>();
+			for(int i = 1 ; i <= num_answers ; i++) {
+				String answer = request.getParameter("max" + i);
+				answers.add(answer);
+			}
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
 					accuracy, media_type, annotation_type, input_type, max_labels, expiry,
-					answers, ranges, step);
+					answers, mins, maxes, step);
 	        if( tid > 0) {
 	            File taskFolder = new File(TASKS_DIRECTORY + "/" + tid);
 	        	taskFolder.mkdirs();

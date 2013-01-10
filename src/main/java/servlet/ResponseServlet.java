@@ -39,7 +39,7 @@ public class ResponseServlet extends HttpServlet {
 			try{
 				id = (Integer) s.getAttribute("account_id");
 			}catch(Exception e) {
-				
+				response.sendRedirect("/");
 			}
 		}
 		
@@ -54,6 +54,8 @@ public class ResponseServlet extends HttpServlet {
 			System.out.println("y1: " + request.getParameter("y1"));
 			System.out.println("x2: " + request.getParameter("x2"));
 			System.out.println("y2: " + request.getParameter("y2"));
+			System.out.println("width: " + request.getParameter("width"));
+			System.out.println("height: " + request.getParameter("height"));
 			//TODO 
 			switch(type){
 			case 1:

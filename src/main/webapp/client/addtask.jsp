@@ -129,7 +129,7 @@
 				</tr>
 				<tr id="numans" style="display:none;">
 						<td>How many answers would you like?</td>
-						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)" value=0/></td>
+						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)" value="0" /></td>
 				</tr>
         <tr id="ans1">
             <td>answer 1?</td>
@@ -180,20 +180,6 @@
             <option value="BOUNDING_BOX">Bounding Box</option>
             </select></td>
         </tr>
-        </tr>
-        <!--<tr>
-            <td>What type of response do you expect?</td>
-            <td><input type="text" name="question" value="binary" /></td>
-        </tr>
-        <tr>
-            <td>What type of response do you expect?</td>
-            <td><input type="text" name="question" placeholder="question" /></td>
-        </tr>
-        <tr>
-            <td>What type of response do you expect?</td>
-            <td><input type="text" name="question" placeholder="question" /></td>
-        </tr>
-        -->
         <tr>
             <td>What is the maximum number of responses you'd like for each subtask?</td>
             <td><input type="number" name="max_labels" value="15" /></td>
