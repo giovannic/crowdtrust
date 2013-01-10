@@ -47,8 +47,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		session.setAttribute("account_id", id);
 		session.setAttribute("account_name", username);
         if( isCrowd ) {
+        	session.setAttribute("crowd", "true");
     		response.sendRedirect("/crowd/profile.jsp");
         } else {
+        	session.setAttribute("crowd", "false");
         	response.sendRedirect("/client/profile.jsp");
         }
         return;
