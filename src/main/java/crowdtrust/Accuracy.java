@@ -5,7 +5,7 @@ public abstract class Accuracy {
 	
 	protected boolean ghost = false;
 	
-	int getN(){
+	public int getN(){
 		return n;
 	}
 	

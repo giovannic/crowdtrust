@@ -8,6 +8,7 @@ import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinaryR;
+import crowdtrust.MultiValueR;
 import crowdtrust.SingleAccuracy;
 import crowdtrust.Account;
 
@@ -152,6 +153,9 @@ public class CrowdDb {
 		return records;
 	}
 
+
+
+
 	public static SingleAccuracy getMultiValueAccuracy(int id) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -167,18 +171,52 @@ public class CrowdDb {
   	  return null;
     }
 		try {
+			SingleAccuracy singleAccuracy=null;
 			preparedStatement.setInt(1, id);
+			double accuracy = 0.5;
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultSet.next(); //JOHNNN
-			double accuracy = resultSet.getDouble("accuracy");
-			int total = resultSet.getInt("total");
-			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy, total);
+			if(resultSet.next()){
+				accuracy = resultSet.getDouble("accuracy");
+				int total = resultSet.getInt("total");
+				singleAccuracy = new SingleAccuracy(accuracy, total);
+			}
+			else{
+				singleAccuracy = new SingleAccuracy(0.5, 0);
+				insertMultiValueAccuracy(id, singleAccuracy);
+			}
+			
 			return singleAccuracy;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+
+
+public static void insertMultiValueAccuracy(int id, SingleAccuracy accuracy) {
+		PreparedStatement preparedStatement;
+		String sql = "INSERT INTO multivalueaccuracies (account, accuracy, total) " +
+				"VALUES(?,?,?)";
+		
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+			double a = accuracy.getAccuracy();
+			int total = accuracy.getN();
+			preparedStatement.setInt(1, id);
+			preparedStatement.setDouble(2, a);
+			preparedStatement.setInt(3, total);
+			
+			preparedStatement.execute();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 	}
 
 	public static void updateBinaryAccuracies(Collection<AccuracyRecord> accuracies) {

@@ -97,7 +97,7 @@ public class MultiValueSubTask extends SubTask{
 
 	@Override
 	protected Collection<Estimate> getEstimates(int id) {
-		return SubTaskDb.getBinaryEstimates(id);
+		return SubTaskDb.getMultiValueEstimates(id);
 	}
 
 	@Override

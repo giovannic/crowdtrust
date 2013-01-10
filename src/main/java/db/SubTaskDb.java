@@ -519,7 +519,7 @@ public class SubTaskDb {
 			break;
 		case 2:
 			s = new MultiValueSubTask(id, taskAccuracy, responses, 
-					maxLabels, Integer.parseInt(finish));
+					maxLabels, 4);
 			break;
 		case 3:
 			s = ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
@@ -575,6 +575,10 @@ public class SubTaskDb {
 
 	public static Collection<Estimate> getBinaryEstimates(int id) {
 		return getEstimates(id, 1);
+	}
+
+	public static Collection<Estimate> getMultiValueEstimates(int id) {
+		return getEstimates(id, 2);
 	}
 
 }

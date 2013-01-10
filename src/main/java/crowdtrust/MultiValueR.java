@@ -18,6 +18,11 @@ public class MultiValueR extends Response{
 	public String serialise() {
 		return Integer.toString(selection);
 	}
+
+	@Override
+	public String toString() {
+		return "" + selection;
+	}
 	
 	public int getSelection(){
 		return this.selection;
