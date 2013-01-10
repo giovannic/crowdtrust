@@ -29,6 +29,8 @@ public class TestAlgorithmNew extends TestCase {
 	protected static int numTasks = 9;
 	protected static int numPeople = 10;
 	protected static AnnotatorModel[] annotators;
+	protected static int[] askPerTask = new int[numTasks];
+	protected static double successRateSum = 0;
 	
 	public TestAlgorithmNew(String name){
 		super(name);
@@ -38,6 +40,9 @@ public class TestAlgorithmNew extends TestCase {
 		System.setProperty("test", "true");
 		boolean labs = false;
 		if(labs){
+			//Stuff for testing
+			
+			for(int k = 0; k < 3; k++){
 			//Clean the database 
 			DbInitialiser.init();
 			
@@ -127,6 +132,8 @@ public class TestAlgorithmNew extends TestCase {
 				for(int j = 0; j < numPeople; j++){
 					//System.out.println("Person " + (j + 1) + " answering task " + i);
 				    t = (BinarySubTask) SubTaskDb.getSequentialSubTask(TaskDb.getTaskId("BinaryTestTask"), annotators[j].bee.getId());
+				    
+				    
 				    if(t == null){
 				    	break;
 				    }
@@ -144,8 +151,12 @@ public class TestAlgorithmNew extends TestCase {
 			}
 		
 		
+			} //end of for
+			System.out.println("Average Success Rate: " + successRateSum);
 		}
 	}
+	
+	
 	
 	protected void errorRates(LinkedList<AnnotatorSubTaskAnswer> answers){
 		System.out.println("---------Calculating label error rate--------------------");
@@ -164,7 +175,7 @@ public class TestAlgorithmNew extends TestCase {
 			}
 		}
 		System.out.println("success rate = " + ((double)correct/numTasks));
-
+		successRateSum += ((double)correct/numTasks);
 		System.out.println("------------------------------------------------------  ");
 	}
 	
