@@ -127,7 +127,7 @@ public class SubTaskDb {
 			return null;
 		}
 	}
-	
+
 	public static SubTask getSequentialSubTask(int task, int annotator) {
 		
 		String sql = "SELECT tasks.annotation_type AS type, " +
@@ -174,6 +174,41 @@ public class SubTaskDb {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static int getResponses(int id) {
+		
+		String sql = "SELECT COUNT(responses.id) AS c " +
+				"FROM responses " +
+				"WHERE responses.subtask = ?";
+		
+		PreparedStatement preparedStatement;
+	    try {
+	    preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+	    preparedStatement.setInt(1, id);
+	    }
+	    catch (ClassNotFoundException e) {
+	    	System.err.println("Error connecting to DB on check finished: PSQL driver not present");
+	      	e.printStackTrace();
+	    	return -1;
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	      	System.err.println("SQL Error on check finished");
+	      	e.printStackTrace();
+	      	return -1;
+	    }
+		try {
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()){
+				int freq = rs.getInt("c");
+				return freq;
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		return -1;
 	}
 
 	public static List<String> getImageSubtasks() {

@@ -44,7 +44,7 @@ import db.TaskDb;
 	        float accuracy;
 	        int max_labels;
 	        int num_answers = 0;
-	        int dimensions = 0;
+//	        int dimensions = 0;
 	        //slider 1 dim, coord 2dim, bounding 4 dim, 
 	        double step = 0;
 	        MediaType media_type;
@@ -56,8 +56,8 @@ import db.TaskDb;
 				media_type = MediaType.valueOf(request.getParameter("media_type"));
 				annotation_type = AnnotationType.valueOf(request.getParameter("annotation_type"));
 				if(annotation_type.equals(AnnotationType.CONTINUOUS)) {
-					dimensions = Integer.parseInt(request.getParameter("dimensions"));
-					step = Double.parseDouble(request.getParameter("step"));
+//					dimensions = Integer.parseInt(request.getParameter("dimensions"));
+//					step = Double.parseDouble(request.getParameter("step"));
 				} else if(annotation_type.equals(AnnotationType.BINARY)) {
 					num_answers = 2;
 				} else {
@@ -92,9 +92,11 @@ import db.TaskDb;
 //				answers.add(answer);
 //			}
 			List<String> mins = new LinkedList<String>();
-			mins.add(request.getParameter("min"));
+//			mins.add(request.getParameter("min"));
+			mins.add("0");
 			List<String> maxes = new LinkedList<String>();
-			maxes.add(request.getParameter("max"));
+//			maxes.add(request.getParameter("max"));
+			maxes.add("0");
 			int tid = TaskDb.addTask(accountID, name, request.getParameter("question"), 
 					accuracy, media_type, annotation_type, input_type, max_labels, expiry,
 					answers, mins, maxes, step);
