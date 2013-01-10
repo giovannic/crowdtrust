@@ -310,7 +310,7 @@ public class SubTaskDb {
 
 	public static SubTask getSubtask(int subTaskId) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT tasks.annotator_type AS type, " +
+		sql.append("SELECT tasks.annotation_type AS type, " +
 				"subtasks.id AS sid, tasks.accuracy AS acc, ");
 		sql.append("tasks.max_labels AS ml, ranged.finish AS finish, " +
 				"ranged.start AS start, ranged.p AS p, " +
