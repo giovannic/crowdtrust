@@ -51,7 +51,7 @@ public class ResponseServlet extends HttpServlet {
 			SubTask subtask = null;
 			int annotationType = Integer.parseInt(request.getParameter("annotation_type"));
 			int subTaskId = Integer.parseInt(request.getParameter("sid"));
-			int inputType = Integer.parseInt(request.getParameter("input_type"));
+//			int inputType = Integer.parseInt(request.getParameter("input_type"));
 			//TODO 
 			switch(annotationType){
 			case 1:
@@ -68,9 +68,9 @@ public class ResponseServlet extends HttpServlet {
 				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 3:
-				switch(inputType) {
+//				switch(inputType) {
 				//only bounding boxes for now, TODO: change later
-				case 4:
+//				case 4:
 					int r4 = Integer.parseInt(request.getParameter("resp4"));
 					int r3 = Integer.parseInt(request.getParameter("resp3"));
 					int r2 = Integer.parseInt(request.getParameter("resp2"));
@@ -78,7 +78,7 @@ public class ResponseServlet extends HttpServlet {
 					int[] rs = {r1,r2,r3,r4};
 					r = new ContinuousR(rs);
 					subtask = db.SubTaskDb.getSubtask(subTaskId);
-				}
+//				}
 				break;
 			}
 			
