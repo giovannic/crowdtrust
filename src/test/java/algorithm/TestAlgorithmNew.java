@@ -162,7 +162,7 @@ public class TestAlgorithmNew extends TestCase {
 	
 	protected void printTimesAsked(){
 		for(int i = 0; i < askPerTask.length; i++){
-			double out = ((askPerTask[i] * 1.0) / (numTasks * 1.0));
+			double out = ((askPerTask[i] * 1.0) / (repeats * 1.0));
 			System.out.println("Average times question " + i + " asked: " + out);
 		}
 	}
