@@ -180,7 +180,8 @@ public class SubTaskDb {
 		
 		String sql = "SELECT COUNT(responses.id) AS c " +
 				"FROM responses " +
-				"WHERE responses.subtask = ?";
+				"WHERE responses.subtask = ? " +
+				"GROUP BY responses.subtask";
 		
 		PreparedStatement preparedStatement;
 	    try {
