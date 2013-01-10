@@ -169,7 +169,7 @@ public class TestAlgorithmNew extends TestCase {
 	
 	protected void updateTimesAsked(){
 		for(int i = 0; i < askPerTask.length; i++){
-			askPerTask[i] += SubTaskDb.getResponses(i);
+			askPerTask[i] += SubTaskDb.getResponses(i + 1);
 		}
 	}
 	
