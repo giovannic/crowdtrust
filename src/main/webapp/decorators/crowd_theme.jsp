@@ -8,6 +8,7 @@
 		<decorator:head />
     <%
       if (session == null || !session.getAttribute("crowd").equals("true")) {
+      session.invalidate()
     %>
       <META HTTP-EQUIV="refresh" CONTENT="0;URL=/" />
     <%
