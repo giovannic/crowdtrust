@@ -31,7 +31,7 @@ public class TestAlgorithmNew extends TestCase {
 	protected static AnnotatorModel[] annotators;
 	protected static int[] askPerTask = new int[numTasks];
 	protected static double successRateSum = 0;
-	protected static int repeats = 1;
+	protected static int repeats = 3;
 	
 	public TestAlgorithmNew(String name){
 		super(name);
