@@ -133,6 +133,7 @@ public class TestAlgorithmNew extends TestCase {
 			//	    System.out.println("Sending in task " + t.getId());
 					annotators[j].answerTask(t);
 				}
+
 			//	System.out.println();
 			//	System.out.println("Task " + i + " done.");
 				if(i == (numTasks - 1)){
