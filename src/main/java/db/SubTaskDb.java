@@ -317,7 +317,7 @@ public class SubTaskDb {
 				"COUNT(responses.id) AS c ");
 		sql.append("FROM subtasks JOIN tasks ON subtasks.task = tasks.id ");
 		sql.append("LEFT JOIN ranged ON tasks.id = ranged.task ");
-		sql.append("LEFT JOIN responses ON responses.id ");
+		sql.append("LEFT JOIN responses ON responses.subtask = subtasks.id ");
 		sql.append("WHERE subtasks.id = ? ");
 		sql.append("GROUP BY sid, type, acc, ml, finish, start, p");
 		PreparedStatement preparedStatement;
