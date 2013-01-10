@@ -153,7 +153,8 @@ public class TestAlgorithmNew extends TestCase {
 		
 		
 			} //end of for
-			System.out.println("Average Success Rate: " + (successRateSum / repeats) );
+			double average = (successRateSum / (repeats * 1.0));
+			System.out.println("Average Success Rate: " + average );
 		}
 	}
 	
