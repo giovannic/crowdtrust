@@ -31,6 +31,7 @@ public class TestAlgorithmNew extends TestCase {
 	protected static AnnotatorModel[] annotators;
 	protected static int[] askPerTask = new int[numTasks];
 	protected static double successRateSum = 0;
+	protected static int repeats = 3;
 	
 	public TestAlgorithmNew(String name){
 		super(name);
@@ -41,8 +42,8 @@ public class TestAlgorithmNew extends TestCase {
 		boolean labs = false;
 		if(labs){
 			//Stuff for testing
-			
-			for(int k = 0; k < 3; k++){
+			initTimesAsked();
+			for(int k = 0; k < repeats; k++){
 			//Clean the database 
 			DbInitialiser.init();
 			
@@ -152,11 +153,30 @@ public class TestAlgorithmNew extends TestCase {
 		
 		
 			} //end of for
-			System.out.println("Average Success Rate: " + successRateSum);
+			double average = (successRateSum / (repeats * 1.0));
+			System.out.println("Average Success Rate: " + average );
+			printTimesAsked();
 		}
 	}
 	
+	protected void printTimesAsked(){
+		for(int i = 0; i < askPerTask.length; i++){
+			double out = ((askPerTask[i] * 1.0) / (numTasks * 1.0));
+			System.out.println("Average times question " + i + " asked: " + out);
+		}
+	}
 	
+	protected void updateTimesAsked(){
+		for(int i = 0; i < askPerTask.length; i++){
+			askPerTask[i] += SubTaskDb.getResponses(i);
+		}
+	}
+	
+	protected void initTimesAsked(){
+		for(int i = 0; i < askPerTask.length; i++){
+			askPerTask[i] = 0;
+		}
+	}
 	
 	protected void errorRates(LinkedList<AnnotatorSubTaskAnswer> answers){
 		System.out.println("---------Calculating label error rate--------------------");
