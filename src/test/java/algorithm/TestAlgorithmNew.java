@@ -147,10 +147,11 @@ public class TestAlgorithmNew extends TestCase {
 				if(i == (numTasks - 1)){
 					printAnnotators();
 					errorRates(answers);
+				
 				}
 
 			}
-		
+			updateTimesAsked();
 		
 			} //end of for
 			double average = (successRateSum / (repeats * 1.0));
@@ -161,14 +162,14 @@ public class TestAlgorithmNew extends TestCase {
 	
 	protected void printTimesAsked(){
 		for(int i = 0; i < askPerTask.length; i++){
-			double out = ((askPerTask[i] * 1.0) / (numTasks * 1.0));
+			double out = ((askPerTask[i] * 1.0) / (repeats * 1.0));
 			System.out.println("Average times question " + i + " asked: " + out);
 		}
 	}
 	
 	protected void updateTimesAsked(){
 		for(int i = 0; i < askPerTask.length; i++){
-			askPerTask[i] += SubTaskDb.getResponses(i);
+			askPerTask[i] += SubTaskDb.getResponses(i + 1);
 		}
 	}
 	
