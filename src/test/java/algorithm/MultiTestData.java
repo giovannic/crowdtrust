@@ -1,6 +1,6 @@
 package algorithm;
 
-import crowdtrust.MultiValueR;
+import crowdtrust.MultiValueResponse;
 import crowdtrust.Response;
 import crowdtrust.TaskType;
 
@@ -19,6 +19,6 @@ public class MultiTestData extends AlgoTestData {
 	}
 	
 	public Response getActualAnswer(){
-		return new MultiValueR(this.actualAnswer);
+		return new MultiValueResponse(this.actualAnswer);
 	}
 }

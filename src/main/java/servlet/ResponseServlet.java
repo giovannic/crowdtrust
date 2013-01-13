@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import crowdtrust.Bee;
-import crowdtrust.BinaryR;
-import crowdtrust.ContinuousR;
-import crowdtrust.MultiValueR;
+import crowdtrust.BinaryResponse;
+import crowdtrust.ContinuousResponse;
+import crowdtrust.MultiValueResponse;
 import crowdtrust.Response;
 import crowdtrust.SubTask;
 
@@ -57,14 +57,14 @@ public class ResponseServlet extends HttpServlet {
 			case 1:
 				int rInt = Integer.parseInt(request.getParameter("response"));
 				if (rInt == 0)
-					r = new BinaryR(true);
+					r = new BinaryResponse(true);
 				else
-					r = new BinaryR(false);
+					r = new BinaryResponse(false);
 				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 2:
 				int s = Integer.parseInt(request.getParameter("response"));
-				r = new MultiValueR(s);
+				r = new MultiValueResponse(s);
 				subtask = db.SubTaskDb.getSubtask(subTaskId);
 				break;
 			case 3:
@@ -76,7 +76,7 @@ public class ResponseServlet extends HttpServlet {
 					int r2 = Integer.parseInt(request.getParameter("resp2"));
 					int r1 = Integer.parseInt(request.getParameter("resp1"));
 					int[] rs = {r1,r2,r3,r4};
-					r = new ContinuousR(rs);
+					r = new ContinuousResponse(rs);
 					subtask = db.SubTaskDb.getSubtask(subTaskId);
 //				}
 				break;

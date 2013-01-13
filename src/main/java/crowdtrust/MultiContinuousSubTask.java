@@ -10,21 +10,16 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	int [][] ranges;
 	double [][] variance;
 
-	MultiContinuousSubTask(double precision, double [][] variance, int d, 
-			int [][] ranges, int id, double confidence_threshold, 
+	MultiContinuousSubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
-		this.precision = precision;
-		this.variance = variance;
-		this.dimensions = d;
-		this.ranges = ranges;
 	}
 
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		SingleAccuracy sa = (SingleAccuracy) a;
-		ContinuousR cr = (ContinuousR) r;
-		ContinuousR cz = (ContinuousR) z;
+		ContinuousResponse cr = (ContinuousResponse) r;
+		ContinuousResponse cz = (ContinuousResponse) z;
 		
 		int total = a.getN();
 		double w = total/total + 1;
@@ -49,7 +44,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	@Override
 	protected void updateLikelihoods(Response r, Accuracy a,
 			Collection<Estimate> state) {
-		ContinuousR cr = (ContinuousR) r;
+		ContinuousResponse cr = (ContinuousResponse) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
@@ -69,7 +64,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 				matched = true;
 				record.incFrequency();
 			}
-			ContinuousR cr2 = (ContinuousR) record.getR();
+			ContinuousResponse cr2 = (ContinuousResponse) record.getR();
 			double p = sa.getAccuracy()*mgd.probability(cr2.getValues(precision)) +
 					(1 - sa.getAccuracy())/responseSpace;
 			double newRatio = Math.log(p/1-p);
@@ -112,5 +107,28 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	protected void initEstimate(Estimate e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	protected static double[][] identity(double d, int dim) {
+		double[][] covariance = new double [dim][dim];
+		for (int i = 0; i < dim; i++){
+			covariance[i][i] = d;
+		}
+		return covariance;
+	}
+
+	@Override
+	protected void setRange(int[][] ranges) {
+		this.ranges = ranges;
+	}
+
+	@Override
+	protected void setDimensions(int length) {
+		dimensions = length;
+	}
+
+	@Override
+	protected void setVariance(double variance) {
+		this.variance = identity(variance, dimensions);
 	}
 }

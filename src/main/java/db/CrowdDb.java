@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
-import crowdtrust.BinaryR;
+import crowdtrust.BinaryResponse;
 import crowdtrust.SingleAccuracy;
 import crowdtrust.Account;
 
@@ -514,7 +514,7 @@ public class CrowdDb {
 				BinaryAccuracy accuracy;
 				accuracy = mapBinaryAccuracy(resultSet);
 				AccuracyRecord record = new AccuracyRecord(new Bee(account), accuracy);
-				record.setMostRecent(new BinaryR(resultSet.getString("response")));
+				record.setMostRecent(new BinaryResponse(resultSet.getString("response")));
 				as.add(record);
 			}
 			return as;
@@ -553,7 +553,7 @@ public class CrowdDb {
 				accuracy = new SingleAccuracy(resultSet.getFloat("accuracy"), 
 						resultSet.getInt("total"));
 				AccuracyRecord record = new AccuracyRecord(new Bee(account), accuracy);
-				record.setMostRecent(new BinaryR(resultSet.getString("response")));
+				record.setMostRecent(new BinaryResponse(resultSet.getString("response")));
 				as.add(record);
 			}
 			return as;

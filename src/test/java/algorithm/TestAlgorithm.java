@@ -18,7 +18,7 @@ import crowdtrust.AccuracyRecord;
 import crowdtrust.AnnotationType;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
-import crowdtrust.BinaryR;
+import crowdtrust.BinaryResponse;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.InputType;
@@ -186,7 +186,7 @@ public class TestAlgorithm extends TestCase {
 						answerBool = false;
 						negQuestions++;
 					}
-					int annotatorAnswer = annotators[i].getBinaryBehaviour().generateAnswer(new BinaryR(answerBool));
+					int annotatorAnswer = annotators[i].getBinaryBehaviour().generateAnswer(new BinaryResponse(answerBool));
 					if(annotatorAnswer == 1 & actualAnswer == 1){
 						truePos ++;
 					}else if(annotatorAnswer == 0 & actualAnswer == 0){

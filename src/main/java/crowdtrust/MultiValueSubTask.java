@@ -8,21 +8,20 @@ public class MultiValueSubTask extends SubTask{
 	
 	int options;
 
-	public MultiValueSubTask(int id, double confidence_threshold, 
-			int number_of_labels, int max_labels, int options){
+	MultiValueSubTask(int id, double confidence_threshold, 
+			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
-		this.options = options;
 	}
 
 	@Override
 	protected void updateLikelihoods(Response r, Accuracy a, 
 			Collection<Estimate> state) {
-		MultiValueR mvr = (MultiValueR) r;
+		MultiValueResponse mvr = (MultiValueResponse) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		if (state.isEmpty()){
 			for (int option = 1; option <= options; option++){
-				MultiValueR initR = new MultiValueR(option);
+				MultiValueResponse initR = new MultiValueResponse(option);
 				Estimate initE = new Estimate(initR, Math.log(getZPrior()/1 - getZPrior()),0);
 				state.add(initE);
 				initEstimate(initE);
@@ -50,8 +49,8 @@ public class MultiValueSubTask extends SubTask{
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		SingleAccuracy sa = (SingleAccuracy) a;
-		MultiValueR mvr = (MultiValueR) r;
-		MultiValueR mvz = (MultiValueR) z;
+		MultiValueResponse mvr = (MultiValueResponse) r;
+		MultiValueResponse mvz = (MultiValueResponse) z;
 		
 		int total = a.getN();
 		double w = (double)total/(total + 1);

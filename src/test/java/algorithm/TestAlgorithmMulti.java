@@ -18,7 +18,7 @@ import crowdtrust.AccuracyRecord;
 import crowdtrust.AnnotationType;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
-import crowdtrust.BinaryR;
+import crowdtrust.BinaryResponse;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.InputType;

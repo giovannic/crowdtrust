@@ -12,11 +12,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import crowdtrust.BinaryR;
-import crowdtrust.ContinuousR;
+import crowdtrust.BinaryResponse;
+import crowdtrust.BinarySubTaskBuilder;
+import crowdtrust.ContinuousResponse;
 import crowdtrust.ContinuousSubTask;
-import crowdtrust.MultiValueR;
+import crowdtrust.ContinuousSubTaskBuilder;
+import crowdtrust.MultiValueResponse;
 import crowdtrust.MultiValueSubTask;
+import crowdtrust.MultiValueSubTaskBuilder;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
 import crowdtrust.BinarySubTask;
@@ -511,16 +514,25 @@ public class SubTaskDb {
 		String fileName = rs.getString("f");
 		switch(type){
 		case 1:
-			s = new BinarySubTask(id, taskAccuracy,
-					responses, maxLabels);
+			BinarySubTaskBuilder sb;
+			sb = new BinarySubTaskBuilder(
+					id, taskAccuracy, responses, maxLabels);
+			s = sb.build();
 			break;
 		case 2:
-			s = new MultiValueSubTask(id, taskAccuracy, responses, 
-					maxLabels, Integer.parseInt(finish));
+			MultiValueSubTaskBuilder mvsb;
+			mvsb = new MultiValueSubTaskBuilder(
+					id, taskAccuracy, responses, maxLabels);
+			mvsb.options(Integer.parseInt(finish));
+			s = mvsb.build();
 			break;
 		case 3:
-			s = ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
-					maxLabels, start, finish, precision);
+			ContinuousSubTaskBuilder csb;
+			csb = new ContinuousSubTaskBuilder(
+					id, taskAccuracy, responses, maxLabels);
+			csb.setRanges(start, finish);
+			csb.setPrecision(precision);
+			s = csb.build();
 			break;
 		}
 		s.addFileName(fileName);
@@ -553,13 +565,13 @@ public class SubTaskDb {
 		try {
 			switch (type){
 			case 1:
-				r = new BinaryR(s);
+				r = new BinaryResponse(s);
 				break;
 			case 2:
-				r = new MultiValueR(s);
+				r = new MultiValueResponse(s);
 				break;
 			case 3:
-				r = new ContinuousR(s);
+				r = new ContinuousResponse(s);
 				break;
 			}
 		} catch (NumberFormatException e) {

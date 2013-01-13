@@ -1,6 +1,6 @@
 package algorithm;
 
-import crowdtrust.BinaryR;
+import crowdtrust.BinaryResponse;
 import crowdtrust.Response;
 import crowdtrust.TaskType;
 
@@ -14,6 +14,6 @@ public class BinaryTestData extends AlgoTestData {
 
 	@Override
 	public Response getActualAnswer() {
-		return actualAnswer == 1 ? new BinaryR(true) : new BinaryR(false);
+		return actualAnswer == 1 ? new BinaryResponse(true) : new BinaryResponse(false);
 	}
 }

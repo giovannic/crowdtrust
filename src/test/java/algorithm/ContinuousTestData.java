@@ -1,6 +1,6 @@
 package algorithm;
 
-import crowdtrust.ContinuousR;
+import crowdtrust.ContinuousResponse;
 import crowdtrust.Response;
 import crowdtrust.TaskType;
 
@@ -19,6 +19,6 @@ public class ContinuousTestData extends AlgoTestData {
 	}
 	
 	public Response getActualAnswer(){
-		return new ContinuousR (actualAnswer);
+		return new ContinuousResponse (actualAnswer);
 	}
 }
