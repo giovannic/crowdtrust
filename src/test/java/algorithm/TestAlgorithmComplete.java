@@ -15,6 +15,7 @@ import crowdtrust.AnnotationType;
 import crowdtrust.BinarySubTask;
 import crowdtrust.InputType;
 import crowdtrust.MediaType;
+import crowdtrust.MultiValueSubTask;
 import crowdtrust.SubTask;
 
 import db.LoginDb;
@@ -52,6 +53,8 @@ public class TestAlgorithmComplete extends TestCase {
 	protected static float binaryAccuracy     = (float) 0.7;
 	protected static float multiAccuracy      = (float) 0.7;
 	protected static float continuousAccuracy = (float) 0.7;
+	
+	protected static int multiLabels = 5;
 	
 	protected static int allowedToAnswer = 10;
 	
@@ -104,17 +107,17 @@ public class TestAlgorithmComplete extends TestCase {
 			
 			//Add the binary tasks and subtasks
 			if(binary){
-				for(int i = 0; i < binaryTasks; i++){
+				for(int i = 0; i < binaryTasks; i++){	//make x binary tasks
 					String name = getRandomName();
 					List<String> testQs = new LinkedList<String>();
-					testQs.add("test q1");
+					testQs.add("test q1");	//constructor got binary tasks
 					testQs.add("test q2");
 					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", binaryAccuracy,
 							       MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, 
 							       allowedToAnswer , getDate(), testQs, new LinkedList<String>(), 
 							       new LinkedList<String>(), 0);
-					int id = TaskDb.getTaskId(name);
-					for(int j = 0; j < subTasksPerTask; j++){
+					int id = TaskDb.getTaskId(name);	
+					for(int j = 0; j < subTasksPerTask; j++){	//create subtasks for this task
 						String sname = getRandomName();
 						SubTaskDb.addSubtask(sname, id);
 						int sid = SubTaskDb.getSubTaskId(sname);
@@ -127,8 +130,23 @@ public class TestAlgorithmComplete extends TestCase {
 			//Add the multi tasks and subtasks
 			if(multi){
 				for(int i = 0; i < multiTasks; i++){
+					String name = getRandomName();
+					List<String> testQs = new LinkedList<String>();
+					testQs.add("test q1");	//constructor got binary tasks
+					testQs.add("test q2");
+					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", multiAccuracy,
+							       MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 
+							       allowedToAnswer , getDate(), testQs, new LinkedList<String>(), 
+							       new LinkedList<String>(), 0);
+					int id = TaskDb.getTaskId(name);	
 					for(int j = 0; j < subTasksPerTask; j++){
-
+						String sname = getRandomName();
+						SubTaskDb.addSubtask(sname, id);
+						int sid = SubTaskDb.getSubTaskId(sname);
+						MultiValueSubTask mst = new MultiValueSubTask(sid, multiAccuracy, multiLabels ,allowedToAnswer);
+						AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst,
+																				 new MultiTestData((rand.nextInt(multiLabels) + 1), multiLabels));
+						answers.add(asta);
 					}			
 				}
 			}

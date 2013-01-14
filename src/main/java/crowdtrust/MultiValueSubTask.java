@@ -9,7 +9,7 @@ public class MultiValueSubTask extends SubTask{
 	
 	int options;
 
-	MultiValueSubTask(int id, double confidence_threshold, 
+	public MultiValueSubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
 	}
