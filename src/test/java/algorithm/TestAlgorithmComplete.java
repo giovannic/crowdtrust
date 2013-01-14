@@ -15,6 +15,7 @@ import crowdtrust.AnnotationType;
 import crowdtrust.BinarySubTask;
 import crowdtrust.InputType;
 import crowdtrust.MediaType;
+import crowdtrust.SubTask;
 
 import db.LoginDb;
 import db.RegisterDb;
@@ -42,13 +43,17 @@ public class TestAlgorithmComplete extends TestCase {
 	protected static double multiBots      = 0.9;
 	protected static double continuousBots = 0.9;
 	
-	protected static int binaryTasks = 1 ;  protected int  binarySubTasksPerTask = 10;
-	protected static int multiTasks  = 1 ;  protected int  multiSubTasksPerTask  = 10;
-	protected static int continTasks = 1 ;  protected int  continSubTasksPerTask = 10;
+	protected static int binaryTasks = 1 ;  
+	protected static int multiTasks  = 0 ;  
+	protected static int continTasks = 0 ;  
+	protected static int totalTasks  = 1 ;
+	protected static int subTasksPerTask = 10;
 	
 	protected static float binaryAccuracy     = (float) 0.7;
 	protected static float multiAccuracy      = (float) 0.7;
 	protected static float continuousAccuracy = (float) 0.7;
+	
+	protected static int allowedToAnswer = 10;
 	
 	protected static LinkedList<AnnotatorSubTaskAnswer> answers;
 	
@@ -106,10 +111,10 @@ public class TestAlgorithmComplete extends TestCase {
 					testQs.add("test q2");
 					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", binaryAccuracy,
 							       MediaType.IMAGE, AnnotationType.BINARY, InputType.RADIO, 
-							       10 , getDate(), testQs, new LinkedList<String>(), 
+							       allowedToAnswer , getDate(), testQs, new LinkedList<String>(), 
 							       new LinkedList<String>(), 0);
 					int id = TaskDb.getTaskId(name);
-					for(int j = 0; j < binarySubTasksPerTask; j++){
+					for(int j = 0; j < subTasksPerTask; j++){
 						String sname = getRandomName();
 						SubTaskDb.addSubtask(sname, id);
 						int sid = SubTaskDb.getSubTaskId(sname);
@@ -122,7 +127,7 @@ public class TestAlgorithmComplete extends TestCase {
 			//Add the multi tasks and subtasks
 			if(multi){
 				for(int i = 0; i < multiTasks; i++){
-					for(int j = 0; j < multiSubTasksPerTask; j++){
+					for(int j = 0; j < subTasksPerTask; j++){
 
 					}			
 				}
@@ -130,15 +135,31 @@ public class TestAlgorithmComplete extends TestCase {
 			//Add the continuous tasks and subtaks
 			if(continuous){
 				for(int i = 0; i < continTasks; i++){
-					for(int j = 0; j < continSubTasksPerTask; j++){
+					for(int j = 0; j < subTasksPerTask; j++){
 
 					}			
 				}
 			}
 			
-			//Give all the annotators the answers
+			//Give all the annotators the answ			TaskDb.gers
 			for(int i = 0; i < numCrowd; i++){
 				annotators[i].setTasks(answers);
+			}
+			
+			//Lets start answering some questions
+			
+			for(int i = 0; i < totalTasks; i++){				//Loop through all the tasks
+				for(int j = 0; j < subTasksPerTask; j++){		//Loop through all subtasks of said task
+					LinkedList<Integer> picked = new LinkedList<Integer>();
+					for(int k = 0; k < allowedToAnswer; k++){	
+						int randIndex = rand.nextInt(numCrowd);
+						while(!(picked.contains(randIndex))){
+							randIndex = rand.nextInt(numCrowd);
+						}
+					    SubTask t = SubTaskDb.getSequentialSubTask((i + 1), annotators[randIndex].bee.getId());
+						annotators[randIndex].answerTask(t);
+					}
+				}
 			}
 			
 		
