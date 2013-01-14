@@ -3,7 +3,6 @@ package algorithm;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,20 +11,15 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
-
-import crowdtrust.AccuracyRecord;
 import crowdtrust.AnnotationType;
-import crowdtrust.Bee;
-import crowdtrust.BinaryAccuracy;
-import crowdtrust.BinaryResponse;
-import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.InputType;
 import crowdtrust.MediaType;
 import crowdtrust.MultiValueSubTask;
+import crowdtrust.MultiValueSubTaskBuilder;
 import crowdtrust.Response;
 import crowdtrust.SingleAccuracy;
+import crowdtrust.SubTask;
 
 import db.DbInitialiser;
 import db.LoginDb;
@@ -118,8 +112,9 @@ public class TestAlgorithmMulti extends TestCase {
 			int id = SubTaskDb.getSubTaskId(uuid);
 			System.out.println("Subtask Id: " + id);
 			
-			
-			MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, 0, 15, 5);
+			MultiValueSubTaskBuilder b = new MultiValueSubTaskBuilder(id, 0.7, 0, 15);
+			b.options(5);
+			SubTask mst = b.build();
 			AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiTestData(rand.nextInt(6), 5));
 			answers.add(asta);
 		}

@@ -1,3 +1,5 @@
+#DS store
+
 #report latex compilation files
 *.log
 *.aux
@@ -16,6 +18,9 @@ conf/Catalina/
 
 #target files
 target*
+
+#presenation files
+presentation*
 
 #eclipse
 .classpath

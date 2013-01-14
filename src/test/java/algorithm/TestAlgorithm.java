@@ -3,7 +3,6 @@ package algorithm;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,11 +11,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
-
-import crowdtrust.AccuracyRecord;
 import crowdtrust.AnnotationType;
-import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinaryResponse;
 import crowdtrust.BinarySubTask;
