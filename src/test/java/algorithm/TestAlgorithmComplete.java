@@ -26,8 +26,8 @@ import db.TaskDb;
 import junit.framework.TestCase;
 
 public class TestAlgorithmComplete extends TestCase {
-	protected static boolean binary     = true;
-	protected static boolean multi      = false;
+	protected static boolean binary     = false;
+	protected static boolean multi      = true;
 	protected static boolean continuous = false;
 	
 	protected static boolean labs       = false;
@@ -44,8 +44,8 @@ public class TestAlgorithmComplete extends TestCase {
 	protected static double multiBots      = 0.9;
 	protected static double continuousBots = 0.9;
 	
-	protected static int binaryTasks = 1 ;  
-	protected static int multiTasks  = 0 ;  
+	protected static int binaryTasks = 0 ;  
+	protected static int multiTasks  = 1 ;  
 	protected static int continTasks = 0 ;  
 	protected static int totalTasks  = 1 ;
 	protected static int subTasksPerTask = 10;
@@ -134,6 +134,9 @@ public class TestAlgorithmComplete extends TestCase {
 					List<String> testQs = new LinkedList<String>();
 					testQs.add("test q1");	//constructor got binary tasks
 					testQs.add("test q2");
+					testQs.add("test q3");
+					testQs.add("test q4");
+					testQs.add("test q5");
 					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", multiAccuracy,
 							       MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 
 							       allowedToAnswer , getDate(), testQs, new LinkedList<String>(), 
