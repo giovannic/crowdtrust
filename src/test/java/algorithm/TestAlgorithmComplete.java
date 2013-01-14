@@ -153,7 +153,7 @@ public class TestAlgorithmComplete extends TestCase {
 					LinkedList<Integer> picked = new LinkedList<Integer>();
 					for(int k = 0; k < allowedToAnswer; k++){	
 						int randIndex = rand.nextInt(numCrowd);
-						while(!(picked.contains(randIndex))){
+						while(picked.contains(randIndex)){
 							randIndex = rand.nextInt(numCrowd);
 							System.out.println("Picking randIndex " + randIndex);
 						}
