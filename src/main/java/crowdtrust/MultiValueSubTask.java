@@ -2,6 +2,7 @@ package crowdtrust;
 
 import java.util.Collection;
 
+import db.CrowdDb;
 import db.SubTaskDb;
 
 public class MultiValueSubTask extends SubTask{
@@ -96,13 +97,12 @@ public class MultiValueSubTask extends SubTask{
 
 	@Override
 	protected Collection<Estimate> getEstimates(int id) {
-		return SubTaskDb.getBinaryEstimates(id);
+		return SubTaskDb.getMultiValueEstimates(id);
 	}
 
 	@Override
 	protected Collection<AccuracyRecord> getAnnotators() {
-		// TODO Auto-generated method stub
-		return null;
+		return CrowdDb.getMultiValueAnnotators(id);
 	}
 
 }

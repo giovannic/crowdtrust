@@ -8,9 +8,12 @@ import crowdtrust.AccuracyRecord;
 import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
 import crowdtrust.BinaryResponse;
+import crowdtrust.ContinuousResponse;
+import crowdtrust.MultiValueResponse;
 import crowdtrust.SingleAccuracy;
 import crowdtrust.Account;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -525,6 +528,51 @@ public class CrowdDb {
 		return null;
 	}
 	
+	public static Collection<AccuracyRecord> getMultiValueAnnotators(int id) {
+		PreparedStatement preparedStatement;
+		String sql = "SELECT responses.account, response, accuracy, total " +
+				"FROM responses JOIN multivalueaccuracies " +
+				"ON responses.account = multivalueaccuracies.account " +
+				"WHERE subtask = ?";
+    try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return null;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return null;
+    }
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			Collection<AccuracyRecord> as = new ArrayList<AccuracyRecord>();
+			int account;
+			while(resultSet.next()) {
+				account = resultSet.getInt(1);
+				
+				SingleAccuracy accuracy;
+				accuracy = new SingleAccuracy(resultSet.getFloat("accuracy"), 
+						resultSet.getInt("total"));
+				AccuracyRecord record = new AccuracyRecord(new Bee(account), accuracy);
+				record.setMostRecent(new MultiValueResponse(resultSet.getString("response")));
+				as.add(record);
+			}
+			return as;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		catch(NumberFormatException ne){
+			ne.printStackTrace();
+		}
+		catch(UnsupportedEncodingException ue){
+			ue.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static Collection<AccuracyRecord> getContinuousAnnotators(int id) {
 		PreparedStatement preparedStatement;
 		String sql = "SELECT responses.account, response, accuracy, total " +
@@ -553,7 +601,7 @@ public class CrowdDb {
 				accuracy = new SingleAccuracy(resultSet.getFloat("accuracy"), 
 						resultSet.getInt("total"));
 				AccuracyRecord record = new AccuracyRecord(new Bee(account), accuracy);
-				record.setMostRecent(new BinaryResponse(resultSet.getString("response")));
+				record.setMostRecent(new ContinuousResponse(resultSet.getString("response")));
 				as.add(record);
 			}
 			return as;

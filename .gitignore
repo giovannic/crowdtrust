@@ -1,4 +1,5 @@
 #DS store
+src/main/webapp/.DS_Store
 
 #report latex compilation files
 *.log
