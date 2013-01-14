@@ -158,7 +158,11 @@ public class TestAlgorithmComplete extends TestCase {
 							System.out.println("Picking randIndex " + randIndex);
 						}
 					    SubTask t = SubTaskDb.getSequentialSubTask((i + 1), annotators[randIndex].bee.getId());
-						annotators[randIndex].answerTask(t);
+						if(t == null){
+							break;
+						}else{
+							annotators[randIndex].answerTask(t);
+						}
 					}
 				}
 			}
