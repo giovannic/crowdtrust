@@ -19,26 +19,31 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
     
 
   public void testBinaryAccuracyIsAboveZeroForTruePositiveInsert() {
+	System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(belowZero, correct, 0, 0);
     assertFalse(CrowdDb.insertBinaryAccuracy(id, accuracy));
   }
 
   public void testBinaryAccuracyIsBelowOneForTruePositiveInsert() {
+		System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(aboveOne, correct, 0, 0);
     assertFalse(CrowdDb.insertBinaryAccuracy(id, accuracy));
   }
 
   public void testBinaryAccuracyIsAboveZeroForTrueNegativeInsert() {
+		System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(correct, belowZero, 0, 0);
     assertFalse(CrowdDb.insertBinaryAccuracy(id, accuracy));
   }
 
   public void testBinaryAccuracyIsBelowOneForTrueNegativeInsert() {
+		System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(correct, aboveOne, 0, 0);
     assertFalse(CrowdDb.insertBinaryAccuracy(id, accuracy));
   }
 
   public void testBinaryAccuracyIsAboveZeroForTruePositiveUpdate() {
+		System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(belowZero, correct, 0, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
@@ -47,6 +52,7 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
   }
 
   public void testBinaryAccuracyIsBelowOneForTruePositiveUpdate() {
+		System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(aboveOne, correct, 0, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
@@ -55,6 +61,7 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
   }
 
   public void testBinaryAccuracyIsAboveZeroForTrueNegativeUpdate() {
+		System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(correct, belowZero, 0, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
@@ -63,6 +70,7 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
   }
 
   public void testBinaryAccuracyIsBelowOneForTrueNegativeUpdate() {
+		System.setProperty("test", "false");
     BinaryAccuracy accuracy = new BinaryAccuracy(correct, aboveOne, 0, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
@@ -72,6 +80,7 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
 
 
   public void testMultiValueAccuracyIsAboveZero() {
+		System.setProperty("test", "false");
     SingleAccuracy accuracy = new SingleAccuracy(belowZero, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
@@ -80,6 +89,7 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
   }
 
   public void testMultiValueAccuracyIsBelowOne() {
+		System.setProperty("test", "false");
     SingleAccuracy accuracy = new SingleAccuracy(aboveOne, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
@@ -88,6 +98,7 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
   }
 
   public void testContinuousAccuracyIsAboveZero() {
+		System.setProperty("test", "false");
     SingleAccuracy accuracy = new SingleAccuracy(belowZero, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
@@ -96,6 +107,7 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
   }
 
   public void testContinuousAccuracyIsBelowOne() {
+		System.setProperty("test", "false");
     SingleAccuracy accuracy = new SingleAccuracy(aboveOne, 0);
     AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
     List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
