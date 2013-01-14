@@ -155,6 +155,7 @@ public class TestAlgorithmComplete extends TestCase {
 						int randIndex = rand.nextInt(numCrowd);
 						while(!(picked.contains(randIndex))){
 							randIndex = rand.nextInt(numCrowd);
+							System.out.println("Picking randIndex " + randIndex);
 						}
 					    SubTask t = SubTaskDb.getSequentialSubTask((i + 1), annotators[randIndex].bee.getId());
 						annotators[randIndex].answerTask(t);
