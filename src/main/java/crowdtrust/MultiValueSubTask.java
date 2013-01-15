@@ -76,7 +76,7 @@ public class MultiValueSubTask extends SubTask{
 
 	@Override
 	protected double getZPrior() {
-		double p = 1/options;
+		double p = (double)1/options;
 		return p/(1-p);
 	}
 
