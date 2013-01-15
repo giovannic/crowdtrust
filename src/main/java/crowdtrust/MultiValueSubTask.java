@@ -23,7 +23,7 @@ public class MultiValueSubTask extends SubTask{
 		if (state.isEmpty()){
 			for (int option = 1; option <= options; option++){
 				MultiValueResponse initR = new MultiValueResponse(option);
-				Estimate initE = new Estimate(initR, Math.log(getZPrior()/1 - getZPrior()),0);
+				Estimate initE = new Estimate(initR, Math.log(getZPrior()/(1-getZPrior())),0);
 				state.add(initE);
 				initEstimate(initE);
 			}
@@ -61,7 +61,7 @@ public class MultiValueSubTask extends SubTask{
 		} else {
 			sa.setAccuracy(w*(alpha/total));
 		}
-		a.increaseN();
+		sa.increaseN();
 	}
 
 	@Override
