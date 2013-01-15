@@ -2,6 +2,8 @@ package crowdtrust;
 
 import java.util.Collection;
 
+import db.SubTaskDb;
+
 public abstract class ContinuousSubTask extends SubTask {
 
 	double precision;
@@ -51,5 +53,20 @@ public abstract class ContinuousSubTask extends SubTask {
 	protected abstract void setDimensions(int length);
 
 	protected abstract void setVariance(double variance);
+	
+	@Override
+	protected Collection<Estimate> getEstimates(int id) {
+		return SubTaskDb.getContinuousEstimates(id);
+	}
+
+	@Override
+	protected void updateEstimates(Collection<Estimate> state) {
+		SubTaskDb.updateEstimates(state, id);
+	}
+
+	@Override
+	protected void initEstimate(Estimate e) {
+		SubTaskDb.addEstimate(e, id);
+	}
 	
 }

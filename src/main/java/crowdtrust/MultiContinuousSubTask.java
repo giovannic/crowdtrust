@@ -90,24 +90,6 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		double p = 1/responseSpace;
 		return p/(1-p);
 	}
-
-	@Override
-	protected Collection<Estimate> getEstimates(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected void updateEstimates(Collection<Estimate> state) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void initEstimate(Estimate e) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	protected static double[][] identity(double d, int dim) {
 		double[][] covariance = new double [dim][dim];

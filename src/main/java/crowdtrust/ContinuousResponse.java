@@ -1,5 +1,7 @@
 package crowdtrust;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class ContinuousResponse extends Response {
@@ -20,7 +22,8 @@ public class ContinuousResponse extends Response {
 	
 	@Override
 	public String serialise() {
-		return StringUtils.join(values);
+		String [] rep = Arrays.toString(values).split("[\\[\\]]")[1].split(", ");
+		return StringUtils.join(rep, "/");
 	}
 
 	@Override
