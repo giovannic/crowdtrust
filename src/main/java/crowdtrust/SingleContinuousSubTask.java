@@ -51,6 +51,8 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 			
 		double pResponseSpace = 1/((range[1] - range[0])*precision);
 		
+		//base confidence to be computed 
+		//if the response has not appeared before
 		double freshConfidence = (getZPrior()/(1-getZPrior()));
 			
 		for (Estimate record : state){
