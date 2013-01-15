@@ -171,17 +171,19 @@ public class TestAlgorithmComplete extends TestCase {
 					String name = getRandomName();
 					List<String> testQs = new LinkedList<String>();
 					testQs.add("test q1");	//constructor got binary tasks
-					testQs.add("test q2");
-					testQs.add("test q3");
-					testQs.add("test q4");
-					testQs.add("test q5");
 					LinkedList<String> mins = new LinkedList<String>();
-					mins.add("1");
+					mins.add("0");
+					mins.add("0");
+					mins.add("0");
+					mins.add("0");
 					LinkedList<String> maxs = new LinkedList<String>();
-					maxs.add("5");
-					double step = 0;
-					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", multiAccuracy,
-							       MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 
+					maxs.add("100");
+					maxs.add("100");
+					maxs.add("100");
+					maxs.add("100");
+					double step = 1;
+					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", continuousAccuracy,
+							       MediaType.IMAGE, AnnotationType.CONTINUOUS, InputType.RADIO, 
 							       allowedToAnswer , getDate(), testQs, mins, maxs, step);
 					int id = TaskDb.getTaskId(name);	
 					for(int j = 0; j < subTasksPerTask; j++){
