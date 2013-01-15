@@ -34,12 +34,7 @@ public class ContinuousSubTaskBuilder extends SubTaskBuilder{
 			ranges[i][1] = Integer.parseInt(finishs[i]);
 		}
 		
-		double responseSpace = 1;
-		for (int i = 0; i < dimensions; i++){
-			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
-		}
-		
-		double variance = responseSpace/(10*dimensions);
+		double variance = 4*precision;
 		ContinuousSubTask c;
 		if (starts.length == 1){
 			c = new SingleContinuousSubTask(id, confidence_threshold, 
