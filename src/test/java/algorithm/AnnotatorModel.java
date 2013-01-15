@@ -77,9 +77,9 @@ public class AnnotatorModel {
 			//Link with gios code
 			task.addResponse(this.bee, new MultiValueResponse(answer));
 		}else if(task instanceof SingleContinuousSubTask){
-			//Leave for now
 		}else if(task instanceof MultiContinuousSubTask){
-			//leave for now
+			ContinuousTestData testData = ((ContinuousTestData) savedTask.getAlgoTestData());
+			int[] answer = this.continuous.generateContinuousAnswer(testData.getPictureX(), testData.getPictureY(), (ContinuousResponse)testData.getActualAnswer());
 		}
 	
 	}

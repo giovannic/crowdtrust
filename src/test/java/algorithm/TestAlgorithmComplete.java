@@ -13,9 +13,12 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 
 import crowdtrust.AnnotationType;
 import crowdtrust.BinarySubTask;
+import crowdtrust.ContinuousSubTask;
 import crowdtrust.InputType;
 import crowdtrust.MediaType;
+import crowdtrust.MultiContinuousSubTask;
 import crowdtrust.MultiValueSubTask;
+import crowdtrust.SingleContinuousSubTask;
 import crowdtrust.SubTask;
 
 import db.LoginDb;
@@ -53,6 +56,10 @@ public class TestAlgorithmComplete extends TestCase {
 	protected static float binaryAccuracy     = (float) 0.7;
 	protected static float multiAccuracy      = (float) 0.7;
 	protected static float continuousAccuracy = (float) 0.7;
+	
+	protected int continPictureX = 100;
+	protected int continPictureY = 100;
+	protected int[] continAnswer = {1, 2, 3, 4};
 	
 	protected static int multiLabels = 5;
 	
@@ -150,7 +157,8 @@ public class TestAlgorithmComplete extends TestCase {
 						String sname = getRandomName();
 						SubTaskDb.addSubtask(sname, id);
 						int sid = SubTaskDb.getSubTaskId(sname);
-						MultiValueSubTask mst = new MultiValueSubTask(sid, multiAccuracy, multiLabels ,allowedToAnswer);
+						//Changed by john
+						MultiValueSubTask mst = new MultiValueSubTask(sid, multiAccuracy, 0,allowedToAnswer);
 						AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst,
 																				 new MultiTestData((rand.nextInt(multiLabels) + 1), multiLabels));
 						answers.add(asta);
@@ -160,8 +168,30 @@ public class TestAlgorithmComplete extends TestCase {
 			//Add the continuous tasks and subtaks
 			if(continuous){
 				for(int i = 0; i < continTasks; i++){
+					String name = getRandomName();
+					List<String> testQs = new LinkedList<String>();
+					testQs.add("test q1");	//constructor got binary tasks
+					testQs.add("test q2");
+					testQs.add("test q3");
+					testQs.add("test q4");
+					testQs.add("test q5");
+					LinkedList<String> mins = new LinkedList<String>();
+					mins.add("1");
+					LinkedList<String> maxs = new LinkedList<String>();
+					maxs.add("5");
+					double step = 0;
+					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", multiAccuracy,
+							       MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 
+							       allowedToAnswer , getDate(), testQs, mins, maxs, step);
+					int id = TaskDb.getTaskId(name);	
 					for(int j = 0; j < subTasksPerTask; j++){
-
+						String sname = getRandomName();
+						SubTaskDb.addSubtask(sname, id);
+						int sid = SubTaskDb.getSubTaskId(sname);
+						MultiContinuousSubTask cst = new MultiContinuousSubTask(sid, continuousAccuracy, 0 ,allowedToAnswer);
+						AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(cst.getId(), cst,
+																				 new ContinuousTestData(continPictureX, continPictureY, continAnswer));
+						answers.add(asta);
 					}			
 				}
 			}
