@@ -696,4 +696,74 @@ public class CrowdDb {
 		}
 		return null;
 	}
+
+	public static boolean checkContinuousAccuraciesForExperts() {
+		PreparedStatement preparedStatement;
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT continuousaccuracies.accuracy ");
+		sql.append("FROM continuousaccuracies JOIN experts ");
+		sql.append("ON experts.account = continuousaccuracies.account ");
+		sql.append("WHERE experts.type = 3");
+		try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return false;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return false;
+    }
+		try {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				while(resultSet.next()) {
+					double accuracy = resultSet.getDouble(1);
+					if(accuracy < 0.85) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static boolean checkMultiValueAccuraciesForExperts() {
+		PreparedStatement preparedStatement;
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT multivalueaccuracies.accuracy ");
+		sql.append("FROM multivalueaccuracies JOIN experts ");
+		sql.append("ON experts.account = multivalueaccuracies.account ");
+		sql.append("WHERE experts.type = 2");
+		try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return false;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return false;
+    }
+		try {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()) {
+				while(resultSet.next()) {
+					double accuracy = resultSet.getDouble(1);
+					if(accuracy < 0.85) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }
