@@ -29,6 +29,8 @@ public class MultiValueSubTask extends SubTask{
 			}
 		}
 		
+		System.out.println("prior " + getZPrior());
+		
 		for (Estimate record : state){
 			if(record.getR().equals(mvr)){
 				record.setConfidence(record.getConfidence() +
@@ -40,6 +42,9 @@ public class MultiValueSubTask extends SubTask{
 						Math.log(ia/(1-ia)));
 			}
 		}
+		
+		System.out.println("accuracy " + sa.getAccuracy() + 
+				" inverse " + inverseAccuracy(sa.getAccuracy()));
 		
 	}
 
@@ -62,6 +67,8 @@ public class MultiValueSubTask extends SubTask{
 			sa.setAccuracy(w*(alpha/total));
 		}
 		sa.increaseN();
+		System.out.println("maxing accuracy" + 
+				sa.getN() + " " + total + " " + sa.getAccuracy());
 	}
 
 	@Override
