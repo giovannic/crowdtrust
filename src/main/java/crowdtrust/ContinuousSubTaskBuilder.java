@@ -39,7 +39,10 @@ public class ContinuousSubTaskBuilder extends SubTaskBuilder{
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
 		}
 		
-		double variance = Math.pow(responseSpace, 1/dimensions)/25;
+		//here variance is calculated on the response space and tuned
+		//to give the most accurate results
+		double variance = Math.pow(responseSpace, 1/dimensions)/10;
+		
 		ContinuousSubTask c;
 		if (starts.length == 1){
 			c = new SingleContinuousSubTask(id, confidence_threshold, 
