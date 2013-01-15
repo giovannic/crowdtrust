@@ -194,7 +194,7 @@ public class CrowdDb {
 		return null;
 	}
 
-	private static boolean insertMVAccuracy(int id, SingleAccuracy accuracy) {
+	public static boolean insertMVAccuracy(int id, SingleAccuracy accuracy) {
 		PreparedStatement preparedStatement;
 		String sql = "INSERT INTO multivalueaccuracies (account, accuracy, total) " +
 				"VALUES(?,?,?)";
@@ -254,7 +254,7 @@ public class CrowdDb {
 		return null;
 	}
 
-	private static boolean insertContinuousAccuracy(int id, SingleAccuracy accuracy) {
+	public static boolean insertContinuousAccuracy(int id, SingleAccuracy accuracy) {
 		PreparedStatement preparedStatement;
 		String sql = "INSERT INTO continuousaccuracies (account, accuracy, total) " +
 				"VALUES(?,?,?)";
