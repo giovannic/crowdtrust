@@ -48,10 +48,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 		session.setAttribute("account_name", username);
         if( isCrowd ) {
         	session.setAttribute("crowd", "true");
-    		response.sendRedirect("/crowd/profile.jsp");
+    		response.sendRedirect("/crowd/tasklist.jsp");
         } else {
         	session.setAttribute("crowd", "false");
-        	response.sendRedirect("/client/profile.jsp");
+        	response.sendRedirect("/client/addtask.jsp");
         }
         return;
     }

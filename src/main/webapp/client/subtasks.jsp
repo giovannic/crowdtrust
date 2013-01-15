@@ -6,11 +6,12 @@
 <%@ page import="crowdtrust.Estimate" %>
 
 <html>
+
+
   <%
+    int aid = (Integer) session.getAttribute("account_id");
     int tid = Integer.parseInt(request.getParameter("task_id"));
-    Collection <Result> results = SubTaskDb.getResults(tid);
-    
-    
+    Collection <Result> results = SubTaskDb.getResults(tid, aid);
   %>
   <head>
     
