@@ -1,8 +1,9 @@
 package algorithm;
 
 import java.util.Random;
-
+import crowdtrust.ContinuousResponse;
 import be.ac.ulg.montefiore.run.distributions.MultiGaussianDistribution;
+
 
 public class ContinuousBehaviour {
 	/*
@@ -16,54 +17,45 @@ public class ContinuousBehaviour {
 		this.honestyRating = honestyRating;
 	}
 	
-	public double[] generateContinuousAnswer(int pictureArea, double[] answer){
+	public int[] generateContinuousAnswer(int pictureX, int pictureY, ContinuousResponse response){
+		Random rand = new Random();
+		if(rand.nextDouble() > this.honestyRating){
+			return getRandomCoords(pictureX, pictureY);
+		}else{
+			//Mean is the actual answer
+			int[]   intmean        = response.getRawValues();
+			double[] mean = new double[4];
+			for(int i = 0; i < 4; i++){
+				mean[i] = intmean[i] * 1.0;
+			}
+			//Covariance as stated in the paper
+			double[][] covariance  = {
+								  	{4, 0, 0, 0},
+								  	{0, 4, 0, 0},
+								  	{0, 0, 4, 0},
+								  	{0, 0, 0, 4},
+									};
+			MultiGaussianDistribution mgd = new MultiGaussianDistribution(mean, covariance);
+			double[] ans = mgd.generate();
+			int [] intans = new int[4];
+			for(int i = 0; i < 4; i++){
+				intans[i] = (int) Math.round(ans[i]);
+			}
 		
-		//Mean is the actual answer
-		double[]   mean        = {answer[0], answer[1], answer[2], answer[3]};
-		//Covariance as stated in the paper
-		double[][] covariance  = {
-								  {4, 0, 0, 0},
-								  {0, 4, 0, 0},
-								  {0, 0, 4, 0},
-								  {0, 0, 0, 4},
-								 };
-		MultiGaussianDistribution mgd = new MultiGaussianDistribution(mean, covariance);
-		double[] lhs = mgd.generate();
-		double[] rhs = new double[4];
-		// aj * N(mean, covariance)
-		lhs = matrixMultiply(this.honestyRating, lhs);
-		//generate some random co-ordinates anywhere within the picture
-		rhs = getRandomCoords(pictureArea);
-		// (1 - aj) * 1/chi ^ 2
-		rhs = matrixMultiply((1 - this.honestyRating), rhs);
-		return matrixAddition(rhs, lhs);
+			return intans;
+		}
 	}
 	
 	
 	//Generated 2 random coords within the area of the picture
-	public double[] getRandomCoords(int pictureArea){
-		double[] ret = new double[4];
-		Random gen = new Random();
-		for(int i = 0; i < 4; i++){
-			ret[i] = gen.nextInt(101);
-		}
+	public int[] getRandomCoords(int pictureX, int pictureY){
+		int[] ret = new int[4];
+		Random rand = new Random();
+		ret[0] = rand.nextInt(pictureX);
+		ret[1] = rand.nextInt(pictureY);
+		ret[2] = rand.nextInt(pictureX);
+		ret[3] = rand.nextInt(pictureY);
 		return ret;
 	}
 	
-	//Multiplies a matrix by a constant
-	public double[] matrixMultiply(double multiplier, double[] matrix){
-		for(int i = 0; i < matrix.length; i++){
-			matrix[i] = matrix[i] * multiplier;
-		}
-		return matrix;
-	}
-	
-	//adds two arrays together basically
-	public double[] matrixAddition(double[] m1, double[] m2){
-		double[] ret = new double[4];
-		for(int i = 0; i < m1.length; i++){
-			ret[i] = m1[i] + m2[i];
-		}
-		return ret;
-	}
 }

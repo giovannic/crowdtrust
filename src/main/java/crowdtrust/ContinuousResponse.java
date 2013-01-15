@@ -40,5 +40,9 @@ public class ContinuousResponse extends Response {
 		}
 		return t;
 	}
+	
+	public int[] getRawValues(){
+		return this.values;
+	}
 
 }
