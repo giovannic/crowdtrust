@@ -360,7 +360,7 @@ public class CrowdDb {
 					return false;
 				} 
 				preparedStatement.setDouble(1, a);
-				preparedStatement.setInt(1, accuracy.getN());
+				preparedStatement.setInt(2, accuracy.getN());
 				preparedStatement.setInt(3, id);
 				preparedStatement.executeUpdate();
 			}
@@ -411,8 +411,8 @@ public class CrowdDb {
 					return false;
 				} 
 				preparedStatement.setDouble(1, a);
-				preparedStatement.setInt(1, accuracy.getN());
-				preparedStatement.setInt(2, id);
+				preparedStatement.setInt(2, accuracy.getN());
+				preparedStatement.setInt(3, id);
 				preparedStatement.executeUpdate();
 			}
       return true;
