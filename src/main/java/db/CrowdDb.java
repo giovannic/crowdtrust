@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 public class CrowdDb {
 
+	/* Adds a response to the response table in the database */
 	public static void addResponse(int account, String string, int subtask) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO responses (account, subtask, response)");
@@ -51,6 +52,7 @@ public class CrowdDb {
 		}
 	}
 
+	/* gets binary accuracy given an account id */
 	public static BinaryAccuracy getBinaryAccuracy(int id) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -84,6 +86,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* adds binary accuracy given the accuracy and account id */
 	public static boolean insertBinaryAccuracy(int id, BinaryAccuracy accuracy) {
 		PreparedStatement preparedStatement;
 		String sql = "INSERT INTO binaryaccuracies (account, truePositive, " +
@@ -116,6 +119,7 @@ public class CrowdDb {
 		}		
 	}
 
+	/* gets the account ids for a given subtask id */
 	public static Collection<Bee> getAnnotators(int subtask_id) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -147,6 +151,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* gets binary accuracies for a collection of account ids */
 	public static Collection<AccuracyRecord> getBinaryAccuracies(Collection<Bee> annotators) {
 		Collection<AccuracyRecord> records = new ArrayList<AccuracyRecord>();
 		for(Bee b : annotators) {
@@ -158,6 +163,7 @@ public class CrowdDb {
 		return records;
 	}
 
+	/* gets multivalue accuracy for a given account id */
 	public static SingleAccuracy getMultiValueAccuracy(int id) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -194,6 +200,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* inserts a multivalue accuracy given account id and accuracy. */
 	public static boolean insertMVAccuracy(int id, SingleAccuracy accuracy) {
 		PreparedStatement preparedStatement;
 		String sql = "INSERT INTO multivalueaccuracies (account, accuracy, total) " +
@@ -218,6 +225,7 @@ public class CrowdDb {
 		
 	}
 	
+	/* gets continuous accuracy given account id */
 	public static SingleAccuracy getContinuousAccuracy(int id) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -254,6 +262,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* inserts continuous accuracy given account id and accuracy */
 	public static boolean insertContinuousAccuracy(int id, SingleAccuracy accuracy) {
 		PreparedStatement preparedStatement;
 		String sql = "INSERT INTO continuousaccuracies (account, accuracy, total) " +
@@ -278,6 +287,7 @@ public class CrowdDb {
 		
 	}
 
+	/* update a collection of binary accuracies given a collection of account ids and accuracies */
 	public static boolean updateBinaryAccuracies(Collection<AccuracyRecord> accuracies) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -323,6 +333,7 @@ public class CrowdDb {
 		}
 	}
 
+	/* gets a collection of multivalue accuracies given a collection of account ids */
 	public static Collection<AccuracyRecord> getMultiValueAccuracies(Collection<Bee> annotators) {
 		Collection<AccuracyRecord> records = new ArrayList<AccuracyRecord>();
 		for(Bee bee : annotators) {
@@ -334,6 +345,7 @@ public class CrowdDb {
 		return records;	
 	}
 
+	/* updates multivalue accuracies given a collection of account ids and accuracies */
 	public static boolean updateMultiValueAccuracies(Collection<AccuracyRecord> accuracies) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -360,20 +372,18 @@ public class CrowdDb {
 					return false;
 				} 
 				preparedStatement.setDouble(1, a);
-				preparedStatement.setInt(2, accuracy.getN());
+				preparedStatement.setInt(1, accuracy.getN());
 				preparedStatement.setInt(3, id);
 				preparedStatement.executeUpdate();
 			}
       return true;
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			return false;
 		}
 	}
-	
-	
 
+	/* gets a collection continuous accuracies given a collection of account ids */
 	public static Collection<AccuracyRecord> getContinuousAccuracies(Collection<Bee> annotators) {
 		Collection<AccuracyRecord> records = new ArrayList<AccuracyRecord>();
 		for(Bee bee : annotators) {
@@ -385,6 +395,7 @@ public class CrowdDb {
 		return records;	
 	}
 
+	/* updates continuous accuracies given a collection of account ids and accuracies */
 	public static boolean updateContinuousAccuracies(Collection<AccuracyRecord> accuracies) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -411,8 +422,8 @@ public class CrowdDb {
 					return false;
 				} 
 				preparedStatement.setDouble(1, a);
-				preparedStatement.setInt(2, accuracy.getN());
-				preparedStatement.setInt(3, id);
+				preparedStatement.setInt(1, accuracy.getN());
+				preparedStatement.setInt(2, id);
 				preparedStatement.executeUpdate();
 			}
       return true;
@@ -446,6 +457,7 @@ public class CrowdDb {
 		updateBots(bots, 3);
 	}
 
+	/* maps a resultset to a binary accuracy */
 	private static BinaryAccuracy mapBinaryAccuracy(ResultSet resultSet) {
 		try {
 		double truePositive = resultSet.getDouble("truePositive");
@@ -461,6 +473,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* updates the experts list given a collection of experts and the annotation type */
 	private static void updateExperts(Collection<Bee> experts, int type) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -490,6 +503,7 @@ public class CrowdDb {
 		}
 	}
 
+	/* updates bot list given a collection of bots and annotation types */
 	private static void updateBots(Collection<Bee> bots, int type) {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -519,6 +533,7 @@ public class CrowdDb {
 		}
 	}
 
+	/* returns a list of all of the experts */
 	public static List<Account> getAllExperts() {
 		PreparedStatement preparedStatement;
 		String sql = "SELECT account FROM experts";
@@ -547,6 +562,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* returns a list of all of the bots */
 	public static List<Account> getAllBots() {
 		PreparedStatement preparedStatement;
 		String sql = "SELECT account FROM bots";
@@ -575,6 +591,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* returns a collection of all of the binary annotators for a given subtask */
 	public static Collection<AccuracyRecord> getBinaryAnnotators(int id) {
 		PreparedStatement preparedStatement;
 		String sql = "SELECT responses.account, response, truePositive, " +
@@ -614,6 +631,7 @@ public class CrowdDb {
 		return null;
 	}
 	
+	/* returns a list of all of the multi value annotators for a given subtask */
 	public static Collection<AccuracyRecord> getMultiValueAnnotators(int id) {
 		PreparedStatement preparedStatement;
 		String sql = "SELECT responses.account, response, accuracy, total " +
@@ -659,6 +677,7 @@ public class CrowdDb {
 		return null;
 	}
 	
+	/* returns a collection of all continuous annotators for a given subtask */
 	public static Collection<AccuracyRecord> getContinuousAnnotators(int id) {
 		PreparedStatement preparedStatement;
 		String sql = "SELECT responses.account, response, accuracy, total " +
@@ -698,6 +717,7 @@ public class CrowdDb {
 		return null;
 	}
 
+	/* checks all continuous task experts */
 	public static boolean checkContinuousAccuraciesForExperts() {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
@@ -733,6 +753,7 @@ public class CrowdDb {
 		}
 	}
 
+	/* checks all category task experts */
 	public static boolean checkMultiValueAccuraciesForExperts() {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
