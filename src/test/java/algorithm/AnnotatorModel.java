@@ -80,6 +80,7 @@ public class AnnotatorModel {
 		}else if(task instanceof MultiContinuousSubTask){
 			ContinuousTestData testData = ((ContinuousTestData) savedTask.getAlgoTestData());
 			int[] answer = this.continuous.generateContinuousAnswer(testData.getPictureX(), testData.getPictureY(), (ContinuousResponse)testData.getActualAnswer());
+			task.addResponse(this.bee, new ContinuousResponse(answer));
 		}
 	
 	}
