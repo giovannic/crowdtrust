@@ -63,7 +63,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 			ContinuousResponse cr2 = (ContinuousResponse) record.getR();
 			double p = sa.getAccuracy()*nd.density(cr2.getValues(precision)[0]) + 
 				(1-sa.getAccuracy())*pResponseSpace;
-			double newRatio = Math.log(p/(1-p));
+			double newRatio = Math.log(p/pResponseSpace);
 			record.setConfidence(record.getConfidence() + newRatio);
 			freshConfidence += newRatio;
 		}

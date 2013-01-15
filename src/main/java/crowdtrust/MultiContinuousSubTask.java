@@ -70,7 +70,8 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 			ContinuousResponse cr2 = (ContinuousResponse) record.getR();
 			double p = sa.getAccuracy()*mgd.probability(cr2.getValues(precision)) +
 					(1 - sa.getAccuracy())/responseSpace;
-			double newRatio = Math.log(p/(1-p));
+			
+			double newRatio = Math.log(p/(1/responseSpace));
 			record.setConfidence(record.getConfidence() + newRatio);
 			freshConfidence += newRatio;
 		}
