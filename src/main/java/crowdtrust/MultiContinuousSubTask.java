@@ -22,7 +22,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		ContinuousResponse cz = (ContinuousResponse) z;
 		
 		int total = a.getN() + 2;
-		double w = total/(total + 1);
+		double w = (double) total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		
 		MultiGaussianDistribution mgd =
