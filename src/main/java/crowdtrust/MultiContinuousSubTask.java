@@ -22,7 +22,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		ContinuousResponse cz = (ContinuousResponse) z;
 		
 		int total = a.getN() + 2;
-		double w = total/total + 1;
+		double w = total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		
 		MultiGaussianDistribution mgd =
@@ -35,7 +35,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		
 		//mle
 		double pLabel = mgd.probability(cr.getValues(precision));
-		double mle = pLabel/(pLabel + 1/responseSpace);
+		double mle = pLabel/(pLabel + (1/responseSpace));
 		sa.setAccuracy(w*(alpha/total) + (1-w)*mle);
 		a.increaseN();
 	}
@@ -82,7 +82,6 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 
 	@Override
 	protected double getZPrior() {
-		// TODO Auto-generated method stub
 		double responseSpace = 1;
 		for (int i = 0; i < ranges.length; i++){
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
