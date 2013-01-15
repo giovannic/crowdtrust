@@ -589,4 +589,8 @@ public class SubTaskDb {
 		return getEstimates(id, 2);
 	}
 
+	public static Collection<Estimate> getContinuousEstimates(int id) {
+		return getEstimates(id,3);
+	}
+
 }
