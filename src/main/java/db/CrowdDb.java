@@ -338,7 +338,7 @@ public class CrowdDb {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE multivalueaccuracies\n");
-		sql.append("SET accuracy = ?\n");
+		sql.append("SET accuracy = ?, total = ?\n");
 		sql.append("WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
@@ -356,11 +356,12 @@ public class CrowdDb {
 				int id = bee.getId();
 				SingleAccuracy accuracy = (SingleAccuracy) record.getAccuracy();
 				double a = accuracy.getAccuracy();
-        if (a < 0 || a > 1) {
-          return false;
-        } 
+				if (a < 0 || a > 1) {
+					return false;
+				} 
 				preparedStatement.setDouble(1, a);
-				preparedStatement.setInt(2, id);
+				preparedStatement.setInt(1, accuracy.getN());
+				preparedStatement.setInt(3, id);
 				preparedStatement.executeUpdate();
 			}
       return true;
@@ -369,6 +370,8 @@ public class CrowdDb {
 			return false;
 		}
 	}
+	
+	
 
 	public static Collection<AccuracyRecord> getContinuousAccuracies(Collection<Bee> annotators) {
 		Collection<AccuracyRecord> records = new ArrayList<AccuracyRecord>();
@@ -385,7 +388,7 @@ public class CrowdDb {
 		PreparedStatement preparedStatement;
 		StringBuilder sql = new StringBuilder();
 		sql.append("UPDATE continuousaccuracies\n");
-		sql.append("SET accuracy = ?\n");
+		sql.append("SET accuracy = ?, total = ?\n");
 		sql.append("WHERE account = ?");
     try {
       preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
@@ -403,10 +406,11 @@ public class CrowdDb {
 				int id = bee.getId();
 				SingleAccuracy accuracy = (SingleAccuracy) record.getAccuracy();
 				double a = accuracy.getAccuracy();
-        if (a < 0 || a > 1) {
-          return false;
-        } 
+				if (a < 0 || a > 1) {
+					return false;
+				} 
 				preparedStatement.setDouble(1, a);
+				preparedStatement.setInt(1, accuracy.getN());
 				preparedStatement.setInt(2, id);
 				preparedStatement.executeUpdate();
 			}
