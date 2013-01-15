@@ -31,6 +31,7 @@ import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
 
+	//change to test scaleability
 	protected static int annotatorNumber = 50;
 	protected static int subtasks = 200;
 	

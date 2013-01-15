@@ -16,7 +16,19 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
   private final double aboveOne = 1.5;
   private final double correct = 0.5;
   private final int id = 1;
-    
+
+  public void testBinaryAccuracyForCorrectInputInsert() {
+	  BinaryAccuracy accuracy = new BinaryAccuracy(correct, correct, 0, 0);
+	  assertTrue(CrowdDb.insertBinaryAccuracy(id, accuracy));
+  }
+  
+  public void testBinaryAccuracyForCorrectInputUpdate() {
+	  BinaryAccuracy accuracy = new BinaryAccuracy(correct, correct, 0, 0);
+	  AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
+      List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
+      list.add(record);
+      assertTrue(CrowdDb.updateBinaryAccuracies(list));
+  }
 
   public void testBinaryAccuracyIsAboveZeroForTruePositiveInsert() {
     BinaryAccuracy accuracy = new BinaryAccuracy(belowZero, correct, 0, 0);
@@ -86,6 +98,14 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
     list.add(record);
     assertFalse(CrowdDb.updateMultiValueAccuracies(list));
   }
+  
+  public void testMultiValueAccuracyIsCorrect() {
+	  SingleAccuracy accuracy = new SingleAccuracy(correct, 0);
+	  AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
+	  List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
+	  list.add(record);
+	  assertTrue(CrowdDb.updateMultiValueAccuracies(list));
+  }
 
   public void testContinuousAccuracyIsAboveZero() {
     SingleAccuracy accuracy = new SingleAccuracy(belowZero, 0);
@@ -103,4 +123,11 @@ public class TestAccuracyIsBetweenZeroAndOne extends TestCase {
     assertFalse(CrowdDb.updateContinuousAccuracies(list));
   }
 
+  public void testContinuousAccuracyIsCorrect() {
+	  SingleAccuracy accuracy = new SingleAccuracy(correct, 0);
+	  AccuracyRecord record = new AccuracyRecord(new Bee(id), accuracy);
+	  List<AccuracyRecord> list = new ArrayList<AccuracyRecord>();
+	  list.add(record);
+	  assertTrue(CrowdDb.updateContinuousAccuracies(list));
+  }
 }
