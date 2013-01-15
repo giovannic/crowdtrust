@@ -509,7 +509,7 @@ public class SubTaskDb {
 		int maxLabels = rs.getInt("ml");
 		String finish = rs.getString("finish");
 		String start = rs.getString("start");
-		float precision = rs.getFloat("p");
+		double precision = rs.getDouble("p");
 		String fileName = rs.getString("f");
 		switch(type){
 		case 1:

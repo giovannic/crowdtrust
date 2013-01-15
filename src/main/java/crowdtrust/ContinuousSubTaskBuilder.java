@@ -52,6 +52,7 @@ public class ContinuousSubTaskBuilder extends SubTaskBuilder{
 		c.setDimensions(dimensions);
 		c.setRange(ranges);
 		c.setVariance(variance);
+		c.precision = precision;
 		return c;
 	}
 	
