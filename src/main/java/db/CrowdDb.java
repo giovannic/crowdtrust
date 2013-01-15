@@ -175,16 +175,107 @@ public class CrowdDb {
 		try {
 			preparedStatement.setInt(1, id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			resultSet.next(); //JOHNNN
-			double accuracy = resultSet.getDouble("accuracy");
-			int total = resultSet.getInt("total");
-			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy, total);
+			SingleAccuracy singleAccuracy = null;
+			double accuracy = 0.5;
+			if(resultSet.next()){
+				accuracy = resultSet.getDouble("accuracy");
+				int total = resultSet.getInt("total");
+				singleAccuracy = new SingleAccuracy(accuracy, total);
+			}else{
+				singleAccuracy = new SingleAccuracy(accuracy, 0);
+				insertMVAccuracy(id, singleAccuracy);
+			}
+			
 			return singleAccuracy;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static boolean insertMVAccuracy(int id, SingleAccuracy accuracy) {
+		PreparedStatement preparedStatement;
+		String sql = "INSERT INTO multivalueaccuracies (account, accuracy, total) " +
+				"VALUES(?,?,?)";
+		
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+			double a = accuracy.getAccuracy();
+			if(a < 0 || a > 1) {
+				return false;
+			}
+			preparedStatement.setInt(1, id);
+			preparedStatement.setDouble(2, a);
+			preparedStatement.setInt(3, accuracy.getN());
+			preparedStatement.execute();
+      return true;
+		} catch (SQLException e1) {
+			return false;
+		} catch (ClassNotFoundException e1) {
+			return false;
+		}	
+		
+	}
+	
+	public static SingleAccuracy getContinuousAccuracy(int id) {
+		PreparedStatement preparedStatement;
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT accuracy, total FROM continuousaccuracies WHERE account = ?");
+    try {
+      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
+    }
+    catch (ClassNotFoundException e) {
+  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
+  	  return null;
+    } catch (SQLException e) {
+  	  System.err.println("SQL Error on Crowd");
+  	  return null;
+    }
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			SingleAccuracy singleAccuracy = null;
+			double accuracy = 0.5;
+			if(resultSet.next()){
+				accuracy = resultSet.getDouble("accuracy");
+				int total = resultSet.getInt("total");
+				singleAccuracy = new SingleAccuracy(accuracy, total);
+			}else{
+				singleAccuracy = new SingleAccuracy(accuracy, 0);
+				insertContinuousAccuracy(id, singleAccuracy);
+			}
+			
+			return singleAccuracy;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static boolean insertContinuousAccuracy(int id, SingleAccuracy accuracy) {
+		PreparedStatement preparedStatement;
+		String sql = "INSERT INTO continuousaccuracies (account, accuracy, total) " +
+				"VALUES(?,?,?)";
+		
+		try {
+			preparedStatement = DbAdaptor.connect().prepareStatement(sql);
+			double a = accuracy.getAccuracy();
+			if(a < 0 || a > 1) {
+				return false;
+			}
+			preparedStatement.setInt(1, id);
+			preparedStatement.setDouble(2, a);
+			preparedStatement.setInt(3, accuracy.getN());
+			preparedStatement.execute();
+      return true;
+		} catch (SQLException e1) {
+			return false;
+		} catch (ClassNotFoundException e1) {
+			return false;
+		}	
+		
 	}
 
 	public static boolean updateBinaryAccuracies(Collection<AccuracyRecord> accuracies) {
@@ -277,34 +368,6 @@ public class CrowdDb {
 		catch (SQLException e) {
 			return false;
 		}
-	}
-
-	public static SingleAccuracy getContinuousAccuracy(int annotatorId) {
-		PreparedStatement preparedStatement;
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT accuracy, total FROM continuousaccuracies WHERE account = ?");
-    try {
-      preparedStatement = DbAdaptor.connect().prepareStatement(sql.toString());
-    }
-    catch (ClassNotFoundException e) {
-  	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
-  	  return null;
-    } catch (SQLException e) {
-  	  System.err.println("SQL Error on Crowd");
-  	  return null;
-    }
-		try {
-			preparedStatement.setInt(1, annotatorId);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			double accuracy = resultSet.getDouble("accuracy");
-			int total = resultSet.getInt("total");
-			SingleAccuracy singleAccuracy = new SingleAccuracy(accuracy, total);
-			return singleAccuracy;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	public static Collection<AccuracyRecord> getContinuousAccuracies(Collection<Bee> annotators) {
