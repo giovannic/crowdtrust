@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import crowdtrust.*;
 
 public class TaskDb {
@@ -58,14 +60,8 @@ public static int addTask(int accountID, String name, String question, float acc
 		}
         if( mins.size() != 0) {
 	        try {
-	        	String minStr = "";
-	        	for( String min : mins ) {
-	        		minStr += min + "/";
-	        	}
-	        	String maxStr = "";
-	        	for( String max : maxes ) {
-	        		maxStr += max + "/";
-	        	}
+	        	String minStr = StringUtils.join(mins, "/");
+	        	String maxStr = StringUtils.join(maxes, "/");
 	        	insertTask = c.prepareStatement("INSERT INTO ranged VALUES(?,?,?,?)");
 	        	insertTask.setInt(1,tid);
 	        	insertTask.setString(2,minStr);
