@@ -22,12 +22,13 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		ContinuousResponse cz = (ContinuousResponse) z;
 		
 		int total = a.getN() + 2;
-		double w = total/total + 1;
+		double w = (double) total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		
 		MultiGaussianDistribution mgd =
 				new MultiGaussianDistribution(
 						cz.getValues(precision), variance);
+		
 		double responseSpace = 1;
 		for (int i = 0; i < ranges.length; i++){
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
@@ -35,7 +36,8 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		
 		//mle
 		double pLabel = mgd.probability(cr.getValues(precision));
-		double mle = pLabel/(pLabel + 1/responseSpace);
+		double mle = pLabel/(pLabel + (1/responseSpace));
+		
 		sa.setAccuracy(w*(alpha/total) + (1-w)*mle);
 		a.increaseN();
 	}
@@ -57,6 +59,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 				new MultiGaussianDistribution(
 						cr.getValues(precision), variance);
 		
+		//calculate confidence in case the response has not been seen before
 		double freshConfidence = (getZPrior()/(1-getZPrior()));
 		
 		for (Estimate record : state){
@@ -67,7 +70,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 			ContinuousResponse cr2 = (ContinuousResponse) record.getR();
 			double p = sa.getAccuracy()*mgd.probability(cr2.getValues(precision)) +
 					(1 - sa.getAccuracy())/responseSpace;
-			double newRatio = Math.log(p/1-p);
+			double newRatio = Math.log(p/(1-p));
 			record.setConfidence(record.getConfidence() + newRatio);
 			freshConfidence += newRatio;
 		}
@@ -82,7 +85,6 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 
 	@Override
 	protected double getZPrior() {
-		// TODO Auto-generated method stub
 		double responseSpace = 1;
 		for (int i = 0; i < ranges.length; i++){
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;

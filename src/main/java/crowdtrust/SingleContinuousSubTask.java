@@ -21,7 +21,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 		ContinuousResponse cz = (ContinuousResponse) z;
 		
 		int total = a.getN() + 2;
-		double w = total/total + 1;
+		double w = (double) total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		
 		NormalDistribution nd = 
@@ -51,6 +51,8 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 			
 		double pResponseSpace = 1/((range[1] - range[0])*precision);
 		
+		//base confidence to be computed 
+		//if the response has not appeared before
 		double freshConfidence = (getZPrior()/(1-getZPrior()));
 			
 		for (Estimate record : state){
