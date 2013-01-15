@@ -137,10 +137,14 @@ public class TestAlgorithmComplete extends TestCase {
 					testQs.add("test q3");
 					testQs.add("test q4");
 					testQs.add("test q5");
+					LinkedList<String> mins = new LinkedList<String>();
+					mins.add("1");
+					LinkedList<String> maxs = new LinkedList<String>();
+					maxs.add("5");
+					double step = 0;
 					TaskDb.addTask(requestor.getBee().getId(),name, "This is a test?", multiAccuracy,
 							       MediaType.IMAGE, AnnotationType.MULTIVALUED, InputType.RADIO, 
-							       allowedToAnswer , getDate(), testQs, new LinkedList<String>(), 
-							       new LinkedList<String>(), 0);
+							       allowedToAnswer , getDate(), testQs, mins, maxs, step);
 					int id = TaskDb.getTaskId(name);	
 					for(int j = 0; j < subTasksPerTask; j++){
 						String sname = getRandomName();
