@@ -53,7 +53,7 @@ public class MultiValueSubTask extends SubTask{
 		MultiValueResponse mvr = (MultiValueResponse) r;
 		MultiValueResponse mvz = (MultiValueResponse) z;
 		
-		int total = a.getN();
+		int total = a.getN() + 2;
 		double w = (double)total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		if (mvr.equals(mvz)){
