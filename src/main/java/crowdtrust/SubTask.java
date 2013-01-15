@@ -40,6 +40,8 @@ public abstract class SubTask {
 		number_of_labels++;
 		if(z.getConfidence() > Math.log(confidence_threshold/(1-confidence_threshold)) || 
 				number_of_labels >= max_labels){
+			System.out.println(Math.log(confidence_threshold/(1-confidence_threshold)));
+			System.out.println(max_labels);
 			System.out.println("Id " + this.id + "People asked: " + this.number_of_labels);
 			close();
 			calculateAccuracies(z.getR());
