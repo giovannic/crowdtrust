@@ -39,7 +39,7 @@ public class ContinuousSubTaskBuilder extends SubTaskBuilder{
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
 		}
 		
-		double variance = responseSpace/(7*dimensions);
+		double variance = responseSpace/(10*dimensions);
 		ContinuousSubTask c;
 		if (starts.length == 1){
 			c = new SingleContinuousSubTask(id, confidence_threshold, 
