@@ -126,7 +126,7 @@
         </tr>
 				<tr id="numans" style="display:none;">
 						<td>How many answers would you like?</td>
-						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)" value="0" /></td>
+						<td><input type="number" id="num_answers" name="num_answers" placeholder="between 2 and 10" min=2 max=10 onchange="displayAnswers(this)" value="2" /></td>
 				</tr>
         <tr id="ans1">
             <td>answer 1?</td>
