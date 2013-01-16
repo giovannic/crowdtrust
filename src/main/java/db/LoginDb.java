@@ -9,6 +9,7 @@ import crowdtrust.Account;
 
 public class LoginDb {
 
+	/* returns account object given the account id*/
 	public static Account getAccount(int id) {
 		String sql = "SELECT username FROM accounts WHERE id = ?";
 		PreparedStatement preparedStatement;
@@ -33,6 +34,7 @@ public class LoginDb {
 		return null;
 	}
 
+	/* checks if the username and password are valid. returns the account id */
   public static int checkUserDetails(String username, String password) {
     String sql = "SELECT id FROM accounts WHERE username = ? AND password = ?";
     PreparedStatement preparedStatement;
@@ -79,6 +81,7 @@ public class LoginDb {
     return null;
   }
 
+	/* checks if the user is crowd or client. true - crowd, false - client */
 	public static boolean isUserCrowd(int id) throws ClassNotFoundException, SQLException {
 		PreparedStatement ps;
 		ps = DbAdaptor.connect().prepareStatement("SELECT type FROM accounts WHERE id = ?");

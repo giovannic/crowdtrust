@@ -16,9 +16,10 @@ import crowdtrust.*;
 
 public class TaskDb {
 	
-public static int addTask(int accountID, String name, String question, float accuracy, 
-			MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
-			List<String> answerList, List<String> mins, List<String> maxes, double step){
+  /* adds a new task to the database */
+  public static int addTask(int accountID, String name, String question, float accuracy, 
+		MediaType media_type, AnnotationType annotation_type, InputType input_type, int max_labels, long expiryTime, 
+		List<String> answerList, List<String> mins, List<String> maxes, double step){
 		Connection c;
 		try {
 			c = DbAdaptor.connect();
@@ -102,6 +103,7 @@ public static int addTask(int accountID, String name, String question, float acc
 		}
 	}*/
 
+  /* gets a task from the database given the task name */
 	public static Task getTask(String name){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks\n");
@@ -127,6 +129,7 @@ public static int addTask(int accountID, String name, String question, float acc
 		}
 	}
 
+  /* gets the task id of a task given the task name */
 	public static int getTaskId(String name){
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id FROM tasks\n");
@@ -153,6 +156,7 @@ public static int addTask(int accountID, String name, String question, float acc
 		}
 	}
 
+  /* checks if the given task and account are present in the database */
 	public static boolean isPresent(int taskID, int accountID) {
     	PreparedStatement checkTask;
 		try {
@@ -218,6 +222,7 @@ public static int addTask(int accountID, String name, String question, float acc
 		return thisTask;
 	}
 
+  /* check if a task if finished or not */
 	public static boolean checkFinished(int id) throws SQLException {
 		StringBuilder sql = new StringBuilder();
 	    sql.append("SELECT * FROM tasks JOIN subtasks ON tasks.id = subtasks.task ");
@@ -243,6 +248,7 @@ public static int addTask(int accountID, String name, String question, float acc
 
 	}
 
+  /* gets task for a crowd member */
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks LEFT JOIN ranged ");
@@ -266,6 +272,7 @@ e.printStackTrace();
 		return tasks;
 	}
 
+  /* gets the uploaded tasks for a given user */
 	public static List<Task> getTasksForClientId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks  LEFT JOIN ranged ON tasks.id = ranged.task WHERE submitter = ?");

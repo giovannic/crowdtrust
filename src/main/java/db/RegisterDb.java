@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 
 public class RegisterDb {
 	
-
+  /* adds a new user to the database */
   public static boolean addUser(String email, String username, String password, boolean crowd) {
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO accounts (email, username, password, type) ");
@@ -52,17 +52,5 @@ public class RegisterDb {
     }
     return null;
   }
-
-  /*private static byte[] sha256(String password) {
-    try {
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] hash = digest.digest(password.getBytes("UTF-8"));
-      return hash;
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }*/
 
 }
