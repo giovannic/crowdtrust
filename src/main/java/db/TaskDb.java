@@ -246,7 +246,7 @@ public static int addTask(int accountID, String name, String question, float acc
 	public static List<Task> getTasksForCrowdId(int id) {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT * FROM tasks LEFT JOIN ranged ");
-		sql.append("ON tasks.id = ranged.task WHERE tasks.ex_time > NOW()");
+		sql.append("ON tasks.id = ranged.task");
 		PreparedStatement preparedStatement;
 		List<Task> tasks = new ArrayList<Task>();
 		try {

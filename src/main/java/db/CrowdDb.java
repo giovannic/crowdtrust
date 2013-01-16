@@ -12,6 +12,8 @@ import crowdtrust.ContinuousResponse;
 import crowdtrust.MultiValueResponse;
 import crowdtrust.SingleAccuracy;
 import crowdtrust.Account;
+import crowdtrust.Task;
+import db.TaskDb;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
@@ -22,9 +24,25 @@ import java.sql.SQLException;
 public class CrowdDb {
 
 	/* Adds a response to the response table in the database */
-	public static void addResponse(int account, String string, int subtask) {
+	public static boolean addResponse(int account, String string, int subtask) {
+	//check valid task for user and no response present
+		boolean isTaskAllowed = false;
+		Task thisTask = SubTaskDb.getTask(subtask);
+		List<Task> allowedTasks = TaskDb.getTasksForCrowdId(account);
+		for( Task t : allowedTasks ) {
+			if( t.getId() == thisTask.getId() ) {
+				isTaskAllowed = true;
+				break;
+			}
+		}
+		if( !isTaskAllowed )
+			return false;
+
+		//get responses for subtask, check account id
+
+		String responsesQueryStr = "SELECT * from responses WHERE  account = ? AND subtask = ?";
 		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO responses (account, subtask, response)");
+		sql.append("INSERT INTO responses (account, subtask, response) ");
 		sql.append("VALUES(?, ?, ?)");
 		Connection c;
     try {
@@ -33,13 +51,19 @@ public class CrowdDb {
     catch (ClassNotFoundException e) {
   	  System.err.println("Error connecting to DB on Crowd: PSQL driver not present");
   	  e.printStackTrace();
-	  return;
+	  return false;
     } catch (SQLException e) {
   	  System.err.println("SQL Error on Crowd");
   	  e.printStackTrace();
-	  return;
+	  return false;
     }
 		try {
+			PreparedStatement responsesQuery = c.prepareStatement(responsesQueryStr);
+			responsesQuery.setInt(1, account);
+			responsesQuery.setInt(2, subtask);
+			ResultSet rs = responsesQuery.executeQuery();
+			if( rs.next() )
+				return false;
 			PreparedStatement preparedStatement = c.prepareStatement(sql.toString());
 			preparedStatement.setInt(1, account);
 			preparedStatement.setInt(2, subtask);
@@ -49,7 +73,9 @@ public class CrowdDb {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	/* gets binary accuracy given an account id */

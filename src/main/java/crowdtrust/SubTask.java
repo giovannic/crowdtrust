@@ -26,10 +26,11 @@ public abstract class SubTask {
 		this.max_labels = max_labels;
 	}
 	
-	public void addResponse(Bee annotator, Response r) {
+	public boolean addResponse(Bee annotator, Response r) {
 		Response response = r;
 		
-		db.CrowdDb.addResponse(annotator.getId(), response.serialise(), this.id);
+		if(!db.CrowdDb.addResponse(annotator.getId(), response.serialise(), this.id))
+			return false;
 		Accuracy a = getAccuracy(annotator.getId());
 		
 		Collection<Estimate> state = getEstimates(id);
@@ -44,6 +45,7 @@ public abstract class SubTask {
 			close();
 			calculateAccuracies(z.getR());
 		}
+	return true;
 	}
 
 	protected void updateEstimates(Collection<Estimate> state){
