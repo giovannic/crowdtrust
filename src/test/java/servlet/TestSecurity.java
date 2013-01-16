@@ -31,10 +31,10 @@ public class TestSecurity extends TestCase {
     }
 
     public void testUserRequestUnAuthTaskId() {
-DbInitialiser.init();
+    	DbInitialiser.init();
             //add users 1 and 2
-    	RegisterDb.addUser("test", "test1", "test", true);
-    	RegisterDb.addUser("test", "test2", "test", false);
+    	RegisterDb.addUser("test", "test1", "test", false);
+    	RegisterDb.addUser("test", "test2", "test", true);
     	
             //add task
     	List<String> answerList = new LinkedList<String>();
@@ -47,16 +47,14 @@ DbInitialiser.init();
 		subtask.addResponse(new Bee(2), new BinaryResponse(true));
             //send in false acct id
           Collection<Result> results = SubTaskDb.getResults(1,2);
-	for(Result r : results)
-System.out.println(r.getE());
           assertTrue(results == null || results.isEmpty());
 
     }
 
     public void testUserSendUnAuthResponse() {
-DbInitialiser.init();
-    	RegisterDb.addUser("test", "test1", "test", true);
-    	RegisterDb.addUser("test", "test2", "test", false);
+    	DbInitialiser.init();
+    	RegisterDb.addUser("test", "test1", "test", false);
+    	RegisterDb.addUser("test", "test2", "test", true);
     	
             //add task
     	List<String> answerList = new LinkedList<String>();
