@@ -40,8 +40,14 @@ public class TestPerformance extends TestCase{
             //add subtask
 		SubTaskDb.addSubtask("testfile2.jpg", 1);
 		SubTask subtask = SubTaskDb.getSubtask(1);
+		List<Thread> threads = new LinkedList<Thread>();
 		for( int i = 2 ; i <= 10 ; i++ ) {
-			new Thread(new Respond(i, subtask)).run();
+			Thread t = new Thread(new Respond(i, subtask));
+			threads.add(t);
+			t.run();
+		}
+		for( int i = 2 ; i <= 10 ; i++ ) {
+			threads.get(i).join();
 		}
 		assertTrue(SubTaskDb.getResponses(1) == 9);
 	}
