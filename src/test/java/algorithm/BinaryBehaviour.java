@@ -38,8 +38,7 @@ public class BinaryBehaviour {
 	public BinaryBehaviour(int truePos, int trueNeg, int totalPos, int totalNeg){
 		this.truePos  = truePos ; this.trueNeg = trueNeg ;
 		this.totalPos = totalPos; this.totalNeg = totalNeg;
-		this.updateRates();      //Set up the inital true pos/neg rates
-//		this.updateSensThresh(); //Set up the inital threshold and sensetivity index
+		this.updateRates();      //Set up the true pos/neg rates
 	}
 	
 	public int generateAnswer(BinaryResponse response){
@@ -50,9 +49,7 @@ public class BinaryBehaviour {
 			realanswer = 0;
 		}
 		//update the sensory index and threshold for the calculation of ujk
-	//	this.updateRates();
 		this.updateSensThresh();
-		//generate ujk
 		double ujk = calculateujk(response.isTrue() ? 1 : 0);
 		//generate the appropriate normal distribution
 		NormalDistribution dist = new NormalDistribution(ujk, this.standardDev);
@@ -62,36 +59,14 @@ public class BinaryBehaviour {
 		 */
 
 		double signal = dist.sample();
+		//Compare signal to threshold and return the appropriate answer.
 		int answer = (Double.compare(signal, this.threshold) > 0) ? 1 : 0;
-		//this.updateNumbers(answer, actualAnswer);	//Update truePos/neg and totalpos/neg
-		this.updateRates();		//Update truePos/negRates
 		return answer;
 	}
 
-	/*
-	 * Update the total positive/negative answers and the true 
-	 * positive/negative answers if they got it correct.
-	 */
-	private void updateNumbers(int answer, int actualAnswer){
-		if(actualAnswer == 1){
-			this.totalPos++;
-			if(answer == 1){
-				this.truePos++;
-			}
-		}else{
-			this.totalNeg++;
-			if(answer == 0){
-				this.trueNeg++;
-			}
-		}
-	}
 	
 	//Calculates the new true pos/neg rates
 	private void updateRates(){
-		//System.out.println("~~~~~~~~~~~~Calculating rates~~~~~~~~~~~~~");
-		//System.out.println("Total Pos: " + this.totalPos + " Total neg " + this.totalNeg);
-		//System.out.println("True  Pos: " + this.truePos + " true neg " + this.trueNeg);
-		//System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		this.truePosRate = ((this.truePos * 1.0) / (this.totalPos * 1.0));
 		this.trueNegRate = ((this.trueNeg * 1.0) / (this.totalNeg * 1.0));
 	}
@@ -106,17 +81,12 @@ public class BinaryBehaviour {
 	 *  t - d/2 = inv(1 - aj1)
 	 */ 
 	private void updateSensThresh(){
-		//System.out.println("~~~~~~~~~~Calculating sens/thresh~~~~~~~~~~~");
-		//Create a standard normal distribution
-		//System.out.println("True neg rate = " + this.trueNegRate);
-		//System.out.println("True pos rate = " + this.truePosRate);
 		NormalDistribution standardNormal = new NormalDistribution();
 		double invTrueNeg = standardNormal.inverseCumulativeProbability(this.trueNegRate); 
 		double invTruePos = standardNormal.inverseCumulativeProbability(1 - this.truePosRate);
 		
 		this.sensitivityIndex = invTrueNeg - invTruePos;
 		this.threshold = invTrueNeg - (this.sensitivityIndex / (2 * 1.0));
-		//System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}
 	
 	private double calculateujk(int actualAnswer){

@@ -3,7 +3,10 @@ package algorithm;
 import crowdtrust.MultiValueResponse;
 import crowdtrust.Response;
 import crowdtrust.TaskType;
-
+/*
+ * To answer a multivalue question the annotator needs the actual
+ * answer and the number of options.
+ */
 public class MultiTestData extends AlgoTestData {
 	int actualAnswer;
 	int numOptions;

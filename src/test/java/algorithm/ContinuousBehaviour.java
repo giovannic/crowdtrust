@@ -20,6 +20,10 @@ public class ContinuousBehaviour {
 	public int[] generateContinuousAnswer(int pictureX, int pictureY, ContinuousResponse response){
 		Random rand = new Random();
 		if(rand.nextDouble() > this.honestyRating){
+			/*
+			 * The user cant be bothered to try and give a right answer so simply return
+			 * co-ordinates drawn from the picture area randomly
+			 */
 			return getRandomCoords(pictureX, pictureY);
 		}else{
 			//Mean is the actual answer
@@ -36,7 +40,9 @@ public class ContinuousBehaviour {
 								  	{0, 0, 0, 4},
 									};
 			MultiGaussianDistribution mgd = new MultiGaussianDistribution(mean, covariance);
+			//Retrieve an answer for the annotator
 			double[] ans = mgd.generate();
+			
 			int [] intans = new int[4];
 			for(int i = 0; i < 4; i++){
 				intans[i] = (int) Math.round(ans[i]);

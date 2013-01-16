@@ -2,10 +2,14 @@ package algorithm;
 
 import crowdtrust.SubTask;
 
+/*
+ * A list of these are passed to annotators to use as answers it simply links
+ * the task to answer with its id in the DB with any data needed to answer it.
+ */
 public class AnnotatorSubTaskAnswer {
-	protected int id;
-	protected SubTask task;
-	protected AlgoTestData data;
+	protected int id;			 // ID in database
+	protected SubTask task;      // task itself
+	protected AlgoTestData data; //test data to answer it with
 	
 	public AnnotatorSubTaskAnswer(int id, SubTask task, AlgoTestData data){
 		this.id   = id;

@@ -4,6 +4,11 @@ import crowdtrust.ContinuousResponse;
 import crowdtrust.Response;
 import crowdtrust.TaskType;
 
+/*
+ * To answer a bounding box problem the annotator needs the
+ * dimensions of the picture as well as the correct answer to
+ * draw the normal distribution
+ */
 public class ContinuousTestData extends AlgoTestData {
 	int pictureX;
 	int pictureY;

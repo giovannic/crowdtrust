@@ -1,9 +1,12 @@
 package algorithm;
 
 import crowdtrust.Response;
-import crowdtrust.Task;
 import crowdtrust.TaskType;
 
+/*
+ * This class serves to give the AnnotatorModel everything it needs to answer a question, when
+ * modelling the algorithm.
+ */
 public abstract class AlgoTestData {
 	protected TaskType taskType;
 	

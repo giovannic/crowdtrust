@@ -14,9 +14,14 @@ public class MultiBehaviour {
 	public MultiBehaviour(int correctAnswers, int totalAnswers){
 		this.correctAnswers = correctAnswers;
 		this.totalAnswers   = totalAnswers;
-		this.updateRates();
+		this.updateRates();	//Derive a success rate
 	}
 	
+	/*
+	 * Simply return an answer with the probability of it being correct
+	 * equal to that of the success rate, else return any one of the
+	 * other options.
+	 */
 	public int generateAnswer(MultiValueResponse multiValueR, int numOptions){
 		Random generator = new Random();
 		int answer;
@@ -29,7 +34,6 @@ public class MultiBehaviour {
 			this.correctAnswers++; this.totalAnswers++;
 			answer = multiValueR.getSelection();
 		}
-		//this.updateRates();
 		return answer;
 	}
 	

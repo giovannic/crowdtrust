@@ -4,6 +4,10 @@ import crowdtrust.BinaryResponse;
 import crowdtrust.Response;
 import crowdtrust.TaskType;
 
+/*
+ * All an annotator needs to answer a binary question is the correct answer
+ * so the appropriate normal distribution can be chosen.
+ */
 public class BinaryTestData extends AlgoTestData {
 	int actualAnswer;
 	

@@ -25,6 +25,10 @@ import db.SubTaskDb;
 import db.TaskDb;
 import junit.framework.TestCase;
 
+/*
+ * TEAM PLEASE NOTE: this has now been superceeded by TestAlgorithmComplete which
+ * encompasses all types of tasks.
+ */
 public class TestAlgorithmNew extends TestCase {
 	protected static int numTasks = 9;
 	protected static int numPeople = 10;

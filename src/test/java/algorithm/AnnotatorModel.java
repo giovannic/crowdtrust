@@ -10,17 +10,20 @@ import crowdtrust.ContinuousResponse;
 import crowdtrust.MultiContinuousSubTask;
 import crowdtrust.MultiValueResponse;
 import crowdtrust.MultiValueSubTask;
-import crowdtrust.SingleContinuousSubTask;
 import crowdtrust.SubTask;
 
+/*
+ * Provides a model of a human being able to answer binary multivalue and
+ * continuous questions
+ */
 public class AnnotatorModel {
-	protected LinkedList<AnnotatorSubTaskAnswer> tasks     ;
-	protected BinaryBehaviour                    binary    ;
-	protected MultiBehaviour                     multi     ;
-	protected ContinuousBehaviour                continuous;
-	protected Bee								 bee       ;
-	protected String							 username  ;
-	protected String							 password  ;
+	protected LinkedList<AnnotatorSubTaskAnswer> tasks     ; //Answers for them to refer to
+	protected BinaryBehaviour                    binary    ; //Ability to answer binary questions
+	protected MultiBehaviour                     multi     ; // ..
+	protected ContinuousBehaviour                continuous; // ..
+	protected Bee								 bee       ; // Connects John to giovanni code
+	protected String							 username  ; // for accessing the database
+	protected String							 password  ; // ..
 	
 	//------------Initalisation------------
 	
@@ -33,6 +36,7 @@ public class AnnotatorModel {
 		return this.binary;
 	}
 	
+	//Give the annotator the answer
 	public void setTasks(LinkedList<AnnotatorSubTaskAnswer> tasks){
 		this.tasks = tasks;
 	}
@@ -60,7 +64,12 @@ public class AnnotatorModel {
 	//------------------------------------
 	
 	public void answerTask(SubTask task){
+		//Get the answer to the task and any data with it
 		AnnotatorSubTaskAnswer savedTask = this.findTask(task.getId());
+		/*
+		 * Work out what type the task is then retrieve any testing data and answer the task
+		 * then register the response in the database.
+		 */
 		if(task instanceof BinarySubTask){
 			BinaryTestData testData = ((BinaryTestData) savedTask.getAlgoTestData());
 			int answer = this.binary.generateAnswer((BinaryResponse) testData.getActualAnswer());
@@ -76,7 +85,6 @@ public class AnnotatorModel {
 			int answer = this.multi.generateAnswer((MultiValueResponse) testData.getActualAnswer(), testData.getNumOptions());
 			//Link with gios code
 			task.addResponse(this.bee, new MultiValueResponse(answer));
-		}else if(task instanceof SingleContinuousSubTask){
 		}else if(task instanceof MultiContinuousSubTask){
 			ContinuousTestData testData = ((ContinuousTestData) savedTask.getAlgoTestData());
 			int[] answer = this.continuous.generateContinuousAnswer(testData.getPictureX(), testData.getPictureY(), (ContinuousResponse)testData.getActualAnswer());
@@ -85,6 +93,7 @@ public class AnnotatorModel {
 	
 	}
 	
+	//Retrieve the answer for a particular subtask
 	public AnnotatorSubTaskAnswer findTask(int id){
 		Iterator<AnnotatorSubTaskAnswer> i = this.tasks.iterator();
 		while(i.hasNext()){

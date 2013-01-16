@@ -28,7 +28,10 @@ import db.TaskDb;
 import db.CrowdDb;
 
 import junit.framework.TestCase;
-
+/*
+ * TEAM PLEASE NOTE: this has now been superceeded by TestAlgorithmComplete which
+ * encompasses all types of tasks.
+ */
 public class TestAlgorithm extends TestCase {
 
 	//change to test scaleability
