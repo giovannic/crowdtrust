@@ -2,6 +2,7 @@ package crowdtrust;
 
 import java.util.Collection;
 
+import db.CrowdDb;
 import db.SubTaskDb;
 
 public class MultiValueSubTask extends SubTask{
@@ -9,21 +10,20 @@ public class MultiValueSubTask extends SubTask{
 	int options;
 
 	public MultiValueSubTask(int id, double confidence_threshold, 
-			int number_of_labels, int max_labels, int options){
+			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
-		this.options = options;
 	}
 
 	@Override
 	protected void updateLikelihoods(Response r, Accuracy a, 
 			Collection<Estimate> state) {
-		MultiValueR mvr = (MultiValueR) r;
+		MultiValueResponse mvr = (MultiValueResponse) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		if (state.isEmpty()){
 			for (int option = 1; option <= options; option++){
-				MultiValueR initR = new MultiValueR(option);
-				Estimate initE = new Estimate(initR, Math.log(getZPrior()/1 - getZPrior()),0);
+				MultiValueResponse initR = new MultiValueResponse(option);
+				Estimate initE = new Estimate(initR, Math.log(getZPrior()/(1-getZPrior())),0);
 				state.add(initE);
 				initEstimate(initE);
 			}
@@ -50,10 +50,10 @@ public class MultiValueSubTask extends SubTask{
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		SingleAccuracy sa = (SingleAccuracy) a;
-		MultiValueR mvr = (MultiValueR) r;
-		MultiValueR mvz = (MultiValueR) z;
+		MultiValueResponse mvr = (MultiValueResponse) r;
+		MultiValueResponse mvz = (MultiValueResponse) z;
 		
-		int total = a.getN();
+		int total = a.getN() + 2;
 		double w = (double)total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		if (mvr.equals(mvz)){
@@ -61,7 +61,7 @@ public class MultiValueSubTask extends SubTask{
 		} else {
 			sa.setAccuracy(w*(alpha/total));
 		}
-		a.increaseN();
+		sa.increaseN();
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class MultiValueSubTask extends SubTask{
 
 	@Override
 	protected double getZPrior() {
-		double p = 1/options;
+		double p = (double)1/options;
 		return p/(1-p);
 	}
 
@@ -102,8 +102,7 @@ public class MultiValueSubTask extends SubTask{
 
 	@Override
 	protected Collection<AccuracyRecord> getAnnotators() {
-		// TODO Auto-generated method stub
-		return null;
+		return CrowdDb.getMultiValueAnnotators(id);
 	}
 
 }

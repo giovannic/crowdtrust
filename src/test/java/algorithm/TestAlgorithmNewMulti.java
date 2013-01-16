@@ -11,10 +11,11 @@ import java.util.UUID;
 
 import crowdtrust.AnnotationType;
 import crowdtrust.BinaryAccuracy;
-import crowdtrust.BinarySubTask;
 import crowdtrust.InputType;
 import crowdtrust.MediaType;
 import crowdtrust.MultiValueSubTask;
+import crowdtrust.MultiValueSubTaskBuilder;
+import crowdtrust.SubTask;
 
 import db.CrowdDb;
 import db.DbInitialiser;
@@ -105,7 +106,10 @@ public class TestAlgorithmNewMulti extends TestCase {
 			//	System.out.println("Subtask Id: " + id);
 				//BinarySubTask bst = new BinarySubTask(id,0.7,0, numPeople);
 				//id conf num labels max options
-				MultiValueSubTask mst = new MultiValueSubTask(id, 0.7, options, numPeople, options);
+				MultiValueSubTaskBuilder b = new MultiValueSubTaskBuilder(
+						id, 0.7, options, numPeople);
+				b.options(options);
+				SubTask mst = b.build();
 				AnnotatorSubTaskAnswer asta = new AnnotatorSubTaskAnswer(mst.getId(), mst, new MultiTestData(rand.nextInt(options + 1), options));
 				answers.add(asta);
 			}

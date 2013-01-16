@@ -9,23 +9,19 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 	int [] range;
 	double variance;
 	
-	SingleContinuousSubTask(double precision, double variance, 
-			int [] range, int id, double confidence_threshold, 
+	SingleContinuousSubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
-		this.precision = precision;
-		this.variance = variance;
-		this.range = range;
 	}
 	
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		SingleAccuracy sa = (SingleAccuracy) a;
-		ContinuousR cr = (ContinuousR) r;
-		ContinuousR cz = (ContinuousR) z;
+		ContinuousResponse cr = (ContinuousResponse) r;
+		ContinuousResponse cz = (ContinuousResponse) z;
 		
-		int total = a.getN();
-		double w = total/total + 1;
+		int total = a.getN() + 2;
+		double w = (double) total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		
 		NormalDistribution nd = 
@@ -44,7 +40,7 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 	@Override
 	protected void updateLikelihoods(Response r, Accuracy a,
 			Collection<Estimate> state) {
-		ContinuousR cr = (ContinuousR) r;
+		ContinuousResponse cr = (ContinuousResponse) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
@@ -55,6 +51,8 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 			
 		double pResponseSpace = 1/((range[1] - range[0])*precision);
 		
+		//base confidence to be computed 
+		//if the response has not appeared before
 		double freshConfidence = (getZPrior()/(1-getZPrior()));
 			
 		for (Estimate record : state){
@@ -62,10 +60,10 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 				matched = true;
 				record.incFrequency();
 			}
-			ContinuousR cr2 = (ContinuousR) record.getR();
+			ContinuousResponse cr2 = (ContinuousResponse) record.getR();
 			double p = sa.getAccuracy()*nd.density(cr2.getValues(precision)[0]) + 
 				(1-sa.getAccuracy())*pResponseSpace;
-			double newRatio = Math.log(p/1-p);
+			double newRatio = Math.log(p/pResponseSpace);
 			record.setConfidence(record.getConfidence() + newRatio);
 			freshConfidence += newRatio;
 		}
@@ -87,6 +85,20 @@ public class SingleContinuousSubTask extends ContinuousSubTask {
 	protected Collection<Estimate> getEstimates(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	protected void setRange(int[][] ranges) {
+		this.range = ranges[0];
+	}
+
+	@Override
+	protected void setDimensions(int length) {
+	}
+
+	@Override
+	protected void setVariance(double variance) {
+		this.variance = variance;
 	}
 
 

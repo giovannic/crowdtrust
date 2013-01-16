@@ -2,15 +2,15 @@ package crowdtrust;
 
 import java.io.UnsupportedEncodingException;
 
-public class MultiValueR extends Response{
+public class MultiValueResponse extends Response{
 	
 	int selection;
 
-	public MultiValueR(int selection){
+	public MultiValueResponse(int selection){
 		this.selection = selection;
 	}
 	
-	public MultiValueR(String b) throws NumberFormatException, UnsupportedEncodingException{
+	public MultiValueResponse(String b) throws NumberFormatException, UnsupportedEncodingException{
 		this.selection = Integer.parseInt(b);
 	}
 	
@@ -30,7 +30,7 @@ public class MultiValueR extends Response{
 
 	@Override
 	public boolean equals(Object o) {
-		MultiValueR mv = (MultiValueR) o;
+		MultiValueResponse mv = (MultiValueResponse) o;
 		return selection == mv.selection;
 	}
 

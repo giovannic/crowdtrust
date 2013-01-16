@@ -2,7 +2,7 @@ package algorithm;
 
 import java.util.Random;
 
-import crowdtrust.MultiValueR;
+import crowdtrust.MultiValueResponse;
 
 public class MultiBehaviour {
 	public int correctAnswers;
@@ -17,7 +17,7 @@ public class MultiBehaviour {
 		this.updateRates();
 	}
 	
-	public int generateAnswer(MultiValueR multiValueR, int numOptions){
+	public int generateAnswer(MultiValueResponse multiValueR, int numOptions){
 		Random generator = new Random();
 		int answer;
 		if(generator.nextDouble() > this.successRate){

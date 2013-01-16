@@ -2,11 +2,13 @@ package crowdtrust;
 
 import java.util.Collection;
 
+import db.SubTaskDb;
+
 public abstract class ContinuousSubTask extends SubTask {
 
 	double precision;
 	
-	public ContinuousSubTask(int id, double confidence_threshold, 
+	protected ContinuousSubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
 	}
@@ -46,40 +48,25 @@ public abstract class ContinuousSubTask extends SubTask {
 		return db.CrowdDb.getContinuousAnnotators(id);
 	}
 
-	public static SubTask makeSubtask(int id, int taskAccuracy, int responses,
-			int maxLabels, String start, String finish, float precision) {
-		String [] starts = start.split("/");
-		String [] finishs = finish.split("/");
-		
-		int dimensions = starts.length;
-		
-		int [][] ranges = new int [dimensions][2];
-		
-		for (int i = 0; i < dimensions; i++){
-			ranges[i][0] = Integer.parseInt(starts[i]);
-			ranges[i][1] = Integer.parseInt(finishs[i]);
-		}
-		
-		double responseSpace = 1;
-		for (int i = 0; i < dimensions; i++){
-			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
-		}
-		
-		double variance = responseSpace/(7*dimensions);
-		
-		if (starts.length == 1)
-			return new SingleContinuousSubTask(precision, variance , ranges[0], 
-					id, taskAccuracy, responses, maxLabels);
-		return new MultiContinuousSubTask(precision, identity(responseSpace/50, dimensions), dimensions,
-				ranges, id, taskAccuracy, responses, maxLabels);
+	protected abstract void setRange(int[][] ranges);
+
+	protected abstract void setDimensions(int length);
+
+	protected abstract void setVariance(double variance);
+	
+	@Override
+	protected Collection<Estimate> getEstimates(int id) {
+		return SubTaskDb.getContinuousEstimates(id);
 	}
 
-	private static double[][] identity(double d, int dim) {
-		double[][] covariance = new double [dim][dim];
-		for (int i = 0; i < dim; i++){
-			covariance[i][i] = d;
-		}
-		return covariance;
+	@Override
+	protected void updateEstimates(Collection<Estimate> state) {
+		SubTaskDb.updateEstimates(state, id);
+	}
+
+	@Override
+	protected void initEstimate(Estimate e) {
+		SubTaskDb.addEstimate(e, id);
 	}
 	
 }

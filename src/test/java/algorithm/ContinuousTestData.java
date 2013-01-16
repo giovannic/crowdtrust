@@ -1,24 +1,30 @@
 package algorithm;
 
-import crowdtrust.ContinuousR;
+import crowdtrust.ContinuousResponse;
 import crowdtrust.Response;
 import crowdtrust.TaskType;
 
 public class ContinuousTestData extends AlgoTestData {
-	int pictureArea;
+	int pictureX;
+	int pictureY;
 	int[] actualAnswer;
 	
-	public ContinuousTestData(int pictureArea, int[] actualAnswer){
+	public ContinuousTestData(int pictureX, int pictureY, int[] actualAnswer){
 		super(TaskType.CONTINUOUS);
-		this.pictureArea  = pictureArea;
+		this.pictureX  = pictureX;
+		this.pictureY  = pictureY;
 		this.actualAnswer = actualAnswer;
 	}
 	
-	public int getPictureArea(){
-		return this.pictureArea;
+	public int getPictureX(){
+		return this.pictureX;
+	}
+	
+	public int getPictureY(){
+		return this.pictureY;
 	}
 	
 	public Response getActualAnswer(){
-		return new ContinuousR (actualAnswer);
+		return new ContinuousResponse (actualAnswer);
 	}
 }

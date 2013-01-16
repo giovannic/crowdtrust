@@ -1,14 +1,14 @@
 package crowdtrust;
 
-public class BinaryR extends Response {
+public class BinaryResponse extends Response {
 
 	private boolean value;
 	
-	public BinaryR(boolean value){
+	public BinaryResponse(boolean value){
 		this.value = value;
 	}
 	
-	public BinaryR(String b){
+	public BinaryResponse(String b){
 		this.value = Boolean.parseBoolean(b);
 	}
 	
@@ -27,7 +27,7 @@ public class BinaryR extends Response {
 
 	@Override
 	public boolean equals(Object o) {
-		BinaryR br = (BinaryR) o;
+		BinaryResponse br = (BinaryResponse) o;
 		return value == br.isTrue();
 	}
 

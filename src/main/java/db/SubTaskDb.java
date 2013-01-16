@@ -12,14 +12,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import crowdtrust.BinaryR;
-import crowdtrust.ContinuousR;
-import crowdtrust.ContinuousSubTask;
-import crowdtrust.MultiValueR;
-import crowdtrust.MultiValueSubTask;
+import crowdtrust.BinaryResponse;
+import crowdtrust.BinarySubTaskBuilder;
+import crowdtrust.ContinuousResponse;
+import crowdtrust.ContinuousSubTaskBuilder;
+import crowdtrust.MultiValueResponse;
+import crowdtrust.MultiValueSubTaskBuilder;
 import crowdtrust.Response;
 import crowdtrust.Estimate;
-import crowdtrust.BinarySubTask;
 import crowdtrust.Result;
 import crowdtrust.SubTask;
 import crowdtrust.Task;
@@ -270,7 +270,6 @@ public class SubTaskDb {
 		    } catch (SQLException e1) {
 				System.err.println("some error with task fields: taskID not valid?");
 				System.err.println("taskID: " + taskID + ", filename: " + filename);
-				e1.printStackTrace();
 				return false;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -504,26 +503,35 @@ public class SubTaskDb {
 	
 	private static SubTask mapSubTask(ResultSet rs, int type) throws SQLException {
 		SubTask s = null;
-		int taskAccuracy = rs.getInt("acc");
+		double taskAccuracy = rs.getDouble("acc");
 		int id = rs.getInt("sid");
 		int responses = rs.getInt("c");
 		int maxLabels = rs.getInt("ml");
 		String finish = rs.getString("finish");
 		String start = rs.getString("start");
-		float precision = rs.getFloat("p");
+		double precision = rs.getDouble("p");
 		String fileName = rs.getString("f");
 		switch(type){
 		case 1:
-			s = new BinarySubTask(id, taskAccuracy,
-					responses, maxLabels);
+			BinarySubTaskBuilder sb;
+			sb = new BinarySubTaskBuilder(
+					id, taskAccuracy, responses, maxLabels);
+			s = sb.build();
 			break;
 		case 2:
-			s = new MultiValueSubTask(id, taskAccuracy, responses, 
-					maxLabels, 4);
+			MultiValueSubTaskBuilder mvsb;
+			mvsb = new MultiValueSubTaskBuilder(
+					id, taskAccuracy, responses, maxLabels);
+			mvsb.options(Integer.parseInt(finish));
+			s = mvsb.build();
 			break;
 		case 3:
-			s = ContinuousSubTask.makeSubtask(id, taskAccuracy, responses, 
-					maxLabels, start, finish, precision);
+			ContinuousSubTaskBuilder csb;
+			csb = new ContinuousSubTaskBuilder(
+					id, taskAccuracy, responses, maxLabels);
+			csb.setRanges(start, finish);
+			csb.setPrecision(precision);
+			s = csb.build();
 			break;
 		}
 		s.addFileName(fileName);
@@ -556,13 +564,13 @@ public class SubTaskDb {
 		try {
 			switch (type){
 			case 1:
-				r = new BinaryR(s);
+				r = new BinaryResponse(s);
 				break;
 			case 2:
-				r = new MultiValueR(s);
+				r = new MultiValueResponse(s);
 				break;
 			case 3:
-				r = new ContinuousR(s);
+				r = new ContinuousResponse(s);
 				break;
 			}
 		} catch (NumberFormatException e) {
@@ -579,6 +587,10 @@ public class SubTaskDb {
 
 	public static Collection<Estimate> getMultiValueEstimates(int id) {
 		return getEstimates(id, 2);
+	}
+
+	public static Collection<Estimate> getContinuousEstimates(int id) {
+		return getEstimates(id,3);
 	}
 
 }

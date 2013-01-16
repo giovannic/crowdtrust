@@ -1,16 +1,18 @@
 package crowdtrust;
 
+import java.util.Arrays;
+
 import org.apache.commons.lang3.StringUtils;
 
-public class ContinuousR extends Response {
+public class ContinuousResponse extends Response {
 
 	private int [] values;
 	
-	public ContinuousR(int [] values){
+	public ContinuousResponse(int [] values){
 		this.values = values;
 	}
 	
-	public ContinuousR(String s){
+	public ContinuousResponse(String s){
 		String [] split = s.split("/");
 		this.values = new int [split.length];
 		for (int i = 0; i < split.length; i++){
@@ -20,12 +22,13 @@ public class ContinuousR extends Response {
 	
 	@Override
 	public String serialise() {
-		return StringUtils.join(values);
+		String [] rep = Arrays.toString(values).split("[\\[\\]]")[1].split(", ");
+		return StringUtils.join(rep, "/");
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		ContinuousR cmr = (ContinuousR) o;
+		ContinuousResponse cmr = (ContinuousResponse) o;
 		for (int i = 0; i < values.length; i++){
 			 if (cmr.values[i] != values[i])
 				 return false;
@@ -39,6 +42,10 @@ public class ContinuousR extends Response {
 			t[i] = values[i] * precision;
 		}
 		return t;
+	}
+	
+	public int[] getRawValues(){
+		return this.values;
 	}
 
 }

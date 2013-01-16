@@ -2,7 +2,7 @@ package algorithm;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-import crowdtrust.BinaryR;
+import crowdtrust.BinaryResponse;
 
 public class BinaryBehaviour {
 	/*
@@ -42,7 +42,7 @@ public class BinaryBehaviour {
 //		this.updateSensThresh(); //Set up the inital threshold and sensetivity index
 	}
 	
-	public int generateAnswer(BinaryR response){
+	public int generateAnswer(BinaryResponse response){
 		int realanswer;
 		if (response.isTrue()){
 			realanswer = 1;

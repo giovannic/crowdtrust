@@ -5,6 +5,7 @@ import java.util.Collection;
 
 public abstract class SubTask {
 	
+	
 	//threshold accuracy variance
 	static final double THETA = 0.008;
 	protected int id;

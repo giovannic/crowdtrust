@@ -6,16 +6,17 @@ import db.SubTaskDb;
 
 public class BinarySubTask extends SubTask {
 
+	
 	public BinarySubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
-		super(id, 0.8, number_of_labels, max_labels);
+		super(id, confidence_threshold, number_of_labels, max_labels);
 	} 
 
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		BinaryAccuracy ba = (BinaryAccuracy) a;
-		BinaryR br = (BinaryR) r;
-		BinaryR bz = (BinaryR) z;
+		BinaryResponse br = (BinaryResponse) r;
+		BinaryResponse bz = (BinaryResponse) z;
 		
 		int total;
 		double w;
@@ -57,7 +58,7 @@ public class BinarySubTask extends SubTask {
 	@Override
 	protected void updateLikelihoods(Response r,  Accuracy a, 
 			Collection<Estimate> state){
-		BinaryR br = (BinaryR) r;
+		BinaryResponse br = (BinaryResponse) r;
 		BinaryAccuracy ba = (BinaryAccuracy) a;
 		
 		double accuracy;
@@ -67,9 +68,9 @@ public class BinarySubTask extends SubTask {
 			accuracy = ba.getTrueNegative();
 		
 		if (state.isEmpty()){
-			BinaryR tR = new BinaryR(true);
+			BinaryResponse tR = new BinaryResponse(true);
 			Estimate t = new Estimate(tR, Math.log(getZPrior()/(1 - getZPrior())),0);
-			BinaryR fR = new BinaryR(false);
+			BinaryResponse fR = new BinaryResponse(false);
 			Estimate f = new Estimate(fR, Math.log(getZPrior()/(1 - getZPrior())),0);
 			state.add(t);
 			initEstimate(t);
@@ -131,4 +132,7 @@ public class BinarySubTask extends SubTask {
 	protected Collection<AccuracyRecord> getAnnotators() {
 		return db.CrowdDb.getBinaryAnnotators(id);
 	}
+	
+	
+
 }

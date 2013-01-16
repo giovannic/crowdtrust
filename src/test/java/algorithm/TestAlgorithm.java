@@ -3,7 +3,6 @@ package algorithm;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,13 +11,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
-
-import crowdtrust.AccuracyRecord;
 import crowdtrust.AnnotationType;
-import crowdtrust.Bee;
 import crowdtrust.BinaryAccuracy;
-import crowdtrust.BinaryR;
+import crowdtrust.BinaryResponse;
 import crowdtrust.BinarySubTask;
 import crowdtrust.Account;
 import crowdtrust.InputType;
@@ -36,6 +31,7 @@ import junit.framework.TestCase;
 
 public class TestAlgorithm extends TestCase {
 
+	//change to test scaleability
 	protected static int annotatorNumber = 50;
 	protected static int subtasks = 200;
 	
@@ -186,7 +182,7 @@ public class TestAlgorithm extends TestCase {
 						answerBool = false;
 						negQuestions++;
 					}
-					int annotatorAnswer = annotators[i].getBinaryBehaviour().generateAnswer(new BinaryR(answerBool));
+					int annotatorAnswer = annotators[i].getBinaryBehaviour().generateAnswer(new BinaryResponse(answerBool));
 					if(annotatorAnswer == 1 & actualAnswer == 1){
 						truePos ++;
 					}else if(annotatorAnswer == 0 & actualAnswer == 0){

@@ -10,29 +10,25 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	int [][] ranges;
 	double [][] variance;
 
-	MultiContinuousSubTask(double precision, double [][] variance, int d, 
-			int [][] ranges, int id, double confidence_threshold, 
+	public MultiContinuousSubTask(int id, double confidence_threshold, 
 			int number_of_labels, int max_labels){
 		super(id, confidence_threshold, number_of_labels, max_labels);
-		this.precision = precision;
-		this.variance = variance;
-		this.dimensions = d;
-		this.ranges = ranges;
 	}
 
 	@Override
 	protected void maximiseAccuracy(Accuracy a, Response r, Response z){
 		SingleAccuracy sa = (SingleAccuracy) a;
-		ContinuousR cr = (ContinuousR) r;
-		ContinuousR cz = (ContinuousR) z;
+		ContinuousResponse cr = (ContinuousResponse) r;
+		ContinuousResponse cz = (ContinuousResponse) z;
 		
-		int total = a.getN();
-		double w = total/total + 1;
+		int total = a.getN() + 2;
+		double w = (double) total/(total + 1);
 		double alpha = sa.getAccuracy()*total;
 		
 		MultiGaussianDistribution mgd =
 				new MultiGaussianDistribution(
 						cz.getValues(precision), variance);
+		
 		double responseSpace = 1;
 		for (int i = 0; i < ranges.length; i++){
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
@@ -40,7 +36,8 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		
 		//mle
 		double pLabel = mgd.probability(cr.getValues(precision));
-		double mle = pLabel/(pLabel + 1/responseSpace);
+		double mle = pLabel/(pLabel + (1/responseSpace));
+		
 		sa.setAccuracy(w*(alpha/total) + (1-w)*mle);
 		a.increaseN();
 	}
@@ -49,7 +46,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 	@Override
 	protected void updateLikelihoods(Response r, Accuracy a,
 			Collection<Estimate> state) {
-		ContinuousR cr = (ContinuousR) r;
+		ContinuousResponse cr = (ContinuousResponse) r;
 		SingleAccuracy sa = (SingleAccuracy) a;
 		
 		boolean matched = false;
@@ -62,6 +59,7 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 				new MultiGaussianDistribution(
 						cr.getValues(precision), variance);
 		
+		//calculate confidence in case the response has not been seen before
 		double freshConfidence = (getZPrior()/(1-getZPrior()));
 		
 		for (Estimate record : state){
@@ -69,10 +67,12 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 				matched = true;
 				record.incFrequency();
 			}
-			ContinuousR cr2 = (ContinuousR) record.getR();
+			ContinuousResponse cr2 = (ContinuousResponse) record.getR();
 			double p = sa.getAccuracy()*mgd.probability(cr2.getValues(precision)) +
 					(1 - sa.getAccuracy())/responseSpace;
-			double newRatio = Math.log(p/1-p);
+			System.out.println(cr.serialise() + " " + cr2.serialise() + 
+					" " + mgd.probability(cr2.getValues(precision)));
+			double newRatio = Math.log(p/(1/responseSpace));
 			record.setConfidence(record.getConfidence() + newRatio);
 			freshConfidence += newRatio;
 		}
@@ -87,7 +87,6 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 
 	@Override
 	protected double getZPrior() {
-		// TODO Auto-generated method stub
 		double responseSpace = 1;
 		for (int i = 0; i < ranges.length; i++){
 			responseSpace *= (ranges[i][1] - ranges[i][0])*precision;
@@ -95,22 +94,27 @@ public class MultiContinuousSubTask extends ContinuousSubTask {
 		double p = 1/responseSpace;
 		return p/(1-p);
 	}
-
-	@Override
-	protected Collection<Estimate> getEstimates(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	protected static double[][] identity(double d, int dim) {
+		double[][] covariance = new double [dim][dim];
+		for (int i = 0; i < dim; i++){
+			covariance[i][i] = d;
+		}
+		return covariance;
 	}
 
 	@Override
-	protected void updateEstimates(Collection<Estimate> state) {
-		// TODO Auto-generated method stub
-		
+	protected void setRange(int[][] ranges) {
+		this.ranges = ranges;
 	}
 
 	@Override
-	protected void initEstimate(Estimate e) {
-		// TODO Auto-generated method stub
-		
+	protected void setDimensions(int length) {
+		dimensions = length;
+	}
+
+	@Override
+	protected void setVariance(double variance) {
+		this.variance = identity(variance, dimensions);
 	}
 }
