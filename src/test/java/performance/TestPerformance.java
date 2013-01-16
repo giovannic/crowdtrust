@@ -26,7 +26,7 @@ public class TestPerformance extends TestCase{
 		DbInitialiser.init();
 	}
 	
-	public void testConcurrentResponses() {
+	public void testConcurrentResponses() throws InterruptedException {
     	DbInitialiser.init();
 		RegisterDb.addUser("test", "test1", "test", false);
     	for( int i = 2 ; i <= 10 ; i++ )
