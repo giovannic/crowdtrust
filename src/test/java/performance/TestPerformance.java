@@ -46,8 +46,8 @@ public class TestPerformance extends TestCase{
 			threads.add(t);
 			t.run();
 		}
-		for( int i = 2 ; i <= 10 ; i++ ) {
-			threads.get(i).join();
+		for( Thread t : threads ) {
+			t.join();
 		}
 		assertTrue(SubTaskDb.getResponses(1) == 9);
 	}
