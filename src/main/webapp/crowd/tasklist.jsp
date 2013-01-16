@@ -30,7 +30,6 @@
 			for(String ans : answers) {
         answersStr += ans + "/";
 			} 
-			/*add stuff for x and y*/
 		%>
 		<tr>
 			<td><%=task.getName()%></td>

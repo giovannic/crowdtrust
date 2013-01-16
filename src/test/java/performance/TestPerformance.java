@@ -22,10 +22,6 @@ public class TestPerformance extends TestCase{
 		super(name);
 	}
 	
-	public void testBatchUploadAccuracies() {
-		DbInitialiser.init();
-	}
-	
 	public void testConcurrentResponses() throws InterruptedException {
     	DbInitialiser.init();
 		RegisterDb.addUser("test", "test1", "test", false);
@@ -41,14 +37,17 @@ public class TestPerformance extends TestCase{
 		SubTaskDb.addSubtask("testfile2.jpg", 1);
 		SubTask subtask = SubTaskDb.getSubtask(1);
 		List<Thread> threads = new LinkedList<Thread>();
+		//create threads which add responses
 		for( int i = 2 ; i <= 10 ; i++ ) {
 			Thread t = new Thread(new Respond(i, subtask));
 			threads.add(t);
 			t.run();
 		}
+		//wait for all threads to complete
 		for( Thread t : threads ) {
 			t.join();
 		}
+		//check all 9 responses added
 		assertTrue(SubTaskDb.getResponses(1) == 9);
 	}
 	
